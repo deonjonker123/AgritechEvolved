@@ -142,11 +142,14 @@ public class PlanterBlockEntity extends BlockEntity implements MenuProvider {
         if (fertilizerStack.isEmpty()) return 1.0F;
         String fertilizerId = RegistryHelper.getItemId(fertilizerStack);
         return switch (fertilizerId) {
-            case "minecraft:bone_meal"                        -> (float) Config.getFertilizerBoneMealSpeedMultiplier();
-            case "immersiveengineering:fertilizer"            -> (float) Config.getFertilizerImmersiveFertilizerSpeedMultiplier();
-            case "mysticalagriculture:fertilized_essence"     -> (float) Config.getFertilizerFertilizedEssenceSpeedMultiplier();
-            case "mysticalagriculture:mystical_fertilizer"    -> (float) Config.getFertilizerMysticalFertilizerSpeedMultiplier();
-            case "forbidden_arcanus:arcane_bone_meal"         -> (float) Config.getFertilizerArcaneBoneMealSpeedMultiplier();
+            case "minecraft:bone_meal"                          -> (float) Config.getFertilizerBoneMealSpeedMultiplier();
+            case "immersiveengineering:fertilizer"              -> (float) Config.getFertilizerImmersiveFertilizerSpeedMultiplier();
+            case "mysticalagriculture:fertilized_essence"       -> (float) Config.getFertilizerFertilizedEssenceSpeedMultiplier();
+            case "mysticalagriculture:mystical_fertilizer"      -> (float) Config.getFertilizerMysticalFertilizerSpeedMultiplier();
+            case "forbidden_arcanus:arcane_bone_meal"           -> (float) Config.getFertilizerArcaneBoneMealSpeedMultiplier();
+            case "agritechevolved:crude_biomass"                -> (float) Config.getFertilizerCrudeBiomassSpeedMultiplier();
+            case "agritechevolved:biomass"                      -> (float) Config.getFertilizerBiomassSpeedMultiplier();
+            case "agritechevolved:compacted_biomass"            -> (float) Config.getFertilizerCompactedBiomassSpeedMultiplier();
             default -> {
                 PlantablesConfig.FertilizerInfo info = PlantablesConfig.getFertilizerInfo(fertilizerId);
                 yield info != null ? info.speedMultiplier : 1.0F;
@@ -159,11 +162,14 @@ public class PlanterBlockEntity extends BlockEntity implements MenuProvider {
         if (fertilizerStack.isEmpty()) return 1.0F;
         String fertilizerId = RegistryHelper.getItemId(fertilizerStack);
         return switch (fertilizerId) {
-            case "minecraft:bone_meal"                        -> (float) Config.getFertilizerBoneMealYieldMultiplier();
-            case "immersiveengineering:fertilizer"            -> (float) Config.getFertilizerImmersiveFertilizerYieldMultiplier();
-            case "mysticalagriculture:fertilized_essence"     -> (float) Config.getFertilizerFertilizedEssenceYieldMultiplier();
-            case "mysticalagriculture:mystical_fertilizer"    -> (float) Config.getFertilizerMysticalFertilizerYieldMultiplier();
-            case "forbidden_arcanus:arcane_bone_meal"         -> (float) Config.getFertilizerArcaneBoneMealYieldMultiplier();
+            case "minecraft:bone_meal"                          -> (float) Config.getFertilizerBoneMealYieldMultiplier();
+            case "immersiveengineering:fertilizer"              -> (float) Config.getFertilizerImmersiveFertilizerYieldMultiplier();
+            case "mysticalagriculture:fertilized_essence"       -> (float) Config.getFertilizerFertilizedEssenceYieldMultiplier();
+            case "mysticalagriculture:mystical_fertilizer"      -> (float) Config.getFertilizerMysticalFertilizerYieldMultiplier();
+            case "forbidden_arcanus:arcane_bone_meal"           -> (float) Config.getFertilizerArcaneBoneMealYieldMultiplier();
+            case "agritechevolved:crude_biomass"                -> (float) Config.getFertilizerCrudeBiomassYieldMultiplier();
+            case "agritechevolved:biomass"                      -> (float) Config.getFertilizerBiomassYieldMultiplier();
+            case "agritechevolved:compacted_biomass"            -> (float) Config.getFertilizerCompactedBiomassYieldMultiplier();
             default -> {
                 PlantablesConfig.FertilizerInfo info = PlantablesConfig.getFertilizerInfo(fertilizerId);
                 yield info != null ? info.yieldMultiplier : 1.0F;
@@ -485,7 +491,7 @@ public class PlanterBlockEntity extends BlockEntity implements MenuProvider {
 
     @Override
     public Component getDisplayName() {
-        return Component.translatable("container.agritechtwo.planter");
+        return Component.translatable("gui.agritechevolved.basic_planter");
     }
 
     @Nullable

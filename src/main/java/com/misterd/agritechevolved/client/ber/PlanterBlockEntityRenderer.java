@@ -36,7 +36,7 @@ import javax.annotation.Nullable;
 public class PlanterBlockEntityRenderer implements BlockEntityRenderer<BlockEntity> {
 
     private static final ModelResourceLocation CLOCHE_DOME_MODEL = new ModelResourceLocation(
-            ResourceLocation.fromNamespaceAndPath("agritechtwo", "block/cloche_dome"), "standalone");
+            ResourceLocation.fromNamespaceAndPath("agritechevolved", "block/cloche_dome"), "standalone");
     private static final ResourceLocation WATER_STILL =
             ResourceLocation.fromNamespaceAndPath("minecraft", "block/water_still");
 

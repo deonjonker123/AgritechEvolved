@@ -2,8 +2,7 @@ package com.misterd.agritechevolved.blockentity;
 
 import com.misterd.agritechevolved.AgritechEvolved;
 import com.misterd.agritechevolved.block.ATEBlocks;
-import com.misterd.agritechevolved.blockentity.custom.AdvancedPlanterBlockEntity;
-import com.misterd.agritechevolved.blockentity.custom.PlanterBlockEntity;
+import com.misterd.agritechevolved.blockentity.custom.*;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.Block;
@@ -38,6 +37,22 @@ public class ATEBlockEntities {
     public static final Supplier<BlockEntityType<AdvancedPlanterBlockEntity>> ADVANCED_PLANTER_BLOCK_BE
             = BLOCK_ENTITIES.register("advanced_planter_block_be", () ->  BlockEntityType.Builder.of(
                     AdvancedPlanterBlockEntity::new, ATEBlocks.ADVANCED_PLANTER.get()).build(null));
+
+    public static final Supplier<BlockEntityType<ComposterBlockEntity>> COMPOSTER_BE
+            = BLOCK_ENTITIES.register("composter_be", () ->  BlockEntityType.Builder.of(
+            ComposterBlockEntity::new, ATEBlocks.COMPOSTER.get()).build(null));
+
+    public static final Supplier<BlockEntityType<CapacitorBlockEntity>> CAPACITOR_BE  =
+            BLOCK_ENTITIES.register("capacitor_be", () -> BlockEntityType.Builder.of(
+                    CapacitorBlockEntity::new,
+                    ATEBlocks.CAPACITOR_TIER_1.get(),
+                    ATEBlocks.CAPACITOR_TIER_2.get(),
+                    ATEBlocks.CAPACITOR_TIER_3.get()
+            ).build(null));
+
+    public static final Supplier<BlockEntityType<BiomassBurnerBlockEntity>> BURNER_BE
+            = BLOCK_ENTITIES.register("burner_be", () ->  BlockEntityType.Builder.of(
+            BiomassBurnerBlockEntity::new, ATEBlocks.BIOMASS_BURNER.get()).build(null));
 
     private static void registerCapabilities(RegisterCapabilitiesEvent event) {
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, PLANTER_BLOCK_BE.get(),

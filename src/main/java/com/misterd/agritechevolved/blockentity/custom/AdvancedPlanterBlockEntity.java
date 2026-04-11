@@ -61,6 +61,7 @@ public class AdvancedPlanterBlockEntity extends BlockEntity implements MenuProvi
     private static final String YM_MK3 = "agritechevolved:ym_mk3";
 
     // Fertilizer IDs
+    private static final String FERTILIZER_CRUDE_BIOMASS           = "agritechevolved:crude_biomass";
     private static final String FERTILIZER_BIOMASS           = "agritechevolved:biomass";
     private static final String FERTILIZER_COMPACTED_BIOMASS = "agritechevolved:compacted_biomass";
     private static final String FERTILIZER_BONE_MEAL         = "minecraft:bone_meal";
@@ -347,6 +348,7 @@ public class AdvancedPlanterBlockEntity extends BlockEntity implements MenuProvi
         if (stack.isEmpty()) return 1.0F;
         String id = RegistryHelper.getItemId(stack);
         return switch (id) {
+            case FERTILIZER_CRUDE_BIOMASS     -> (float)(forSpeed ? Config.getFertilizerCrudeBiomassSpeedMultiplier()      : Config.getFertilizerCrudeBiomassYieldMultiplier());
             case FERTILIZER_BIOMASS           -> (float)(forSpeed ? Config.getFertilizerBiomassSpeedMultiplier()           : Config.getFertilizerBiomassYieldMultiplier());
             case FERTILIZER_COMPACTED_BIOMASS -> (float)(forSpeed ? Config.getFertilizerCompactedBiomassSpeedMultiplier()  : Config.getFertilizerCompactedBiomassYieldMultiplier());
             case FERTILIZER_BONE_MEAL         -> (float)(forSpeed ? Config.getFertilizerBoneMealSpeedMultiplier()          : Config.getFertilizerBoneMealYieldMultiplier());

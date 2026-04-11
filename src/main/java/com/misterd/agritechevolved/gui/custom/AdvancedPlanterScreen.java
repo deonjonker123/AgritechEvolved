@@ -46,7 +46,7 @@ public class AdvancedPlanterScreen extends AbstractContainerScreen<AdvancedPlant
         this.imageWidth       = 212;
         this.imageHeight      = 170;
         this.inventoryLabelX  = 26;
-        this.inventoryLabelY  = imageHeight - 95;
+        this.inventoryLabelY  = imageHeight - 96;
     }
 
     @Override

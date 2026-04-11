@@ -1,8 +1,10 @@
 package com.misterd.agritechevolved.block;
 
 import com.misterd.agritechevolved.AgritechEvolved;
+import com.misterd.agritechevolved.component.ATEDataComponents;
 import com.misterd.agritechevolved.item.ATEItems;
 import com.misterd.agritechevolved.block.custom.*;
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -15,7 +17,9 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 import java.util.function.Supplier;
 
 public class ATEBlocks {
@@ -94,39 +98,72 @@ public class ATEBlocks {
                     .requiresCorrectToolForDrops()));
 
     public static final DeferredBlock<Block> BIOMASS_BURNER = registerBlock("biomass_burner",
-            () -> new Block(BlockBehaviour.Properties.of()
+            () -> new BiomassBurnerBlock(BlockBehaviour.Properties.of()
                     .strength(2.0F, 3.0F)
                     .sound(SoundType.STONE)
                     .noOcclusion()
                     .requiresCorrectToolForDrops()));
 
     public static final DeferredBlock<Block> COMPOSTER = registerBlock("composter",
-            () -> new Block(BlockBehaviour.Properties.of()
+            () -> new ComposterBlock(BlockBehaviour.Properties.of()
                     .strength(2.0F, 3.0F)
                     .sound(SoundType.STONE)
                     .noOcclusion()
                     .requiresCorrectToolForDrops()));
 
     public static final DeferredBlock<Block> CAPACITOR_TIER_1 = registerBlock("capacitor_tier1",
-            () -> new Block(BlockBehaviour.Properties.of()
+            () -> new CapacitorTier1Block(BlockBehaviour.Properties.of()
                     .strength(2.0F, 3.0F)
                     .sound(SoundType.STONE)
                     .noOcclusion()
-                    .requiresCorrectToolForDrops()));
+                    .requiresCorrectToolForDrops())
+            {
+                public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
+                    super.appendHoverText(stack, context, tooltip, flag);
+                    Integer storedEnergy = stack.get(ATEDataComponents.STORED_ENERGY.get());
+                    if (storedEnergy != null && storedEnergy > 0) {
+                        NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.US);
+                        tooltip.add(Component.translatable("tooltip.agritechevolved.capacitor.stored_energy", storedEnergy).withStyle(ChatFormatting.GOLD));
+                    }
+
+                }
+            });
 
     public static final DeferredBlock<Block> CAPACITOR_TIER_2 = registerBlock("capacitor_tier2",
-            () -> new Block(BlockBehaviour.Properties.of()
+            () -> new CapacitorTier2Block(BlockBehaviour.Properties.of()
                     .strength(2.0F, 3.0F)
                     .sound(SoundType.STONE)
                     .noOcclusion()
-                    .requiresCorrectToolForDrops()));
+                    .requiresCorrectToolForDrops())
+            {
+                public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
+                    super.appendHoverText(stack, context, tooltip, flag);
+                    Integer storedEnergy = stack.get(ATEDataComponents.STORED_ENERGY.get());
+                    if (storedEnergy != null && storedEnergy > 0) {
+                        NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.US);
+                        tooltip.add(Component.translatable("tooltip.agritechevolved.capacitor.stored_energy", storedEnergy).withStyle(ChatFormatting.GOLD));
+                    }
+
+                }
+            });
 
     public static final DeferredBlock<Block> CAPACITOR_TIER_3 = registerBlock("capacitor_tier3",
-            () -> new Block(BlockBehaviour.Properties.of()
+            () -> new CapacitorTier3Block(BlockBehaviour.Properties.of()
                     .strength(2.0F, 3.0F)
                     .sound(SoundType.STONE)
                     .noOcclusion()
-                    .requiresCorrectToolForDrops()));
+                    .requiresCorrectToolForDrops())
+            {
+                public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
+                    super.appendHoverText(stack, context, tooltip, flag);
+                    Integer storedEnergy = stack.get(ATEDataComponents.STORED_ENERGY.get());
+                    if (storedEnergy != null && storedEnergy > 0) {
+                        NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.US);
+                        tooltip.add(Component.translatable("tooltip.agritechevolved.capacitor.stored_energy", storedEnergy).withStyle(ChatFormatting.GOLD));
+                    }
+
+                }
+            });
 
     public static final DeferredBlock<Block> COMPACTED_BIOMASS_BLOCK = registerBlock("compacted_biomass_block",
             () -> new Block(BlockBehaviour.Properties.of()

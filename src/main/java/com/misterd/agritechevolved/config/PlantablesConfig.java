@@ -58,43 +58,43 @@ public class PlantablesConfig {
         List<CropEntry> defaultCrops = new ArrayList<>();
         addVanillaCrops(defaultCrops);
         if (Config.enableMysticalAgriculture) {
-            LOGGER.info("Adding Mystical Agriculture crops to AgriTech: Two config");
+            LOGGER.info("Adding Mystical Agriculture crops to AgriTech: Evolved config");
             addMysticalAgricultureCrops(defaultCrops);
         }
         if (Config.enableFarmersDelight) {
-            LOGGER.info("Adding Farmer's Delight crops to AgriTech: Two config");
+            LOGGER.info("Adding Farmer's Delight crops to AgriTech: Evolved config");
             addFarmersDelightCrops(defaultCrops);
         }
         if (Config.enableArsNouveau) {
-            LOGGER.info("Adding Ars Nouveau crops to AgriTech: Two config");
+            LOGGER.info("Adding Ars Nouveau crops to AgriTech: Evolved config");
             addArsNouveauCrops(defaultCrops);
         }
         if (Config.enableSilentGear) {
-            LOGGER.info("Adding Silent Gear crops to AgriTech: Two config");
+            LOGGER.info("Adding Silent Gear crops to AgriTech: Evolved config");
             addSilentGearCrops(defaultCrops);
         }
         if (Config.enableImmersiveEngineering) {
-            LOGGER.info("Adding Immersive Engineering Hemp Fiber to AgriTech: Two config");
+            LOGGER.info("Adding Immersive Engineering Hemp Fiber to AgriTech: Evolved config");
             addImmersiveEngineering(defaultCrops);
         }
         if (Config.enableOccultism) {
-            LOGGER.info("Adding Occultism crops to AgriTech: Two config");
+            LOGGER.info("Adding Occultism crops to AgriTech: Evolved config");
             addOccultimCrops(defaultCrops);
         }
         if (Config.enablePamsCrops) {
-            LOGGER.info("Adding Pam's HarvestCraft - Crops to AgriTech: Two config");
+            LOGGER.info("Adding Pam's HarvestCraft - Crops to AgriTech: Evolved config");
             addPamsCrops(defaultCrops);
         }
         if (Config.enableCroptopia) {
-            LOGGER.info("Adding Croptopia crops to AgriTech: Two config");
+            LOGGER.info("Adding Croptopia crops to AgriTech: Evolved config");
             addCroptopiaCrops(defaultCrops);
         }
         if (Config.enableActuallyAdditions) {
-            LOGGER.info("Adding Actually Additions crops to AgriTech: Two config");
+            LOGGER.info("Adding Actually Additions crops to AgriTech: Evolved config");
             addActuallyAdditionsCrops(defaultCrops);
         }
         if (Config.enableCobblemon) {
-            LOGGER.info("Adding Cobblemon crops to AgriTech: Two config");
+            LOGGER.info("Adding Cobblemon crops to AgriTech: Evolved config");
             addCobblemonCrops(defaultCrops);
         }
         config.allowedCrops = defaultCrops;
@@ -102,43 +102,43 @@ public class PlantablesConfig {
         List<TreeEntry> defaultTrees = new ArrayList<>();
         addVanillaTrees(defaultTrees);
         if (Config.enableArsElemental) {
-            LOGGER.info("Adding Ars Nouveau Archwood trees to AgriTech: Two config");
+            LOGGER.info("Adding Ars Nouveau Archwood trees to AgriTech: Evolved config");
             addArsElementalTrees(defaultTrees);
         }
         if (Config.enableArsNouveau) {
-            LOGGER.info("Adding Ars Nouveau Archwood trees to AgriTech: Two config");
+            LOGGER.info("Adding Ars Nouveau Archwood trees to AgriTech: Evolved config");
             addArsNouveauTrees(defaultTrees);
         }
         if (Config.enableEvilCraft) {
-            LOGGER.info("Adding Evilcraft trees to AgriTech: Two config");
+            LOGGER.info("Adding Evilcraft trees to AgriTech: Evolved config");
             addEvilCraftTrees(defaultTrees);
         }
         if (Config.enableForbiddenArcanus) {
-            LOGGER.info("Adding Forbidden Arcanus trees to AgriTech: Two config");
+            LOGGER.info("Adding Forbidden Arcanus trees to AgriTech: Evolved config");
             addForbiddenArcanusTrees(defaultTrees);
         }
         if (Config.enableIntegratedDynamics) {
-            LOGGER.info("Adding Menril trees to AgriTech: Two config");
+            LOGGER.info("Adding Menril trees to AgriTech: Evolved config");
             addIntegratedDynamicsTrees(defaultTrees);
         }
         if (Config.enableSilentGear) {
-            LOGGER.info("Adding Silent Gear trees to AgriTech: Two config");
+            LOGGER.info("Adding Silent Gear trees to AgriTech: Evolved config");
             addSilentGearTrees(defaultTrees);
         }
         if (Config.enableOccultism) {
-            LOGGER.info("Adding Occultism trees to AgriTech: Two config");
+            LOGGER.info("Adding Occultism trees to AgriTech: Evolved config");
             addOccultismTrees(defaultTrees);
         }
         if (Config.enablePamsTrees) {
-            LOGGER.info("Adding Pam's HarvestCraft - Trees to AgriTech: Two config");
+            LOGGER.info("Adding Pam's HarvestCraft - Trees to AgriTech: Evolved config");
             addPamsTrees(defaultTrees);
         }
         if (Config.enableCroptopia) {
-            LOGGER.info("Adding Croptopia trees to AgriTech: Two config");
+            LOGGER.info("Adding Croptopia trees to AgriTech: Evolved config");
             addCroptopiaTrees(defaultTrees);
         }
         if (Config.enableCobblemon) {
-            LOGGER.info("Adding Cobblemon trees to AgriTech: Two config");
+            LOGGER.info("Adding Cobblemon trees to AgriTech: Evolved config");
             addCobblemonTrees(defaultTrees);
         }
         config.allowedTrees = defaultTrees;
@@ -146,15 +146,15 @@ public class PlantablesConfig {
         List<SoilEntry> defaultSoils = new ArrayList<>();
         addVanillaSoils(defaultSoils);
         if (Config.enableMysticalAgriculture) {
-            LOGGER.info("Adding Mystical Agriculture soils to AgriTech: Two config");
+            LOGGER.info("Adding Mystical Agriculture soils to AgriTech: Evolved config");
             addMysticalAgricultureSoils(defaultSoils);
         }
         if (Config.enableFarmersDelight) {
-            LOGGER.info("Adding Farmer's Delight soils to AgriTech: Two config");
+            LOGGER.info("Adding Farmer's Delight soils to AgriTech: Evolved config");
             addFarmersDelightSoils(defaultSoils);
         }
         if (Config.enableJustDireThings) {
-            LOGGER.info("Adding Just Dire Things soils to AgriTech: Two config");
+            LOGGER.info("Adding Just Dire Things soils to AgriTech: Evolved config");
             addJustDireThingsSoils(defaultSoils);
         }
         config.allowedSoils = defaultSoils;
@@ -162,15 +162,15 @@ public class PlantablesConfig {
         List<FertilizerEntry> defaultFertilizers = new ArrayList<>();
         addVanillaFertilizers(defaultFertilizers);
         if (Config.enableImmersiveEngineering) {
-            LOGGER.info("Adding Immersive Engineering fertilizer to AgriTech: Two config");
+            LOGGER.info("Adding Immersive Engineering fertilizer to AgriTech: Evolved config");
             addImmersiveEngineeringFertilizers(defaultFertilizers);
         }
         if (Config.enableForbiddenArcanus) {
-            LOGGER.info("Adding Forbidden Arcanus fertilizer to AgriTech: Two config");
+            LOGGER.info("Adding Forbidden Arcanus fertilizer to AgriTech: Evolved config");
             addForbiddenArcanusFertilizers(defaultFertilizers);
         }
         if (Config.enableMysticalAgriculture) {
-            LOGGER.info("Adding Mystical Agriculture fertilizer to AgriTech: Two config");
+            LOGGER.info("Adding Mystical Agriculture fertilizer to AgriTech: Evolved config");
             addMysticalAgricultureFertilizers(defaultFertilizers);
         }
         config.allowedFertilizers = defaultFertilizers;
@@ -191,7 +191,8 @@ public class PlantablesConfig {
             "justdirethings:goosoil_tier2",
             "justdirethings:goosoil_tier3",
             "justdirethings:goosoil_tier4",
-            "farmersdelight:rich_soil_farmland"
+            "farmersdelight:rich_soil_farmland",
+            "agritechevolved:infused_farmland"
     );
 
     // Standard soils accepted by most ground-planted crops (flowers, berries, etc.)
@@ -217,7 +218,9 @@ public class PlantablesConfig {
             "justdirethings:goosoil_tier2",
             "justdirethings:goosoil_tier3",
             "justdirethings:goosoil_tier4",
-            "farmersdelight:rich_soil_farmland"
+            "farmersdelight:rich_soil_farmland",
+            "agritechevolved:infused_farmland",
+            "agritechevolved:mulch"
     );
 
     private static CropEntry makeCrop(String seed, List<String> validSoils, DropEntry... drops) {
@@ -263,7 +266,7 @@ public class PlantablesConfig {
                 makeDrop("minecraft:pumpkin", 1, 1)));
 
         crops.add(makeCrop("minecraft:sugar_cane",
-                List.of("minecraft:dirt", "minecraft:grass_block", "minecraft:sand", "minecraft:red_sand", "snad:snad", "snad:red_snad"),
+                List.of("minecraft:dirt", "minecraft:grass_block", "minecraft:sand", "minecraft:red_sand", "snad:snad", "snad:red_snad", "agritechevolved:mulch"),
                 makeDrop("minecraft:sugar_cane", 1, 3)));
 
         crops.add(makeCrop("minecraft:cactus",
@@ -274,7 +277,7 @@ public class PlantablesConfig {
                 List.of("minecraft:dirt", "minecraft:grass_block", "minecraft:rooted_dirt", "minecraft:coarse_dirt",
                         "minecraft:podzol", "minecraft:mycelium", "minecraft:mud", "minecraft:moss_block",
                         "minecraft:muddy_mangrove_roots",
-                        "farmersdelight:rich_soil", "farmersdelight:organic_compost"),
+                        "farmersdelight:rich_soil", "farmersdelight:organic_compost", "agritechevolved:mulch"),
                 makeDrop("minecraft:bamboo", 2, 4)));
 
         crops.add(makeCrop("minecraft:sweet_berries",
@@ -287,7 +290,7 @@ public class PlantablesConfig {
 
                         "justdirethings:goosoil_tier1", "justdirethings:goosoil_tier2",
                         "justdirethings:goosoil_tier3", "justdirethings:goosoil_tier4",
-                        "farmersdelight:rich_soil_farmland", "farmersdelight:rich_soil", "farmersdelight:organic_compost"),
+                        "farmersdelight:rich_soil_farmland", "farmersdelight:rich_soil", "farmersdelight:organic_compost", "agritechevolved:mulch"),
                 makeDrop("minecraft:sweet_berries", 2, 4)));
 
         crops.add(makeCrop("minecraft:glow_berries",
@@ -323,12 +326,12 @@ public class PlantablesConfig {
 
         crops.add(makeCrop("minecraft:brown_mushroom",
                 List.of("minecraft:mycelium", "minecraft:podzol",
-                        "farmersdelight:rich_soil", "farmersdelight:organic_compost"),
+                        "farmersdelight:rich_soil", "farmersdelight:organic_compost", "agritechevolved:mulch"),
                 makeDrop("minecraft:brown_mushroom", 1, 1)));
 
         crops.add(makeCrop("minecraft:red_mushroom",
                 List.of("minecraft:mycelium", "minecraft:podzol",
-                        "farmersdelight:rich_soil", "farmersdelight:organic_compost"),
+                        "farmersdelight:rich_soil", "farmersdelight:organic_compost", "agritechevolved:mulch"),
                 makeDrop("minecraft:red_mushroom", 1, 1)));
 
         crops.add(makeCrop("minecraft:cocoa_beans",
@@ -547,7 +550,7 @@ public class PlantablesConfig {
                         "justdirethings:goosoil_tier1", "justdirethings:goosoil_tier2",
                         "justdirethings:goosoil_tier3", "justdirethings:goosoil_tier4",
                         "farmersdelight:rich_soil_farmland", "farmersdelight:organic_compost",
-                        "farmersdelight:rich_soil"),
+                        "farmersdelight:rich_soil", "agritechevolved:mulch"),
                 makeDrop("ars_nouveau:sourceberry_bush", 2, 4, 1.0F)));
     }
 
@@ -556,14 +559,7 @@ public class PlantablesConfig {
                 makeDrop("silentgear:fluffy_puff", 1, 4, 1.0F),
                 makeDrop("silentgear:fluffy_seeds", 1, 1, 1.0F)));
 
-        crops.add(makeCrop("silentgear:flax_seeds",
-                List.of("minecraft:farmland",
-                        "mysticalagriculture:inferium_farmland", "mysticalagriculture:prudentium_farmland",
-                        "mysticalagriculture:tertium_farmland", "mysticalagriculture:imperium_farmland",
-                        "mysticalagriculture:supremium_farmland", "mysticalagradditions:insanium_farmland",
-                        "justdirethings:goosoil_tier1", "justdirethings:goosoil_tier2",
-                        "justdirethings:goosoil_tier3", "justdirethings:goosoil_tier4",
-                        "farmersdelight:rich_soil_farmland"),
+        crops.add(makeCrop("silentgear:flax_seeds", STANDARD_FARMLAND_SOILS,
                 makeDrop("silentgear:flax_fiber", 1, 4, 1.0F),
                 makeDrop("silentgear:flax_seeds", 1, 1, 0.2F),
                 makeDrop("silentgear:flax_flowers", 1, 1, 0.2F)));
@@ -1181,7 +1177,7 @@ public class PlantablesConfig {
 
         List<String> azaleaSoils = List.of("minecraft:dirt", "minecraft:grass_block", "minecraft:podzol",
                 "minecraft:coarse_dirt", "minecraft:rooted_dirt", "minecraft:moss_block",
-                "minecraft:mycelium");
+                "minecraft:mycelium", "agritechevolved:mulch");
 
         trees.add(makeTree("minecraft:azalea", azaleaSoils,
                 makeDrop("minecraft:oak_log", 2, 6),
@@ -1734,7 +1730,9 @@ public class PlantablesConfig {
                 new S("minecraft:stone",                  0.6F),
                 new S("snad:suol_snad",                  1.2F),
                 new S("snad:snad",                  1.2F),
-                new S("snad:red_snad",                  1.2F)
+                new S("snad:red_snad",                  1.2F),
+                new S("agritechevolved:infused_farmland", 1.5F),
+                new S("agritechevolved:mulch", 1.0F)
 
         }) {
             SoilEntry e = new SoilEntry();
@@ -1810,7 +1808,26 @@ public class PlantablesConfig {
         boneMeal.item = "minecraft:bone_meal";
         boneMeal.speedMultiplier = (float) Config.getFertilizerBoneMealSpeedMultiplier();
         boneMeal.yieldMultiplier = (float) Config.getFertilizerBoneMealYieldMultiplier();
+
+        FertilizerEntry crudeBiomass = new FertilizerEntry();
+        crudeBiomass.item = "agritechevolved:crude_biomass";
+        crudeBiomass.speedMultiplier = (float) Config.getFertilizerCrudeBiomassSpeedMultiplier();
+        crudeBiomass.yieldMultiplier = (float) Config.getFertilizerCrudeBiomassYieldMultiplier();
+
+        FertilizerEntry biomass = new FertilizerEntry();
+        biomass.item = "agritechevolved:biomass";
+        biomass.speedMultiplier = (float) Config.getFertilizerBiomassSpeedMultiplier();
+        biomass.yieldMultiplier = (float) Config.getFertilizerBiomassYieldMultiplier();
+
+        FertilizerEntry compactedBiomass = new FertilizerEntry();
+        compactedBiomass.item = "agritechevolved:compacted_biomass";
+        compactedBiomass.speedMultiplier = (float) Config.getFertilizerCompactedBiomassSpeedMultiplier();
+        compactedBiomass.yieldMultiplier = (float) Config.getFertilizerCompactedBiomassYieldMultiplier();
+
         fertilizers.add(boneMeal);
+        fertilizers.add(crudeBiomass);
+        fertilizers.add(biomass);
+        fertilizers.add(compactedBiomass);
     }
 
     private static void addImmersiveEngineeringFertilizers(List<FertilizerEntry> fertilizers) {

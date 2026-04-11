@@ -271,7 +271,7 @@ public class PlanterBlock extends BaseEntityBlock {
     private void openGui(Player player, PlanterBlockEntity planter, BlockPos pos) {
         MenuProvider menuProvider = new SimpleMenuProvider(
                 (containerId, playerInventory, playerEntity) -> new BasicPlanterMenu(containerId, playerInventory, planter),
-                Component.translatable("container.agritechtwo.planter")
+                Component.translatable("gui.agritechevolved.basic_planter")
         );
         player.openMenu(menuProvider, pos);
     }

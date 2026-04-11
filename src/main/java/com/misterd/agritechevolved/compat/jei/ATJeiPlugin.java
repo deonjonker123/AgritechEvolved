@@ -1,11 +1,13 @@
 package com.misterd.agritechevolved.compat.jei;
 
 import com.misterd.agritechevolved.block.ATEBlocks;
+import com.misterd.agritechevolved.config.CompostableConfig;
 import com.misterd.agritechevolved.config.PlantablesConfig;
 import com.misterd.agritechevolved.util.RegistryHelper;
 import com.mojang.logging.LogUtils;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
+import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
@@ -16,10 +18,14 @@ import net.minecraft.world.item.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @JeiPlugin
 public class ATJeiPlugin implements IModPlugin {
-    private static final ResourceLocation PLUGIN_ID = ResourceLocation.fromNamespaceAndPath("agritechevolved", "jei_plugin");
+
+    private static final ResourceLocation PLUGIN_ID =
+            ResourceLocation.fromNamespaceAndPath("agritechevolved", "jei_plugin");
+
     private static IJeiRuntime jeiRuntime;
 
     @Override
@@ -27,22 +33,46 @@ public class ATJeiPlugin implements IModPlugin {
         return PLUGIN_ID;
     }
 
+    // -------------------------------------------------------------------------
+    // Category registration
+    // -------------------------------------------------------------------------
+
     @Override
     public void registerCategories(IRecipeCategoryRegistration registration) {
+        IGuiHelper guiHelper = registration.getJeiHelpers().getGuiHelper();
         registration.addRecipeCategories(
-                new PlanterRecipeCategory(registration.getJeiHelpers().getGuiHelper())
+                new PlanterRecipeCategory(guiHelper),
+                new CompostRecipeCategory(guiHelper)
         );
     }
+
+    // -------------------------------------------------------------------------
+    // Recipe registration
+    // -------------------------------------------------------------------------
 
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
         registration.addRecipes(PlanterRecipeCategory.PLANTER_RECIPE_TYPE, generatePlanterRecipes());
+        registration.addRecipes(CompostRecipeCategory.COMPOST_RECIPE_TYPE, generateCompostRecipes());
     }
+
+    // -------------------------------------------------------------------------
+    // Catalyst registration
+    // -------------------------------------------------------------------------
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        registration.addRecipeCatalyst(new ItemStack(ATEBlocks.OAK_PLANTER.get()), PlanterRecipeCategory.PLANTER_RECIPE_TYPE);
+        registration.addRecipeCatalyst(
+                new ItemStack(ATEBlocks.OAK_PLANTER.get()),
+                PlanterRecipeCategory.PLANTER_RECIPE_TYPE);
+        registration.addRecipeCatalyst(
+                new ItemStack(ATEBlocks.COMPOSTER.get()),
+                CompostRecipeCategory.COMPOST_RECIPE_TYPE);
     }
+
+    // -------------------------------------------------------------------------
+    // Recipe generators
+    // -------------------------------------------------------------------------
 
     private List<PlanterRecipe> generatePlanterRecipes() {
         List<PlanterRecipe> recipes = new ArrayList<>();
@@ -63,11 +93,9 @@ public class ATJeiPlugin implements IModPlugin {
                         continue;
                     }
                     PlanterRecipe recipe = PlanterRecipe.createCrop(seedId, soilId);
-                    if (recipe != null && !recipe.getOutputs().isEmpty()) {
-                        recipes.add(recipe);
-                    }
+                    if (recipe != null && !recipe.getOutputs().isEmpty()) recipes.add(recipe);
                 } catch (Exception e) {
-                    LogUtils.getLogger().error("Error creating recipe for seed {} and soil {}: {}", seedId, soilId, e.getMessage(), e);
+                    LogUtils.getLogger().error("Error creating recipe for seed {} and soil {}: {}", seedId, soilId, e.getMessage());
                 }
             }
         }
@@ -86,11 +114,9 @@ public class ATJeiPlugin implements IModPlugin {
                         continue;
                     }
                     PlanterRecipe recipe = PlanterRecipe.createTree(saplingId, soilId);
-                    if (recipe != null && !recipe.getOutputs().isEmpty()) {
-                        recipes.add(recipe);
-                    }
+                    if (recipe != null && !recipe.getOutputs().isEmpty()) recipes.add(recipe);
                 } catch (Exception e) {
-                    LogUtils.getLogger().error("Error creating recipe for sapling {} and soil {}: {}", saplingId, soilId, e.getMessage(), e);
+                    LogUtils.getLogger().error("Error creating recipe for sapling {} and soil {}: {}", saplingId, soilId, e.getMessage());
                 }
             }
         }
@@ -98,9 +124,29 @@ public class ATJeiPlugin implements IModPlugin {
         return recipes;
     }
 
+    private List<CompostRecipe> generateCompostRecipes() {
+        List<CompostRecipe> recipes = CompostableConfig.getCompostableItems().stream()
+                .map(itemId -> {
+                    try {
+                        return CompostRecipe.create(itemId);
+                    } catch (Exception e) {
+                        LogUtils.getLogger().error("Failed to create compost recipe for {}: {}", itemId, e.getMessage());
+                        return null;
+                    }
+                })
+                .filter(Objects::nonNull)
+                .toList();
+        LogUtils.getLogger().info("Generated {} compost recipes for JEI", recipes.size());
+        return recipes;
+    }
+
+    // -------------------------------------------------------------------------
+    // Runtime
+    // -------------------------------------------------------------------------
+
     @Override
     public void onRuntimeAvailable(IJeiRuntime runtime) {
-        ATJeiPlugin.jeiRuntime = runtime;
+        jeiRuntime = runtime;
     }
 
     public static IJeiRuntime getJeiRuntime() {

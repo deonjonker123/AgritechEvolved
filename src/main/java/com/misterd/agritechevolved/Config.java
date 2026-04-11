@@ -37,7 +37,6 @@ public class Config {
     public static ModConfigSpec.BooleanValue ENABLE_CROPTOPIA;
     public static ModConfigSpec.BooleanValue ENABLE_COBBLEMON;
     public static ModConfigSpec.BooleanValue ENABLE_ACTUALLY_ADDITIONS;
-    public static ModConfigSpec.BooleanValue ENABLE_ATE;
 
     // -------------------------------------------------------------------------
     // Modules
@@ -60,6 +59,8 @@ public class Config {
     // -------------------------------------------------------------------------
     public static ModConfigSpec.DoubleValue FERTILIZER_BONE_MEAL_SPEED_MULTIPLIER;
     public static ModConfigSpec.DoubleValue FERTILIZER_BONE_MEAL_YIELD_MULTIPLIER;
+    public static ModConfigSpec.DoubleValue FERTILIZER_CRUDE_BIOMASS_SPEED_MULTIPLIER;
+    public static ModConfigSpec.DoubleValue FERTILIZER_CRUDE_BIOMASS_YIELD_MULTIPLIER;
     public static ModConfigSpec.DoubleValue FERTILIZER_BIOMASS_SPEED_MULTIPLIER;
     public static ModConfigSpec.DoubleValue FERTILIZER_BIOMASS_YIELD_MULTIPLIER;
     public static ModConfigSpec.DoubleValue FERTILIZER_COMPACTED_BIOMASS_SPEED_MULTIPLIER;
@@ -129,7 +130,6 @@ public class Config {
     public static boolean enableCroptopia;
     public static boolean enableCobblemon;
     public static boolean enableActuallyAdditions;
-    public static boolean enableAgritechEvolved;
 
     // =========================================================================
     // Registration
@@ -168,7 +168,6 @@ public class Config {
         ENABLE_CROPTOPIA             = COMMON_BUILDER.comment("Enable Croptopia compatibility").define("enable_croptopia", true);
         ENABLE_COBBLEMON             = COMMON_BUILDER.comment("Enable Cobblemon compatibility").define("enable_cobblemon", true);
         ENABLE_ACTUALLY_ADDITIONS    = COMMON_BUILDER.comment("Enable Actually Additions compatibility").define("enable_actually_additions", true);
-        ENABLE_ATE                   = COMMON_BUILDER.comment("Enable AgriTech: Evolved internal content").define("enable_agritech_evolved", true);
         COMMON_BUILDER.pop();
     }
 
@@ -200,6 +199,8 @@ public class Config {
         COMMON_BUILDER.comment("Fertilizer Configuration").push("fertilizers");
         FERTILIZER_BONE_MEAL_SPEED_MULTIPLIER             = COMMON_BUILDER.comment("Speed multiplier for Bone Meal").defineInRange("bone_meal_speed_multiplier", 1.2D, 0.1D, 10.0D);
         FERTILIZER_BONE_MEAL_YIELD_MULTIPLIER             = COMMON_BUILDER.comment("Yield multiplier for Bone Meal").defineInRange("bone_meal_yield_multiplier", 1.2D, 0.1D, 10.0D);
+        FERTILIZER_CRUDE_BIOMASS_SPEED_MULTIPLIER               = COMMON_BUILDER.comment("Speed multiplier for Crude Biomass fertilizer").defineInRange("biomass_speed_multiplier", 1.25D, 0.1D, 10.0D);
+        FERTILIZER_CRUDE_BIOMASS_YIELD_MULTIPLIER               = COMMON_BUILDER.comment("Yield multiplier for Crude Biomass fertilizer").defineInRange("biomass_yield_multiplier", 1.25D, 0.1D, 10.0D);
         FERTILIZER_BIOMASS_SPEED_MULTIPLIER               = COMMON_BUILDER.comment("Speed multiplier for Biomass fertilizer").defineInRange("biomass_speed_multiplier", 1.3D, 0.1D, 10.0D);
         FERTILIZER_BIOMASS_YIELD_MULTIPLIER               = COMMON_BUILDER.comment("Yield multiplier for Biomass fertilizer").defineInRange("biomass_yield_multiplier", 1.3D, 0.1D, 10.0D);
         FERTILIZER_COMPACTED_BIOMASS_SPEED_MULTIPLIER     = COMMON_BUILDER.comment("Speed multiplier for Compacted Biomass fertilizer").defineInRange("compacted_biomass_speed_multiplier", 1.8D, 0.1D, 10.0D);
@@ -297,6 +298,8 @@ public class Config {
 
     public static double getFertilizerBoneMealSpeedMultiplier()             { return FERTILIZER_BONE_MEAL_SPEED_MULTIPLIER.get(); }
     public static double getFertilizerBoneMealYieldMultiplier()             { return FERTILIZER_BONE_MEAL_YIELD_MULTIPLIER.get(); }
+    public static double getFertilizerCrudeBiomassSpeedMultiplier()              { return FERTILIZER_CRUDE_BIOMASS_SPEED_MULTIPLIER.get(); }
+    public static double getFertilizerCrudeBiomassYieldMultiplier()              { return FERTILIZER_CRUDE_BIOMASS_YIELD_MULTIPLIER.get(); }
     public static double getFertilizerBiomassSpeedMultiplier()              { return FERTILIZER_BIOMASS_SPEED_MULTIPLIER.get(); }
     public static double getFertilizerBiomassYieldMultiplier()              { return FERTILIZER_BIOMASS_YIELD_MULTIPLIER.get(); }
     public static double getFertilizerCompactedBiomassSpeedMultiplier()     { return FERTILIZER_COMPACTED_BIOMASS_SPEED_MULTIPLIER.get(); }
@@ -364,7 +367,7 @@ public class Config {
     // =========================================================================
 
     public static void loadConfig() {
-        //CompostableConfig.loadConfig();
+        CompostableConfig.loadConfig();
         PlantablesConfig.loadConfig();
         LOGGER.info("AgriTech: Evolved configs reloaded");
     }
@@ -388,9 +391,8 @@ public class Config {
         enableCroptopia            = ENABLE_CROPTOPIA.get()             && ModList.get().isLoaded("croptopia");
         enableCobblemon            = ENABLE_COBBLEMON.get()             && ModList.get().isLoaded("cobblemon");
         enableActuallyAdditions    = ENABLE_ACTUALLY_ADDITIONS.get()    && ModList.get().isLoaded("actuallyadditions");
-        enableAgritechEvolved      = ENABLE_ATE.get();
         LOGGER.info("AgriTech: Evolved configuration loaded");
-        //CompostableConfig.loadConfig();
+        CompostableConfig.loadConfig();
         PlantablesConfig.loadConfig();
         logModCompatibility();
     }

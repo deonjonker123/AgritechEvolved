@@ -32,6 +32,17 @@ public class ATECreativeTab {
 
                         output.accept(ATEBlocks.ADVANCED_PLANTER);
 
+                        output.accept(ATEBlocks.COMPOSTER);
+
+                        output.accept(ATEBlocks.BIOMASS_BURNER);
+                        output.accept(ATEBlocks.CAPACITOR_TIER_1);
+                        output.accept(ATEBlocks.CAPACITOR_TIER_2);
+                        output.accept(ATEBlocks.CAPACITOR_TIER_3);
+
+                        output.accept(ATEBlocks.MULCH);
+                        output.accept(ATEBlocks.INFUSED_FARMLAND);
+                        output.accept(ATEBlocks.COMPACTED_BIOMASS_BLOCK);
+
                         output.accept(ATEItems.CRUDE_BIOMASS.get());
                         output.accept(ATEItems.BIOMASS.get());
                         output.accept(ATEItems.COMPACTED_BIOMASS.get());
