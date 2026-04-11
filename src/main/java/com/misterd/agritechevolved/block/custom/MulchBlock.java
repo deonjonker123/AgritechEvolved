@@ -27,16 +27,14 @@ public class MulchBlock extends Block {
     }
 
     @Override
-    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos,
-                                              Player player, InteractionHand hand, BlockHitResult hitResult) {
+    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
         return stack.getItem() instanceof HoeItem
                 ? convertToInfusedFarmland(level, pos, player, stack)
                 : ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
     }
 
     @Override
-    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos,
-                                               Player player, BlockHitResult hitResult) {
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
         ItemStack mainHand = player.getMainHandItem();
         if (mainHand.getItem() instanceof HoeItem) {
             return convertToInfusedFarmland(level, pos, player, mainHand).result();
@@ -44,8 +42,7 @@ public class MulchBlock extends Block {
         return InteractionResult.PASS;
     }
 
-    private ItemInteractionResult convertToInfusedFarmland(Level level, BlockPos pos,
-                                                           Player player, ItemStack hoe) {
+    private ItemInteractionResult convertToInfusedFarmland(Level level, BlockPos pos, Player player, ItemStack hoe) {
         if (level.isClientSide) return ItemInteractionResult.sidedSuccess(true);
 
         level.setBlockAndUpdate(pos, ATEBlocks.INFUSED_FARMLAND.get().defaultBlockState());
@@ -58,8 +55,7 @@ public class MulchBlock extends Block {
 
     @Override
     @Nullable
-    public BlockState getToolModifiedState(BlockState state, UseOnContext context,
-                                           ItemAbility toolAction, boolean simulate) {
+    public BlockState getToolModifiedState(BlockState state, UseOnContext context, ItemAbility toolAction, boolean simulate) {
         return toolAction == ItemAbilities.HOE_TILL
                 ? ATEBlocks.INFUSED_FARMLAND.get().defaultBlockState()
                 : super.getToolModifiedState(state, context, toolAction, simulate);

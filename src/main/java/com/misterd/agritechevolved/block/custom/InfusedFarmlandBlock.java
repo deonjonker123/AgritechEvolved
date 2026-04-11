@@ -68,8 +68,7 @@ public class InfusedFarmlandBlock extends FarmBlock {
     }
 
     @Override
-    public TriState canSustainPlant(BlockState state, BlockGetter level, BlockPos soilPosition,
-                                    Direction facing, BlockState plant) {
+    public TriState canSustainPlant(BlockState state, BlockGetter level, BlockPos soilPosition, Direction facing, BlockState plant) {
         if (facing != Direction.UP) return TriState.FALSE;
         Block b = plant.getBlock();
         if (b instanceof BushBlock || b instanceof CropBlock || b instanceof StemBlock) return TriState.TRUE;
@@ -77,20 +76,14 @@ public class InfusedFarmlandBlock extends FarmBlock {
     }
 
     @Override
-    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos,
-                                               Player player, BlockHitResult hitResult) {
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
         return super.useWithoutItem(state, level, pos, player, hitResult);
     }
 
     @Override
-    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos,
-                                              Player player, InteractionHand hand, BlockHitResult hitResult) {
+    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
         return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
     }
-
-    // -------------------------------------------------------------------------
-    // Random tick — moisture and bonemeal bonus
-    // -------------------------------------------------------------------------
 
     @Override
     protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
@@ -106,7 +99,6 @@ public class InfusedFarmlandBlock extends FarmBlock {
             level.setBlock(pos, state.setValue(MOISTURE, 7), 2);
         }
 
-        // Bonus: fully hydrated farmland has a chance to advance the crop above
         if (moisture == 7 && random.nextFloat() < 0.45F) {
             bonemealCrop(level, pos);
         }
@@ -137,18 +129,13 @@ public class InfusedFarmlandBlock extends FarmBlock {
         if (next != null) level.setBlockAndUpdate(cropPos, next);
     }
 
-    // -------------------------------------------------------------------------
-    // Fall / neighbour / pathfinding / fertility
-    // -------------------------------------------------------------------------
-
     @Override
     public void fallOn(Level level, BlockState state, BlockPos pos, Entity entity, float fallDistance) {
         entity.causeFallDamage(fallDistance, 1.0F, entity.damageSources().fall());
     }
 
     @Override
-    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock,
-                                   BlockPos neighborPos, boolean movedByPiston) {
+    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock, BlockPos neighborPos, boolean movedByPiston) {
         super.neighborChanged(state, level, pos, neighborBlock, neighborPos, movedByPiston);
         if (!state.canSurvive(level, pos)) turnToMulch(null, state, level, pos);
     }
@@ -158,10 +145,6 @@ public class InfusedFarmlandBlock extends FarmBlock {
 
     @Override
     public boolean isFertile(BlockState state, BlockGetter level, BlockPos pos) { return true; }
-
-    // -------------------------------------------------------------------------
-    // Degradation to Mulch
-    // -------------------------------------------------------------------------
 
     public static void turnToMulch(@Nullable Entity entity, BlockState state, Level level, BlockPos pos) {
         BlockState mulch = pushEntitiesUp(state, ATEBlocks.MULCH.get().defaultBlockState(), level, pos);
@@ -175,15 +158,10 @@ public class InfusedFarmlandBlock extends FarmBlock {
 
         double yOffset = newShape.max(Direction.Axis.Y) - oldShape.max(Direction.Axis.Y);
         if (yOffset > 0.0) {
-            level.getEntities(null, oldShape.bounds().move(pos))
-                    .forEach(e -> e.teleportTo(e.getX(), e.getY() + yOffset, e.getZ()));
+            level.getEntities(null, oldShape.bounds().move(pos)).forEach(e -> e.teleportTo(e.getX(), e.getY() + yOffset, e.getZ()));
         }
         return newState;
     }
-
-    // -------------------------------------------------------------------------
-    // Moisture helpers
-    // -------------------------------------------------------------------------
 
     private static boolean shouldMaintainFarmland(BlockGetter level, BlockPos pos) {
         for (BlockPos nearby : BlockPos.betweenClosed(pos.offset(-6, 0, -6), pos.offset(6, 1, 6))) {

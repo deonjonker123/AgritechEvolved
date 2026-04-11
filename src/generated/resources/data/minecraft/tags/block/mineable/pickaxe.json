@@ -6,8 +6,6 @@
     "agritechevolved:capacitor_tier1",
     "agritechevolved:capacitor_tier2",
     "agritechevolved:capacitor_tier3",
-    "agritechevolved:compacted_biomass_block",
-    "agritechevolved:infused_farmland",
-    "agritechevolved:mulch"
+    "agritechevolved:compacted_biomass_block"
   ]
 }

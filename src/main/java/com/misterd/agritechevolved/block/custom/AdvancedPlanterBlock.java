@@ -113,10 +113,6 @@ public class AdvancedPlanterBlock extends BaseEntityBlock {
         return new AdvancedPlanterBlockEntity(pos, state);
     }
 
-    // -------------------------------------------------------------------------
-    // Placement / removal
-    // -------------------------------------------------------------------------
-
     @Override
     public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving) {
         super.onPlace(state, level, pos, oldState, isMoving);
@@ -128,7 +124,6 @@ public class AdvancedPlanterBlock extends BaseEntityBlock {
     @Override
     public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
         if (state.getBlock() != newState.getBlock()) {
-            // Drop the cloche as an item if one is installed
             if (state.getValue(CLOCHED)) {
                 level.addFreshEntity(new ItemEntity(
                         level,
@@ -143,20 +138,14 @@ public class AdvancedPlanterBlock extends BaseEntityBlock {
         super.onRemove(state, level, pos, newState, isMoving);
     }
 
-    // -------------------------------------------------------------------------
-    // Interaction
-    // -------------------------------------------------------------------------
-
     @Override
-    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos,
-                                              Player player, InteractionHand hand, BlockHitResult hitResult) {
+    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
         if (!(level.getBlockEntity(pos) instanceof AdvancedPlanterBlockEntity planter)) {
             return ItemInteractionResult.FAIL;
         }
 
         ItemStack heldItem = player.getItemInHand(hand);
 
-        // Sneak + empty hand + cloched → remove cloche
         if (player.isCrouching() && heldItem.isEmpty() && state.getValue(CLOCHED)) {
             if (!level.isClientSide()) {
                 level.setBlock(pos, state.setValue(CLOCHED, false), 3);
@@ -170,7 +159,6 @@ public class AdvancedPlanterBlock extends BaseEntityBlock {
             return ItemInteractionResult.SUCCESS;
         }
 
-        // Sneak-click always opens the GUI
         if (player.isCrouching()) {
             if (!level.isClientSide()) openMenu(level, pos, player, planter);
             return ItemInteractionResult.SUCCESS;
@@ -178,7 +166,6 @@ public class AdvancedPlanterBlock extends BaseEntityBlock {
 
         String heldItemId = RegistryHelper.getItemId(heldItem);
 
-        // --- Cloche ---
         if (heldItem.getItem() instanceof ClocheItem) {
             if (state.getValue(CLOCHED)) return ItemInteractionResult.FAIL;
             if (!level.isClientSide()) {
@@ -189,48 +176,35 @@ public class AdvancedPlanterBlock extends BaseEntityBlock {
             return ItemInteractionResult.SUCCESS;
         }
 
-        // --- Seed / Sapling ---
         if (PlantablesConfig.isValidSeed(heldItemId) || PlantablesConfig.isValidSapling(heldItemId)) {
             return tryPlaceSeedOrSapling(heldItem, heldItemId, level, pos, state, player, planter);
         }
 
-        // --- Soil ---
         if (PlantablesConfig.isValidSoil(heldItemId)) {
             return tryPlaceSoil(heldItem, heldItemId, level, pos, state, player, planter);
         }
 
-        // --- Hoe (till soil in slot 1) ---
         if (heldItem.getItem() instanceof HoeItem) {
             return tryTillSoil(heldItem, level, pos, player, hand, planter);
         }
 
-        // --- Fertilizer ---
         if (PlantablesConfig.isValidFertilizer(heldItemId)) {
             return tryPlaceFertilizer(heldItem, level, pos, state, player, planter);
         }
 
-        // --- Module ---
         if (heldItem.is(ATETags.Items.ATE_MODULES)) {
             return tryPlaceModule(heldItem, level, pos, state, player, planter);
         }
 
-        // --- Mystical Agriculture essence (upgrade farmland) ---
         if (tryUpgradeFarmland(stack, heldItemId, level, pos, player, planter)) {
             return ItemInteractionResult.sidedSuccess(level.isClientSide());
         }
 
-        // Fallback: open GUI
         if (!level.isClientSide()) openMenu(level, pos, player, planter);
         return ItemInteractionResult.SUCCESS;
     }
 
-    // -------------------------------------------------------------------------
-    // Interaction helpers
-    // -------------------------------------------------------------------------
-
-    private ItemInteractionResult tryPlaceSeedOrSapling(ItemStack heldItem, String heldItemId, Level level,
-                                                        BlockPos pos, BlockState state, Player player,
-                                                        AdvancedPlanterBlockEntity planter) {
+    private ItemInteractionResult tryPlaceSeedOrSapling(ItemStack heldItem, String heldItemId, Level level, BlockPos pos, BlockState state, Player player, AdvancedPlanterBlockEntity planter) {
         if (level.isClientSide()) return ItemInteractionResult.SUCCESS;
         if (!planter.inventory.getStackInSlot(0).isEmpty()) return ItemInteractionResult.SUCCESS;
 
@@ -241,8 +215,7 @@ public class AdvancedPlanterBlock extends BaseEntityBlock {
                     ? PlantablesConfig.isSoilValidForSeed(soilId, heldItemId)
                     : PlantablesConfig.isSoilValidForSapling(soilId, heldItemId);
             if (!valid) {
-                player.displayClientMessage(
-                        Component.translatable("message.agritechevolved.invalid_plant_soil_combination"), true);
+                player.displayClientMessage(Component.translatable("message.agritechevolved.invalid_plant_soil_combination"), true);
                 return ItemInteractionResult.SUCCESS;
             }
         }
@@ -252,9 +225,7 @@ public class AdvancedPlanterBlock extends BaseEntityBlock {
         return ItemInteractionResult.SUCCESS;
     }
 
-    private ItemInteractionResult tryPlaceSoil(ItemStack heldItem, String heldItemId, Level level,
-                                               BlockPos pos, BlockState state, Player player,
-                                               AdvancedPlanterBlockEntity planter) {
+    private ItemInteractionResult tryPlaceSoil(ItemStack heldItem, String heldItemId, Level level, BlockPos pos, BlockState state, Player player, AdvancedPlanterBlockEntity planter) {
         if (level.isClientSide()) return ItemInteractionResult.SUCCESS;
         if (!planter.inventory.getStackInSlot(1).isEmpty()) return ItemInteractionResult.SUCCESS;
 
@@ -265,8 +236,7 @@ public class AdvancedPlanterBlock extends BaseEntityBlock {
             if (PlantablesConfig.isValidSeed(plantId))         valid = PlantablesConfig.isSoilValidForSeed(heldItemId, plantId);
             else if (PlantablesConfig.isValidSapling(plantId)) valid = PlantablesConfig.isSoilValidForSapling(heldItemId, plantId);
             if (!valid) {
-                player.displayClientMessage(
-                        Component.translatable("message.agritechevolved.invalid_plant_soil_combination"), true);
+                player.displayClientMessage(Component.translatable("message.agritechevolved.invalid_plant_soil_combination"), true);
                 return ItemInteractionResult.SUCCESS;
             }
         }
@@ -276,9 +246,7 @@ public class AdvancedPlanterBlock extends BaseEntityBlock {
         return ItemInteractionResult.SUCCESS;
     }
 
-    private ItemInteractionResult tryTillSoil(ItemStack heldItem, Level level, BlockPos pos,
-                                              Player player, InteractionHand hand,
-                                              AdvancedPlanterBlockEntity planter) {
+    private ItemInteractionResult tryTillSoil(ItemStack heldItem, Level level, BlockPos pos, Player player, InteractionHand hand, AdvancedPlanterBlockEntity planter) {
         ItemStack soilStack = planter.inventory.getStackInSlot(1);
         if (soilStack.isEmpty() || !(soilStack.getItem() instanceof BlockItem blockItem)) {
             return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
@@ -304,9 +272,7 @@ public class AdvancedPlanterBlock extends BaseEntityBlock {
         return ItemInteractionResult.sidedSuccess(level.isClientSide());
     }
 
-    private ItemInteractionResult tryPlaceFertilizer(ItemStack heldItem, Level level, BlockPos pos,
-                                                     BlockState state, Player player,
-                                                     AdvancedPlanterBlockEntity planter) {
+    private ItemInteractionResult tryPlaceFertilizer(ItemStack heldItem, Level level, BlockPos pos, BlockState state, Player player, AdvancedPlanterBlockEntity planter) {
         if (level.isClientSide()) return ItemInteractionResult.SUCCESS;
         if (!planter.inventory.getStackInSlot(4).isEmpty()) return ItemInteractionResult.SUCCESS;
 
@@ -315,9 +281,7 @@ public class AdvancedPlanterBlock extends BaseEntityBlock {
         return ItemInteractionResult.SUCCESS;
     }
 
-    private ItemInteractionResult tryPlaceModule(ItemStack heldItem, Level level, BlockPos pos,
-                                                 BlockState state, Player player,
-                                                 AdvancedPlanterBlockEntity planter) {
+    private ItemInteractionResult tryPlaceModule(ItemStack heldItem, Level level, BlockPos pos, BlockState state, Player player, AdvancedPlanterBlockEntity planter) {
         if (level.isClientSide()) return ItemInteractionResult.SUCCESS;
 
         for (int slot = 2; slot <= 3; slot++) {
@@ -330,9 +294,7 @@ public class AdvancedPlanterBlock extends BaseEntityBlock {
         return ItemInteractionResult.SUCCESS;
     }
 
-    /** @return true if the essence was consumed and the farmland was upgraded */
-    private boolean tryUpgradeFarmland(ItemStack stack, String heldItemId, Level level, BlockPos pos,
-                                       Player player, AdvancedPlanterBlockEntity planter) {
+    private boolean tryUpgradeFarmland(ItemStack stack, String heldItemId, Level level, BlockPos pos, Player player, AdvancedPlanterBlockEntity planter) {
         Map<String, String> essenceMap = new HashMap<>(ESSENCE_TO_FARMLAND);
         if (ModList.get().isLoaded("mysticalagradditions")) {
             essenceMap.put("mysticalagradditions:insanium_essence", "mysticalagradditions:insanium_farmland");
@@ -352,8 +314,7 @@ public class AdvancedPlanterBlock extends BaseEntityBlock {
 
         if (soilId.equals(targetFarmlandId)) {
             if (!level.isClientSide()) {
-                player.displayClientMessage(
-                        Component.translatable("message.agritechevolved.same_farmland"), true);
+                player.displayClientMessage(Component.translatable("message.agritechevolved.same_farmland"), true);
             }
             return true;
         }
@@ -367,12 +328,7 @@ public class AdvancedPlanterBlock extends BaseEntityBlock {
         return true;
     }
 
-    // -------------------------------------------------------------------------
-    // Utilities
-    // -------------------------------------------------------------------------
-
-    private void placeInSlot(AdvancedPlanterBlockEntity planter, int slot, ItemStack heldItem,
-                             Level level, BlockPos pos, BlockState state) {
+    private void placeInSlot(AdvancedPlanterBlockEntity planter, int slot, ItemStack heldItem, Level level, BlockPos pos, BlockState state) {
         planter.inventory.setStackInSlot(slot, heldItem.copyWithCount(1));
         heldItem.shrink(1);
         level.sendBlockUpdated(pos, state, state, 2);
@@ -385,16 +341,10 @@ public class AdvancedPlanterBlock extends BaseEntityBlock {
                 Component.translatable("gui.agritechevolved.advanced_planter")), pos);
     }
 
-    // -------------------------------------------------------------------------
-    // Ticker
-    // -------------------------------------------------------------------------
-
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state,
-                                                                  BlockEntityType<T> type) {
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
         return type == ATEBlockEntities.ADVANCED_PLANTER_BLOCK_BE.get()
-                ? (lvl, pos, blockState, be) ->
-                AdvancedPlanterBlockEntity.tick(lvl, pos, blockState, (AdvancedPlanterBlockEntity) be)
+                ? (lvl, pos, blockState, be) -> AdvancedPlanterBlockEntity.tick(lvl, pos, blockState, (AdvancedPlanterBlockEntity) be)
                 : null;
     }
 }

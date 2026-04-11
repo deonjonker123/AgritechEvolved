@@ -320,6 +320,8 @@ public class ATERecipeProvider extends RecipeProvider implements IConditionBuild
                 .define('D', ATETags.Items.DIRT_LIKE_BLOCK_ITEMS)
                 .unlockedBy("has_leaves", has(ItemTags.LEAVES))
                 .save(recipeOutput);
+
+        buildDurabilityRecipes(recipeOutput);
     }
 
     public void buildDurabilityRecipes(RecipeOutput recipeOutput) {

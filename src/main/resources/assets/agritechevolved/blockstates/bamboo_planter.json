@@ -1,6 +1,0 @@
-{
-  "variants": {
-    "cloched=false": { "model": "agritechevolved:block/bamboo_planter" },
-    "cloched=true":  { "model": "agritechevolved:block/bamboo_planter" }
-  }
-}

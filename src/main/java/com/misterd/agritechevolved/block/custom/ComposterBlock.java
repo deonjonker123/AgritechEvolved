@@ -76,11 +76,9 @@ public class ComposterBlock extends BaseEntityBlock {
     }
 
     @Override
-    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos,
-                                              Player player, InteractionHand hand, BlockHitResult hitResult) {
+    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
         if (!level.isClientSide() && level.getBlockEntity(pos) instanceof ComposterBlockEntity composter) {
-            ((ServerPlayer) player).openMenu(
-                    new SimpleMenuProvider(composter, Component.translatable("gui.agritechevolved.composter")), pos);
+            ((ServerPlayer) player).openMenu(new SimpleMenuProvider(composter, Component.translatable("gui.agritechevolved.composter")), pos);
         }
         return ItemInteractionResult.SUCCESS;
     }

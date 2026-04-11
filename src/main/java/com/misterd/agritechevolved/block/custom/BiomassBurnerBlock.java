@@ -88,19 +88,16 @@ public class BiomassBurnerBlock extends BaseEntityBlock {
     }
 
     @Override
-    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos,
-                                              Player player, InteractionHand hand, BlockHitResult hitResult) {
+    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
         if (!level.isClientSide() && level.getBlockEntity(pos) instanceof BiomassBurnerBlockEntity burner) {
-            ((ServerPlayer) player).openMenu(
-                    new SimpleMenuProvider(burner, Component.translatable("gui.agritechevolved.biomass_burner")), pos);
+            ((ServerPlayer) player).openMenu(new SimpleMenuProvider(burner, Component.translatable("gui.agritechevolved.biomass_burner")), pos);
         }
         return ItemInteractionResult.SUCCESS;
     }
 
     @Override
     @Nullable
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state,
-                                                                  BlockEntityType<T> type) {
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
         return type == ATEBlockEntities.BURNER_BE.get()
                 ? (lvl, pos, blockState, be) -> BiomassBurnerBlockEntity.tick(lvl, pos, blockState, (BiomassBurnerBlockEntity) be)
                 : null;

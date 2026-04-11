@@ -1,10 +1,34 @@
 {
   "variants": {
-    "has_energy=false": {
+    "facing=north,has_energy=false": {
       "model": "agritechevolved:block/capacitor_tier2"
     },
-    "has_energy=true": {
+    "facing=north,has_energy=true": {
       "model": "agritechevolved:block/capacitor_tier2_powered"
+    },
+    "facing=south,has_energy=false": {
+      "model": "agritechevolved:block/capacitor_tier2",
+      "y": 280
+    },
+    "facing=south,has_energy=true": {
+      "model": "agritechevolved:block/capacitor_tier2_powered",
+      "y": 280
+    },
+    "facing=east,has_energy=false": {
+      "model": "agritechevolved:block/capacitor_tier2",
+      "y": 90
+    },
+    "facing=east,has_energy=true": {
+      "model": "agritechevolved:block/capacitor_tier2_powered",
+      "y": 90
+    },
+    "facing=west,has_energy=false": {
+      "model": "agritechevolved:block/capacitor_tier2",
+      "y": 270
+    },
+    "facing=west,has_energy=true": {
+      "model": "agritechevolved:block/capacitor_tier2_powered",
+      "y": 270
     }
   }
 }

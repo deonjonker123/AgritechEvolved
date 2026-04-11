@@ -1,6 +1,0 @@
-{
-  "variants": {
-    "cloched=false": { "model": "agritechevolved:block/cherry_planter" },
-    "cloched=true":  { "model": "agritechevolved:block/cherry_planter" }
-  }
-}

@@ -1,6 +1,0 @@
-{
-  "variants": {
-    "cloched=false": { "model": "agritechevolved:block/spruce_planter" },
-    "cloched=true":  { "model": "agritechevolved:block/spruce_planter" }
-  }
-}

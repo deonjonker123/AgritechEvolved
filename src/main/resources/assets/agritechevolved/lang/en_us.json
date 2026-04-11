@@ -1,17 +1,17 @@
 {
   "creativetab.agritechevolved": "Agritech: Evolved",
 
-  "block.agritechevolved.oak_planter": "Oak Planter",
-  "block.agritechevolved.acacia_planter": "Acacia Planter",
-  "block.agritechevolved.bamboo_planter": "Bamboo Planter",
-  "block.agritechevolved.birch_planter": "Birch Planter",
-  "block.agritechevolved.cherry_planter": "Cherry Planter",
-  "block.agritechevolved.crimson_planter": "Crimson Planter",
-  "block.agritechevolved.dark_oak_planter": "Dark Oak Planter",
-  "block.agritechevolved.jungle_planter": "Jungle Planter",
-  "block.agritechevolved.mangrove_planter": "Mangrove Planter",
-  "block.agritechevolved.spruce_planter": "Spruce Planter",
-  "block.agritechevolved.warped_planter": "Warped Planter",
+  "block.agritechevolved.basic_planter": "Basic Oak Planter",
+  "block.agritechevolved.basic_acacia_planter": "Basic Acacia Planter",
+  "block.agritechevolved.basic_bamboo_planter": "Basic Bamboo Planter",
+  "block.agritechevolved.basic_birch_planter": "Basic Birch Planter",
+  "block.agritechevolved.basic_cherry_planter": "Basic Cherry Planter",
+  "block.agritechevolved.basic_crimson_planter": "Basic Crimson Planter",
+  "block.agritechevolved.basic_dark_oak_planter": "Basic Dark Oak Planter",
+  "block.agritechevolved.basic_jungle_planter": "Basic Jungle Planter",
+  "block.agritechevolved.basic_mangrove_planter": "Basic Mangrove Planter",
+  "block.agritechevolved.basic_spruce_planter": "Basic Spruce Planter",
+  "block.agritechevolved.basic_warped_planter": "Basic Warped Planter",
 
   "block.agritechevolved.advanced_planter": "Advanced Planter",
 
