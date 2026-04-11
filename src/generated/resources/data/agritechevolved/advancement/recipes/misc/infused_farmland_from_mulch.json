@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_mulch": {
+      "conditions": {
+        "items": [
+          {
+            "items": "agritechevolved:mulch"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "agritechevolved:infused_farmland_from_mulch"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_mulch"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "agritechevolved:infused_farmland_from_mulch"
+    ]
+  }
+}
