@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": {
+      "item": "agritechevolved:oak_planter"
+    },
+    "F": {
+      "item": "minecraft:iron_ingot"
+    },
+    "I": {
+      "item": "minecraft:iron_block"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    }
+  },
+  "pattern": [
+    "F F",
+    "IAI",
+    "RIR"
+  ],
+  "result": {
+    "count": 1,
+    "id": "agritechevolved:advanced_planter"
+  }
+}

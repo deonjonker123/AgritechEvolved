@@ -1,0 +1,6 @@
+{
+  "variants": {
+    "cloched=false": { "model": "agritechevolved:block/dark_oak_planter" },
+    "cloched=true":  { "model": "agritechevolved:block/dark_oak_planter" }
+  }
+}
