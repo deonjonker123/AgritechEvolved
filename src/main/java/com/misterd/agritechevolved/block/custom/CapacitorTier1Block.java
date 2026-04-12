@@ -36,7 +36,7 @@ import java.util.List;
 
 public class CapacitorTier1Block extends BaseEntityBlock {
 
-    public static final MapCodec<CapacitorTier2Block> CODEC = simpleCodec(CapacitorTier2Block::new);
+    public static final MapCodec<CapacitorTier1Block> CODEC = simpleCodec(CapacitorTier1Block::new);
     public static final BooleanProperty HAS_ENERGY = BooleanProperty.create("has_energy");
     public static final DirectionProperty FACING  = HorizontalDirectionalBlock.FACING;
 

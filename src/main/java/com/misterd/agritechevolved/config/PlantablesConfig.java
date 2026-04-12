@@ -359,7 +359,7 @@ public class PlantablesConfig {
 
     private static final List<String> STANDARD_TREE_SOILS = List.of(
             "minecraft:dirt", "minecraft:grass_block", "minecraft:podzol",
-            "minecraft:coarse_dirt", "minecraft:mycelium"
+            "minecraft:coarse_dirt", "minecraft:mycelium", "agritechevolved:mulch"
     );
 
     private static TreeEntry makeTree(String sapling, List<String> validSoils, DropEntry... drops) {

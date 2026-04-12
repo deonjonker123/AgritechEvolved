@@ -14,7 +14,7 @@ import java.util.function.Supplier;
 public class ATECreativeTab {
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TAB = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, AgritechEvolved.MODID);
 
-    public static final Supplier<CreativeModeTab> AGRITECH_TWO = CREATIVE_MODE_TAB.register("agritechevolved_creativetab",
+    public static final Supplier<CreativeModeTab> AGRITECH_EVOLVED = CREATIVE_MODE_TAB.register("agritechevolved_creativetab",
             () -> CreativeModeTab.builder().icon(() -> new ItemStack(ATEBlocks.ADVANCED_PLANTER.get()))
                     .title(Component.translatable("creativetab.agritechevolved"))
                     .displayItems((itemDisplayParameters, output) -> {

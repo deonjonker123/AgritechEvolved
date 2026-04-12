@@ -18,8 +18,8 @@ import net.minecraft.world.item.ItemStack;
 import java.util.List;
 
 public class PlanterRecipeCategory implements IRecipeCategory<PlanterRecipe> {
-    public static final ResourceLocation UID = ResourceLocation.fromNamespaceAndPath("agritechtwo", "planter");
-    public static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath("agritechtwo", "textures/gui/jei/jei_planters_gui.png");
+    public static final ResourceLocation UID = ResourceLocation.fromNamespaceAndPath("agritechevolved", "planter");
+    public static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath("agritechevolved", "textures/gui/jei/jei_planters_gui.png");
     public static final RecipeType<PlanterRecipe> PLANTER_RECIPE_TYPE = new RecipeType<>(UID, PlanterRecipe.class);
 
     private final IDrawable background;
@@ -31,7 +31,7 @@ public class PlanterRecipeCategory implements IRecipeCategory<PlanterRecipe> {
     }
 
     @Override public RecipeType<PlanterRecipe> getRecipeType() { return PLANTER_RECIPE_TYPE; }
-    @Override public Component getTitle()    { return Component.translatable("jei.agritechtwo.planter.tooltip"); }
+    @Override public Component getTitle()    { return Component.translatable("jei.agritechevolved.planter.tooltip"); }
     @Override public IDrawable getBackground() { return background; }
     @Override public IDrawable getIcon()       { return icon; }
     @Override public int getWidth()            { return 134; }
