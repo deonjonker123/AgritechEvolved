@@ -123,6 +123,17 @@ public class ATERecipeProvider extends RecipeProvider implements IConditionBuild
                 .unlockedBy("has_oak_log", has(Items.OAK_LOG))
                 .save(recipeOutput);
 
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ATEBlocks.OAK_PLANTER.get())
+                .pattern("P P")
+                .pattern("PDP")
+                .pattern("LHL")
+                .define('P', ItemTags.PLANKS)
+                .define('L', ItemTags.LOGS)
+                .define('H', Items.HOPPER)
+                .define('D', ItemTags.WOODEN_SLABS)
+                .unlockedBy("has_oak_log", has(Items.OAK_LOG))
+                .save(recipeOutput, "agritechevolved:basic_planter_from_any_wood");
+
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ATEBlocks.SPRUCE_PLANTER.get())
                 .pattern("P P")
                 .pattern("PDP")
@@ -160,7 +171,7 @@ public class ATERecipeProvider extends RecipeProvider implements IConditionBuild
                 .pattern("RIR")
                 .define('F', Items.IRON_INGOT)
                 .define('I', Items.IRON_BLOCK)
-                .define('A', ATEBlocks.OAK_PLANTER)
+                .define('A', ATETags.Items.BASIC_PLANTER_ITEMS)
                 .define('R', Items.REDSTONE)
                 .unlockedBy("has_basic_planter", has(ATEBlocks.OAK_PLANTER))
                 .save(recipeOutput);

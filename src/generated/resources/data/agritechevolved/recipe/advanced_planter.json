@@ -3,7 +3,7 @@
   "category": "misc",
   "key": {
     "A": {
-      "item": "agritechevolved:oak_planter"
+      "tag": "agritechevolved:basic_planter_items"
     },
     "F": {
       "item": "minecraft:iron_ingot"

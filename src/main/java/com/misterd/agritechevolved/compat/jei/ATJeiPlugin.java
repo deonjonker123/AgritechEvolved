@@ -7,11 +7,13 @@ import com.misterd.agritechevolved.util.RegistryHelper;
 import com.mojang.logging.LogUtils;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
+import mezz.jei.api.constants.RecipeTypes;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import mezz.jei.api.runtime.IJeiRuntime;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
@@ -33,10 +35,6 @@ public class ATJeiPlugin implements IModPlugin {
         return PLUGIN_ID;
     }
 
-    // -------------------------------------------------------------------------
-    // Category registration
-    // -------------------------------------------------------------------------
-
     @Override
     public void registerCategories(IRecipeCategoryRegistration registration) {
         IGuiHelper guiHelper = registration.getJeiHelpers().getGuiHelper();
@@ -46,19 +44,11 @@ public class ATJeiPlugin implements IModPlugin {
         );
     }
 
-    // -------------------------------------------------------------------------
-    // Recipe registration
-    // -------------------------------------------------------------------------
-
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
         registration.addRecipes(PlanterRecipeCategory.PLANTER_RECIPE_TYPE, generatePlanterRecipes());
         registration.addRecipes(CompostRecipeCategory.COMPOST_RECIPE_TYPE, generateCompostRecipes());
     }
-
-    // -------------------------------------------------------------------------
-    // Catalyst registration
-    // -------------------------------------------------------------------------
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
@@ -69,10 +59,6 @@ public class ATJeiPlugin implements IModPlugin {
                 new ItemStack(ATEBlocks.COMPOSTER.get()),
                 CompostRecipeCategory.COMPOST_RECIPE_TYPE);
     }
-
-    // -------------------------------------------------------------------------
-    // Recipe generators
-    // -------------------------------------------------------------------------
 
     private List<PlanterRecipe> generatePlanterRecipes() {
         List<PlanterRecipe> recipes = new ArrayList<>();
@@ -139,10 +125,6 @@ public class ATJeiPlugin implements IModPlugin {
         LogUtils.getLogger().info("Generated {} compost recipes for JEI", recipes.size());
         return recipes;
     }
-
-    // -------------------------------------------------------------------------
-    // Runtime
-    // -------------------------------------------------------------------------
 
     @Override
     public void onRuntimeAvailable(IJeiRuntime runtime) {
