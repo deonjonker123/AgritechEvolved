@@ -28,10 +28,6 @@ public enum PlanterProvider implements IBlockComponentProvider, IServerDataProvi
 
     private static final ResourceLocation UID = ResourceLocation.fromNamespaceAndPath("agritechevolved", "planter_info");
 
-    // -------------------------------------------------------------------------
-    // Client: tooltip display
-    // -------------------------------------------------------------------------
-
     @Override
     public void appendTooltip(ITooltip tooltip, BlockAccessor accessor, IPluginConfig config) {
         CompoundTag data = accessor.getServerData();
@@ -72,7 +68,6 @@ public enum PlanterProvider implements IBlockComponentProvider, IServerDataProvi
                     .withStyle(ChatFormatting.AQUA));
         }
 
-        // Advanced planter extras
         if (data.getBoolean("isAdvanced")) {
             int energy    = data.getInt("energyStored");
             int maxEnergy = data.getInt("maxEnergy");
@@ -90,10 +85,6 @@ public enum PlanterProvider implements IBlockComponentProvider, IServerDataProvi
         }
     }
 
-    // -------------------------------------------------------------------------
-    // Server: data collection
-    // -------------------------------------------------------------------------
-
     @Override
     public void appendServerData(CompoundTag data, BlockAccessor accessor) {
         BlockEntity be = accessor.getBlockEntity();
@@ -103,10 +94,6 @@ public enum PlanterProvider implements IBlockComponentProvider, IServerDataProvi
             appendBasicPlanterData(data, basic, accessor.getBlockState());
         }
     }
-
-    // -------------------------------------------------------------------------
-    // Basic planter data
-    // -------------------------------------------------------------------------
 
     private void appendBasicPlanterData(CompoundTag data, PlanterBlockEntity planter, BlockState state) {
         data.putBoolean("isAdvanced", false);
@@ -127,10 +114,6 @@ public enum PlanterProvider implements IBlockComponentProvider, IServerDataProvi
         appendClocheData(data, cloched);
     }
 
-    // -------------------------------------------------------------------------
-    // Advanced planter data
-    // -------------------------------------------------------------------------
-
     private void appendAdvancedPlanterData(CompoundTag data, AdvancedPlanterBlockEntity planter, BlockState state) {
         data.putBoolean("isAdvanced", true);
 
@@ -149,11 +132,9 @@ public enum PlanterProvider implements IBlockComponentProvider, IServerDataProvi
         boolean cloched = state.getValue(AdvancedPlanterBlock.CLOCHED);
         appendClocheData(data, cloched);
 
-        // Energy
         data.putInt("energyStored", planter.getEnergyStored());
         data.putInt("maxEnergy", planter.getMaxEnergyStored());
 
-        // Modules
         ItemStack mod1 = planter.inventory.getStackInSlot(2);
         ItemStack mod2 = planter.inventory.getStackInSlot(3);
         boolean hasModules = !mod1.isEmpty() || !mod2.isEmpty();
@@ -163,10 +144,6 @@ public enum PlanterProvider implements IBlockComponentProvider, IServerDataProvi
             data.putFloat("moduleYieldModifier", planter.getModuleYieldModifier());
         }
     }
-
-    // -------------------------------------------------------------------------
-    // Shared helpers
-    // -------------------------------------------------------------------------
 
     private void appendCommonCropData(CompoundTag data, ItemStack seedStack, ItemStack soilStack,
                                       int growthStage, float growthProgress, float soilModifier) {
@@ -199,36 +176,14 @@ public enum PlanterProvider implements IBlockComponentProvider, IServerDataProvi
         }
     }
 
-    // -------------------------------------------------------------------------
-    // Fertilizer lookups
-    // -------------------------------------------------------------------------
-
-    private float getFertilizerSpeedModifier(String id) {
-        return switch (id) {
-            case "minecraft:bone_meal"                     -> (float) Config.getFertilizerBoneMealSpeedMultiplier();
-            case "immersiveengineering:fertilizer"         -> (float) Config.getFertilizerImmersiveFertilizerSpeedMultiplier();
-            case "mysticalagriculture:fertilized_essence"  -> (float) Config.getFertilizerFertilizedEssenceSpeedMultiplier();
-            case "mysticalagriculture:mystical_fertilizer" -> (float) Config.getFertilizerMysticalFertilizerSpeedMultiplier();
-            case "forbidden_arcanus:arcane_bone_meal"      -> (float) Config.getFertilizerArcaneBoneMealSpeedMultiplier();
-            default -> {
-                PlantablesConfig.FertilizerInfo info = PlantablesConfig.getFertilizerInfo(id);
-                yield info != null ? info.speedMultiplier : 1.0F;
-            }
-        };
+    private float getFertilizerSpeedModifier(String fertilizerId) {
+        PlantablesConfig.FertilizerInfo info = PlantablesConfig.getFertilizerInfo(fertilizerId);
+        return info != null ? info.speedMultiplier : 1.0F;
     }
 
-    private float getFertilizerYieldModifier(String id) {
-        return switch (id) {
-            case "minecraft:bone_meal"                     -> (float) Config.getFertilizerBoneMealYieldMultiplier();
-            case "immersiveengineering:fertilizer"         -> (float) Config.getFertilizerImmersiveFertilizerYieldMultiplier();
-            case "mysticalagriculture:fertilized_essence"  -> (float) Config.getFertilizerFertilizedEssenceYieldMultiplier();
-            case "mysticalagriculture:mystical_fertilizer" -> (float) Config.getFertilizerMysticalFertilizerYieldMultiplier();
-            case "forbidden_arcanus:arcane_bone_meal"      -> (float) Config.getFertilizerArcaneBoneMealYieldMultiplier();
-            default -> {
-                PlantablesConfig.FertilizerInfo info = PlantablesConfig.getFertilizerInfo(id);
-                yield info != null ? info.yieldMultiplier : 1.0F;
-            }
-        };
+    private float getFertilizerYieldModifier(String fertilizerId) {
+        PlantablesConfig.FertilizerInfo info = PlantablesConfig.getFertilizerInfo(fertilizerId);
+        return info != null ? info.yieldMultiplier : 1.0F;
     }
 
     private int getMaxStage(ItemStack plantStack) {

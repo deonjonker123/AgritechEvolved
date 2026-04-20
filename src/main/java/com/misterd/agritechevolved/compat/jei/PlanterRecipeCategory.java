@@ -1,6 +1,7 @@
 package com.misterd.agritechevolved.compat.jei;
 
 import com.misterd.agritechevolved.block.ATEBlocks;
+import com.misterd.agritechevolved.config.PlantablesConfig;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -10,6 +11,7 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -31,7 +33,7 @@ public class PlanterRecipeCategory implements IRecipeCategory<PlanterRecipe> {
     }
 
     @Override public RecipeType<PlanterRecipe> getRecipeType() { return PLANTER_RECIPE_TYPE; }
-    @Override public Component getTitle()    { return Component.translatable("jei.agritechevolved.planter.tooltip"); }
+    @Override public Component getTitle()      { return Component.translatable("jei.agritechevolved.planter.tooltip"); }
     @Override public IDrawable getBackground() { return background; }
     @Override public IDrawable getIcon()       { return icon; }
     @Override public int getWidth()            { return 134; }
@@ -44,12 +46,31 @@ public class PlanterRecipeCategory implements IRecipeCategory<PlanterRecipe> {
         builder.addSlot(RecipeIngredientRole.INPUT, 10, 46)
                 .addIngredients(recipe.getSoilIngredient());
 
+        List<PlantablesConfig.DropInfo> dropInfos = recipe.getDropInfos();
         int outputIndex = 0;
         for (ItemStack output : recipe.getOutputs()) {
             if (outputIndex >= 12) break;
             int x = 52 + outputIndex % 4 * 18;
             int y = 10 + outputIndex / 4 * 18;
-            builder.addSlot(RecipeIngredientRole.OUTPUT, x, y).addItemStack(output);
+
+            final PlantablesConfig.DropInfo info = outputIndex < dropInfos.size() ? dropInfos.get(outputIndex) : null;
+
+            var slot = builder.addSlot(RecipeIngredientRole.OUTPUT, x, y).addItemStack(output);
+
+            if (info != null) {
+                slot.addTooltipCallback((recipeSlotView, tooltip) -> {
+                    String countStr = info.minCount == info.maxCount
+                            ? String.valueOf(info.minCount)
+                            : info.minCount + "–" + info.maxCount;
+                    tooltip.add(Component.literal("Count: " + countStr).withStyle(ChatFormatting.GRAY));
+
+                    if (info.chance < 1.0F) {
+                        tooltip.add(Component.literal(String.format("%.0f%% chance", info.chance * 100))
+                                .withStyle(ChatFormatting.GOLD));
+                    }
+                });
+            }
+
             outputIndex++;
         }
     }

@@ -22,6 +22,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.HoeItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
@@ -38,6 +39,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.fml.ModList;
+import net.neoforged.neoforge.common.ItemAbilities;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -60,18 +62,9 @@ public class AdvancedPlanterBlock extends BaseEntityBlock {
             Block.box(3,  2,  3, 13,  3, 13)
     );
 
-    private static final Map<String, String> TILLABLE_BLOCKS;
     private static final Map<String, String> ESSENCE_TO_FARMLAND;
 
     static {
-        TILLABLE_BLOCKS = new HashMap<>();
-        TILLABLE_BLOCKS.put("minecraft:dirt",        "minecraft:farmland");
-        TILLABLE_BLOCKS.put("minecraft:grass_block", "minecraft:farmland");
-        TILLABLE_BLOCKS.put("minecraft:mycelium",    "minecraft:farmland");
-        TILLABLE_BLOCKS.put("minecraft:podzol",      "minecraft:farmland");
-        TILLABLE_BLOCKS.put("minecraft:coarse_dirt", "minecraft:farmland");
-        TILLABLE_BLOCKS.put("minecraft:rooted_dirt", "minecraft:farmland");
-
         ESSENCE_TO_FARMLAND = new HashMap<>();
         ESSENCE_TO_FARMLAND.put("mysticalagriculture:inferium_essence",   "mysticalagriculture:inferium_farmland");
         ESSENCE_TO_FARMLAND.put("mysticalagriculture:prudentium_essence", "mysticalagriculture:prudentium_farmland");
@@ -185,7 +178,7 @@ public class AdvancedPlanterBlock extends BaseEntityBlock {
         }
 
         if (heldItem.getItem() instanceof HoeItem) {
-            return tryTillSoil(heldItem, level, pos, player, hand, planter);
+            return tryTillSoil(heldItem, level, pos, player, hand, hitResult, planter);
         }
 
         if (PlantablesConfig.isValidFertilizer(heldItemId)) {
@@ -233,7 +226,7 @@ public class AdvancedPlanterBlock extends BaseEntityBlock {
         if (!plantStack.isEmpty()) {
             String plantId = RegistryHelper.getItemId(plantStack);
             boolean valid = false;
-            if (PlantablesConfig.isValidSeed(plantId))         valid = PlantablesConfig.isSoilValidForSeed(heldItemId, plantId);
+            if (PlantablesConfig.isValidSeed(plantId)) valid = PlantablesConfig.isSoilValidForSeed(heldItemId, plantId);
             else if (PlantablesConfig.isValidSapling(plantId)) valid = PlantablesConfig.isSoilValidForSapling(heldItemId, plantId);
             if (!valid) {
                 player.displayClientMessage(Component.translatable("message.agritechevolved.invalid_plant_soil_combination"), true);
@@ -246,25 +239,22 @@ public class AdvancedPlanterBlock extends BaseEntityBlock {
         return ItemInteractionResult.SUCCESS;
     }
 
-    private ItemInteractionResult tryTillSoil(ItemStack heldItem, Level level, BlockPos pos, Player player, InteractionHand hand, AdvancedPlanterBlockEntity planter) {
+    private ItemInteractionResult tryTillSoil(ItemStack heldItem, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult, AdvancedPlanterBlockEntity planter) {
         ItemStack soilStack = planter.inventory.getStackInSlot(1);
         if (soilStack.isEmpty() || !(soilStack.getItem() instanceof BlockItem blockItem)) {
             return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
         }
 
-        Map<String, String> tillable = new HashMap<>(TILLABLE_BLOCKS);
-        if (ModList.get().isLoaded("farmersdelight")) {
-            tillable.put("farmersdelight:rich_soil", "farmersdelight:rich_soil_farmland");
-        }
+        BlockState soilState = blockItem.getBlock().defaultBlockState();
+        BlockState result = soilState.getToolModifiedState(
+                new UseOnContext(level, player, hand, heldItem, hitResult),
+                ItemAbilities.HOE_TILL,
+                false
+        );
 
-        String soilId   = RegistryHelper.getBlockId(blockItem.getBlock());
-        String resultId = tillable.get(soilId);
-        if (resultId == null) return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        if (result == null) return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
 
-        Block resultBlock = RegistryHelper.getBlock(resultId);
-        if (resultBlock == null) return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
-
-        planter.inventory.setStackInSlot(1, new ItemStack(resultBlock));
+        planter.inventory.setStackInSlot(1, new ItemStack(result.getBlock()));
         level.playSound(player, pos, SoundEvents.HOE_TILL, SoundSource.BLOCKS, 1.0F, 1.0F);
         if (!player.getAbilities().instabuild) {
             heldItem.hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand));

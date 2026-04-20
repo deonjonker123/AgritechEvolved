@@ -34,9 +34,9 @@ import javax.annotation.Nullable;
 
 public class BiomassBurnerBlock extends BaseEntityBlock {
 
-    public static final DirectionProperty FACING  = HorizontalDirectionalBlock.FACING;
-    public static final BooleanProperty   BURNING  = BooleanProperty.create("burning");
-    public static final VoxelShape        SHAPE    = Block.box(0, 0, 0, 16, 16, 16);
+    public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
+    public static final BooleanProperty BURNING = BooleanProperty.create("burning");
+    public static final VoxelShape SHAPE = Block.box(0, 0, 0, 16, 16, 16);
     public static final MapCodec<BiomassBurnerBlock> CODEC = simpleCodec(BiomassBurnerBlock::new);
 
     public BiomassBurnerBlock(Properties properties) {

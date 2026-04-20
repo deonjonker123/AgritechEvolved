@@ -39,20 +39,15 @@ import java.util.*;
 
 public class AdvancedPlanterBlockEntity extends BlockEntity implements MenuProvider {
 
-    // -------------------------------------------------------------------------
-    // Constants
-    // -------------------------------------------------------------------------
-
-    private static final int SLOT_PLANT      = 0;
-    private static final int SLOT_SOIL       = 1;
-    private static final int SLOT_MODULE_1   = 2;
-    private static final int SLOT_MODULE_2   = 3;
+    private static final int SLOT_PLANT = 0;
+    private static final int SLOT_SOIL = 1;
+    private static final int SLOT_MODULE_1 = 2;
+    private static final int SLOT_MODULE_2 = 3;
     private static final int SLOT_FERTILIZER = 4;
     private static final int SLOT_OUTPUT_MIN = 5;
     private static final int SLOT_OUTPUT_MAX = 16;
-    private static final int TOTAL_SLOTS     = 17;
+    private static final int TOTAL_SLOTS = 17;
 
-    // Module IDs
     private static final String SM_MK1 = "agritechevolved:sm_mk1";
     private static final String SM_MK2 = "agritechevolved:sm_mk2";
     private static final String SM_MK3 = "agritechevolved:sm_mk3";
@@ -60,19 +55,6 @@ public class AdvancedPlanterBlockEntity extends BlockEntity implements MenuProvi
     private static final String YM_MK2 = "agritechevolved:ym_mk2";
     private static final String YM_MK3 = "agritechevolved:ym_mk3";
 
-    // Fertilizer IDs
-    private static final String FERTILIZER_CRUDE_BIOMASS           = "agritechevolved:crude_biomass";
-    private static final String FERTILIZER_BIOMASS           = "agritechevolved:biomass";
-    private static final String FERTILIZER_COMPACTED_BIOMASS = "agritechevolved:compacted_biomass";
-    private static final String FERTILIZER_BONE_MEAL         = "minecraft:bone_meal";
-    private static final String FERTILIZER_IE                = "immersiveengineering:fertilizer";
-    private static final String FERTILIZER_MA_ESSENCE        = "mysticalagriculture:fertilized_essence";
-    private static final String FERTILIZER_MA_MYSTICAL       = "mysticalagriculture:mystical_fertilizer";
-    private static final String FERTILIZER_ARCANE_BONE_MEAL  = "forbidden_arcanus:arcane_bone_meal";
-
-    // -------------------------------------------------------------------------
-    // Inventory
-    // -------------------------------------------------------------------------
 
     public final ItemStackHandler inventory = new ItemStackHandler(TOTAL_SLOTS) {
         @Override
@@ -109,8 +91,8 @@ public class AdvancedPlanterBlockEntity extends BlockEntity implements MenuProvi
                             : PlantablesConfig.isSoilValidForSapling(id, plantId);
                 }
                 case SLOT_MODULE_1, SLOT_MODULE_2 -> stack.is(ATETags.Items.ATE_MODULES);
-                case SLOT_FERTILIZER             -> PlantablesConfig.isValidFertilizer(id);
-                default                          -> false; // output slots (5-16) are output-only
+                case SLOT_FERTILIZER -> PlantablesConfig.isValidFertilizer(id);
+                default -> false;
             };
         }
 
@@ -126,22 +108,14 @@ public class AdvancedPlanterBlockEntity extends BlockEntity implements MenuProvi
         }
     };
 
-    // -------------------------------------------------------------------------
-    // Fields
-    // -------------------------------------------------------------------------
-
     private final OutputOnlyItemHandler outputHandler;
 
-    private int   growthProgress      = 0;
-    private int   growthTicks         = 0;
-    private boolean readyToHarvest    = false;
-    private int   energyStored        = 0;
-    private int   lastGrowthStage     = -1;
+    private int growthProgress = 0;
+    private int growthTicks = 0;
+    private boolean readyToHarvest = false;
+    private int energyStored = 0;
+    private int lastGrowthStage = -1;
     private float currentTotalModifier = 1.0F;
-
-    // -------------------------------------------------------------------------
-    // Constructor / MenuProvider
-    // -------------------------------------------------------------------------
 
     public AdvancedPlanterBlockEntity(BlockPos pos, BlockState blockState) {
         super(ATEBlockEntities.ADVANCED_PLANTER_BLOCK_BE.get(), pos, blockState);
@@ -159,12 +133,8 @@ public class AdvancedPlanterBlockEntity extends BlockEntity implements MenuProvi
         return new AdvancedPlanterMenu(id, inv, this);
     }
 
-    // -------------------------------------------------------------------------
-    // Energy
-    // -------------------------------------------------------------------------
-
-    public int  getEnergyStored()    { return energyStored; }
-    public int  getMaxEnergyStored() { return Config.getPlanterEnergyBuffer(); }
+    public int getEnergyStored() { return energyStored; }
+    public int getMaxEnergyStored() { return Config.getPlanterEnergyBuffer(); }
     public boolean canExtractEnergy() { return false; }
     public boolean canReceiveEnergy() { return true; }
 
@@ -191,23 +161,18 @@ public class AdvancedPlanterBlockEntity extends BlockEntity implements MenuProvi
         return new IEnergyStorage() {
             @Override public int receiveEnergy(int max, boolean sim) { return AdvancedPlanterBlockEntity.this.receiveEnergy(max, sim); }
             @Override public int extractEnergy(int max, boolean sim) { return 0; }
-            @Override public int  getEnergyStored()    { return AdvancedPlanterBlockEntity.this.getEnergyStored(); }
+            @Override public int  getEnergyStored() { return AdvancedPlanterBlockEntity.this.getEnergyStored(); }
             @Override public int  getMaxEnergyStored() { return AdvancedPlanterBlockEntity.this.getMaxEnergyStored(); }
-            @Override public boolean canExtract()       { return false; }
-            @Override public boolean canReceive()       { return true; }
+            @Override public boolean canExtract() { return false; }
+            @Override public boolean canReceive() { return true; }
         };
     }
-
-    // -------------------------------------------------------------------------
-    // Item handler capability
-    // -------------------------------------------------------------------------
 
     public IItemHandler getOutputHandler() { return outputHandler; }
 
     public IItemHandler getItemHandler(@Nullable Direction side) {
         if (side == Direction.DOWN) return outputHandler;
 
-        // Side handler: slot 0 → fertilizer (insert only), slots 1-11 → output slots 5-15 (extract only)
         return new IItemHandler() {
             @Override public int getSlots() { return 12; }
 
@@ -235,20 +200,12 @@ public class AdvancedPlanterBlockEntity extends BlockEntity implements MenuProvi
         };
     }
 
-    // -------------------------------------------------------------------------
-    // Capability registration
-    // -------------------------------------------------------------------------
-
     public static void registerCapabilities(RegisterCapabilitiesEvent event) {
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, ATEBlockEntities.ADVANCED_PLANTER_BLOCK_BE.get(),
                 (be, dir) -> be instanceof AdvancedPlanterBlockEntity p ? p.getItemHandler(dir) : null);
         event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, ATEBlockEntities.ADVANCED_PLANTER_BLOCK_BE.get(),
                 (be, dir) -> be instanceof AdvancedPlanterBlockEntity p ? p.getEnergyStorage(dir) : null);
     }
-
-    // -------------------------------------------------------------------------
-    // Lifecycle
-    // -------------------------------------------------------------------------
 
     @Override
     public void setChanged() {
@@ -261,10 +218,6 @@ public class AdvancedPlanterBlockEntity extends BlockEntity implements MenuProvi
         super.onLoad();
         if (level != null && !level.isClientSide()) level.invalidateCapabilities(getBlockPos());
     }
-
-    // -------------------------------------------------------------------------
-    // Module modifiers
-    // -------------------------------------------------------------------------
 
     public float getModuleSpeedModifier() {
         float speed = 1.0F, penalty = 1.0F;
@@ -317,10 +270,6 @@ public class AdvancedPlanterBlockEntity extends BlockEntity implements MenuProvi
 
     private float getModuleGrowthModifier() { return getModuleSpeedModifier(); }
 
-    // -------------------------------------------------------------------------
-    // Cloche modifiers
-    // -------------------------------------------------------------------------
-
     private float getClocheGrowthModifier() {
         return getBlockState().getValue(AdvancedPlanterBlock.CLOCHED)
                 ? (float) Config.getClocheSpeedMultiplier() : 1.0F;
@@ -330,10 +279,6 @@ public class AdvancedPlanterBlockEntity extends BlockEntity implements MenuProvi
         return getBlockState().getValue(AdvancedPlanterBlock.CLOCHED)
                 ? (float) Config.getClocheYieldMultiplier() : 1.0F;
     }
-
-    // -------------------------------------------------------------------------
-    // Fertilizer modifiers
-    // -------------------------------------------------------------------------
 
     private float getFertilizerGrowthModifier() {
         return getFertilizerModifier(true);
@@ -347,37 +292,20 @@ public class AdvancedPlanterBlockEntity extends BlockEntity implements MenuProvi
         ItemStack stack = inventory.getStackInSlot(SLOT_FERTILIZER);
         if (stack.isEmpty()) return 1.0F;
         String id = RegistryHelper.getItemId(stack);
-        return switch (id) {
-            case FERTILIZER_CRUDE_BIOMASS     -> (float)(forSpeed ? Config.getFertilizerCrudeBiomassSpeedMultiplier()      : Config.getFertilizerCrudeBiomassYieldMultiplier());
-            case FERTILIZER_BIOMASS           -> (float)(forSpeed ? Config.getFertilizerBiomassSpeedMultiplier()           : Config.getFertilizerBiomassYieldMultiplier());
-            case FERTILIZER_COMPACTED_BIOMASS -> (float)(forSpeed ? Config.getFertilizerCompactedBiomassSpeedMultiplier()  : Config.getFertilizerCompactedBiomassYieldMultiplier());
-            case FERTILIZER_BONE_MEAL         -> (float)(forSpeed ? Config.getFertilizerBoneMealSpeedMultiplier()          : Config.getFertilizerBoneMealYieldMultiplier());
-            case FERTILIZER_IE                -> (float)(forSpeed ? Config.getFertilizerImmersiveFertilizerSpeedMultiplier(): Config.getFertilizerImmersiveFertilizerYieldMultiplier());
-            case FERTILIZER_MA_ESSENCE        -> (float)(forSpeed ? Config.getFertilizerFertilizedEssenceSpeedMultiplier() : Config.getFertilizerFertilizedEssenceYieldMultiplier());
-            case FERTILIZER_MA_MYSTICAL       -> (float)(forSpeed ? Config.getFertilizerMysticalFertilizerSpeedMultiplier(): Config.getFertilizerMysticalFertilizerYieldMultiplier());
-            case FERTILIZER_ARCANE_BONE_MEAL  -> (float)(forSpeed ? Config.getFertilizerArcaneBoneMealSpeedMultiplier()    : Config.getFertilizerArcaneBoneMealYieldMultiplier());
-            default -> {
-                PlantablesConfig.FertilizerInfo info = PlantablesConfig.getFertilizerInfo(id);
-                yield info != null ? (forSpeed ? info.speedMultiplier : info.yieldMultiplier) : 1.0F;
-            }
-        };
+        PlantablesConfig.FertilizerInfo info = PlantablesConfig.getFertilizerInfo(id);
+        return info != null ? (forSpeed ? info.speedMultiplier : info.yieldMultiplier) : 1.0F;
     }
-
-    // -------------------------------------------------------------------------
-    // Tick
-    // -------------------------------------------------------------------------
 
     public static void tick(Level level, BlockPos pos, BlockState state, AdvancedPlanterBlockEntity be) {
         if (level.isClientSide()) return;
 
-        // Sync powered state
         boolean powered = be.energyStored > 0;
         if (state.getValue(AdvancedPlanterBlock.POWERED) != powered) {
             level.setBlock(pos, state.setValue(AdvancedPlanterBlock.POWERED, powered), 3);
         }
 
         ItemStack plant = be.inventory.getStackInSlot(SLOT_PLANT);
-        ItemStack soil  = be.inventory.getStackInSlot(SLOT_SOIL);
+        ItemStack soil = be.inventory.getStackInSlot(SLOT_SOIL);
 
         if (plant.isEmpty() || soil.isEmpty()) {
             be.resetGrowth();
@@ -405,8 +333,8 @@ public class AdvancedPlanterBlockEntity extends BlockEntity implements MenuProvi
             be.growthTicks++;
 
             if (be.growthTicks >= growthTime) {
-                be.readyToHarvest  = true;
-                be.growthProgress  = 100;
+                be.readyToHarvest = true;
+                be.growthProgress = 100;
                 be.lastGrowthStage = be.getGrowthStage();
                 level.sendBlockUpdated(pos, state, state, 3);
                 be.setChanged();
@@ -427,10 +355,6 @@ public class AdvancedPlanterBlockEntity extends BlockEntity implements MenuProvi
 
         tryOutputItemsBelow(level, pos, be);
     }
-
-    // -------------------------------------------------------------------------
-    // Growth helpers
-    // -------------------------------------------------------------------------
 
     private boolean isValidPlantSoilCombination(String plantId, String soilId) {
         if (PlantablesConfig.isValidSeed(plantId))    return PlantablesConfig.isSoilValidForSeed(soilId, plantId);
@@ -459,9 +383,9 @@ public class AdvancedPlanterBlockEntity extends BlockEntity implements MenuProvi
     }
 
     private void resetGrowth() {
-        growthProgress  = 0;
-        growthTicks     = 0;
-        readyToHarvest  = false;
+        growthProgress = 0;
+        growthTicks = 0;
+        readyToHarvest = false;
         lastGrowthStage = -1;
         setChanged();
     }
@@ -474,10 +398,6 @@ public class AdvancedPlanterBlockEntity extends BlockEntity implements MenuProvi
                 : Math.min(8, (int)(growthProgress / 12.5F));
     }
 
-    // -------------------------------------------------------------------------
-    // Harvest
-    // -------------------------------------------------------------------------
-
     public boolean hasOutputSpace() {
         List<ItemStack> drops = getHarvestDrops(inventory.getStackInSlot(SLOT_PLANT));
         Map<Integer, ItemStack> sim = new HashMap<>();
@@ -489,18 +409,16 @@ public class AdvancedPlanterBlockEntity extends BlockEntity implements MenuProvi
         for (ItemStack drop : drops) {
             int remaining = drop.getCount();
 
-            // Try to stack into existing matching stacks
             for (int slot = SLOT_OUTPUT_MIN; slot <= SLOT_OUTPUT_MAX && remaining > 0; slot++) {
                 ItemStack existing = sim.get(slot);
                 if (!existing.isEmpty() && existing.is(drop.getItem()) && existing.getCount() < existing.getMaxStackSize()) {
                     int space = existing.getMaxStackSize() - existing.getCount();
-                    int add   = Math.min(space, remaining);
+                    int add = Math.min(space, remaining);
                     existing.grow(add);
                     remaining -= add;
                 }
             }
 
-            // Try empty slots
             for (int slot = SLOT_OUTPUT_MIN; slot <= SLOT_OUTPUT_MAX && remaining > 0; slot++) {
                 if (sim.get(slot).isEmpty()) {
                     sim.put(slot, new ItemStack(drop.getItem(), remaining));
@@ -529,7 +447,7 @@ public class AdvancedPlanterBlockEntity extends BlockEntity implements MenuProvi
                     remaining -= toPlace;
                 } else if (existing.is(drop.getItem()) && existing.getCount() < existing.getMaxStackSize()) {
                     int space = existing.getMaxStackSize() - existing.getCount();
-                    int add   = Math.min(space, remaining);
+                    int add = Math.min(space, remaining);
                     existing.grow(add);
                     remaining -= add;
                 }
@@ -555,7 +473,7 @@ public class AdvancedPlanterBlockEntity extends BlockEntity implements MenuProvi
 
         String plantId = RegistryHelper.getItemId(plant);
         List<PlantablesConfig.DropInfo> configDrops;
-        if (PlantablesConfig.isValidSeed(plantId))        configDrops = PlantablesConfig.getCropDrops(plantId);
+        if (PlantablesConfig.isValidSeed(plantId)) configDrops = PlantablesConfig.getCropDrops(plantId);
         else if (PlantablesConfig.isValidSapling(plantId)) configDrops = PlantablesConfig.getTreeDrops(plantId);
         else return drops;
 
@@ -580,10 +498,6 @@ public class AdvancedPlanterBlockEntity extends BlockEntity implements MenuProvi
         return result;
     }
 
-    // -------------------------------------------------------------------------
-    // Auto-output below
-    // -------------------------------------------------------------------------
-
     private static void tryOutputItemsBelow(Level level, BlockPos pos, AdvancedPlanterBlockEntity be) {
         IItemHandler target = level.getCapability(Capabilities.ItemHandler.BLOCK, pos.below(), Direction.UP);
         if (target == null) return;
@@ -607,19 +521,11 @@ public class AdvancedPlanterBlockEntity extends BlockEntity implements MenuProvi
         }
     }
 
-    // -------------------------------------------------------------------------
-    // Drops on break
-    // -------------------------------------------------------------------------
-
     public void drops() {
         SimpleContainer container = new SimpleContainer(inventory.getSlots());
         for (int i = 0; i < inventory.getSlots(); i++) container.setItem(i, inventory.getStackInSlot(i));
         Containers.dropContents(level, worldPosition, container);
     }
-
-    // -------------------------------------------------------------------------
-    // NBT serialization
-    // -------------------------------------------------------------------------
 
     @Override
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
@@ -637,17 +543,13 @@ public class AdvancedPlanterBlockEntity extends BlockEntity implements MenuProvi
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
         inventory.deserializeNBT(registries, tag.getCompound("inventory"));
-        growthProgress      = tag.getInt("growthProgress");
-        growthTicks         = tag.getInt("growthTicks");
-        readyToHarvest      = tag.getBoolean("readyToHarvest");
-        energyStored        = tag.getInt("energyStored");
-        lastGrowthStage     = tag.getInt("lastGrowthStage");
+        growthProgress = tag.getInt("growthProgress");
+        growthTicks = tag.getInt("growthTicks");
+        readyToHarvest = tag.getBoolean("readyToHarvest");
+        energyStored = tag.getInt("energyStored");
+        lastGrowthStage = tag.getInt("lastGrowthStage");
         currentTotalModifier = tag.getFloat("currentTotalModifier");
     }
-
-    // -------------------------------------------------------------------------
-    // Sync packets
-    // -------------------------------------------------------------------------
 
     @Override
     @Nullable
@@ -659,10 +561,6 @@ public class AdvancedPlanterBlockEntity extends BlockEntity implements MenuProvi
     public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
         return saveWithoutMetadata(registries);
     }
-
-    // -------------------------------------------------------------------------
-    // OutputOnlyItemHandler
-    // -------------------------------------------------------------------------
 
     private static class OutputOnlyItemHandler implements IItemHandler {
         private final ItemStackHandler original;
@@ -690,7 +588,7 @@ public class AdvancedPlanterBlockEntity extends BlockEntity implements MenuProvi
                     : ItemStack.EMPTY;
         }
 
-        @Override public int     getSlotLimit(int slot)                   { return original.getSlotLimit(slot); }
+        @Override public int getSlotLimit(int slot) { return original.getSlotLimit(slot); }
         @Override public boolean isItemValid(int slot, @NotNull ItemStack stack) { return false; }
     }
 }

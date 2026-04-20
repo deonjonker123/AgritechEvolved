@@ -38,10 +38,6 @@ import javax.annotation.Nullable;
 
 public class ComposterBlockEntity extends BlockEntity implements MenuProvider {
 
-    // -------------------------------------------------------------------------
-    // Slot layout
-    // -------------------------------------------------------------------------
-
     private static final int INPUT_SLOTS_START  = 0;
     private static final int INPUT_SLOTS_COUNT  = 12;
     private static final int OUTPUT_SLOTS_START = 12;
@@ -49,14 +45,9 @@ public class ComposterBlockEntity extends BlockEntity implements MenuProvider {
     private static final int MODULE_SLOT        = 15;
     private static final int TOTAL_SLOTS        = 16;
 
-    // Module IDs
     private static final String SM_MK1 = "agritechevolved:sm_mk1";
     private static final String SM_MK2 = "agritechevolved:sm_mk2";
     private static final String SM_MK3 = "agritechevolved:sm_mk3";
-
-    // -------------------------------------------------------------------------
-    // Fields
-    // -------------------------------------------------------------------------
 
     private int progress     = 0;
     private int energyStored = 0;
@@ -87,17 +78,9 @@ public class ComposterBlockEntity extends BlockEntity implements MenuProvider {
         }
     };
 
-    // -------------------------------------------------------------------------
-    // Constructor
-    // -------------------------------------------------------------------------
-
     public ComposterBlockEntity(BlockPos pos, BlockState blockState) {
         super(ATEBlockEntities.COMPOSTER_BE.get(), pos, blockState);
     }
-
-    // -------------------------------------------------------------------------
-    // Tick
-    // -------------------------------------------------------------------------
 
     public static void tick(Level level, BlockPos pos, BlockState state, ComposterBlockEntity be) {
         if (level.isClientSide()) return;
@@ -139,10 +122,6 @@ public class ComposterBlockEntity extends BlockEntity implements MenuProvider {
             }
         }
     }
-
-    // -------------------------------------------------------------------------
-    // Processing logic
-    // -------------------------------------------------------------------------
 
     private boolean canProcess() {
         return countAvailableOrganicItems() >= Config.getComposterItemsPerBiomass()
@@ -197,10 +176,6 @@ public class ComposterBlockEntity extends BlockEntity implements MenuProvider {
         }
     }
 
-    // -------------------------------------------------------------------------
-    // Validation helpers
-    // -------------------------------------------------------------------------
-
     private boolean isCompostable(ItemStack stack) {
         return !stack.isEmpty() && CompostableConfig.isCompostable(RegistryHelper.getItemId(stack));
     }
@@ -210,10 +185,6 @@ public class ComposterBlockEntity extends BlockEntity implements MenuProvider {
         String id = RegistryHelper.getItemId(stack);
         return id.equals(SM_MK1) || id.equals(SM_MK2) || id.equals(SM_MK3);
     }
-
-    // -------------------------------------------------------------------------
-    // Module modifiers
-    // -------------------------------------------------------------------------
 
     private double getModuleSpeedModifier() {
         ItemStack module = inventory.getStackInSlot(MODULE_SLOT);
@@ -236,10 +207,6 @@ public class ComposterBlockEntity extends BlockEntity implements MenuProvider {
             default     -> 1.0;
         };
     }
-
-    // -------------------------------------------------------------------------
-    // Energy
-    // -------------------------------------------------------------------------
 
     public int  getEnergyStored()    { return energyStored; }
     public int  getMaxEnergyStored() { return Config.getComposterEnergyBuffer(); }
@@ -268,10 +235,6 @@ public class ComposterBlockEntity extends BlockEntity implements MenuProvider {
         };
     }
 
-    // -------------------------------------------------------------------------
-    // Item handler capability
-    // -------------------------------------------------------------------------
-
     public IItemHandler getItemHandler(@Nullable Direction side) {
         return new IItemHandler() {
             @Override public int getSlots() { return TOTAL_SLOTS; }
@@ -296,10 +259,6 @@ public class ComposterBlockEntity extends BlockEntity implements MenuProvider {
         };
     }
 
-    // -------------------------------------------------------------------------
-    // Progress accessors
-    // -------------------------------------------------------------------------
-
     public int getProgress() { return progress; }
 
     public int getMaxProgress() {
@@ -312,19 +271,11 @@ public class ComposterBlockEntity extends BlockEntity implements MenuProvider {
     public int getOrganicItemsCollected()  { return countAvailableOrganicItems(); }
     public int getRequiredOrganicItems()   { return Config.getComposterItemsPerBiomass(); }
 
-    // -------------------------------------------------------------------------
-    // Drops
-    // -------------------------------------------------------------------------
-
     public void drops() {
         SimpleContainer container = new SimpleContainer(inventory.getSlots());
         for (int i = 0; i < inventory.getSlots(); i++) container.setItem(i, inventory.getStackInSlot(i));
         Containers.dropContents(level, worldPosition, container);
     }
-
-    // -------------------------------------------------------------------------
-    // NBT serialization
-    // -------------------------------------------------------------------------
 
     @Override
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
@@ -341,10 +292,6 @@ public class ComposterBlockEntity extends BlockEntity implements MenuProvider {
         progress     = tag.getInt("progress");
         energyStored = tag.getInt("energyStored");
     }
-
-    // -------------------------------------------------------------------------
-    // Sync packets
-    // -------------------------------------------------------------------------
 
     @Override
     public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
@@ -364,10 +311,6 @@ public class ComposterBlockEntity extends BlockEntity implements MenuProvider {
         return ClientboundBlockEntityDataPacket.create(this);
     }
 
-    // -------------------------------------------------------------------------
-    // MenuProvider
-    // -------------------------------------------------------------------------
-
     @Override
     public Component getDisplayName() {
         return Component.translatable("gui.agritechevolved.composter");
@@ -379,20 +322,12 @@ public class ComposterBlockEntity extends BlockEntity implements MenuProvider {
         return new ComposterMenu(containerId, playerInventory, this);
     }
 
-    // -------------------------------------------------------------------------
-    // Capability registration
-    // -------------------------------------------------------------------------
-
     public static void registerCapabilities(RegisterCapabilitiesEvent event) {
         event.registerBlockEntity(ItemHandler.BLOCK, ATEBlockEntities.COMPOSTER_BE.get(),
                 (be, dir) -> be instanceof ComposterBlockEntity c ? c.getItemHandler(dir) : null);
         event.registerBlockEntity(EnergyStorage.BLOCK, ATEBlockEntities.COMPOSTER_BE.get(),
                 (be, dir) -> be instanceof ComposterBlockEntity c ? c.getEnergyStorage(dir) : null);
     }
-
-    // -------------------------------------------------------------------------
-    // Lifecycle
-    // -------------------------------------------------------------------------
 
     @Override
     public void setChanged() {

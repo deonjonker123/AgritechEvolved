@@ -38,7 +38,7 @@ public class CapacitorTier3Block extends BaseEntityBlock {
 
     public static final MapCodec<CapacitorTier3Block> CODEC = simpleCodec(CapacitorTier3Block::new);
     public static final BooleanProperty HAS_ENERGY = BooleanProperty.create("has_energy");
-    public static final DirectionProperty FACING  = HorizontalDirectionalBlock.FACING;
+    public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 
     public CapacitorTier3Block(Properties properties) {
         super(properties);

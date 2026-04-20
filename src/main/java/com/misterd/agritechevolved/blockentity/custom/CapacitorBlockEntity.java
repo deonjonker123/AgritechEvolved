@@ -39,18 +39,10 @@ public class CapacitorBlockEntity extends BlockEntity implements MenuProvider {
     private int tier         = 1;
     private int transferRate = 512;
 
-    // -------------------------------------------------------------------------
-    // Constructor
-    // -------------------------------------------------------------------------
-
     public CapacitorBlockEntity(BlockPos pos, BlockState blockState) {
         super(ATEBlockEntities.CAPACITOR_BE.get(), pos, blockState);
         initializeCapacitor(blockState);
     }
-
-    // -------------------------------------------------------------------------
-    // Capacitor initialisation
-    // -------------------------------------------------------------------------
 
     private void initializeCapacitor(BlockState state) {
         if (state.is(ATEBlocks.CAPACITOR_TIER_1.get())) {
@@ -72,7 +64,6 @@ public class CapacitorBlockEntity extends BlockEntity implements MenuProvider {
         }
     }
 
-    /** Creates an EnergyStorage that notifies the level on every real receive/extract. */
     private EnergyStorage makeTrackedStorage(int capacity) {
         return new EnergyStorage(capacity) {
             @Override
@@ -97,10 +88,6 @@ public class CapacitorBlockEntity extends BlockEntity implements MenuProvider {
             level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 3);
         }
     }
-
-    // -------------------------------------------------------------------------
-    // Tick
-    // -------------------------------------------------------------------------
 
     public static void tick(Level level, BlockPos pos, BlockState state, CapacitorBlockEntity be) {
         if (level == null || level.isClientSide()) return;
@@ -135,7 +122,6 @@ public class CapacitorBlockEntity extends BlockEntity implements MenuProvider {
             level.sendBlockUpdated(pos, state, state, 3);
         }
 
-        // Sync the has_energy blockstate property
         boolean hasEnergy = be.getEnergyStored() > 0;
         BooleanProperty prop = null;
         if      (state.is(ATEBlocks.CAPACITOR_TIER_1.get())) prop = CapacitorTier1Block.HAS_ENERGY;
@@ -146,10 +132,6 @@ public class CapacitorBlockEntity extends BlockEntity implements MenuProvider {
             level.setBlock(pos, state.setValue(prop, hasEnergy), 3);
         }
     }
-
-    // -------------------------------------------------------------------------
-    // Energy API
-    // -------------------------------------------------------------------------
 
     public int getEnergyStored()    { return energyStorage != null ? energyStorage.getEnergyStored()    : 0; }
     public int getMaxEnergyStored() { return energyStorage != null ? energyStorage.getMaxEnergyStored() : 0; }
@@ -177,10 +159,6 @@ public class CapacitorBlockEntity extends BlockEntity implements MenuProvider {
         };
     }
 
-    // -------------------------------------------------------------------------
-    // Force-set energy (used on block placement to restore data-component energy)
-    // -------------------------------------------------------------------------
-
     public void forceSetEnergy(int energy) {
         if (energyStorage == null) return;
         int clamped = Math.min(energy, energyStorage.getMaxEnergyStored());
@@ -189,18 +167,12 @@ public class CapacitorBlockEntity extends BlockEntity implements MenuProvider {
             f.setAccessible(true);
             f.setInt(energyStorage, clamped);
         } catch (Exception e) {
-            // Fallback: pump energy in via the normal API
             int current;
             while ((current = energyStorage.getEnergyStored()) < clamped
                     && energyStorage.receiveEnergy(clamped - current, false) > 0) {
-                // loop until full or no progress
             }
         }
     }
-
-    // -------------------------------------------------------------------------
-    // Accessors
-    // -------------------------------------------------------------------------
 
     public int    getTier()        { return tier; }
     public int    getTransferRate() { return transferRate; }
@@ -212,10 +184,6 @@ public class CapacitorBlockEntity extends BlockEntity implements MenuProvider {
             default -> "Unknown";
         };
     }
-
-    // -------------------------------------------------------------------------
-    // NBT serialization
-    // -------------------------------------------------------------------------
 
     @Override
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
@@ -233,10 +201,6 @@ public class CapacitorBlockEntity extends BlockEntity implements MenuProvider {
         if (tag.contains("tier"))         tier         = tag.getInt("tier");
         if (tag.contains("transferRate")) transferRate = tag.getInt("transferRate");
     }
-
-    // -------------------------------------------------------------------------
-    // Sync packets
-    // -------------------------------------------------------------------------
 
     @Override
     public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
@@ -256,18 +220,10 @@ public class CapacitorBlockEntity extends BlockEntity implements MenuProvider {
         return ClientboundBlockEntityDataPacket.create(this);
     }
 
-    // -------------------------------------------------------------------------
-    // Capability registration
-    // -------------------------------------------------------------------------
-
     public static void registerCapabilities(RegisterCapabilitiesEvent event) {
         event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, ATEBlockEntities.CAPACITOR_BE.get(),
                 (be, dir) -> be instanceof CapacitorBlockEntity c ? c.getEnergyStorage(dir) : null);
     }
-
-    // -------------------------------------------------------------------------
-    // Lifecycle
-    // -------------------------------------------------------------------------
 
     @Override
     public void setChanged() {
@@ -280,10 +236,6 @@ public class CapacitorBlockEntity extends BlockEntity implements MenuProvider {
         super.onLoad();
         if (level != null && !level.isClientSide()) level.invalidateCapabilities(getBlockPos());
     }
-
-    // -------------------------------------------------------------------------
-    // MenuProvider
-    // -------------------------------------------------------------------------
 
     @Override
     public Component getDisplayName() {

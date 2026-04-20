@@ -33,7 +33,7 @@ import javax.annotation.Nullable;
 
 public class InfusedFarmlandBlock extends FarmBlock {
 
-    public static final VoxelShape    SHAPE    = Block.box(0, 0, 0, 16, 15, 16);
+    public static final VoxelShape SHAPE = Block.box(0, 0, 0, 16, 15, 16);
     public static final IntegerProperty MOISTURE = BlockStateProperties.MOISTURE;
 
     public InfusedFarmlandBlock(Properties properties) {

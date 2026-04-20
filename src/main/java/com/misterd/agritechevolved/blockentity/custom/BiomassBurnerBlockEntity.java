@@ -36,18 +36,10 @@ import javax.annotation.Nullable;
 
 public class BiomassBurnerBlockEntity extends BlockEntity implements MenuProvider {
 
-    // -------------------------------------------------------------------------
-    // Fuel item IDs
-    // -------------------------------------------------------------------------
-
     private static final String BIOMASS                 = "agritechevolved:biomass";
     private static final String CRUDE_BIOMASS           = "agritechevolved:crude_biomass";
     private static final String COMPACTED_BIOMASS       = "agritechevolved:compacted_biomass";
     private static final String COMPACTED_BIOMASS_BLOCK = "agritechevolved:compacted_biomass_block";
-
-    // -------------------------------------------------------------------------
-    // Inventory
-    // -------------------------------------------------------------------------
 
     public final ItemStackHandler inventory = new ItemStackHandler(1) {
         @Override
@@ -67,10 +59,6 @@ public class BiomassBurnerBlockEntity extends BlockEntity implements MenuProvide
         }
     };
 
-    // -------------------------------------------------------------------------
-    // Fields
-    // -------------------------------------------------------------------------
-
     private final GeneratorEnergyStorage energyStorage =
             new GeneratorEnergyStorage(Config.getBurnerEnergyBuffer());
 
@@ -79,17 +67,9 @@ public class BiomassBurnerBlockEntity extends BlockEntity implements MenuProvide
     private int     currentBurnValue = 0;
     private boolean isBurning        = false;
 
-    // -------------------------------------------------------------------------
-    // Constructor
-    // -------------------------------------------------------------------------
-
     public BiomassBurnerBlockEntity(BlockPos pos, BlockState blockState) {
         super(ATEBlockEntities.BURNER_BE.get(), pos, blockState);
     }
-
-    // -------------------------------------------------------------------------
-    // Tick
-    // -------------------------------------------------------------------------
 
     public static void tick(Level level, BlockPos pos, BlockState state, BiomassBurnerBlockEntity be) {
         if (level == null || level.isClientSide()) return;
@@ -125,10 +105,6 @@ public class BiomassBurnerBlockEntity extends BlockEntity implements MenuProvide
             level.setBlock(pos, state.setValue(BiomassBurnerBlock.BURNING, shouldBurn), 3);
         }
     }
-
-    // -------------------------------------------------------------------------
-    // Burn logic
-    // -------------------------------------------------------------------------
 
     private boolean canStartBurning() {
         ItemStack fuel = inventory.getStackInSlot(0);
@@ -210,20 +186,12 @@ public class BiomassBurnerBlockEntity extends BlockEntity implements MenuProvide
         return distributed;
     }
 
-    // -------------------------------------------------------------------------
-    // Fuel validation helper
-    // -------------------------------------------------------------------------
-
     private static boolean isFuel(ItemStack stack) {
         if (stack.isEmpty()) return false;
         String id = RegistryHelper.getItemId(stack);
         return id.equals(BIOMASS) || id.equals(CRUDE_BIOMASS)
                 || id.equals(COMPACTED_BIOMASS) || id.equals(COMPACTED_BIOMASS_BLOCK);
     }
-
-    // -------------------------------------------------------------------------
-    // Energy API
-    // -------------------------------------------------------------------------
 
     public int     getEnergyStored()    { return energyStorage.getEnergyStored(); }
     public int     getMaxEnergyStored() { return energyStorage.getMaxEnergyStored(); }
@@ -246,10 +214,6 @@ public class BiomassBurnerBlockEntity extends BlockEntity implements MenuProvide
         };
     }
 
-    // -------------------------------------------------------------------------
-    // Item handler capability
-    // -------------------------------------------------------------------------
-
     public IItemHandler getItemHandler(@Nullable Direction side) {
         return new IItemHandler() {
             @Override public int getSlots() { return 1; }
@@ -259,7 +223,6 @@ public class BiomassBurnerBlockEntity extends BlockEntity implements MenuProvide
             }
 
             @Override public @NotNull ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
-                // Only biomass and compacted biomass accepted via automation
                 if (stack.isEmpty()) return stack;
                 String id = RegistryHelper.getItemId(stack);
                 return (id.equals(BIOMASS) || id.equals(COMPACTED_BIOMASS))
@@ -276,28 +239,16 @@ public class BiomassBurnerBlockEntity extends BlockEntity implements MenuProvide
         };
     }
 
-    // -------------------------------------------------------------------------
-    // Progress / state accessors
-    // -------------------------------------------------------------------------
-
     public int     getProgress()    { return progress; }
     public int     getMaxProgress() { return maxProgress; }
     public boolean isBurning()      { return isBurning; }
     public void    setProgress(int progress) { this.progress = progress; }
-
-    // -------------------------------------------------------------------------
-    // Drops
-    // -------------------------------------------------------------------------
 
     public void drops() {
         SimpleContainer container = new SimpleContainer(inventory.getSlots());
         for (int i = 0; i < inventory.getSlots(); i++) container.setItem(i, inventory.getStackInSlot(i));
         Containers.dropContents(level, worldPosition, container);
     }
-
-    // -------------------------------------------------------------------------
-    // NBT serialization
-    // -------------------------------------------------------------------------
 
     @Override
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
@@ -321,10 +272,6 @@ public class BiomassBurnerBlockEntity extends BlockEntity implements MenuProvide
         isBurning        = tag.getBoolean("isBurning");
     }
 
-    // -------------------------------------------------------------------------
-    // Sync packets
-    // -------------------------------------------------------------------------
-
     @Override
     public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
         CompoundTag tag = super.getUpdateTag(registries);
@@ -343,20 +290,12 @@ public class BiomassBurnerBlockEntity extends BlockEntity implements MenuProvide
         return ClientboundBlockEntityDataPacket.create(this);
     }
 
-    // -------------------------------------------------------------------------
-    // Capability registration
-    // -------------------------------------------------------------------------
-
     public static void registerCapabilities(RegisterCapabilitiesEvent event) {
         event.registerBlockEntity(ItemHandler.BLOCK, ATEBlockEntities.BURNER_BE.get(),
                 (be, dir) -> be instanceof BiomassBurnerBlockEntity b ? b.getItemHandler(dir) : null);
         event.registerBlockEntity(EnergyStorage.BLOCK, ATEBlockEntities.BURNER_BE.get(),
                 (be, dir) -> be instanceof BiomassBurnerBlockEntity b ? b.getEnergyStorage(dir) : null);
     }
-
-    // -------------------------------------------------------------------------
-    // Lifecycle
-    // -------------------------------------------------------------------------
 
     @Override
     public void setChanged() {
@@ -370,10 +309,6 @@ public class BiomassBurnerBlockEntity extends BlockEntity implements MenuProvide
         if (level != null && !level.isClientSide()) level.invalidateCapabilities(getBlockPos());
     }
 
-    // -------------------------------------------------------------------------
-    // MenuProvider
-    // -------------------------------------------------------------------------
-
     @Override
     public Component getDisplayName() {
         return Component.translatable("gui.agritechevolved.biomass_burner");
@@ -385,10 +320,6 @@ public class BiomassBurnerBlockEntity extends BlockEntity implements MenuProvide
         return new BiomassBurnerMenu(containerId, playerInventory, this);
     }
 
-    // -------------------------------------------------------------------------
-    // GeneratorEnergyStorage — output-only, filled by burning
-    // -------------------------------------------------------------------------
-
     private static class GeneratorEnergyStorage extends net.neoforged.neoforge.energy.EnergyStorage {
 
         GeneratorEnergyStorage(int capacity) {
@@ -399,7 +330,6 @@ public class BiomassBurnerBlockEntity extends BlockEntity implements MenuProvide
         @Override public boolean canReceive()                                     { return false; }
         @Override public boolean canExtract()                                     { return true; }
 
-        /** Directly adds generated RF up to the storage capacity. Returns the amount actually stored. */
         public int generateEnergy(int amount) {
             int generated = Math.min(amount, capacity - energy);
             energy += generated;
