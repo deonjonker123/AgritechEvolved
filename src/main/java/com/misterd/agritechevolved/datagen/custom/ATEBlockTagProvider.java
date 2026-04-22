@@ -29,7 +29,8 @@ public class ATEBlockTagProvider extends BlockTagsProvider {
                 .add(ATEBlocks.MANGROVE_PLANTER.get())
                 .add(ATEBlocks.OAK_PLANTER.get())
                 .add(ATEBlocks.SPRUCE_PLANTER.get())
-                .add(ATEBlocks.WARPED_PLANTER.get());
+                .add(ATEBlocks.WARPED_PLANTER.get())
+                .add(ATEBlocks.PALE_OAK_PLANTER.get());
 
         tag(BlockTags.MINEABLE_WITH_PICKAXE)
                 .add(ATEBlocks.ADVANCED_PLANTER.get())

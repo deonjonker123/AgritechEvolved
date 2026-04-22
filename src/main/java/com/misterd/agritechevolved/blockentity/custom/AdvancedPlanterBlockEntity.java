@@ -2,9 +2,11 @@ package com.misterd.agritechevolved.blockentity.custom;
 
 import com.misterd.agritechevolved.Config;
 import com.misterd.agritechevolved.block.custom.AdvancedPlanterBlock;
+import com.misterd.agritechevolved.block.custom.PlanterBlock;
 import com.misterd.agritechevolved.blockentity.ATEBlockEntities;
 import com.misterd.agritechevolved.config.PlantablesConfig;
 import com.misterd.agritechevolved.gui.custom.AdvancedPlanterMenu;
+import com.misterd.agritechevolved.item.ATEItems;
 import com.misterd.agritechevolved.util.ATETags;
 import com.misterd.agritechevolved.util.RegistryHelper;
 import net.minecraft.core.BlockPos;
@@ -18,6 +20,7 @@ import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.Containers;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -488,6 +491,22 @@ public class AdvancedPlanterBlockEntity extends BlockEntity implements MenuProvi
                 : Math.min(8, (int) (growthProgress / 12.5F));
     }
 
+    @Override
+    public void preRemoveSideEffects(BlockPos pos, BlockState state) {
+        if (state.getValue(AdvancedPlanterBlock.CLOCHED)) {
+            level.addFreshEntity(new ItemEntity(level,pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, new ItemStack(ATEItems.CLOCHE.get())));
+        }
+        drops();
+    }
+
+    public void drops() {
+        SimpleContainer inv = new SimpleContainer(inventory.size());
+        for (int i = 0; i < inventory.size(); i++) {
+            inv.setItem(i, getStack(i));
+        }
+        Containers.dropContents(level, worldPosition, inv);
+    }
+
     public boolean hasOutputSpace() {
         List<ItemStack> drops = getHarvestDrops(getStack(SLOT_PLANT));
         Map<Integer, Integer> simAmounts = new HashMap<>();
@@ -643,12 +662,6 @@ public class AdvancedPlanterBlockEntity extends BlockEntity implements MenuProvi
         ItemResource res = inventory.getResource(slot);
         if (res.isEmpty()) return ItemStack.EMPTY;
         return res.toStack(inventory.getAmountAsInt(slot));
-    }
-
-    public void drops() {
-        SimpleContainer container = new SimpleContainer(inventory.size());
-        for (int i = 0; i < inventory.size(); i++) container.setItem(i, getStack(i));
-        Containers.dropContents(level, worldPosition, container);
     }
 
     @Override

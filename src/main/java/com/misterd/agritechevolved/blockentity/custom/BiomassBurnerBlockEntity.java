@@ -304,10 +304,17 @@ public class BiomassBurnerBlockEntity extends BlockEntity implements MenuProvide
         return res.toStack(inventory.getAmountAsInt(slot));
     }
 
+    @Override
+    public void preRemoveSideEffects(BlockPos pos, BlockState state) {
+        drops();
+    }
+
     public void drops() {
-        SimpleContainer container = new SimpleContainer(inventory.size());
-        for (int i = 0; i < inventory.size(); i++) container.setItem(i, getStack(i));
-        Containers.dropContents(level, worldPosition, container);
+        SimpleContainer inv = new SimpleContainer(inventory.size());
+        for (int i = 0; i < inventory.size(); i++) {
+            inv.setItem(i, getStack(i));
+        }
+        Containers.dropContents(level, worldPosition, inv);
     }
 
     public int getEnergyStored() {

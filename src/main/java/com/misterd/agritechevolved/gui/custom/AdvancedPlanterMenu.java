@@ -22,22 +22,22 @@ import net.neoforged.neoforge.transfer.transaction.Transaction;
 
 public class AdvancedPlanterMenu extends AbstractContainerMenu {
 
-    private static final int PLAYER_SLOTS    = 36;
-    private static final int SLOT_PLANT      = 0;
-    private static final int SLOT_SOIL       = 1;
-    private static final int SLOT_MODULE_1   = 2;
-    private static final int SLOT_MODULE_2   = 3;
+    private static final int PLAYER_SLOTS = 36;
+    private static final int SLOT_PLANT = 0;
+    private static final int SLOT_SOIL = 1;
+    private static final int SLOT_MODULE_1 = 2;
+    private static final int SLOT_MODULE_2 = 3;
     private static final int SLOT_FERTILIZER = 4;
     private static final int SLOT_OUTPUT_MIN = 5;
     private static final int SLOT_OUTPUT_MAX = 16;
-    private static final int TE_SLOT_COUNT   = 17;
-    private static final int TE_FIRST_SLOT   = PLAYER_SLOTS;
-    private static final int TE_LAST_SLOT    = TE_FIRST_SLOT + TE_SLOT_COUNT;
+    private static final int TE_SLOT_COUNT = 17;
+    private static final int TE_FIRST_SLOT = PLAYER_SLOTS;
+    private static final int TE_LAST_SLOT = TE_FIRST_SLOT + TE_SLOT_COUNT;
 
     public final AdvancedPlanterBlockEntity blockEntity;
     private final Level level;
 
-    private int lastEnergyStored   = 0;
+    private int lastEnergyStored = 0;
     private int lastGrowthProgress = 0;
 
     public AdvancedPlanterMenu(int containerId, Inventory inv, FriendlyByteBuf extraData) {
@@ -47,7 +47,7 @@ public class AdvancedPlanterMenu extends AbstractContainerMenu {
     public AdvancedPlanterMenu(int containerId, Inventory inv, BlockEntity blockEntity) {
         super(ATEMenuTypes.ADVANCED_PLANTER_BLOCK_MENU.get(), containerId);
         this.blockEntity = (AdvancedPlanterBlockEntity) blockEntity;
-        this.level       = inv.player.level();
+        this.level = inv.player.level();
 
         addPlayerInventory(inv);
         addPlayerHotbar(inv);
@@ -56,10 +56,10 @@ public class AdvancedPlanterMenu extends AbstractContainerMenu {
     }
 
     private void addBlockEntitySlots() {
-        addSlot(new AdvancedSlot(blockEntity, SLOT_PLANT,      8,   16));
-        addSlot(new AdvancedSlot(blockEntity, SLOT_SOIL,       8,   52));
-        addSlot(new AdvancedSlot(blockEntity, SLOT_MODULE_1,   152, 16));
-        addSlot(new AdvancedSlot(blockEntity, SLOT_MODULE_2,   170, 16));
+        addSlot(new AdvancedSlot(blockEntity, SLOT_PLANT, 8, 16));
+        addSlot(new AdvancedSlot(blockEntity, SLOT_SOIL, 8, 52));
+        addSlot(new AdvancedSlot(blockEntity, SLOT_MODULE_1, 152, 16));
+        addSlot(new AdvancedSlot(blockEntity, SLOT_MODULE_2, 170, 16));
         addSlot(new AdvancedSlot(blockEntity, SLOT_FERTILIZER, 161, 52));
 
         int idx = SLOT_OUTPUT_MIN;
@@ -70,18 +70,40 @@ public class AdvancedPlanterMenu extends AbstractContainerMenu {
 
     private void addDataSlots() {
         addDataSlot(new DataSlot() {
-            @Override public int get()           { return blockEntity.getEnergyStored(); }
-            @Override public void set(int value) { lastEnergyStored = value; }
+            @Override
+            public int get() {
+                return blockEntity.getEnergyStored();
+            }
+
+            @Override
+            public void set(int value) {
+                lastEnergyStored = value;
+            }
         });
         addDataSlot(new DataSlot() {
-            @Override public int get()           { return Math.round(blockEntity.getGrowthProgress() * 1000.0F); }
-            @Override public void set(int value) { lastGrowthProgress = value; }
+            @Override
+            public int get() {
+                return Math.round(blockEntity.getGrowthProgress() * 1000.0F);
+            }
+
+            @Override
+            public void set(int value) {
+                lastGrowthProgress = value;
+            }
         });
     }
 
-    public int   getEnergyStored()    { return level.isClientSide() ? lastEnergyStored   : blockEntity.getEnergyStored(); }
-    public int   getMaxEnergyStored() { return blockEntity.getMaxEnergyStored(); }
-    public float getGrowthProgress()  { return level.isClientSide() ? lastGrowthProgress / 1000.0F : blockEntity.getGrowthProgress(); }
+    public int getEnergyStored() {
+        return level.isClientSide() ? lastEnergyStored : blockEntity.getEnergyStored();
+    }
+
+    public int getMaxEnergyStored() {
+        return blockEntity.getMaxEnergyStored();
+    }
+
+    public float getGrowthProgress() {
+        return level.isClientSide() ? lastGrowthProgress / 1000.0F : blockEntity.getGrowthProgress();
+    }
 
     @Override
     public ItemStack quickMoveStack(Player player, int index) {
@@ -92,11 +114,9 @@ public class AdvancedPlanterMenu extends AbstractContainerMenu {
         ItemStack copy  = stack.copy();
 
         if (index < PLAYER_SLOTS) {
-            if (!tryMoveToBlockEntity(stack)) {
-                if (!moveItemStackTo(stack, TE_FIRST_SLOT, TE_LAST_SLOT, false))
-                    return ItemStack.EMPTY;
-            }
+            if (!moveToBlockEntity(stack)) return ItemStack.EMPTY;
         } else {
+            if (index >= TE_LAST_SLOT) return ItemStack.EMPTY;
             if (!moveItemStackTo(stack, 0, PLAYER_SLOTS, false)) return ItemStack.EMPTY;
         }
 
@@ -107,7 +127,7 @@ public class AdvancedPlanterMenu extends AbstractContainerMenu {
         return copy;
     }
 
-    private boolean tryMoveToBlockEntity(ItemStack stack) {
+    private boolean moveToBlockEntity(ItemStack stack) {
         String id = RegistryHelper.getItemId(stack);
 
         if (PlantablesConfig.isValidSeed(id) || PlantablesConfig.isValidSapling(id)) {
@@ -123,6 +143,7 @@ public class AdvancedPlanterMenu extends AbstractContainerMenu {
             insertSingle(stack, SLOT_PLANT);
             return true;
         }
+
         if (PlantablesConfig.isValidSoil(id)) {
             if (!blockEntity.getStack(SLOT_SOIL).isEmpty()) return false;
             ItemStack plant = blockEntity.getStack(SLOT_PLANT);
@@ -136,10 +157,11 @@ public class AdvancedPlanterMenu extends AbstractContainerMenu {
             insertSingle(stack, SLOT_SOIL);
             return true;
         }
+
         if (PlantablesConfig.isValidFertilizer(id)) {
-            insertSingle(stack, SLOT_FERTILIZER);
-            return true;
+            return insertIntoBlockEntity(stack, SLOT_FERTILIZER, SLOT_FERTILIZER + 1);
         }
+
         if (stack.is(ATETags.Items.ATE_MODULES)) {
             for (int slot = SLOT_MODULE_1; slot <= SLOT_MODULE_2; slot++) {
                 if (blockEntity.getStack(slot).isEmpty()) {
@@ -147,8 +169,43 @@ public class AdvancedPlanterMenu extends AbstractContainerMenu {
                     return true;
                 }
             }
+            return false;
         }
+
         return false;
+    }
+
+    private boolean insertIntoBlockEntity(ItemStack stack, int startSlot, int endSlot) {
+        if (stack.isEmpty()) return false;
+        int inserted = 0;
+
+        for (int i = startSlot; i < endSlot && !stack.isEmpty(); i++) {
+            ItemStack existing = blockEntity.getStack(i);
+            if (existing.isEmpty() || !ItemStack.isSameItemSameComponents(existing, stack)) continue;
+            int space = stack.getMaxStackSize() - existing.getCount();
+            if (space <= 0) continue;
+            int toInsert = Math.min(space, stack.getCount());
+            try (Transaction tx = Transaction.openRoot()) {
+                int actual = blockEntity.inventory.insert(i, ItemResource.of(stack), toInsert, tx);
+                tx.commit();
+                stack.shrink(actual);
+                inserted += actual;
+            }
+        }
+
+        for (int i = startSlot; i < endSlot && !stack.isEmpty(); i++) {
+            if (!blockEntity.getStack(i).isEmpty()) continue;
+            if (!blockEntity.inventory.isValid(i, ItemResource.of(stack))) continue;
+            int toInsert = Math.min(stack.getMaxStackSize(), stack.getCount());
+            try (Transaction tx = Transaction.openRoot()) {
+                int actual = blockEntity.inventory.insert(i, ItemResource.of(stack), toInsert, tx);
+                tx.commit();
+                stack.shrink(actual);
+                inserted += actual;
+            }
+        }
+
+        return inserted > 0;
     }
 
     private void insertSingle(ItemStack stack, int slot) {
@@ -176,17 +233,13 @@ public class AdvancedPlanterMenu extends AbstractContainerMenu {
             addSlot(new Slot(inv, i, 26 + i * 18, 144));
     }
 
-    // -------------------------------------------------------------------------
-    // Custom slot
-    // -------------------------------------------------------------------------
-
     private static class AdvancedSlot extends Slot {
         private final AdvancedPlanterBlockEntity be;
         private final int index;
 
         AdvancedSlot(AdvancedPlanterBlockEntity be, int index, int x, int y) {
             super(new SimpleContainer(be.inventory.size()), index, x, y);
-            this.be    = be;
+            this.be = be;
             this.index = index;
         }
 

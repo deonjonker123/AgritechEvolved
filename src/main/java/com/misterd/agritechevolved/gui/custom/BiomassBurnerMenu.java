@@ -20,21 +20,21 @@ import net.neoforged.neoforge.transfer.transaction.Transaction;
 
 public class BiomassBurnerMenu extends AbstractContainerMenu {
 
-    private static final int PLAYER_SLOTS   = 36;
-    private static final int TE_FIRST_SLOT  = PLAYER_SLOTS;
-    private static final int TE_LAST_SLOT   = TE_FIRST_SLOT + 1;
+    private static final int PLAYER_SLOTS = 36;
+    private static final int TE_FUEL_SLOT = PLAYER_SLOTS;
+    private static final int TE_LAST_SLOT = TE_FUEL_SLOT + 1;
 
-    private static final String BIOMASS                 = "agritechevolved:biomass";
-    private static final String CRUDE_BIOMASS           = "agritechevolved:crude_biomass";
-    private static final String COMPACTED_BIOMASS       = "agritechevolved:compacted_biomass";
+    private static final String BIOMASS = "agritechevolved:biomass";
+    private static final String CRUDE_BIOMASS = "agritechevolved:crude_biomass";
+    private static final String COMPACTED_BIOMASS = "agritechevolved:compacted_biomass";
     private static final String COMPACTED_BIOMASS_BLOCK = "agritechevolved:compacted_biomass_block";
 
     public final BiomassBurnerBlockEntity blockEntity;
     private final Level level;
 
-    private int lastProgress    = 0;
+    private int lastProgress = 0;
     private int lastMaxProgress = 0;
-    private int lastEnergy      = 0;
+    private int lastEnergy = 0;
 
     public BiomassBurnerMenu(int containerId, Inventory inv, FriendlyByteBuf extraData) {
         this(containerId, inv, inv.player.level().getBlockEntity(extraData.readBlockPos()));
@@ -43,7 +43,7 @@ public class BiomassBurnerMenu extends AbstractContainerMenu {
     public BiomassBurnerMenu(int containerId, Inventory inv, BlockEntity blockEntity) {
         super(ATEMenuTypes.BURNER_MENU.get(), containerId);
         this.blockEntity = (BiomassBurnerBlockEntity) blockEntity;
-        this.level       = inv.player.level();
+        this.level = inv.player.level();
 
         addPlayerInventory(inv);
         addPlayerHotbar(inv);
@@ -53,23 +53,55 @@ public class BiomassBurnerMenu extends AbstractContainerMenu {
 
     private void addDataSlots() {
         addDataSlot(new DataSlot() {
-            @Override public int get()           { return blockEntity.getEnergyStored(); }
-            @Override public void set(int value) { lastEnergy = value; }
+            @Override
+            public int get() {
+                return blockEntity.getEnergyStored();
+            }
+
+            @Override
+            public void set(int value) {
+                lastEnergy = value;
+            }
         });
         addDataSlot(new DataSlot() {
-            @Override public int get()           { return blockEntity.getProgress(); }
-            @Override public void set(int value) { lastProgress = value; }
+            @Override
+            public int get() {
+                return blockEntity.getProgress();
+            }
+
+            @Override
+            public void set(int value) {
+                lastProgress = value;
+            }
         });
         addDataSlot(new DataSlot() {
-            @Override public int get()           { return blockEntity.getMaxProgress(); }
-            @Override public void set(int value) { lastMaxProgress = value; }
+            @Override
+            public int get() {
+                return blockEntity.getMaxProgress();
+            }
+
+            @Override
+            public void set(int value) {
+                lastMaxProgress = value;
+            }
         });
     }
 
-    public int getEnergyStored()    { return level.isClientSide() ? lastEnergy      : blockEntity.getEnergyStored(); }
-    public int getMaxEnergyStored() { return blockEntity.getMaxEnergy(); }
-    public int getProgress()        { return level.isClientSide() ? lastProgress    : blockEntity.getProgress(); }
-    public int getMaxProgress()     { return level.isClientSide() ? lastMaxProgress : blockEntity.getMaxProgress(); }
+    public int getEnergyStored() {
+        return level.isClientSide() ? lastEnergy : blockEntity.getEnergyStored();
+    }
+
+    public int getMaxEnergyStored() {
+        return blockEntity.getMaxEnergy();
+    }
+
+    public int getProgress() {
+        return level.isClientSide() ? lastProgress : blockEntity.getProgress();
+    }
+
+    public int getMaxProgress() {
+        return level.isClientSide() ? lastMaxProgress : blockEntity.getMaxProgress();
+    }
 
     @Override
     public ItemStack quickMoveStack(Player player, int index) {
@@ -77,11 +109,13 @@ public class BiomassBurnerMenu extends AbstractContainerMenu {
         if (source == null || !source.hasItem()) return ItemStack.EMPTY;
 
         ItemStack stack = source.getItem();
-        ItemStack copy  = stack.copy();
+        ItemStack copy = stack.copy();
 
         if (index < PLAYER_SLOTS) {
-            if (!moveItemStackTo(stack, TE_FIRST_SLOT, TE_LAST_SLOT, false)) return ItemStack.EMPTY;
+            if (!isFuel(stack)) return ItemStack.EMPTY;
+            if (!insertIntoBlockEntity(stack, 0, 1)) return ItemStack.EMPTY;
         } else {
+            if (index >= TE_LAST_SLOT) return ItemStack.EMPTY;
             if (!moveItemStackTo(stack, 0, PLAYER_SLOTS, false)) return ItemStack.EMPTY;
         }
 
@@ -92,10 +126,42 @@ public class BiomassBurnerMenu extends AbstractContainerMenu {
         return copy;
     }
 
+    private boolean insertIntoBlockEntity(ItemStack stack, int startSlot, int endSlot) {
+        if (stack.isEmpty()) return false;
+        int inserted = 0;
+
+        for (int i = startSlot; i < endSlot && !stack.isEmpty(); i++) {
+            ItemStack existing = blockEntity.getStack(i);
+            if (existing.isEmpty() || !ItemStack.isSameItemSameComponents(existing, stack)) continue;
+            int space = stack.getMaxStackSize() - existing.getCount();
+            if (space <= 0) continue;
+            int toInsert = Math.min(space, stack.getCount());
+            try (Transaction tx = Transaction.openRoot()) {
+                int actual = blockEntity.inventory.insert(i, ItemResource.of(stack), toInsert, tx);
+                tx.commit();
+                stack.shrink(actual);
+                inserted += actual;
+            }
+        }
+
+        for (int i = startSlot; i < endSlot && !stack.isEmpty(); i++) {
+            if (!blockEntity.getStack(i).isEmpty()) continue;
+            if (!blockEntity.inventory.isValid(i, ItemResource.of(stack))) continue;
+            int toInsert = Math.min(stack.getMaxStackSize(), stack.getCount());
+            try (Transaction tx = Transaction.openRoot()) {
+                int actual = blockEntity.inventory.insert(i, ItemResource.of(stack), toInsert, tx);
+                tx.commit();
+                stack.shrink(actual);
+                inserted += actual;
+            }
+        }
+
+        return inserted > 0;
+    }
+
     @Override
     public boolean stillValid(Player player) {
-        return stillValid(ContainerLevelAccess.create(level, blockEntity.getBlockPos()),
-                player, ATEBlocks.BIOMASS_BURNER.get());
+        return stillValid(ContainerLevelAccess.create(level, blockEntity.getBlockPos()), player, ATEBlocks.BIOMASS_BURNER.get());
     }
 
     private void addPlayerInventory(Inventory inv) {
@@ -122,7 +188,7 @@ public class BiomassBurnerMenu extends AbstractContainerMenu {
 
         BiomassSlot(BiomassBurnerBlockEntity be, int index, int x, int y) {
             super(new SimpleContainer(be.inventory.size()), index, x, y);
-            this.be    = be;
+            this.be = be;
             this.index = index;
         }
 
@@ -141,8 +207,7 @@ public class BiomassBurnerMenu extends AbstractContainerMenu {
             setChanged();
         }
 
-        @Override
-        public boolean mayPlace(ItemStack stack) { return isFuel(stack); }
+        @Override public boolean mayPlace(ItemStack stack) { return isFuel(stack); }
 
         @Override
         public ItemStack remove(int amount) {

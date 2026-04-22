@@ -15,12 +15,17 @@ public class CompostRecipe implements IRecipeCategoryExtension {
     private final List<ItemStack> outputs;
 
     public CompostRecipe(Ingredient input, List<ItemStack> outputs) {
-        this.input   = input;
+        this.input = input;
         this.outputs = outputs;
     }
 
-    public Ingredient getInput()         { return input; }
-    public List<ItemStack> getOutputs()  { return outputs; }
+    public Ingredient getInput() {
+        return input;
+    }
+
+    public List<ItemStack> getOutputs() {
+        return outputs;
+    }
 
     public static CompostRecipe create(String itemId) {
         var item = RegistryHelper.getItem(itemId);

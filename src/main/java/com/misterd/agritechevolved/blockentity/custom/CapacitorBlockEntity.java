@@ -128,7 +128,8 @@ public class CapacitorBlockEntity extends BlockEntity implements MenuProvider {
 
         @Override
         protected Integer createSnapshot() {
-            return be.energyStored; }
+            return be.energyStored;
+        }
 
         @Override
         protected void revertToSnapshot(Integer snapshot) {

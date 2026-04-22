@@ -80,8 +80,7 @@ public enum PlanterProvider implements IServerDataProvider<BlockAccessor> {
         }
     }
 
-    private void appendCommonCropData(CompoundTag data, ItemStack seedStack, ItemStack soilStack,
-                                      int growthStage, float growthProgress, float soilModifier) {
+    private void appendCommonCropData(CompoundTag data, ItemStack seedStack, ItemStack soilStack, int growthStage, float growthProgress, float soilModifier) {
         data.putBoolean("hasCrop", true);
         data.putString("cropName", seedStack.getDisplayName().getString());
         data.putInt("currentStage", growthStage);

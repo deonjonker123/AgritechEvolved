@@ -25,12 +25,12 @@ public enum PlanterClientProvider implements IBlockComponentProvider {
         CompoundTag data = accessor.getServerData();
         if (!data.getBooleanOr("hasCrop", false)) return;
 
-        String cropName       = data.getStringOr("cropName", "");
-        int currentStage      = data.getIntOr("currentStage", 0);
-        int maxStage          = data.getIntOr("maxStage", 0);
+        String cropName = data.getStringOr("cropName", "");
+        int currentStage = data.getIntOr("currentStage", 0);
+        int maxStage = data.getIntOr("maxStage", 0);
         float progressPercent = data.getFloatOr("progressPercent", 0f);
-        String soilName       = data.getStringOr("soilName", "");
-        float growthModifier  = data.getFloatOr("growthModifier", 1f);
+        String soilName = data.getStringOr("soilName", "");
+        float growthModifier = data.getFloatOr("growthModifier", 1f);
 
         if (progressPercent >= 100.0F) {
             tooltip.add(Component.translatable("jade.agritechevolved.crop_ready", cropName)
@@ -65,7 +65,7 @@ public enum PlanterClientProvider implements IBlockComponentProvider {
         }
 
         if (data.getBooleanOr("isAdvanced", false)) {
-            int energy    = data.getIntOr("energyStored", 0);
+            int energy = data.getIntOr("energyStored", 0);
             int maxEnergy = data.getIntOr("maxEnergy", 0);
             NumberFormat fmt = NumberFormat.getInstance(Locale.US);
             tooltip.add(Component.translatable("jade.agritechevolved.energy_info",

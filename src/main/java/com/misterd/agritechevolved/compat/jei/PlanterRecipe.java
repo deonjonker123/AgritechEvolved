@@ -21,19 +21,39 @@ public class PlanterRecipe implements IRecipeCategoryExtension {
 
     public PlanterRecipe(Ingredient plantableIngredient, Ingredient soilIngredient, List<ItemStack> outputs, List<PlantablesConfig.DropInfo> dropInfos, PlantableType type) {
         this.plantableIngredient = plantableIngredient;
-        this.soilIngredient      = soilIngredient;
-        this.outputs             = outputs;
-        this.dropInfos           = dropInfos;
-        this.type                = type;
+        this.soilIngredient = soilIngredient;
+        this.outputs = outputs;
+        this.dropInfos = dropInfos;
+        this.type = type;
     }
 
-    public Ingredient getPlantableIngredient() { return plantableIngredient; }
-    public Ingredient getSeedIngredient()      { return plantableIngredient; }
-    public Ingredient getSaplingIngredient()   { return plantableIngredient; }
-    public Ingredient getSoilIngredient()      { return soilIngredient; }
-    public List<ItemStack> getOutputs()        { return outputs; }
-    public List<PlantablesConfig.DropInfo> getDropInfos() { return dropInfos; }
-    public PlantableType getType()             { return type; }
+    public Ingredient getPlantableIngredient() {
+        return plantableIngredient;
+    }
+
+    public Ingredient getSeedIngredient() {
+        return plantableIngredient;
+    }
+
+    public Ingredient getSaplingIngredient() {
+        return plantableIngredient;
+    }
+
+    public Ingredient getSoilIngredient() {
+        return soilIngredient;
+    }
+
+    public List<ItemStack> getOutputs() {
+        return outputs;
+    }
+
+    public List<PlantablesConfig.DropInfo> getDropInfos() {
+        return dropInfos;
+    }
+
+    public PlantableType getType() {
+        return type;
+    }
 
     public static PlanterRecipe createCrop(String seedId, String soilId) {
         return create(seedId, soilId, PlantableType.CROP);
@@ -60,13 +80,13 @@ public class PlanterRecipe implements IRecipeCategoryExtension {
         }
 
         Ingredient plantableIngredient = Ingredient.of(plantableItem);
-        Ingredient soilIngredient      = Ingredient.of(soilBlock.asItem());
+        Ingredient soilIngredient = Ingredient.of(soilBlock.asItem());
 
         List<PlantablesConfig.DropInfo> drops = type == PlantableType.CROP
                 ? PlantablesConfig.getCropDrops(plantableId)
                 : PlantablesConfig.getTreeDrops(plantableId);
 
-        List<ItemStack> outputs               = new ArrayList<>();
+        List<ItemStack> outputs = new ArrayList<>();
         List<PlantablesConfig.DropInfo> validDropInfos = new ArrayList<>();
 
         for (PlantablesConfig.DropInfo dropInfo : drops) {

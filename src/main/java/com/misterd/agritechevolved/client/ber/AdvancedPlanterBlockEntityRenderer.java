@@ -20,16 +20,16 @@ public class AdvancedPlanterBlockEntityRenderer
     public AdvancedPlanterBlockEntityRenderer(BlockEntityRendererProvider.Context context) {}
 
     public static class RenderState extends BlockEntityRenderState {
-        public boolean cloched       = false;
-        public ItemStack soilStack   = ItemStack.EMPTY;
-        public ItemStack plantStack  = ItemStack.EMPTY;
-        public float growthProgress  = 0f;
-        public int growthStage       = 0;
-        public boolean soilIsWater   = false;
-        public long posSeed          = 0L;
-        public double distanceSq     = 0.0;
-        public int[] soilTints       = new int[0];
-        public int[] plantTints      = new int[0];
+        public boolean cloched = false;
+        public ItemStack soilStack = ItemStack.EMPTY;
+        public ItemStack plantStack = ItemStack.EMPTY;
+        public float growthProgress = 0f;
+        public int growthStage = 0;
+        public boolean soilIsWater = false;
+        public long posSeed = 0L;
+        public double distanceSq = 0.0;
+        public int[] soilTints = new int[0];
+        public int[] plantTints = new int[0];
     }
 
     @Override
@@ -41,19 +41,18 @@ public class AdvancedPlanterBlockEntityRenderer
     public void extractRenderState(AdvancedPlanterBlockEntity be, RenderState state, float partialTick, Vec3 cameraPos, ModelFeatureRenderer.@org.jspecify.annotations.Nullable CrumblingOverlay crumblingOverlay) {
         BlockEntityRenderer.super.extractRenderState(be, state, partialTick, cameraPos, crumblingOverlay);
 
-        state.cloched       = be.getBlockState().getValue(AdvancedPlanterBlock.CLOCHED);
-        state.soilStack     = be.getStack(1).copy();
-        state.plantStack    = be.getStack(0).copy();
+        state.cloched = be.getBlockState().getValue(AdvancedPlanterBlock.CLOCHED);
+        state.soilStack = be.getStack(1).copy();
+        state.plantStack  = be.getStack(0).copy();
         state.growthProgress = be.getGrowthProgress();
-        state.growthStage   = be.getGrowthStage();
-        state.posSeed       = be.getBlockPos().asLong();
-        state.distanceSq    = cameraPos.distanceToSqr(Vec3.atCenterOf(be.getBlockPos()));
-        state.soilIsWater   = !state.soilStack.isEmpty()
-                && RegistryHelper.getItemId(state.soilStack).equals("minecraft:water_bucket");
+        state.growthStage = be.getGrowthStage();
+        state.posSeed = be.getBlockPos().asLong();
+        state.distanceSq = cameraPos.distanceToSqr(Vec3.atCenterOf(be.getBlockPos()));
+        state.soilIsWater = !state.soilStack.isEmpty() && RegistryHelper.getItemId(state.soilStack).equals("minecraft:water_bucket");
 
         var level = (BlockAndTintGetter) be.getLevel();
-        var pos   = be.getBlockPos();
-        state.soilTints  = PlanterBlockEntityRenderer.sampleTints(state.soilStack,  level, pos);
+        var pos = be.getBlockPos();
+        state.soilTints = PlanterBlockEntityRenderer.sampleTints(state.soilStack,  level, pos);
         state.plantTints = PlanterBlockEntityRenderer.sampleTints(state.plantStack, level, pos);
     }
 

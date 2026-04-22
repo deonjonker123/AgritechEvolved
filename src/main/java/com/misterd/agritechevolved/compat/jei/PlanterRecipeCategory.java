@@ -33,11 +33,30 @@ public class PlanterRecipeCategory implements IRecipeCategory<PlanterRecipe> {
         this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(ATEBlocks.OAK_PLANTER.get()));
     }
 
-    @Override public RecipeType<PlanterRecipe> getRecipeType() { return PLANTER_RECIPE_TYPE; }
-    @Override public Component getTitle()      { return Component.translatable("jei.agritechevolved.planter.tooltip"); }
-    @Override public IDrawable getIcon()       { return icon; }
-    @Override public int getWidth()            { return 134; }
-    @Override public int getHeight()           { return 72; }
+    @Override
+    public RecipeType<PlanterRecipe> getRecipeType() {
+        return PLANTER_RECIPE_TYPE;
+    }
+
+    @Override
+    public Component getTitle() {
+        return Component.translatable("jei.agritechevolved.planter.tooltip");
+    }
+
+    @Override
+    public IDrawable getIcon() {
+        return icon;
+    }
+
+    @Override
+    public int getWidth() {
+        return 134;
+    }
+
+    @Override
+    public int getHeight() {
+        return 72;
+    }
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, PlanterRecipe recipe, IFocusGroup focuses) {
