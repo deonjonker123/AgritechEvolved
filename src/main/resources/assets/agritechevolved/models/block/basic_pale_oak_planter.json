@@ -2,10 +2,10 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [32, 32],
 	"textures": {
-		"1": "agritechtwo:block/pale_oak_hp",
-		"2": "agritechtwo:block/pale_oak_hp_legs",
-		"5": "agritechtwo:block/hopper",
-		"particle": "agritechtwo:block/pale_oak_hp"
+		"1": "agritechevolved:block/pale_oak_hp",
+		"2": "agritechevolved:block/pale_oak_hp_legs",
+		"5": "agritechevolved:block/hopper",
+		"particle": "agritechevolved:block/pale_oak_hp"
 	},
 	"elements": [
 		{

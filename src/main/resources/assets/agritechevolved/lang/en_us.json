@@ -12,6 +12,7 @@
   "block.agritechevolved.basic_mangrove_planter": "Basic Mangrove Planter",
   "block.agritechevolved.basic_spruce_planter": "Basic Spruce Planter",
   "block.agritechevolved.basic_warped_planter": "Basic Warped Planter",
+  "block.agritechevolved.basic_pale_oak_planter": "Basic Pale Oak Planter",
 
   "block.agritechevolved.advanced_planter": "Advanced Planter",
 
@@ -51,7 +52,7 @@
   "gui.agritechevolved.composter": "Composter",
   "gui.agritechevolved.capacitor": "Capacitor",
 
-  "message.agritechevolved.invalid_plant_soil_combination": "Seed/Sapling can't grow on this soil",
+  "message.agritechevolved.invalid_seed_soil_combination": "Seed/Sapling can't grow on this soil",
   "message.agritechevolved.same_farmland": "This farmland is already of this type!",
 
   "tooltip.agritechevolved.sm_mk1": "§6§n§lHold Shift for more info§r§r§r",

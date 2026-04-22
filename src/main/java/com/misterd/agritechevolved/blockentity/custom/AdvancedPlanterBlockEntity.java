@@ -26,13 +26,17 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
-import net.neoforged.neoforge.energy.IEnergyStorage;
-import net.neoforged.neoforge.items.IItemHandler;
-import net.neoforged.neoforge.items.ItemHandlerHelper;
-import net.neoforged.neoforge.items.ItemStackHandler;
-import org.jetbrains.annotations.NotNull;
+import net.neoforged.neoforge.transfer.energy.EnergyHandler;
+import net.neoforged.neoforge.transfer.transaction.SnapshotJournal;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.item.ItemResource;
+import net.neoforged.neoforge.transfer.item.ItemStacksResourceHandler;
+import net.neoforged.neoforge.transfer.transaction.Transaction;
+import net.neoforged.neoforge.transfer.transaction.TransactionContext;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -48,6 +52,7 @@ public class AdvancedPlanterBlockEntity extends BlockEntity implements MenuProvi
     private static final int SLOT_OUTPUT_MAX = 16;
     private static final int TOTAL_SLOTS = 17;
 
+    // Module item IDs
     private static final String SM_MK1 = "agritechevolved:sm_mk1";
     private static final String SM_MK2 = "agritechevolved:sm_mk2";
     private static final String SM_MK3 = "agritechevolved:sm_mk3";
@@ -55,26 +60,22 @@ public class AdvancedPlanterBlockEntity extends BlockEntity implements MenuProvi
     private static final String YM_MK2 = "agritechevolved:ym_mk2";
     private static final String YM_MK3 = "agritechevolved:ym_mk3";
 
-
-    public final ItemStackHandler inventory = new ItemStackHandler(TOTAL_SLOTS) {
+    public final ItemStacksResourceHandler inventory = new ItemStacksResourceHandler(TOTAL_SLOTS) {
         @Override
-        public int getSlotLimit(int slot) {
-            return slot == SLOT_PLANT || slot == SLOT_SOIL || slot == SLOT_MODULE_1 || slot == SLOT_MODULE_2
-                    ? 1 : super.getSlotLimit(slot);
+        public long getCapacityAsLong(int index, ItemResource resource) {
+            return (index == SLOT_PLANT || index == SLOT_SOIL || index == SLOT_MODULE_1 || index == SLOT_MODULE_2)
+                    ? 1
+                    : resource.toStack().getMaxStackSize();
         }
 
         @Override
-        protected int getStackLimit(int slot, ItemStack stack) {
-            return slot == SLOT_FERTILIZER ? 64 : super.getStackLimit(slot, stack);
-        }
-
-        @Override
-        public boolean isItemValid(int slot, @NotNull ItemStack stack) {
-            String id = RegistryHelper.getItemId(stack);
-            return switch (slot) {
+        public boolean isValid(int index, ItemResource resource) {
+            if (resource.isEmpty()) return false;
+            String id = RegistryHelper.getItemId(resource.toStack());
+            return switch (index) {
                 case SLOT_PLANT -> {
                     if (!PlantablesConfig.isValidSeed(id) && !PlantablesConfig.isValidSapling(id)) yield false;
-                    ItemStack soil = getStackInSlot(SLOT_SOIL);
+                    ItemStack soil = getStack(SLOT_SOIL);
                     if (soil.isEmpty()) yield true;
                     String soilId = RegistryHelper.getItemId(soil);
                     yield PlantablesConfig.isValidSeed(id)
@@ -83,43 +84,39 @@ public class AdvancedPlanterBlockEntity extends BlockEntity implements MenuProvi
                 }
                 case SLOT_SOIL -> {
                     if (!PlantablesConfig.isValidSoil(id)) yield false;
-                    ItemStack plant = getStackInSlot(SLOT_PLANT);
+                    ItemStack plant = getStack(SLOT_PLANT);
                     if (plant.isEmpty()) yield true;
                     String plantId = RegistryHelper.getItemId(plant);
                     yield PlantablesConfig.isValidSeed(plantId)
                             ? PlantablesConfig.isSoilValidForSeed(id, plantId)
                             : PlantablesConfig.isSoilValidForSapling(id, plantId);
                 }
-                case SLOT_MODULE_1, SLOT_MODULE_2 -> stack.is(ATETags.Items.ATE_MODULES);
+                case SLOT_MODULE_1, SLOT_MODULE_2 -> resource.toStack().is(ATETags.Items.ATE_MODULES);
                 case SLOT_FERTILIZER -> PlantablesConfig.isValidFertilizer(id);
-                default -> false;
+                default -> true;
             };
         }
 
         @Override
-        protected void onContentsChanged(int slot) {
+        protected void onContentsChanged(int index, ItemStack previousContents) {
             AdvancedPlanterBlockEntity.this.setChanged();
             Level lvl = AdvancedPlanterBlockEntity.this.level;
             if (lvl != null && !lvl.isClientSide()) {
                 BlockPos p = AdvancedPlanterBlockEntity.this.getBlockPos();
-                lvl.sendBlockUpdated(p, AdvancedPlanterBlockEntity.this.getBlockState(),
-                        AdvancedPlanterBlockEntity.this.getBlockState(), 3);
+                lvl.sendBlockUpdated(p, AdvancedPlanterBlockEntity.this.getBlockState(), AdvancedPlanterBlockEntity.this.getBlockState(), 3);
             }
         }
     };
 
-    private final OutputOnlyItemHandler outputHandler;
-
     private int growthProgress = 0;
     private int growthTicks = 0;
     private boolean readyToHarvest = false;
-    private int energyStored = 0;
     private int lastGrowthStage = -1;
+    private int energyStored = 0;
     private float currentTotalModifier = 1.0F;
 
     public AdvancedPlanterBlockEntity(BlockPos pos, BlockState blockState) {
         super(ATEBlockEntities.ADVANCED_PLANTER_BLOCK_BE.get(), pos, blockState);
-        this.outputHandler = new OutputOnlyItemHandler(inventory, SLOT_OUTPUT_MIN, SLOT_OUTPUT_MAX);
     }
 
     @Override
@@ -133,10 +130,13 @@ public class AdvancedPlanterBlockEntity extends BlockEntity implements MenuProvi
         return new AdvancedPlanterMenu(id, inv, this);
     }
 
-    public int getEnergyStored() { return energyStored; }
-    public int getMaxEnergyStored() { return Config.getPlanterEnergyBuffer(); }
-    public boolean canExtractEnergy() { return false; }
-    public boolean canReceiveEnergy() { return true; }
+    public int getEnergyStored() {
+        return energyStored;
+    }
+
+    public int getMaxEnergyStored() {
+        return Config.getPlanterEnergyBuffer();
+    }
 
     public int receiveEnergy(int maxReceive, boolean simulate) {
         int received = Math.min(maxReceive, getMaxEnergyStored() - energyStored);
@@ -147,7 +147,54 @@ public class AdvancedPlanterBlockEntity extends BlockEntity implements MenuProvi
         return received;
     }
 
-    public int extractEnergy(int maxExtract, boolean simulate) { return 0; }
+    public EnergyHandler getEnergyStorage(@Nullable Direction side) {
+        return new BEEnergyHandler(this);
+    }
+
+    private static class BEEnergyHandler extends SnapshotJournal<Integer> implements EnergyHandler {
+        private final AdvancedPlanterBlockEntity be;
+
+        BEEnergyHandler(AdvancedPlanterBlockEntity be) {
+            this.be = be;
+        }
+
+        @Override
+        protected Integer createSnapshot() {
+            return be.energyStored;
+        }
+
+        @Override
+        protected void revertToSnapshot(Integer snapshot) {
+            be.energyStored = snapshot;
+        }
+
+        @Override
+        protected void onRootCommit(Integer originalState) {
+            be.setChanged();
+        }
+
+        @Override
+        public long getAmountAsLong() {
+            return be.energyStored;
+        }
+
+        @Override
+        public long getCapacityAsLong() {
+            return be.getMaxEnergyStored();
+        }
+
+        @Override public int insert(int amount, TransactionContext tx) {
+            int received = Math.min(amount, be.getMaxEnergyStored() - be.energyStored);
+            if (received <= 0) return 0;
+            updateSnapshots(tx);
+            be.energyStored += received;
+            return received;
+        }
+
+        @Override
+        public int extract(int amount, TransactionContext tx) {
+            return 0; }
+    }
 
     private boolean consumeEnergy() {
         int required = Math.round(Config.getPlanterBasePowerConsumption() * getModulePowerModifier());
@@ -157,53 +204,102 @@ public class AdvancedPlanterBlockEntity extends BlockEntity implements MenuProvi
         return true;
     }
 
-    public IEnergyStorage getEnergyStorage(@Nullable Direction side) {
-        return new IEnergyStorage() {
-            @Override public int receiveEnergy(int max, boolean sim) { return AdvancedPlanterBlockEntity.this.receiveEnergy(max, sim); }
-            @Override public int extractEnergy(int max, boolean sim) { return 0; }
-            @Override public int  getEnergyStored() { return AdvancedPlanterBlockEntity.this.getEnergyStored(); }
-            @Override public int  getMaxEnergyStored() { return AdvancedPlanterBlockEntity.this.getMaxEnergyStored(); }
-            @Override public boolean canExtract() { return false; }
-            @Override public boolean canReceive() { return true; }
+    public ResourceHandler<ItemResource> getInsertHandler() {
+        return new ResourceHandler<>() {
+            @Override
+            public int size() {
+                return inventory.size();
+            }
+
+            @Override
+            public ItemResource getResource(int index) {
+                return inventory.getResource(index);
+            }
+
+            @Override
+            public long getAmountAsLong(int index) {
+                return inventory.getAmountAsLong(index);
+            }
+
+            @Override
+            public long getCapacityAsLong(int index, ItemResource resource) {
+                return inventory.getCapacityAsLong(index, resource);
+            }
+
+            @Override
+            public boolean isValid(int index, ItemResource resource) {
+                if (resource.isEmpty()) return false;
+                String id = RegistryHelper.getItemId(resource.toStack());
+                return switch (index) {
+                    case SLOT_PLANT -> PlantablesConfig.isValidSeed(id) || PlantablesConfig.isValidSapling(id);
+                    case SLOT_SOIL -> PlantablesConfig.isValidSoil(id);
+                    case SLOT_FERTILIZER -> PlantablesConfig.isValidFertilizer(id);
+                    default -> false;
+                };
+            }
+
+            @Override
+            public int insert(int index, ItemResource resource, int amount, TransactionContext tx) {
+                if (index != SLOT_FERTILIZER) return 0;
+                if (!PlantablesConfig.isValidFertilizer(RegistryHelper.getItemId(resource.toStack()))) return 0;
+                return inventory.insert(index, resource, amount, tx);
+            }
+
+            @Override
+            public int extract(int index, ItemResource resource, int amount, TransactionContext tx) {
+                return 0;
+            }
         };
     }
 
-    public IItemHandler getOutputHandler() { return outputHandler; }
-
-    public IItemHandler getItemHandler(@Nullable Direction side) {
-        if (side == Direction.DOWN) return outputHandler;
-
-        return new IItemHandler() {
-            @Override public int getSlots() { return 12; }
-
-            @Override public ItemStack getStackInSlot(int slot) {
-                return slot == 0
-                        ? inventory.getStackInSlot(SLOT_FERTILIZER)
-                        : inventory.getStackInSlot(slot + SLOT_FERTILIZER);
+    public ResourceHandler<ItemResource> getExtractHandler() {
+        return new ResourceHandler<>() {
+            @Override
+            public int size() {
+                return inventory.size();
             }
 
-            @Override public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
-                return slot == 0 ? inventory.insertItem(SLOT_FERTILIZER, stack, simulate) : stack;
+            @Override
+            public ItemResource getResource(int index) {
+                return inventory.getResource(index);
             }
 
-            @Override public ItemStack extractItem(int slot, int amount, boolean simulate) {
-                return slot == 0 ? ItemStack.EMPTY : inventory.extractItem(slot + SLOT_FERTILIZER, amount, simulate);
+            @Override
+            public long getAmountAsLong(int index) {
+                return inventory.getAmountAsLong(index);
             }
 
-            @Override public int getSlotLimit(int slot) {
-                return inventory.getSlotLimit(slot == 0 ? SLOT_FERTILIZER : slot + SLOT_FERTILIZER);
+            @Override
+            public long getCapacityAsLong(int index, ItemResource resource) {
+                return inventory.getCapacityAsLong(index, resource);
             }
 
-            @Override public boolean isItemValid(int slot, ItemStack stack) {
-                return slot == 0 && inventory.isItemValid(SLOT_FERTILIZER, stack);
+            @Override
+            public boolean isValid(int index, ItemResource resource) {
+                return false;
+            }
+
+            @Override
+            public int insert(int index, ItemResource resource, int amount, TransactionContext tx) {
+                return 0;
+            }
+
+            @Override
+            public int extract(int index, ItemResource resource, int amount, TransactionContext tx) {
+                if (index < SLOT_OUTPUT_MIN) return 0;
+                return inventory.extract(index, resource, amount, tx);
             }
         };
+    }
+
+    public ResourceHandler<ItemResource> getItemHandler(@Nullable Direction side) {
+        return side == Direction.DOWN ? getExtractHandler() : getInsertHandler();
     }
 
     public static void registerCapabilities(RegisterCapabilitiesEvent event) {
-        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, ATEBlockEntities.ADVANCED_PLANTER_BLOCK_BE.get(),
+        event.registerBlockEntity(Capabilities.Item.BLOCK, ATEBlockEntities.ADVANCED_PLANTER_BLOCK_BE.get(),
                 (be, dir) -> be instanceof AdvancedPlanterBlockEntity p ? p.getItemHandler(dir) : null);
-        event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, ATEBlockEntities.ADVANCED_PLANTER_BLOCK_BE.get(),
+        event.registerBlockEntity(Capabilities.Energy.BLOCK, ATEBlockEntities.ADVANCED_PLANTER_BLOCK_BE.get(),
                 (be, dir) -> be instanceof AdvancedPlanterBlockEntity p ? p.getEnergyStorage(dir) : null);
     }
 
@@ -222,7 +318,7 @@ public class AdvancedPlanterBlockEntity extends BlockEntity implements MenuProvi
     public float getModuleSpeedModifier() {
         float speed = 1.0F, penalty = 1.0F;
         for (int slot = SLOT_MODULE_1; slot <= SLOT_MODULE_2; slot++) {
-            String id = RegistryHelper.getItemId(inventory.getStackInSlot(slot));
+            String id = RegistryHelper.getItemId(getStack(slot));
             if (id.isEmpty()) continue;
             speed   *= switch (id) {
                 case SM_MK1 -> (float) Config.getSpeedModuleMk1Multiplier();
@@ -243,7 +339,7 @@ public class AdvancedPlanterBlockEntity extends BlockEntity implements MenuProvi
     public float getModuleYieldModifier() {
         float yield = 1.0F;
         for (int slot = SLOT_MODULE_1; slot <= SLOT_MODULE_2; slot++) {
-            String id = RegistryHelper.getItemId(inventory.getStackInSlot(slot));
+            String id = RegistryHelper.getItemId(getStack(slot));
             yield *= switch (id) {
                 case YM_MK1 -> (float) Config.getYieldModuleMk1Multiplier();
                 case YM_MK2 -> (float) Config.getYieldModuleMk2Multiplier();
@@ -257,7 +353,7 @@ public class AdvancedPlanterBlockEntity extends BlockEntity implements MenuProvi
     public float getModulePowerModifier() {
         float power = 1.0F;
         for (int slot = SLOT_MODULE_1; slot <= SLOT_MODULE_2; slot++) {
-            String id = RegistryHelper.getItemId(inventory.getStackInSlot(slot));
+            String id = RegistryHelper.getItemId(getStack(slot));
             power *= switch (id) {
                 case SM_MK1 -> (float) Config.getSpeedModuleMk1PowerMultiplier();
                 case SM_MK2 -> (float) Config.getSpeedModuleMk2PowerMultiplier();
@@ -267,8 +363,6 @@ public class AdvancedPlanterBlockEntity extends BlockEntity implements MenuProvi
         }
         return power;
     }
-
-    private float getModuleGrowthModifier() { return getModuleSpeedModifier(); }
 
     private float getClocheGrowthModifier() {
         return getBlockState().getValue(AdvancedPlanterBlock.CLOCHED)
@@ -289,11 +383,14 @@ public class AdvancedPlanterBlockEntity extends BlockEntity implements MenuProvi
     }
 
     private float getFertilizerModifier(boolean forSpeed) {
-        ItemStack stack = inventory.getStackInSlot(SLOT_FERTILIZER);
+        ItemStack stack = getStack(SLOT_FERTILIZER);
         if (stack.isEmpty()) return 1.0F;
-        String id = RegistryHelper.getItemId(stack);
-        PlantablesConfig.FertilizerInfo info = PlantablesConfig.getFertilizerInfo(id);
+        PlantablesConfig.FertilizerInfo info = PlantablesConfig.getFertilizerInfo(RegistryHelper.getItemId(stack));
         return info != null ? (forSpeed ? info.speedMultiplier : info.yieldMultiplier) : 1.0F;
+    }
+
+    public float getSoilGrowthModifier(ItemStack soil) {
+        return soil.isEmpty() ? 1.0F : PlantablesConfig.getSoilGrowthModifier(RegistryHelper.getItemId(soil));
     }
 
     public static void tick(Level level, BlockPos pos, BlockState state, AdvancedPlanterBlockEntity be) {
@@ -304,8 +401,8 @@ public class AdvancedPlanterBlockEntity extends BlockEntity implements MenuProvi
             level.setBlock(pos, state.setValue(AdvancedPlanterBlock.POWERED, powered), 3);
         }
 
-        ItemStack plant = be.inventory.getStackInSlot(SLOT_PLANT);
-        ItemStack soil = be.inventory.getStackInSlot(SLOT_SOIL);
+        ItemStack plant = be.getStack(SLOT_PLANT);
+        ItemStack soil = be.getStack(SLOT_SOIL);
 
         if (plant.isEmpty() || soil.isEmpty()) {
             be.resetGrowth();
@@ -313,7 +410,7 @@ public class AdvancedPlanterBlockEntity extends BlockEntity implements MenuProvi
         }
 
         String plantId = RegistryHelper.getItemId(plant);
-        String soilId  = RegistryHelper.getItemId(soil);
+        String soilId = RegistryHelper.getItemId(soil);
 
         if (!be.isValidPlantSoilCombination(plantId, soilId)) {
             be.resetGrowth();
@@ -324,7 +421,7 @@ public class AdvancedPlanterBlockEntity extends BlockEntity implements MenuProvi
             if (!be.consumeEnergy()) return;
 
             float totalModifier = be.getSoilGrowthModifier(soil)
-                    * be.getModuleGrowthModifier()
+                    * be.getModuleSpeedModifier()
                     * be.getFertilizerGrowthModifier()
                     * be.getClocheGrowthModifier();
             be.currentTotalModifier = totalModifier;
@@ -339,7 +436,7 @@ public class AdvancedPlanterBlockEntity extends BlockEntity implements MenuProvi
                 level.sendBlockUpdated(pos, state, state, 3);
                 be.setChanged();
             } else {
-                be.growthProgress = (int)(be.growthTicks / (float) growthTime * 100);
+                be.growthProgress = (int) (be.growthTicks / (float) growthTime * 100);
                 int stage = be.getGrowthStage();
                 if (stage != be.lastGrowthStage) be.lastGrowthStage = stage;
                 if (be.growthTicks % 20 == 0) {
@@ -357,29 +454,20 @@ public class AdvancedPlanterBlockEntity extends BlockEntity implements MenuProvi
     }
 
     private boolean isValidPlantSoilCombination(String plantId, String soilId) {
-        if (PlantablesConfig.isValidSeed(plantId))    return PlantablesConfig.isSoilValidForSeed(soilId, plantId);
+        if (PlantablesConfig.isValidSeed(plantId)) return PlantablesConfig.isSoilValidForSeed(soilId, plantId);
         if (PlantablesConfig.isValidSapling(plantId)) return PlantablesConfig.isSoilValidForSapling(soilId, plantId);
         return false;
     }
 
     private boolean isTree() {
-        ItemStack plant = inventory.getStackInSlot(SLOT_PLANT);
+        ItemStack plant = getStack(SLOT_PLANT);
         return !plant.isEmpty() && PlantablesConfig.isValidSapling(RegistryHelper.getItemId(plant));
-    }
-
-    private boolean isCrop() {
-        ItemStack plant = inventory.getStackInSlot(SLOT_PLANT);
-        return !plant.isEmpty() && PlantablesConfig.isValidSeed(RegistryHelper.getItemId(plant));
     }
 
     private int getBaseGrowthTime(ItemStack plant) {
         String id = RegistryHelper.getItemId(plant);
         if (PlantablesConfig.isValidSapling(id)) return PlantablesConfig.getBaseSaplingGrowthTime(id);
         return Config.getPlanterBaseProcessingTime();
-    }
-
-    public float getSoilGrowthModifier(ItemStack soil) {
-        return soil.isEmpty() ? 1.0F : PlantablesConfig.getSoilGrowthModifier(RegistryHelper.getItemId(soil));
     }
 
     private void resetGrowth() {
@@ -390,38 +478,46 @@ public class AdvancedPlanterBlockEntity extends BlockEntity implements MenuProvi
         setChanged();
     }
 
-    public float getGrowthProgress() { return growthProgress / 100.0F; }
+    public float getGrowthProgress() {
+        return growthProgress / 100.0F;
+    }
 
     public int getGrowthStage() {
         return isTree()
                 ? (growthProgress > 50 ? 1 : 0)
-                : Math.min(8, (int)(growthProgress / 12.5F));
+                : Math.min(8, (int) (growthProgress / 12.5F));
     }
 
     public boolean hasOutputSpace() {
-        List<ItemStack> drops = getHarvestDrops(inventory.getStackInSlot(SLOT_PLANT));
-        Map<Integer, ItemStack> sim = new HashMap<>();
+        List<ItemStack> drops = getHarvestDrops(getStack(SLOT_PLANT));
+        Map<Integer, Integer> simAmounts = new HashMap<>();
+        Map<Integer, Item> simItems = new HashMap<>();
+        Map<Integer, Integer> simCap = new HashMap<>();
+
         for (int slot = SLOT_OUTPUT_MIN; slot <= SLOT_OUTPUT_MAX; slot++) {
-            ItemStack s = inventory.getStackInSlot(slot);
-            sim.put(slot, s.isEmpty() ? ItemStack.EMPTY : s.copy());
+            ItemStack s = getStack(slot);
+            simAmounts.put(slot, s.getCount());
+            simItems.put(slot, s.isEmpty() ? null : s.getItem());
+            simCap.put(slot, s.isEmpty() ? 64 : s.getMaxStackSize());
         }
 
         for (ItemStack drop : drops) {
             int remaining = drop.getCount();
 
             for (int slot = SLOT_OUTPUT_MIN; slot <= SLOT_OUTPUT_MAX && remaining > 0; slot++) {
-                ItemStack existing = sim.get(slot);
-                if (!existing.isEmpty() && existing.is(drop.getItem()) && existing.getCount() < existing.getMaxStackSize()) {
-                    int space = existing.getMaxStackSize() - existing.getCount();
-                    int add = Math.min(space, remaining);
-                    existing.grow(add);
-                    remaining -= add;
+                Item here = simItems.get(slot);
+                if (here != null && here == drop.getItem()) {
+                    int space = simCap.get(slot) - simAmounts.get(slot);
+                    int toAdd = Math.min(space, remaining);
+                    simAmounts.merge(slot, toAdd, Integer::sum);
+                    remaining -= toAdd;
                 }
             }
 
             for (int slot = SLOT_OUTPUT_MIN; slot <= SLOT_OUTPUT_MAX && remaining > 0; slot++) {
-                if (sim.get(slot).isEmpty()) {
-                    sim.put(slot, new ItemStack(drop.getItem(), remaining));
+                if (simItems.get(slot) == null) {
+                    simItems.put(slot, drop.getItem());
+                    simAmounts.put(slot, remaining);
                     remaining = 0;
                 }
             }
@@ -435,58 +531,51 @@ public class AdvancedPlanterBlockEntity extends BlockEntity implements MenuProvi
         if (!readyToHarvest) return;
 
         float yieldModifier = getFertilizerYieldModifier() * getModuleYieldModifier() * getClocheYieldModifier();
-        List<ItemStack> drops = applyYieldModifier(getHarvestDrops(inventory.getStackInSlot(SLOT_PLANT)), yieldModifier);
+        List<ItemStack> drops = applyYieldModifier(getHarvestDrops(getStack(SLOT_PLANT)), yieldModifier);
 
         for (ItemStack drop : drops) {
             int remaining = drop.getCount();
+            ItemResource res = ItemResource.of(drop);
+
             for (int slot = SLOT_OUTPUT_MIN; slot <= SLOT_OUTPUT_MAX && remaining > 0; slot++) {
-                ItemStack existing = inventory.getStackInSlot(slot);
-                if (existing.isEmpty()) {
-                    int toPlace = Math.min(remaining, drop.getMaxStackSize());
-                    inventory.setStackInSlot(slot, new ItemStack(drop.getItem(), toPlace));
-                    remaining -= toPlace;
-                } else if (existing.is(drop.getItem()) && existing.getCount() < existing.getMaxStackSize()) {
+                ItemStack existing = getStack(slot);
+                if (!existing.isEmpty() && existing.is(drop.getItem())) {
                     int space = existing.getMaxStackSize() - existing.getCount();
-                    int add = Math.min(space, remaining);
-                    existing.grow(add);
-                    remaining -= add;
+                    if (space <= 0) continue;
+                    try (Transaction tx = Transaction.openRoot()) {
+                        int inserted = inventory.insert(slot, res, Math.min(space, remaining), tx);
+                        tx.commit();
+                        remaining -= inserted;
+                    }
                 }
             }
+
+            for (int slot = SLOT_OUTPUT_MIN; slot <= SLOT_OUTPUT_MAX && remaining > 0; slot++) {
+                if (getStack(slot).isEmpty()) {
+                    int toPlace = Math.min(remaining, drop.getMaxStackSize());
+                    try (Transaction tx = Transaction.openRoot()) {
+                        int inserted = inventory.insert(slot, res, toPlace, tx);
+                        tx.commit();
+                        remaining -= inserted;
+                    }
+                }
+            }
+
             if (remaining > 0) break;
         }
 
-        consumeFertilizerForGrowthCycle();
+        consumeFertilizer();
         resetGrowth();
     }
 
-    private void consumeFertilizerForGrowthCycle() {
-        ItemStack fertilizer = inventory.getStackInSlot(SLOT_FERTILIZER);
-        if (fertilizer.isEmpty()) return;
-        fertilizer.shrink(1);
-        inventory.setStackInSlot(SLOT_FERTILIZER, fertilizer.isEmpty() ? ItemStack.EMPTY : fertilizer);
-        setChanged();
-    }
-
-    private List<ItemStack> getHarvestDrops(ItemStack plant) {
-        List<ItemStack> drops = new ArrayList<>();
-        if (plant.isEmpty()) return drops;
-
-        String plantId = RegistryHelper.getItemId(plant);
-        List<PlantablesConfig.DropInfo> configDrops;
-        if (PlantablesConfig.isValidSeed(plantId)) configDrops = PlantablesConfig.getCropDrops(plantId);
-        else if (PlantablesConfig.isValidSapling(plantId)) configDrops = PlantablesConfig.getTreeDrops(plantId);
-        else return drops;
-
-        Random random = new Random();
-        for (PlantablesConfig.DropInfo info : configDrops) {
-            if (random.nextFloat() > info.chance) continue;
-            int count = info.minCount == info.maxCount
-                    ? info.minCount
-                    : info.minCount + random.nextInt(info.maxCount - info.minCount + 1);
-            Item item = RegistryHelper.getItem(info.item);
-            if (item != null) drops.add(new ItemStack(item, count));
+    private void consumeFertilizer() {
+        ItemStack stack = getStack(SLOT_FERTILIZER);
+        if (stack.isEmpty()) return;
+        try (Transaction tx = Transaction.openRoot()) {
+            inventory.extract(SLOT_FERTILIZER, ItemResource.of(stack), 1, tx);
+            tx.commit();
         }
-        return drops;
+        setChanged();
     }
 
     private List<ItemStack> applyYieldModifier(List<ItemStack> drops, float modifier) {
@@ -498,19 +587,48 @@ public class AdvancedPlanterBlockEntity extends BlockEntity implements MenuProvi
         return result;
     }
 
+    private List<ItemStack> getHarvestDrops(ItemStack plant) {
+        List<ItemStack> drops = new ArrayList<>();
+        if (plant.isEmpty()) return drops;
+
+        String plantId = RegistryHelper.getItemId(plant);
+        List<PlantablesConfig.DropInfo> configDrops;
+        if (PlantablesConfig.isValidSeed(plantId))    configDrops = PlantablesConfig.getCropDrops(plantId);
+        else if (PlantablesConfig.isValidSapling(plantId)) configDrops = PlantablesConfig.getTreeDrops(plantId);
+        else return drops;
+
+        Random rng = new Random();
+        for (PlantablesConfig.DropInfo info : configDrops) {
+            if (rng.nextFloat() > info.chance) continue;
+            int count = info.maxCount > info.minCount
+                    ? info.minCount + rng.nextInt(info.maxCount - info.minCount + 1)
+                    : info.minCount;
+            Item item = RegistryHelper.getItem(info.item);
+            if (item != null) drops.add(new ItemStack(item, count));
+        }
+        return drops;
+    }
+
     private static void tryOutputItemsBelow(Level level, BlockPos pos, AdvancedPlanterBlockEntity be) {
-        IItemHandler target = level.getCapability(Capabilities.ItemHandler.BLOCK, pos.below(), Direction.UP);
+        BlockPos below = pos.below();
+        if (level.getBlockEntity(below) == null) return;
+
+        ResourceHandler<ItemResource> target = level.getCapability(Capabilities.Item.BLOCK, below, Direction.UP);
         if (target == null) return;
 
         boolean changed = false;
         for (int slot = SLOT_OUTPUT_MIN; slot <= SLOT_OUTPUT_MAX; slot++) {
-            if (be.inventory.getStackInSlot(slot).isEmpty()) continue;
-            ItemStack extracted = be.inventory.extractItem(slot, 64, true);
-            if (extracted.isEmpty()) continue;
-            ItemStack remaining = ItemHandlerHelper.insertItemStacked(target, extracted, false);
-            int inserted = extracted.getCount() - remaining.getCount();
-            if (inserted > 0) {
-                be.inventory.extractItem(slot, inserted, false);
+            ItemResource res = be.inventory.getResource(slot);
+            if (res.isEmpty()) continue;
+            int available = be.inventory.getAmountAsInt(slot);
+            if (available <= 0) continue;
+
+            try (Transaction tx = Transaction.openRoot()) {
+                int insertable = target.insert(res, available, tx);
+                if (insertable <= 0) continue;
+                int extracted = be.inventory.extract(slot, res, insertable, tx);
+                if (extracted != insertable) continue;
+                tx.commit();
                 changed = true;
             }
         }
@@ -521,34 +639,40 @@ public class AdvancedPlanterBlockEntity extends BlockEntity implements MenuProvi
         }
     }
 
+    public ItemStack getStack(int slot) {
+        ItemResource res = inventory.getResource(slot);
+        if (res.isEmpty()) return ItemStack.EMPTY;
+        return res.toStack(inventory.getAmountAsInt(slot));
+    }
+
     public void drops() {
-        SimpleContainer container = new SimpleContainer(inventory.getSlots());
-        for (int i = 0; i < inventory.getSlots(); i++) container.setItem(i, inventory.getStackInSlot(i));
+        SimpleContainer container = new SimpleContainer(inventory.size());
+        for (int i = 0; i < inventory.size(); i++) container.setItem(i, getStack(i));
         Containers.dropContents(level, worldPosition, container);
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-        super.saveAdditional(tag, registries);
-        tag.put("inventory", inventory.serializeNBT(registries));
-        tag.putInt("growthProgress", growthProgress);
-        tag.putInt("growthTicks", growthTicks);
-        tag.putBoolean("readyToHarvest", readyToHarvest);
-        tag.putInt("energyStored", energyStored);
-        tag.putInt("lastGrowthStage", lastGrowthStage);
-        tag.putFloat("currentTotalModifier", currentTotalModifier);
+    protected void saveAdditional(ValueOutput output) {
+        super.saveAdditional(output);
+        inventory.serialize(output);
+        output.putInt("growthProgress", growthProgress);
+        output.putInt("growthTicks", growthTicks);
+        output.putBoolean("readyToHarvest", readyToHarvest);
+        output.putInt("energyStored", energyStored);
+        output.putInt("lastGrowthStage", lastGrowthStage);
+        output.putFloat("currentTotalModifier", currentTotalModifier);
     }
 
     @Override
-    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-        super.loadAdditional(tag, registries);
-        inventory.deserializeNBT(registries, tag.getCompound("inventory"));
-        growthProgress = tag.getInt("growthProgress");
-        growthTicks = tag.getInt("growthTicks");
-        readyToHarvest = tag.getBoolean("readyToHarvest");
-        energyStored = tag.getInt("energyStored");
-        lastGrowthStage = tag.getInt("lastGrowthStage");
-        currentTotalModifier = tag.getFloat("currentTotalModifier");
+    protected void loadAdditional(ValueInput input) {
+        super.loadAdditional(input);
+        inventory.deserialize(input);
+        growthProgress = input.getIntOr("growthProgress", 0);
+        growthTicks = input.getIntOr("growthTicks", 0);
+        readyToHarvest = input.getBooleanOr("readyToHarvest", false);
+        energyStored = input.getIntOr("energyStored", 0);
+        lastGrowthStage = input.getIntOr("lastGrowthStage", -1);
+        currentTotalModifier = input.getFloatOr("currentTotalModifier", 1.0F);
     }
 
     @Override
@@ -560,35 +684,5 @@ public class AdvancedPlanterBlockEntity extends BlockEntity implements MenuProvi
     @Override
     public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
         return saveWithoutMetadata(registries);
-    }
-
-    private static class OutputOnlyItemHandler implements IItemHandler {
-        private final ItemStackHandler original;
-        private final int firstOutputSlot;
-        private final int lastOutputSlot;
-
-        OutputOnlyItemHandler(ItemStackHandler original, int firstOutputSlot, int lastOutputSlot) {
-            this.original        = original;
-            this.firstOutputSlot = firstOutputSlot;
-            this.lastOutputSlot  = lastOutputSlot;
-        }
-
-        @Override public int getSlots() { return original.getSlots(); }
-
-        @Override @NotNull
-        public ItemStack getStackInSlot(int slot) { return original.getStackInSlot(slot); }
-
-        @Override @NotNull
-        public ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) { return stack; }
-
-        @Override @NotNull
-        public ItemStack extractItem(int slot, int amount, boolean simulate) {
-            return (slot >= firstOutputSlot && slot <= lastOutputSlot)
-                    ? original.extractItem(slot, amount, simulate)
-                    : ItemStack.EMPTY;
-        }
-
-        @Override public int getSlotLimit(int slot) { return original.getSlotLimit(slot); }
-        @Override public boolean isItemValid(int slot, @NotNull ItemStack stack) { return false; }
     }
 }

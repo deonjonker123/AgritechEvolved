@@ -1,8 +1,10 @@
 package com.misterd.agritechevolved.compat.jei;
 
+import com.misterd.agritechevolved.Config;
 import com.misterd.agritechevolved.block.ATEBlocks;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
+import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
@@ -10,17 +12,19 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
+
+import java.util.List;
 
 public class CompostRecipeCategory implements IRecipeCategory<CompostRecipe> {
 
-    public static final ResourceLocation UID =
-            ResourceLocation.fromNamespaceAndPath("agritechevolved", "composting");
-    public static final ResourceLocation TEXTURE =
-            ResourceLocation.fromNamespaceAndPath("agritechevolved", "textures/gui/jei/jei_composter_gui.png");
+    public static final Identifier UID =
+            Identifier.fromNamespaceAndPath("agritechevolved", "composting");
+    public static final Identifier TEXTURE =
+            Identifier.fromNamespaceAndPath("agritechevolved", "textures/gui/jei/jei_composter_gui.png");
     public static final RecipeType<CompostRecipe> COMPOST_RECIPE_TYPE =
             new RecipeType<>(UID, CompostRecipe.class);
 
@@ -34,31 +38,28 @@ public class CompostRecipeCategory implements IRecipeCategory<CompostRecipe> {
     }
 
     @Override public RecipeType<CompostRecipe> getRecipeType() { return COMPOST_RECIPE_TYPE; }
-    @Override public Component    getTitle()      { return Component.translatable("jei.agritechevolved.composting.tooltip"); }
-    @Override public IDrawable    getBackground() { return background; }
-    @Override public IDrawable    getIcon()       { return icon; }
-    @Override public int          getWidth()      { return 134; }
-    @Override public int          getHeight()     { return 72; }
+    @Override public Component getTitle()  { return Component.translatable("jei.agritechevolved.composting.tooltip"); }
+    @Override public IDrawable getIcon()   { return icon; }
+    @Override public int       getWidth()  { return 134; }
+    @Override public int       getHeight() { return 72; }
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, CompostRecipe recipe, IFocusGroup focuses) {
-        ItemStack[] inputItems = recipe.getInput().getItems();
-        if (inputItems.length > 0) {
-            ItemStack display = inputItems[0].copy();
-            display.setCount(32);
-            builder.addSlot(RecipeIngredientRole.INPUT, 10, 10).addItemStack(display);
-        }
+        int itemsRequired = Config.getComposterItemsPerBiomass();
 
-        int outputIndex = 0;
-        for (ItemStack output : recipe.getOutputs()) {
-            builder.addSlot(RecipeIngredientRole.OUTPUT, 106, 10 + outputIndex * 18).addItemStack(output);
-            outputIndex++;
+        IRecipeSlotBuilder inputSlot = builder.addSlot(RecipeIngredientRole.INPUT, 10, 10);
+        recipe.getInput().items()
+                .map(h -> new ItemStack(h.value(), itemsRequired))
+                .forEach(inputSlot::add);
+
+        List<ItemStack> outputs = recipe.getOutputs();
+        for (int i = 0; i < outputs.size(); i++) {
+            builder.addSlot(RecipeIngredientRole.OUTPUT, 106, 10 + i * 18).add(outputs.get(i));
         }
     }
 
     @Override
-    public void draw(CompostRecipe recipe, IRecipeSlotsView recipeSlotsView,
-                     GuiGraphics guiGraphics, double mouseX, double mouseY) {
+    public void draw(CompostRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphicsExtractor guiGraphics, double mouseX, double mouseY) {
         background.draw(guiGraphics);
     }
 }

@@ -27,6 +27,7 @@ public class ATECreativeTab {
                         output.accept(ATEBlocks.JUNGLE_PLANTER);
                         output.accept(ATEBlocks.MANGROVE_PLANTER);
                         output.accept(ATEBlocks.OAK_PLANTER);
+                        output.accept(ATEBlocks.PALE_OAK_PLANTER);
                         output.accept(ATEBlocks.SPRUCE_PLANTER);
                         output.accept(ATEBlocks.WARPED_PLANTER);
 

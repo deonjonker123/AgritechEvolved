@@ -6,7 +6,10 @@ import com.misterd.agritechevolved.gui.ATEMenuTypes;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.*;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.inventory.DataSlot;
+import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -16,9 +19,13 @@ public class CapacitorMenu extends AbstractContainerMenu {
     public final CapacitorBlockEntity blockEntity;
     private final Level level;
 
-    // -------------------------------------------------------------------------
-    // Constructors
-    // -------------------------------------------------------------------------
+    // Split into low/high 16-bit to fit DataSlot's signed short limit
+    private int lastEnergyLow    = 0;
+    private int lastEnergyHigh   = 0;
+    private int lastMaxLow       = 0;
+    private int lastMaxHigh      = 0;
+    private int lastTransferRate = 0;
+    private int lastTier         = 1;
 
     public CapacitorMenu(int containerId, Inventory inv, FriendlyByteBuf extraData) {
         this(containerId, inv, inv.player.level().getBlockEntity(extraData.readBlockPos()));
@@ -33,55 +40,37 @@ public class CapacitorMenu extends AbstractContainerMenu {
         addDataSlots();
     }
 
-    // -------------------------------------------------------------------------
-    // Data slots
-    //
-    // DataSlot is limited to 16-bit signed values (-32768..32767), so energy
-    // values that exceed Short.MAX_VALUE must be split across two slots and
-    // reassembled on the client. The low/high 16-bit split below is intentional.
-    // -------------------------------------------------------------------------
-
     private void addDataSlots() {
-        // Energy stored — low 16 bits
         addDataSlot(new DataSlot() {
             @Override public int get()           { return blockEntity.getEnergyStored() & 0xFFFF; }
-            @Override public void set(int value) { }
+            @Override public void set(int value) { lastEnergyLow = value; }
         });
-        // Energy stored — high 16 bits
         addDataSlot(new DataSlot() {
             @Override public int get()           { return (blockEntity.getEnergyStored() >> 16) & 0xFFFF; }
-            @Override public void set(int value) { }
+            @Override public void set(int value) { lastEnergyHigh = value; }
         });
-        // Max energy — low 16 bits
         addDataSlot(new DataSlot() {
             @Override public int get()           { return blockEntity.getMaxEnergyStored() & 0xFFFF; }
-            @Override public void set(int value) { }
+            @Override public void set(int value) { lastMaxLow = value; }
         });
-        // Max energy — high 16 bits
         addDataSlot(new DataSlot() {
             @Override public int get()           { return (blockEntity.getMaxEnergyStored() >> 16) & 0xFFFF; }
-            @Override public void set(int value) { }
+            @Override public void set(int value) { lastMaxHigh = value; }
         });
-        // Transfer rate
         addDataSlot(new DataSlot() {
             @Override public int get()           { return blockEntity.getTransferRate(); }
-            @Override public void set(int value) { }
+            @Override public void set(int value) { lastTransferRate = value; }
         });
-        // Tier
         addDataSlot(new DataSlot() {
             @Override public int get()           { return blockEntity.getTier(); }
-            @Override public void set(int value) { }
+            @Override public void set(int value) { lastTier = value; }
         });
     }
 
-    // -------------------------------------------------------------------------
-    // Data accessors
-    // -------------------------------------------------------------------------
-
-    public int    getEnergyStored()    { return blockEntity.getEnergyStored(); }
-    public int    getMaxEnergyStored() { return blockEntity.getMaxEnergyStored(); }
-    public int    getTransferRate()    { return blockEntity.getTransferRate(); }
-    public int    getTier()            { return blockEntity.getTier(); }
+    public int    getEnergyStored()    { return level.isClientSide() ? (lastEnergyHigh << 16) | (lastEnergyLow & 0xFFFF) : blockEntity.getEnergyStored(); }
+    public int    getMaxEnergyStored() { return level.isClientSide() ? (lastMaxHigh    << 16) | (lastMaxLow    & 0xFFFF) : blockEntity.getMaxEnergyStored(); }
+    public int    getTransferRate()    { return level.isClientSide() ? lastTransferRate : blockEntity.getTransferRate(); }
+    public int    getTier()            { return level.isClientSide() ? lastTier         : blockEntity.getTier(); }
     public String getTierName() {
         return switch (getTier()) {
             case 1  -> "Tier 1";
@@ -90,10 +79,6 @@ public class CapacitorMenu extends AbstractContainerMenu {
             default -> "Unknown";
         };
     }
-
-    // -------------------------------------------------------------------------
-    // Slot interaction
-    // -------------------------------------------------------------------------
 
     @Override
     public ItemStack quickMoveStack(Player player, int index) {
@@ -108,21 +93,14 @@ public class CapacitorMenu extends AbstractContainerMenu {
                 || stillValid(access, player, ATEBlocks.CAPACITOR_TIER_3.get());
     }
 
-    // -------------------------------------------------------------------------
-    // Player inventory / hotbar
-    // -------------------------------------------------------------------------
-
     private void addPlayerInventory(Inventory inv) {
-        for (int row = 0; row < 3; row++) {
-            for (int col = 0; col < 9; col++) {
+        for (int row = 0; row < 3; row++)
+            for (int col = 0; col < 9; col++)
                 addSlot(new Slot(inv, col + row * 9 + 9, 8 + col * 18, 66 + row * 18));
-            }
-        }
     }
 
     private void addPlayerHotbar(Inventory inv) {
-        for (int i = 0; i < 9; i++) {
+        for (int i = 0; i < 9; i++)
             addSlot(new Slot(inv, i, 8 + i * 18, 125));
-        }
     }
 }

@@ -17,7 +17,7 @@ public class ATJadePlugin implements IWailaPlugin {
     }
 
     public void registerClient(IWailaClientRegistration registration) {
-        registration.registerBlockComponent(PlanterProvider.INSTANCE, PlanterBlock.class);
-        registration.registerBlockComponent(PlanterProvider.INSTANCE, AdvancedPlanterBlock.class);
+        registration.registerBlockComponent(PlanterClientProvider.INSTANCE, PlanterBlock.class);
+        registration.registerBlockComponent(PlanterClientProvider.INSTANCE, AdvancedPlanterBlock.class);
     }
 }

@@ -7,14 +7,12 @@ import com.misterd.agritechevolved.util.RegistryHelper;
 import com.mojang.logging.LogUtils;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
-import mezz.jei.api.constants.RecipeTypes;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import mezz.jei.api.runtime.IJeiRuntime;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.ArrayList;
@@ -25,13 +23,13 @@ import java.util.Objects;
 @JeiPlugin
 public class ATJeiPlugin implements IModPlugin {
 
-    private static final ResourceLocation PLUGIN_ID =
-            ResourceLocation.fromNamespaceAndPath("agritechevolved", "jei_plugin");
+    private static final Identifier PLUGIN_ID =
+            Identifier.fromNamespaceAndPath("agritechevolved", "jei_plugin");
 
     private static IJeiRuntime jeiRuntime;
 
     @Override
-    public ResourceLocation getPluginUid() {
+    public Identifier getPluginUid() {
         return PLUGIN_ID;
     }
 

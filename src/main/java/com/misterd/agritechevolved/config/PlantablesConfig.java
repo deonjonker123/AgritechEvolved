@@ -283,18 +283,18 @@ public class PlantablesConfig {
         crops.add(makeCrop("minecraft:sweet_berries",
                 List.of("minecraft:farmland", "minecraft:dirt", "minecraft:grass_block", "minecraft:rooted_dirt",
                         "minecraft:coarse_dirt", "minecraft:podzol", "minecraft:mycelium", "minecraft:mud",
-                        "minecraft:moss_block", "minecraft:muddy_mangrove_roots",
+                        "minecraft:moss_block", "minecraft:muddy_mangrove_roots", "minecraft:pale_moss_block",
                         "mysticalagriculture:inferium_farmland", "mysticalagriculture:prudentium_farmland",
                         "mysticalagriculture:tertium_farmland", "mysticalagriculture:imperium_farmland",
                         "mysticalagriculture:supremium_farmland", "mysticalagradditions:insanium_farmland",
 
                         "justdirethings:goosoil_tier1", "justdirethings:goosoil_tier2",
                         "justdirethings:goosoil_tier3", "justdirethings:goosoil_tier4",
-                        "farmersdelight:rich_soil_farmland", "farmersdelight:rich_soil", "farmersdelight:organic_compost", "agritechevolved:mulch"),
+                        "farmersdelight:rich_soil_farmland", "farmersdelight:rich_soil", "farmersdelight:organic_compost"),
                 makeDrop("minecraft:sweet_berries", 2, 4)));
 
         crops.add(makeCrop("minecraft:glow_berries",
-                List.of("minecraft:moss_block"),
+                List.of("minecraft:moss_block", "minecraft:pale_moss_block"),
                 makeDrop("minecraft:glow_berries", 2, 4)));
 
         crops.add(makeCrop("minecraft:nether_wart",
@@ -323,6 +323,11 @@ public class PlantablesConfig {
                 makeDrop("minecraft:moss_block", 1, 2),
                 makeDrop("minecraft:moss_carpet", 1, 1, 0.1F),
                 makeDrop("minecraft:wheat_seeds", 1, 1, 0.1F)));
+
+        crops.add(makeCrop("minecraft:pale_moss_block",
+                List.of("minecraft:stone"),
+                makeDrop("minecraft:pale_moss_block", 1, 2),
+                makeDrop("minecraft:pale_moss_carpet", 1, 1, 0.1F)));
 
         crops.add(makeCrop("minecraft:brown_mushroom",
                 List.of("minecraft:mycelium", "minecraft:podzol",
@@ -358,8 +363,11 @@ public class PlantablesConfig {
     }
 
     private static final List<String> STANDARD_TREE_SOILS = List.of(
+    "agritechevolved:infused_farmland", "agritechevolved:mulch",
             "minecraft:dirt", "minecraft:grass_block", "minecraft:podzol",
-            "minecraft:coarse_dirt", "minecraft:mycelium", "agritechevolved:mulch"
+            "minecraft:coarse_dirt", "minecraft:mycelium", "minecraft:rooted_dirt",
+            "minecraft:moss_block", "minecraft:pale_moss_block", "minecraft:farmland",
+            "minecraft:mud", "minecraft:muddy_mangrove_roots"
     );
 
     private static TreeEntry makeTree(String sapling, List<String> validSoils, DropEntry... drops) {
@@ -1175,6 +1183,12 @@ public class PlantablesConfig {
                 makeDrop("minecraft:cherry_sapling", 1, 2, 0.5F),
                 makeDrop("minecraft:stick", 1, 2, 0.5F)));
 
+        trees.add(makeTree("minecraft:pale_oak_sapling", STANDARD_TREE_SOILS,
+                makeDrop("minecraft:pale_oak_log", 4, 8),
+                makeDrop("minecraft:pale_oak_sapling", 1, 2, 0.5F),
+                makeDrop("minecraft:stick", 1, 2, 0.5F),
+                makeDrop("minecraft:pale_hanging_moss", 1, 2, 0.3F)));
+
         List<String> azaleaSoils = List.of("minecraft:dirt", "minecraft:grass_block", "minecraft:podzol",
                 "minecraft:coarse_dirt", "minecraft:rooted_dirt", "minecraft:moss_block",
                 "minecraft:mycelium", "agritechevolved:mulch");
@@ -1714,6 +1728,7 @@ public class PlantablesConfig {
                 new S("minecraft:muddy_mangrove_roots",   0.5F),
                 new S("minecraft:rooted_dirt",            0.475F),
                 new S("minecraft:moss_block",             0.475F),
+                new S("minecraft:pale_moss_block",        0.475F),
                 new S("minecraft:farmland",               0.5F),
                 new S("minecraft:sand",                   0.5F),
                 new S("minecraft:red_sand",               0.5F),

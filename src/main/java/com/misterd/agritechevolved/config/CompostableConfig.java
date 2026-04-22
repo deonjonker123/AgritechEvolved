@@ -145,7 +145,7 @@ public class CompostableConfig {
                 "minecraft:acacia_sapling", "minecraft:dark_oak_sapling",
                 "minecraft:cherry_sapling", "minecraft:mangrove_propagule",
                 "minecraft:azalea", "minecraft:flowering_azalea",
-                "minecraft:crimson_fungus", "minecraft:warped_fungus"
+                "minecraft:crimson_fungus", "minecraft:warped_fungus","minecraft:pale_oak_sapling"
         ));
         // Crops and food
         items.addAll(Arrays.asList(
@@ -164,7 +164,7 @@ public class CompostableConfig {
                 "minecraft:cherry_leaves", "minecraft:azalea_leaves",
                 "minecraft:flowering_azalea_leaves", "minecraft:mangrove_leaves",
                 "minecraft:muddy_mangrove_roots", "minecraft:mangrove_roots",
-                "minecraft:moss_block", "minecraft:vine", "minecraft:lily_pad",
+                "minecraft:moss_block", "minecraft:vine", "minecraft:lily_pad", "minecraft:moss_carpet", "minecraft:pale_moss_carpet",
                 "minecraft:spore_blossom", "minecraft:pink_petals",
                 "minecraft:sculk_vein", "minecraft:glow_lichen", "minecraft:sea_pickle",
                 "minecraft:twisting_vines", "minecraft:weeping_vines"

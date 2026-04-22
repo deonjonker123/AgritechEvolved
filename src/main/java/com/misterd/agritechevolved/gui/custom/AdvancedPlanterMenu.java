@@ -7,6 +7,7 @@ import com.misterd.agritechevolved.gui.ATEMenuTypes;
 import com.misterd.agritechevolved.util.ATETags;
 import com.misterd.agritechevolved.util.RegistryHelper;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -16,24 +17,12 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.neoforged.neoforge.items.SlotItemHandler;
+import net.neoforged.neoforge.transfer.item.ItemResource;
+import net.neoforged.neoforge.transfer.transaction.Transaction;
 
 public class AdvancedPlanterMenu extends AbstractContainerMenu {
 
-    // -------------------------------------------------------------------------
-    // Slot layout constants
-    // -------------------------------------------------------------------------
-
-    private static final int PLAYER_INV_ROWS    = 3;
-    private static final int PLAYER_INV_COLS    = 9;
-    private static final int HOTBAR_SLOTS       = 9;
-    private static final int PLAYER_SLOTS       = PLAYER_INV_ROWS * PLAYER_INV_COLS + HOTBAR_SLOTS; // 36
-
-    private static final int TE_FIRST_SLOT      = PLAYER_SLOTS;       // 36
-    private static final int TE_SLOT_COUNT      = 17;
-    private static final int TE_LAST_SLOT       = TE_FIRST_SLOT + TE_SLOT_COUNT; // 53
-
-    // Block entity slot indices (mirrors AdvancedPlanterBlockEntity)
+    private static final int PLAYER_SLOTS    = 36;
     private static final int SLOT_PLANT      = 0;
     private static final int SLOT_SOIL       = 1;
     private static final int SLOT_MODULE_1   = 2;
@@ -41,21 +30,15 @@ public class AdvancedPlanterMenu extends AbstractContainerMenu {
     private static final int SLOT_FERTILIZER = 4;
     private static final int SLOT_OUTPUT_MIN = 5;
     private static final int SLOT_OUTPUT_MAX = 16;
-
-    // -------------------------------------------------------------------------
-    // Fields
-    // -------------------------------------------------------------------------
+    private static final int TE_SLOT_COUNT   = 17;
+    private static final int TE_FIRST_SLOT   = PLAYER_SLOTS;
+    private static final int TE_LAST_SLOT    = TE_FIRST_SLOT + TE_SLOT_COUNT;
 
     public final AdvancedPlanterBlockEntity blockEntity;
     private final Level level;
 
-    // Synced values (client-side mirrors)
     private int lastEnergyStored   = 0;
     private int lastGrowthProgress = 0;
-
-    // -------------------------------------------------------------------------
-    // Constructors
-    // -------------------------------------------------------------------------
 
     public AdvancedPlanterMenu(int containerId, Inventory inv, FriendlyByteBuf extraData) {
         this(containerId, inv, inv.player.level().getBlockEntity(extraData.readBlockPos()));
@@ -72,46 +55,18 @@ public class AdvancedPlanterMenu extends AbstractContainerMenu {
         addDataSlots();
     }
 
-    // -------------------------------------------------------------------------
-    // Slot setup
-    // -------------------------------------------------------------------------
-
     private void addBlockEntitySlots() {
-        // Input slots
-        addSlot(new SlotItemHandler(blockEntity.inventory, SLOT_PLANT,      8,   16));
-        addSlot(new SlotItemHandler(blockEntity.inventory, SLOT_SOIL,       8,   52));
-        addSlot(new SlotItemHandler(blockEntity.inventory, SLOT_MODULE_1,   152, 16));
-        addSlot(new SlotItemHandler(blockEntity.inventory, SLOT_MODULE_2,   170, 16));
-        addSlot(new SlotItemHandler(blockEntity.inventory, SLOT_FERTILIZER, 161, 52));
+        addSlot(new AdvancedSlot(blockEntity, SLOT_PLANT,      8,   16));
+        addSlot(new AdvancedSlot(blockEntity, SLOT_SOIL,       8,   52));
+        addSlot(new AdvancedSlot(blockEntity, SLOT_MODULE_1,   152, 16));
+        addSlot(new AdvancedSlot(blockEntity, SLOT_MODULE_2,   170, 16));
+        addSlot(new AdvancedSlot(blockEntity, SLOT_FERTILIZER, 161, 52));
 
-        // Output grid (3 rows × 4 cols)
-        int outputIndex = SLOT_OUTPUT_MIN;
-        for (int row = 0; row < 3; row++) {
-            for (int col = 0; col < 4; col++) {
-                addSlot(new SlotItemHandler(blockEntity.inventory, outputIndex++,
-                        62 + col * 18, 16 + row * 18));
-            }
-        }
+        int idx = SLOT_OUTPUT_MIN;
+        for (int row = 0; row < 3; row++)
+            for (int col = 0; col < 4; col++)
+                addSlot(new AdvancedSlot(blockEntity, idx++, 62 + col * 18, 16 + row * 18));
     }
-
-    private void addPlayerInventory(Inventory inv) {
-        for (int row = 0; row < PLAYER_INV_ROWS; row++) {
-            for (int col = 0; col < PLAYER_INV_COLS; col++) {
-                addSlot(new Slot(inv, col + row * PLAYER_INV_COLS + HOTBAR_SLOTS,
-                        26 + col * 18, 86 + row * 18));
-            }
-        }
-    }
-
-    private void addPlayerHotbar(Inventory inv) {
-        for (int i = 0; i < HOTBAR_SLOTS; i++) {
-            addSlot(new Slot(inv, i, 26 + i * 18, 144));
-        }
-    }
-
-    // -------------------------------------------------------------------------
-    // Data slots (server → client sync)
-    // -------------------------------------------------------------------------
 
     private void addDataSlots() {
         addDataSlot(new DataSlot() {
@@ -124,139 +79,147 @@ public class AdvancedPlanterMenu extends AbstractContainerMenu {
         });
     }
 
-    // -------------------------------------------------------------------------
-    // Data accessors (client-safe)
-    // -------------------------------------------------------------------------
-
-    public int getEnergyStored() {
-        return level.isClientSide ? lastEnergyStored : blockEntity.getEnergyStored();
-    }
-
-    public int getMaxEnergyStored() {
-        return blockEntity.getMaxEnergyStored();
-    }
-
-    public float getGrowthProgress() {
-        return level.isClientSide ? lastGrowthProgress / 1000.0F : blockEntity.getGrowthProgress();
-    }
-
-    // -------------------------------------------------------------------------
-    // Shift-click
-    // -------------------------------------------------------------------------
+    public int   getEnergyStored()    { return level.isClientSide() ? lastEnergyStored   : blockEntity.getEnergyStored(); }
+    public int   getMaxEnergyStored() { return blockEntity.getMaxEnergyStored(); }
+    public float getGrowthProgress()  { return level.isClientSide() ? lastGrowthProgress / 1000.0F : blockEntity.getGrowthProgress(); }
 
     @Override
     public ItemStack quickMoveStack(Player player, int index) {
         Slot source = slots.get(index);
         if (source == null || !source.hasItem()) return ItemStack.EMPTY;
 
-        ItemStack stack    = source.getItem();
-        ItemStack stackCopy = stack.copy();
+        ItemStack stack = source.getItem();
+        ItemStack copy  = stack.copy();
 
         if (index < PLAYER_SLOTS) {
-            // Player → block entity: try to place into the appropriate input slot
             if (!tryMoveToBlockEntity(stack)) {
-                // Fallback: shift into any TE slot
-                if (!moveItemStackTo(stack, TE_FIRST_SLOT, TE_LAST_SLOT, false)) {
+                if (!moveItemStackTo(stack, TE_FIRST_SLOT, TE_LAST_SLOT, false))
                     return ItemStack.EMPTY;
-                }
             }
         } else {
-            // Block entity → player inventory
-            if (index >= TE_LAST_SLOT) {
-                return ItemStack.EMPTY; // invalid
-            }
-            if (!moveItemStackTo(stack, 0, PLAYER_SLOTS, false)) {
-                return ItemStack.EMPTY;
-            }
+            if (!moveItemStackTo(stack, 0, PLAYER_SLOTS, false)) return ItemStack.EMPTY;
         }
 
-        if (stack.isEmpty()) {
-            source.set(ItemStack.EMPTY);
-        } else {
-            source.setChanged();
-        }
+        if (stack.isEmpty()) source.set(ItemStack.EMPTY);
+        else source.setChanged();
+
         source.onTake(player, stack);
-        return stackCopy;
+        return copy;
     }
 
-    /**
-     * Attempts to shift-click a stack from the player's inventory into the
-     * correct block-entity slot. Returns true if the item was placed.
-     */
     private boolean tryMoveToBlockEntity(ItemStack stack) {
         String id = RegistryHelper.getItemId(stack);
 
-        // Seed or sapling → slot 0
         if (PlantablesConfig.isValidSeed(id) || PlantablesConfig.isValidSapling(id)) {
-            if (!blockEntity.inventory.getStackInSlot(SLOT_PLANT).isEmpty()) return false;
-            if (!isSeedSoilCompatible(id, blockEntity.inventory.getStackInSlot(SLOT_SOIL))) return false;
-            placeSingle(stack, SLOT_PLANT);
+            if (!blockEntity.getStack(SLOT_PLANT).isEmpty()) return false;
+            ItemStack soil = blockEntity.getStack(SLOT_SOIL);
+            if (!soil.isEmpty()) {
+                String soilId = RegistryHelper.getItemId(soil);
+                boolean valid = PlantablesConfig.isValidSeed(id)
+                        ? PlantablesConfig.isSoilValidForSeed(soilId, id)
+                        : PlantablesConfig.isSoilValidForSapling(soilId, id);
+                if (!valid) return false;
+            }
+            insertSingle(stack, SLOT_PLANT);
             return true;
         }
-
-        // Soil → slot 1
         if (PlantablesConfig.isValidSoil(id)) {
-            if (!blockEntity.inventory.getStackInSlot(SLOT_SOIL).isEmpty()) return false;
-            if (!isSoilPlantCompatible(id, blockEntity.inventory.getStackInSlot(SLOT_PLANT))) return false;
-            placeSingle(stack, SLOT_SOIL);
+            if (!blockEntity.getStack(SLOT_SOIL).isEmpty()) return false;
+            ItemStack plant = blockEntity.getStack(SLOT_PLANT);
+            if (!plant.isEmpty()) {
+                String plantId = RegistryHelper.getItemId(plant);
+                boolean valid = PlantablesConfig.isValidSeed(plantId)
+                        ? PlantablesConfig.isSoilValidForSeed(id, plantId)
+                        : PlantablesConfig.isSoilValidForSapling(id, plantId);
+                if (!valid) return false;
+            }
+            insertSingle(stack, SLOT_SOIL);
             return true;
         }
-
-        // Fertilizer → slot 4
         if (PlantablesConfig.isValidFertilizer(id)) {
-            if (!blockEntity.inventory.getStackInSlot(SLOT_FERTILIZER).isEmpty()) return false;
-            placeSingle(stack, SLOT_FERTILIZER);
+            insertSingle(stack, SLOT_FERTILIZER);
             return true;
         }
-
-        // Module → first empty module slot (2 or 3)
         if (stack.is(ATETags.Items.ATE_MODULES)) {
             for (int slot = SLOT_MODULE_1; slot <= SLOT_MODULE_2; slot++) {
-                if (blockEntity.inventory.getStackInSlot(slot).isEmpty()) {
-                    placeSingle(stack, slot);
+                if (blockEntity.getStack(slot).isEmpty()) {
+                    insertSingle(stack, slot);
                     return true;
                 }
             }
         }
-
         return false;
     }
 
-    // -------------------------------------------------------------------------
-    // Compatibility helpers
-    // -------------------------------------------------------------------------
-
-    /** Returns true if the seed/sapling is compatible with the existing soil (or soil is absent). */
-    private boolean isSeedSoilCompatible(String seedId, ItemStack soilStack) {
-        if (soilStack.isEmpty()) return true;
-        String soilId = RegistryHelper.getItemId(soilStack);
-        if (PlantablesConfig.isValidSeed(seedId))    return PlantablesConfig.isSoilValidForSeed(soilId, seedId);
-        if (PlantablesConfig.isValidSapling(seedId)) return PlantablesConfig.isSoilValidForSapling(soilId, seedId);
-        return false;
-    }
-
-    /** Returns true if the soil is compatible with the existing plant (or plant slot is absent). */
-    private boolean isSoilPlantCompatible(String soilId, ItemStack plantStack) {
-        if (plantStack.isEmpty()) return true;
-        String plantId = RegistryHelper.getItemId(plantStack);
-        if (PlantablesConfig.isValidSeed(plantId))    return PlantablesConfig.isSoilValidForSeed(soilId, plantId);
-        if (PlantablesConfig.isValidSapling(plantId)) return PlantablesConfig.isSoilValidForSapling(soilId, plantId);
-        return false;
-    }
-
-    /** Places one item from {@code stack} into the given inventory slot. */
-    private void placeSingle(ItemStack stack, int slot) {
-        blockEntity.inventory.setStackInSlot(slot, stack.copyWithCount(1));
+    private void insertSingle(ItemStack stack, int slot) {
+        try (Transaction tx = Transaction.openRoot()) {
+            blockEntity.inventory.insert(slot, ItemResource.of(stack), 1, tx);
+            tx.commit();
+        }
         stack.shrink(1);
     }
-
-    // -------------------------------------------------------------------------
-    // Validity check
-    // -------------------------------------------------------------------------
 
     @Override
     public boolean stillValid(Player player) {
         return stillValid(ContainerLevelAccess.create(level, blockEntity.getBlockPos()),
                 player, ATEBlocks.ADVANCED_PLANTER.get());
+    }
+
+    private void addPlayerInventory(Inventory inv) {
+        for (int row = 0; row < 3; row++)
+            for (int col = 0; col < 9; col++)
+                addSlot(new Slot(inv, col + row * 9 + 9, 26 + col * 18, 86 + row * 18));
+    }
+
+    private void addPlayerHotbar(Inventory inv) {
+        for (int i = 0; i < 9; i++)
+            addSlot(new Slot(inv, i, 26 + i * 18, 144));
+    }
+
+    // -------------------------------------------------------------------------
+    // Custom slot
+    // -------------------------------------------------------------------------
+
+    private static class AdvancedSlot extends Slot {
+        private final AdvancedPlanterBlockEntity be;
+        private final int index;
+
+        AdvancedSlot(AdvancedPlanterBlockEntity be, int index, int x, int y) {
+            super(new SimpleContainer(be.inventory.size()), index, x, y);
+            this.be    = be;
+            this.index = index;
+        }
+
+        @Override public ItemStack getItem() { return be.getStack(index); }
+
+        @Override
+        public void set(ItemStack stack) {
+            try (Transaction tx = Transaction.openRoot()) {
+                ItemStack existing = be.getStack(index);
+                if (!existing.isEmpty())
+                    be.inventory.extract(index, ItemResource.of(existing), existing.getCount(), tx);
+                if (!stack.isEmpty())
+                    be.inventory.insert(index, ItemResource.of(stack), stack.getCount(), tx);
+                tx.commit();
+            }
+            setChanged();
+        }
+
+        @Override
+        public boolean mayPlace(ItemStack stack) {
+            return be.inventory.isValid(index, ItemResource.of(stack));
+        }
+
+        @Override
+        public ItemStack remove(int amount) {
+            ItemStack existing = getItem();
+            if (existing.isEmpty()) return ItemStack.EMPTY;
+            int toExtract = Math.min(amount, existing.getCount());
+            try (Transaction tx = Transaction.openRoot()) {
+                int extracted = be.inventory.extract(index, ItemResource.of(existing), toExtract, tx);
+                tx.commit();
+                return new ItemStack(existing.getItem(), extracted);
+            }
+        }
     }
 }

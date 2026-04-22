@@ -11,12 +11,14 @@ import com.misterd.agritechevolved.util.RegistryHelper;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.SimpleMenuProvider;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
@@ -38,11 +40,11 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.neoforged.fml.ModList;
 import net.neoforged.neoforge.common.ItemAbilities;
+import net.neoforged.neoforge.transfer.item.ItemResource;
+import net.neoforged.neoforge.transfer.transaction.Transaction;
 
 import javax.annotation.Nullable;
-import java.util.HashMap;
 import java.util.Map;
 
 public class AdvancedPlanterBlock extends BaseEntityBlock {
@@ -51,27 +53,25 @@ public class AdvancedPlanterBlock extends BaseEntityBlock {
     public static final BooleanProperty POWERED = BooleanProperty.create("powered");
     public static final BooleanProperty CLOCHED = BooleanProperty.create("cloched");
     public static final VoxelShape SHAPE = Shapes.or(
-            Block.box(1,  0,  1,  3, 11,  3),
-            Block.box(13, 0,  1, 15, 11,  3),
-            Block.box(1,  0, 13,  3, 11, 15),
+            Block.box(1, 0, 1, 3, 11, 3),
+            Block.box(13, 0, 1, 15, 11, 3),
+            Block.box(1, 0, 13, 3, 11, 15),
             Block.box(13, 0, 13, 15, 11, 15),
-            Block.box(2,  2,  2, 14, 10,  3),
-            Block.box(2,  2, 13, 14, 10, 14),
-            Block.box(2,  2,  3,  3, 10, 13),
-            Block.box(13, 2,  3, 14, 10, 13),
-            Block.box(3,  2,  3, 13,  3, 13)
+            Block.box(2, 2, 2, 14, 10, 3),
+            Block.box(2, 2, 13, 14, 10, 14),
+            Block.box(2, 2, 3, 3, 10, 13),
+            Block.box(13, 2, 3, 14, 10, 13),
+            Block.box(3, 2, 3, 13, 3, 13)
     );
 
-    private static final Map<String, String> ESSENCE_TO_FARMLAND;
-
-    static {
-        ESSENCE_TO_FARMLAND = new HashMap<>();
-        ESSENCE_TO_FARMLAND.put("mysticalagriculture:inferium_essence",   "mysticalagriculture:inferium_farmland");
-        ESSENCE_TO_FARMLAND.put("mysticalagriculture:prudentium_essence", "mysticalagriculture:prudentium_farmland");
-        ESSENCE_TO_FARMLAND.put("mysticalagriculture:tertium_essence",    "mysticalagriculture:tertium_farmland");
-        ESSENCE_TO_FARMLAND.put("mysticalagriculture:imperium_essence",   "mysticalagriculture:imperium_farmland");
-        ESSENCE_TO_FARMLAND.put("mysticalagriculture:supremium_essence",  "mysticalagriculture:supremium_farmland");
-    }
+    private static final Map<String, String> ESSENCE_TO_FARMLAND = Map.of(
+            "mysticalagriculture:inferium_essence", "mysticalagriculture:inferium_farmland",
+            "mysticalagriculture:prudentium_essence", "mysticalagriculture:prudentium_farmland",
+            "mysticalagriculture:tertium_essence", "mysticalagriculture:tertium_farmland",
+            "mysticalagriculture:imperium_essence", "mysticalagriculture:imperium_farmland",
+            "mysticalagriculture:supremium_essence", "mysticalagriculture:supremium_farmland",
+            "mysticalagradditions:insanium_essence", "mysticalagradditions:insanium_farmland"
+    );
 
     public AdvancedPlanterBlock(Properties properties) {
         super(properties);
@@ -107,228 +107,233 @@ public class AdvancedPlanterBlock extends BaseEntityBlock {
     }
 
     @Override
-    public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving) {
-        super.onPlace(state, level, pos, oldState, isMoving);
-        if (!level.isClientSide()) {
-            level.invalidateCapabilities(pos);
-        }
+    protected void affectNeighborsAfterRemoval(BlockState state, ServerLevel level, BlockPos pos, boolean movedByPiston) {
+        Containers.updateNeighboursAfterDestroy(state, level, pos);
     }
 
     @Override
-    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
-        if (state.getBlock() != newState.getBlock()) {
-            if (state.getValue(CLOCHED)) {
-                level.addFreshEntity(new ItemEntity(
-                        level,
-                        pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
-                        new ItemStack(ATEItems.CLOCHE.get())
-                ));
-            }
-            if (level.getBlockEntity(pos) instanceof AdvancedPlanterBlockEntity planter) {
-                planter.drops();
-            }
-        }
-        super.onRemove(state, level, pos, newState, isMoving);
-    }
-
-    @Override
-    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+    protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
         if (!(level.getBlockEntity(pos) instanceof AdvancedPlanterBlockEntity planter)) {
-            return ItemInteractionResult.FAIL;
+            return InteractionResult.FAIL;
         }
 
         ItemStack heldItem = player.getItemInHand(hand);
-
-        if (player.isCrouching() && heldItem.isEmpty() && state.getValue(CLOCHED)) {
-            if (!level.isClientSide()) {
-                level.setBlock(pos, state.setValue(CLOCHED, false), 3);
-                level.addFreshEntity(new ItemEntity(
-                        level,
-                        pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5,
-                        new ItemStack(ATEItems.CLOCHE.get())
-                ));
-                level.playSound(null, pos, SoundEvents.GLASS_BREAK, SoundSource.BLOCKS, 0.5F, 1.2F);
-            }
-            return ItemInteractionResult.SUCCESS;
-        }
-
-        if (player.isCrouching()) {
-            if (!level.isClientSide()) openMenu(level, pos, player, planter);
-            return ItemInteractionResult.SUCCESS;
-        }
-
         String heldItemId = RegistryHelper.getItemId(heldItem);
 
+        if (player.isCrouching() && heldItem.isEmpty() && state.getValue(CLOCHED)) {
+            return handleClocheRemoval(state, level, pos, player);
+        }
+        if (player.isCrouching()) {
+            return handleCrouchOpen(level, pos, player, planter);
+        }
         if (heldItem.getItem() instanceof ClocheItem) {
-            if (state.getValue(CLOCHED)) return ItemInteractionResult.FAIL;
-            if (!level.isClientSide()) {
-                level.setBlock(pos, state.setValue(CLOCHED, true), 3);
-                if (!player.getAbilities().instabuild) heldItem.shrink(1);
-                level.playSound(null, pos, SoundEvents.GLASS_PLACE, SoundSource.BLOCKS, 1.0F, 1.0F);
-            }
-            return ItemInteractionResult.SUCCESS;
+            return handleClochePlace(state, level, pos, player, heldItem);
         }
-
         if (PlantablesConfig.isValidSeed(heldItemId) || PlantablesConfig.isValidSapling(heldItemId)) {
-            return tryPlaceSeedOrSapling(heldItem, heldItemId, level, pos, state, player, planter);
+            return handlePlantInsert(state, level, pos, player, planter, heldItem, heldItemId);
         }
-
         if (PlantablesConfig.isValidSoil(heldItemId)) {
-            return tryPlaceSoil(heldItem, heldItemId, level, pos, state, player, planter);
+            return handleSoilInsert(state, level, pos, player, planter, heldItem, heldItemId);
         }
-
-        if (heldItem.getItem() instanceof HoeItem) {
-            return tryTillSoil(heldItem, level, pos, player, hand, hitResult, planter);
-        }
-
         if (PlantablesConfig.isValidFertilizer(heldItemId)) {
-            return tryPlaceFertilizer(heldItem, level, pos, state, player, planter);
+            return handleFertilizer(state, level, pos, player, planter, heldItem);
         }
-
+        if (heldItem.getItem() instanceof HoeItem) {
+            return handleHoeTill(level, pos, player, planter, heldItem, hand, hitResult);
+        }
         if (heldItem.is(ATETags.Items.ATE_MODULES)) {
-            return tryPlaceModule(heldItem, level, pos, state, player, planter);
+            return handleModuleInsert(level, pos, state, player, planter, heldItem);
+        }
+        if (ESSENCE_TO_FARMLAND.containsKey(heldItemId)) {
+            return handleEssenceUpgrade(stack, level, pos, player, planter, heldItemId);
         }
 
-        if (tryUpgradeFarmland(stack, heldItemId, level, pos, player, planter)) {
-            return ItemInteractionResult.sidedSuccess(level.isClientSide());
-        }
-
-        if (!level.isClientSide()) openMenu(level, pos, player, planter);
-        return ItemInteractionResult.SUCCESS;
+        if (!level.isClientSide()) openGui(player, planter, pos);
+        return InteractionResult.SUCCESS;
     }
 
-    private ItemInteractionResult tryPlaceSeedOrSapling(ItemStack heldItem, String heldItemId, Level level, BlockPos pos, BlockState state, Player player, AdvancedPlanterBlockEntity planter) {
-        if (level.isClientSide()) return ItemInteractionResult.SUCCESS;
-        if (!planter.inventory.getStackInSlot(0).isEmpty()) return ItemInteractionResult.SUCCESS;
+    private InteractionResult handleClocheRemoval(BlockState state, Level level, BlockPos pos, Player player) {
+        if (!level.isClientSide()) {
+            level.setBlock(pos, state.setValue(CLOCHED, false), 3);
+            level.addFreshEntity(new ItemEntity(level, pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, new ItemStack(ATEItems.CLOCHE.get())));
+            level.playSound(null, pos, SoundEvents.GLASS_BREAK, SoundSource.BLOCKS, 0.5F, 1.2F);
+        }
+        return InteractionResult.SUCCESS;
+    }
 
-        ItemStack soilStack = planter.inventory.getStackInSlot(1);
-        if (!soilStack.isEmpty()) {
-            String soilId = RegistryHelper.getItemId(soilStack);
+    private InteractionResult handleCrouchOpen(Level level, BlockPos pos, Player player, AdvancedPlanterBlockEntity planter) {
+        if (!level.isClientSide()) openGui(player, planter, pos);
+        return InteractionResult.SUCCESS;
+    }
+
+    private InteractionResult handleClochePlace(BlockState state, Level level, BlockPos pos, Player player, ItemStack heldItem) {
+        if (state.getValue(CLOCHED)) return InteractionResult.FAIL;
+        if (!level.isClientSide()) {
+            level.setBlock(pos, state.setValue(CLOCHED, true), 3);
+            if (!player.getAbilities().instabuild) heldItem.shrink(1);
+            level.playSound(null, pos, SoundEvents.GLASS_PLACE, SoundSource.BLOCKS, 1.0F, 1.0F);
+        }
+        return InteractionResult.SUCCESS;
+    }
+
+    private InteractionResult handlePlantInsert(BlockState state, Level level, BlockPos pos, Player player, AdvancedPlanterBlockEntity planter, ItemStack heldItem, String heldItemId) {
+        if (!planter.getStack(0).isEmpty()) {
+            if (!level.isClientSide()) openGui(player, planter, pos);
+            return InteractionResult.SUCCESS;
+        }
+        if (level.isClientSide()) return InteractionResult.SUCCESS;
+
+        ItemStack existingSoil = planter.getStack(1);
+        if (!existingSoil.isEmpty()) {
+            String soilId = RegistryHelper.getItemId(existingSoil);
             boolean valid = PlantablesConfig.isValidSeed(heldItemId)
                     ? PlantablesConfig.isSoilValidForSeed(soilId, heldItemId)
                     : PlantablesConfig.isSoilValidForSapling(soilId, heldItemId);
             if (!valid) {
-                player.displayClientMessage(Component.translatable("message.agritechevolved.invalid_plant_soil_combination"), true);
-                return ItemInteractionResult.SUCCESS;
+                player.sendSystemMessage(Component.translatable("message.agritechevolved.invalid_seed_soil_combination"));
+                return InteractionResult.SUCCESS;
             }
         }
 
-        placeInSlot(planter, 0, heldItem, level, pos, state);
+        try (Transaction tx = Transaction.openRoot()) {
+            planter.inventory.insert(0, ItemResource.of(heldItem), 1, tx);
+            tx.commit();
+        }
+        if (!player.getAbilities().instabuild) heldItem.shrink(1);
         level.playSound(null, pos, SoundEvents.CROP_PLANTED, SoundSource.BLOCKS, 1.0F, 1.0F);
-        return ItemInteractionResult.SUCCESS;
-    }
-
-    private ItemInteractionResult tryPlaceSoil(ItemStack heldItem, String heldItemId, Level level, BlockPos pos, BlockState state, Player player, AdvancedPlanterBlockEntity planter) {
-        if (level.isClientSide()) return ItemInteractionResult.SUCCESS;
-        if (!planter.inventory.getStackInSlot(1).isEmpty()) return ItemInteractionResult.SUCCESS;
-
-        ItemStack plantStack = planter.inventory.getStackInSlot(0);
-        if (!plantStack.isEmpty()) {
-            String plantId = RegistryHelper.getItemId(plantStack);
-            boolean valid = false;
-            if (PlantablesConfig.isValidSeed(plantId)) valid = PlantablesConfig.isSoilValidForSeed(heldItemId, plantId);
-            else if (PlantablesConfig.isValidSapling(plantId)) valid = PlantablesConfig.isSoilValidForSapling(heldItemId, plantId);
-            if (!valid) {
-                player.displayClientMessage(Component.translatable("message.agritechevolved.invalid_plant_soil_combination"), true);
-                return ItemInteractionResult.SUCCESS;
-            }
-        }
-
-        placeInSlot(planter, 1, heldItem, level, pos, state);
-        level.playSound(null, pos, SoundEvents.GRAVEL_PLACE, SoundSource.BLOCKS, 1.0F, 0.8F);
-        return ItemInteractionResult.SUCCESS;
-    }
-
-    private ItemInteractionResult tryTillSoil(ItemStack heldItem, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult, AdvancedPlanterBlockEntity planter) {
-        ItemStack soilStack = planter.inventory.getStackInSlot(1);
-        if (soilStack.isEmpty() || !(soilStack.getItem() instanceof BlockItem blockItem)) {
-            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
-        }
-
-        BlockState soilState = blockItem.getBlock().defaultBlockState();
-        BlockState result = soilState.getToolModifiedState(
-                new UseOnContext(level, player, hand, heldItem, hitResult),
-                ItemAbilities.HOE_TILL,
-                false
-        );
-
-        if (result == null) return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
-
-        planter.inventory.setStackInSlot(1, new ItemStack(result.getBlock()));
-        level.playSound(player, pos, SoundEvents.HOE_TILL, SoundSource.BLOCKS, 1.0F, 1.0F);
-        if (!player.getAbilities().instabuild) {
-            heldItem.hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand));
-        }
-        return ItemInteractionResult.sidedSuccess(level.isClientSide());
-    }
-
-    private ItemInteractionResult tryPlaceFertilizer(ItemStack heldItem, Level level, BlockPos pos, BlockState state, Player player, AdvancedPlanterBlockEntity planter) {
-        if (level.isClientSide()) return ItemInteractionResult.SUCCESS;
-        if (!planter.inventory.getStackInSlot(4).isEmpty()) return ItemInteractionResult.SUCCESS;
-
-        placeInSlot(planter, 4, heldItem, level, pos, state);
-        level.playSound(null, pos, SoundEvents.BONE_MEAL_USE, SoundSource.BLOCKS, 1.0F, 1.0F);
-        return ItemInteractionResult.SUCCESS;
-    }
-
-    private ItemInteractionResult tryPlaceModule(ItemStack heldItem, Level level, BlockPos pos, BlockState state, Player player, AdvancedPlanterBlockEntity planter) {
-        if (level.isClientSide()) return ItemInteractionResult.SUCCESS;
-
-        for (int slot = 2; slot <= 3; slot++) {
-            if (planter.inventory.getStackInSlot(slot).isEmpty()) {
-                placeInSlot(planter, slot, heldItem, level, pos, state);
-                level.playSound(null, pos, SoundEvents.ITEM_PICKUP, SoundSource.BLOCKS, 1.0F, 1.2F);
-                return ItemInteractionResult.SUCCESS;
-            }
-        }
-        return ItemInteractionResult.SUCCESS;
-    }
-
-    private boolean tryUpgradeFarmland(ItemStack stack, String heldItemId, Level level, BlockPos pos, Player player, AdvancedPlanterBlockEntity planter) {
-        Map<String, String> essenceMap = new HashMap<>(ESSENCE_TO_FARMLAND);
-        if (ModList.get().isLoaded("mysticalagradditions")) {
-            essenceMap.put("mysticalagradditions:insanium_essence", "mysticalagradditions:insanium_farmland");
-        }
-
-        String targetFarmlandId = essenceMap.get(heldItemId);
-        if (targetFarmlandId == null) return false;
-
-        ItemStack soilStack = planter.inventory.getStackInSlot(1);
-        if (soilStack.isEmpty() || !(soilStack.getItem() instanceof BlockItem soilBlockItem)) return false;
-
-        String soilId = RegistryHelper.getBlockId(soilBlockItem.getBlock());
-        boolean isFarmland = soilId.equals("minecraft:farmland")
-                || (soilId.startsWith("mysticalagriculture:") && soilId.endsWith("_farmland"))
-                || (soilId.startsWith("mysticalagradditions:") && soilId.endsWith("_farmland"));
-        if (!isFarmland) return false;
-
-        if (soilId.equals(targetFarmlandId)) {
-            if (!level.isClientSide()) {
-                player.displayClientMessage(Component.translatable("message.agritechevolved.same_farmland"), true);
-            }
-            return true;
-        }
-
-        Block resultBlock = RegistryHelper.getBlock(targetFarmlandId);
-        if (resultBlock == null) return false;
-
-        planter.inventory.setStackInSlot(1, new ItemStack(resultBlock));
-        if (!player.getAbilities().instabuild) stack.shrink(1);
-        level.playSound(player, pos, SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.BLOCKS, 1.0F, 1.0F);
-        return true;
-    }
-
-    private void placeInSlot(AdvancedPlanterBlockEntity planter, int slot, ItemStack heldItem, Level level, BlockPos pos, BlockState state) {
-        planter.inventory.setStackInSlot(slot, heldItem.copyWithCount(1));
-        heldItem.shrink(1);
         level.sendBlockUpdated(pos, state, state, 2);
         planter.setChanged();
+        return InteractionResult.SUCCESS;
     }
 
-    private void openMenu(Level level, BlockPos pos, Player player, AdvancedPlanterBlockEntity planter) {
+    private InteractionResult handleSoilInsert(BlockState state, Level level, BlockPos pos, Player player, AdvancedPlanterBlockEntity planter, ItemStack heldItem, String heldItemId) {
+        if (!planter.getStack(1).isEmpty()) {
+            if (!level.isClientSide()) openGui(player, planter, pos);
+            return InteractionResult.SUCCESS;
+        }
+        if (level.isClientSide()) return InteractionResult.SUCCESS;
+
+        ItemStack existingPlant = planter.getStack(0);
+        if (!existingPlant.isEmpty()) {
+            String plantId = RegistryHelper.getItemId(existingPlant);
+            boolean valid = PlantablesConfig.isValidSeed(plantId)
+                    ? PlantablesConfig.isSoilValidForSeed(heldItemId, plantId)
+                    : PlantablesConfig.isSoilValidForSapling(heldItemId, plantId);
+            if (!valid) {
+                player.sendSystemMessage(Component.translatable("message.agritechevolved.invalid_seed_soil_combination"));
+                return InteractionResult.SUCCESS;
+            }
+        }
+
+        try (Transaction tx = Transaction.openRoot()) {
+            planter.inventory.insert(1, ItemResource.of(heldItem), 1, tx);
+            tx.commit();
+        }
+        if (!player.getAbilities().instabuild) heldItem.shrink(1);
+        level.playSound(null, pos, SoundEvents.GRAVEL_PLACE, SoundSource.BLOCKS, 1.0F, 0.8F);
+        level.sendBlockUpdated(pos, state, state, 2);
+        planter.setChanged();
+        return InteractionResult.SUCCESS;
+    }
+
+    private InteractionResult handleFertilizer(BlockState state, Level level, BlockPos pos, Player player, AdvancedPlanterBlockEntity planter, ItemStack heldItem) {
+        if (!planter.getStack(4).isEmpty()) {
+            if (!level.isClientSide()) openGui(player, planter, pos);
+            return InteractionResult.SUCCESS;
+        }
+        if (level.isClientSide()) return InteractionResult.SUCCESS;
+
+        try (Transaction tx = Transaction.openRoot()) {
+            planter.inventory.insert(4, ItemResource.of(heldItem), heldItem.getCount(), tx);
+            tx.commit();
+        }
+        if (!player.getAbilities().instabuild) heldItem.shrink(1);
+        level.playSound(null, pos, SoundEvents.BONE_MEAL_USE, SoundSource.BLOCKS, 1.0F, 1.0F);
+        level.sendBlockUpdated(pos, state, state, 2);
+        planter.setChanged();
+        return InteractionResult.SUCCESS;
+    }
+
+    private InteractionResult handleHoeTill(Level level, BlockPos pos, Player player, AdvancedPlanterBlockEntity planter, ItemStack heldItem, InteractionHand hand, BlockHitResult hitResult) {
+        ItemStack soilStack = planter.getStack(1);
+        if (!soilStack.isEmpty() && soilStack.getItem() instanceof BlockItem soilBlockItem) {
+            BlockState soilState = soilBlockItem.getBlock().defaultBlockState();
+            BlockState result = soilState.getToolModifiedState(new UseOnContext(level, player, hand, heldItem, hitResult), ItemAbilities.HOE_TILL, false);
+            if (result != null) {
+                try (Transaction tx = Transaction.openRoot()) {
+                    planter.inventory.extract(1, ItemResource.of(soilStack), 1, tx);
+                    planter.inventory.insert(1, ItemResource.of(new ItemStack(result.getBlock())), 1, tx);
+                    tx.commit();
+                }
+                level.playSound(player, pos, SoundEvents.HOE_TILL, SoundSource.BLOCKS, 1.0F, 1.0F);
+                if (!player.getAbilities().instabuild) {
+                    EquipmentSlot slot = hand == InteractionHand.MAIN_HAND
+                            ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND;
+                    heldItem.hurtAndBreak(1, player, slot);
+                }
+                return level.isClientSide() ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
+            }
+        }
+        return InteractionResult.PASS;
+    }
+
+    private InteractionResult handleModuleInsert(Level level, BlockPos pos, BlockState state, Player player, AdvancedPlanterBlockEntity planter, ItemStack heldItem) {
+        if (level.isClientSide()) return InteractionResult.SUCCESS;
+
+        for (int slot = 2; slot <= 3; slot++) {
+            if (planter.getStack(slot).isEmpty()) {
+                try (Transaction tx = Transaction.openRoot()) {
+                    planter.inventory.insert(slot, ItemResource.of(heldItem), 1, tx);
+                    tx.commit();
+                }
+                if (!player.getAbilities().instabuild) heldItem.shrink(1);
+                level.playSound(null, pos, SoundEvents.ITEM_PICKUP, SoundSource.BLOCKS, 1.0F, 1.2F);
+                level.sendBlockUpdated(pos, state, state, 2);
+                planter.setChanged();
+                return InteractionResult.SUCCESS;
+            }
+        }
+        return InteractionResult.SUCCESS;
+    }
+
+    private InteractionResult handleEssenceUpgrade(ItemStack stack, Level level, BlockPos pos, Player player, AdvancedPlanterBlockEntity planter, String heldItemId) {
+        ItemStack soilStack = planter.getStack(1);
+        if (!soilStack.isEmpty() && soilStack.getItem() instanceof BlockItem soilBlockItem) {
+            String soilId = RegistryHelper.getBlockId(soilBlockItem.getBlock());
+            boolean isValidFarmland = soilId.equals("minecraft:farmland")
+                    || (soilId.startsWith("mysticalagriculture:") && soilId.endsWith("_farmland"))
+                    || (soilId.startsWith("mysticalagradditions:") && soilId.endsWith("_farmland"));
+
+            if (isValidFarmland) {
+                String farmlandId = ESSENCE_TO_FARMLAND.get(heldItemId);
+                Block resultBlock = RegistryHelper.getBlock(farmlandId);
+                if (resultBlock != null) {
+                    if (soilId.equals(farmlandId)) {
+                        if (!level.isClientSide()) {
+                            player.sendSystemMessage(Component.translatable("message.agritechevolved.same_farmland"));
+                        }
+                        return level.isClientSide() ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
+                    }
+
+                    try (Transaction tx = Transaction.openRoot()) {
+                        planter.inventory.extract(1, ItemResource.of(soilStack), 1, tx);
+                        planter.inventory.insert(1, ItemResource.of(new ItemStack(resultBlock)), 1, tx);
+                        tx.commit();
+                    }
+                    if (!player.getAbilities().instabuild) stack.shrink(1);
+                    level.playSound(player, pos, SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.BLOCKS, 1.0F, 1.0F);
+                    return level.isClientSide() ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
+                }
+            }
+        }
+        return InteractionResult.PASS;
+    }
+
+    private void openGui(Player player, AdvancedPlanterBlockEntity planter, BlockPos pos) {
         player.openMenu(new SimpleMenuProvider(
                 (id, inv, p) -> new AdvancedPlanterMenu(id, inv, planter),
-                Component.translatable("gui.agritechevolved.advanced_planter")), pos);
+                Component.translatable("gui.agritechevolved.advanced_planter")
+        ), pos);
     }
 
     @Override

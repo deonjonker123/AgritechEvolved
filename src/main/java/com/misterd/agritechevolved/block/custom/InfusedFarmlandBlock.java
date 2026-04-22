@@ -7,12 +7,8 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.util.TriState;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -24,14 +20,13 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.pathfinder.PathComputationType;
-import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.neoforged.neoforge.common.util.TriState;
 
 import javax.annotation.Nullable;
 
-public class InfusedFarmlandBlock extends FarmBlock {
+public class InfusedFarmlandBlock extends Block {
 
     public static final VoxelShape SHAPE = Block.box(0, 0, 0, 16, 15, 16);
     public static final IntegerProperty MOISTURE = BlockStateProperties.MOISTURE;
@@ -55,7 +50,7 @@ public class InfusedFarmlandBlock extends FarmBlock {
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         return !defaultBlockState().canSurvive(context.getLevel(), context.getClickedPos())
                 ? Blocks.DIRT.defaultBlockState()
-                : super.getStateForPlacement(context);
+                : defaultBlockState();
     }
 
     @Override
@@ -76,16 +71,6 @@ public class InfusedFarmlandBlock extends FarmBlock {
     }
 
     @Override
-    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
-        return super.useWithoutItem(state, level, pos, player, hitResult);
-    }
-
-    @Override
-    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
-        return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
-    }
-
-    @Override
     protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         int moisture = state.getValue(MOISTURE);
 
@@ -100,14 +85,14 @@ public class InfusedFarmlandBlock extends FarmBlock {
         }
 
         if (moisture == 7 && random.nextFloat() < 0.45F) {
-            bonemealCrop(level, pos);
+            bonemealCrop(level, pos, random);
         }
     }
 
-    private void bonemealCrop(ServerLevel level, BlockPos pos) {
+    private void bonemealCrop(ServerLevel level, BlockPos pos, RandomSource random) {
         BlockPos cropPos = pos.above();
-        BlockState crop  = level.getBlockState(cropPos);
-        BlockState next  = null;
+        BlockState crop = level.getBlockState(cropPos);
+        BlockState next = null;
         Block b = crop.getBlock();
 
         if (b instanceof CropBlock cropBlock) {
@@ -122,7 +107,7 @@ public class InfusedFarmlandBlock extends FarmBlock {
             if (age < 3) next = crop.setValue(SweetBerryBushBlock.AGE, age + 1);
         } else if (b instanceof BonemealableBlock bonemealable) {
             if (bonemealable.isValidBonemealTarget(level, cropPos, crop)) {
-                bonemealable.performBonemeal(level, level.random, cropPos, crop);
+                bonemealable.performBonemeal(level, random, cropPos, crop);
             }
         }
 
@@ -130,13 +115,12 @@ public class InfusedFarmlandBlock extends FarmBlock {
     }
 
     @Override
-    public void fallOn(Level level, BlockState state, BlockPos pos, Entity entity, float fallDistance) {
+    public void fallOn(Level level, BlockState state, BlockPos pos, Entity entity, double fallDistance) {
         entity.causeFallDamage(fallDistance, 1.0F, entity.damageSources().fall());
     }
 
     @Override
-    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock, BlockPos neighborPos, boolean movedByPiston) {
-        super.neighborChanged(state, level, pos, neighborBlock, neighborPos, movedByPiston);
+    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block changedBlock, @Nullable Orientation orientation, boolean movedByPiston) {
         if (!state.canSurvive(level, pos)) turnToMulch(null, state, level, pos);
     }
 
@@ -158,7 +142,8 @@ public class InfusedFarmlandBlock extends FarmBlock {
 
         double yOffset = newShape.max(Direction.Axis.Y) - oldShape.max(Direction.Axis.Y);
         if (yOffset > 0.0) {
-            level.getEntities(null, oldShape.bounds().move(pos)).forEach(e -> e.teleportTo(e.getX(), e.getY() + yOffset, e.getZ()));
+            level.getEntities(null, oldShape.bounds().move(pos))
+                    .forEach(e -> e.teleportTo(e.getX(), e.getY() + yOffset, e.getZ()));
         }
         return newState;
     }

@@ -1,180 +1,131 @@
 package com.misterd.agritechevolved.gui.custom;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 
 import java.text.NumberFormat;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 public class CapacitorScreen extends AbstractContainerScreen<CapacitorMenu> {
 
-    private static final ResourceLocation GUI_TEXTURE =
-            ResourceLocation.fromNamespaceAndPath("agritechevolved", "textures/gui/capacitor_gui.png");
+    private static final Identifier GUI_TEXTURE =
+            Identifier.fromNamespaceAndPath("agritechevolved", "textures/gui/capacitor_gui.png");
 
-    // Energy bar region (relative to GUI origin)
+    private static final int GUI_W = 176, GUI_H = 151;
+
     private static final int BAR_X = 8;
     private static final int BAR_Y = 15;
     private static final int BAR_W = 160;
     private static final int BAR_H = 34;
 
-    // -------------------------------------------------------------------------
-    // Constructor / init
-    // -------------------------------------------------------------------------
-
     public CapacitorScreen(CapacitorMenu menu, Inventory playerInventory, Component title) {
-        super(menu, playerInventory, title);
-        this.imageHeight      = 151;
-        this.inventoryLabelY  = imageHeight - 96;
+        super(menu, playerInventory, title, GUI_W, GUI_H);
+        this.inventoryLabelY = GUI_H - 96;
     }
 
     @Override
     protected void init() {
         super.init();
-        titleLabelX  = (imageWidth - font.width(title)) / 2;
-        titleLabelY -= 2;
-    }
-
-    // -------------------------------------------------------------------------
-    // Rendering
-    // -------------------------------------------------------------------------
-
-    @Override
-    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        super.render(guiGraphics, mouseX, mouseY, partialTick);
-        renderTooltip(guiGraphics, mouseX, mouseY);
+        this.titleLabelX = (this.imageWidth - this.minecraft.font.width(this.title)) / 2;
+        this.titleLabelY -= 2;
     }
 
     @Override
-    protected void renderBg(GuiGraphics guiGraphics, float partialTick, int mouseX, int mouseY) {
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderSystem.setShaderTexture(0, GUI_TEXTURE);
+    public void extractContents(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
+        graphics.blit(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE,
+                this.leftPos, this.topPos, 0.0F, 0.0F,
+                this.imageWidth, this.imageHeight, 256, 256);
 
-        int x = (width - imageWidth)   / 2;
-        int y = (height - imageHeight) / 2;
-        guiGraphics.blit(GUI_TEXTURE, x, y, 0, 0, imageWidth, imageHeight);
-
-        int energy    = menu.getEnergyStored();
-        int maxEnergy = menu.getMaxEnergyStored();
+        // Energy bar (horizontal, left-to-right)
+        int energy = menu.getEnergyStored(), maxEnergy = menu.getMaxEnergyStored();
         if (maxEnergy > 0) {
             int fillWidth = (int) (BAR_W * (double) energy / maxEnergy);
             if (fillWidth > 0) {
-                guiGraphics.blit(GUI_TEXTURE, x + BAR_X, y + BAR_Y, 0, 151, fillWidth, BAR_H);
+                graphics.blit(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE,
+                        this.leftPos + BAR_X, this.topPos + BAR_Y,
+                        0.0F, 151.0F,
+                        fillWidth, BAR_H, 256, 256);
             }
         }
-    }
 
-    @Override
-    protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY) {
-        guiGraphics.drawString(font, title,               titleLabelX,    titleLabelY,    0x404040, false);
-        guiGraphics.drawString(font, playerInventoryTitle, inventoryLabelX, inventoryLabelY, 0x404040, false);
+        // Energy text centred in bar
+        Component energyText = Component.literal(NumberFormat.getNumberInstance(Locale.US).format(energy) + " RF");
+        int barCenterX = this.leftPos + BAR_X + BAR_W / 2;
+        int barCenterY = this.topPos  + BAR_Y + BAR_H / 2 - this.minecraft.font.lineHeight;
+        graphics.text(this.minecraft.font, energyText,
+                barCenterX - this.minecraft.font.width(energyText) / 2, barCenterY, 0xFFFFFF, true);
 
-        int energy    = menu.getEnergyStored();
-        int maxEnergy = menu.getMaxEnergyStored();
-        NumberFormat fmt = NumberFormat.getNumberInstance(Locale.US);
-
-        // Energy amount centred in the bar
-        Component energyText = Component.literal(fmt.format(energy) + " RF");
-        int barCenterX = BAR_X + BAR_W / 2;
-        int barCenterY = BAR_Y + BAR_H / 2 - font.lineHeight;
-        guiGraphics.drawString(font, energyText, barCenterX - font.width(energyText) / 2, barCenterY, 0xFFFFFF, true);
-
-        // Percentage below
         if (maxEnergy > 0) {
-            double pct = (double) energy * 100.0 / maxEnergy;
-            Component pctText = Component.literal(String.format("%.1f%%", pct));
-            guiGraphics.drawString(font, pctText, barCenterX - font.width(pctText) / 2, barCenterY + 10, 0xCCCCCC, true);
+            Component pctText = Component.literal(String.format("%.1f%%", (double) energy * 100.0 / maxEnergy));
+            graphics.text(this.minecraft.font, pctText,
+                    barCenterX - this.minecraft.font.width(pctText) / 2, barCenterY + 10, 0xCCCCCC, true);
         }
+
+        super.extractContents(graphics, mouseX, mouseY, partialTick);
     }
 
-    // -------------------------------------------------------------------------
-    // Tooltips
-    // -------------------------------------------------------------------------
-
     @Override
-    protected void renderTooltip(GuiGraphics guiGraphics, int mouseX, int mouseY) {
-        super.renderTooltip(guiGraphics, mouseX, mouseY);
-
-        int x = (width - imageWidth)   / 2;
-        int y = (height - imageHeight) / 2;
-
-        // Energy bar tooltip
-        if (isHovering(BAR_X, BAR_Y, BAR_W, BAR_H, mouseX, mouseY)) {
-            int energy      = menu.getEnergyStored();
-            int maxEnergy   = menu.getMaxEnergyStored();
+    protected void extractTooltip(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
+        if (isOver(BAR_X, BAR_Y, BAR_W, BAR_H, mouseX, mouseY)) {
+            int energy = menu.getEnergyStored(), maxEnergy = menu.getMaxEnergyStored();
             int transferRate = menu.getTransferRate();
             String tierName = menu.getTierName();
             NumberFormat fmt = NumberFormat.getNumberInstance(Locale.US);
             double pct = maxEnergy > 0 ? (double) energy * 100.0 / maxEnergy : 0.0;
-
-            guiGraphics.renderComponentTooltip(font, List.of(
-                    Component.translatable("tooltip.agritechevolved.capacitor.title", tierName)
-                            .withStyle(ChatFormatting.GOLD),
-                    Component.translatable("tooltip.agritechevolved.capacitor.energy_storage")
-                            .withStyle(ChatFormatting.YELLOW),
+            graphics.setComponentTooltipForNextFrame(this.minecraft.font, List.of(
+                    Component.translatable("tooltip.agritechevolved.capacitor.title", tierName).withStyle(ChatFormatting.GOLD),
+                    Component.translatable("tooltip.agritechevolved.capacitor.energy_storage").withStyle(ChatFormatting.YELLOW),
                     Component.translatable("tooltip.agritechevolved.capacitor.energy",
-                                    fmt.format(energy), fmt.format(maxEnergy))
-                            .withStyle(ChatFormatting.WHITE),
+                            fmt.format(energy), fmt.format(maxEnergy)).withStyle(ChatFormatting.WHITE),
                     Component.translatable("tooltip.agritechevolved.capacitor.energy_percentage",
-                                    String.format("%.1f", pct))
-                            .withStyle(ChatFormatting.GRAY),
+                            String.format("%.1f", pct)).withStyle(ChatFormatting.GRAY),
                     Component.translatable("tooltip.agritechevolved.capacitor.transfer_rate",
-                                    fmt.format(transferRate))
-                            .withStyle(ChatFormatting.AQUA),
-                    Component.translatable("tooltip.agritechevolved.capacitor.connects_all_sides")
-                            .withStyle(ChatFormatting.GREEN),
-                    Component.translatable("tooltip.agritechevolved.capacitor.except_bottom")
-                            .withStyle(ChatFormatting.DARK_GREEN)
+                            fmt.format(transferRate)).withStyle(ChatFormatting.AQUA),
+                    Component.translatable("tooltip.agritechevolved.capacitor.connects_all_sides").withStyle(ChatFormatting.GREEN),
+                    Component.translatable("tooltip.agritechevolved.capacitor.except_bottom").withStyle(ChatFormatting.DARK_GREEN)
             ), mouseX, mouseY);
+            return;
         }
 
-        // Title bar tooltip
-        if (isHovering(BAR_X, 6, BAR_W, 8, mouseX, mouseY)) {
-            String tierName  = menu.getTierName();
+        if (isOver(BAR_X, 6, BAR_W, 8, mouseX, mouseY)) {
+            String tierName = menu.getTierName();
             int transferRate = menu.getTransferRate();
-            guiGraphics.renderComponentTooltip(font, List.of(
-                    Component.translatable("tooltip.agritechevolved.capacitor.title", tierName)
-                            .withStyle(ChatFormatting.GOLD),
-                    Component.translatable("tooltip.agritechevolved.capacitor.description")
-                            .withStyle(ChatFormatting.YELLOW),
+            graphics.setComponentTooltipForNextFrame(this.minecraft.font, List.of(
+                    Component.translatable("tooltip.agritechevolved.capacitor.title", tierName).withStyle(ChatFormatting.GOLD),
+                    Component.translatable("tooltip.agritechevolved.capacitor.description").withStyle(ChatFormatting.YELLOW),
                     Component.translatable("tooltip.agritechevolved.capacitor.max_transfer",
-                                    NumberFormat.getNumberInstance(Locale.US).format(transferRate))
-                            .withStyle(ChatFormatting.AQUA)
+                            NumberFormat.getNumberInstance(Locale.US).format(transferRate)).withStyle(ChatFormatting.AQUA)
             ), mouseX, mouseY);
+            return;
         }
 
-        // Info region tooltip
-        if (isHovering(BAR_X, 50, BAR_W, 15, mouseX, mouseY)) {
-            guiGraphics.renderComponentTooltip(font, List.of(
-                    Component.translatable("tooltip.agritechevolved.capacitor.information")
-                            .withStyle(ChatFormatting.GOLD),
-                    Component.translatable("tooltip.agritechevolved.capacitor.info_stores")
-                            .withStyle(ChatFormatting.GRAY),
-                    Component.translatable("tooltip.agritechevolved.capacitor.info_balances")
-                            .withStyle(ChatFormatting.GRAY),
-                    Component.translatable("tooltip.agritechevolved.capacitor.info_automatic")
-                            .withStyle(ChatFormatting.GRAY)
+        if (isOver(BAR_X, 50, BAR_W, 15, mouseX, mouseY)) {
+            graphics.setComponentTooltipForNextFrame(this.minecraft.font, List.of(
+                    Component.translatable("tooltip.agritechevolved.capacitor.information").withStyle(ChatFormatting.GOLD),
+                    Component.translatable("tooltip.agritechevolved.capacitor.info_stores").withStyle(ChatFormatting.GRAY),
+                    Component.translatable("tooltip.agritechevolved.capacitor.info_balances").withStyle(ChatFormatting.GRAY),
+                    Component.translatable("tooltip.agritechevolved.capacitor.info_automatic").withStyle(ChatFormatting.GRAY)
             ), mouseX, mouseY);
+            return;
         }
+
+        super.extractTooltip(graphics, mouseX, mouseY);
     }
 
-    // -------------------------------------------------------------------------
-    // Helper
-    // -------------------------------------------------------------------------
+    @Override
+    public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
+        return super.mouseClicked(event, doubleClick);
+    }
 
-    /** Returns true if the screen-space point falls within the widget rectangle (GUI-relative coords). */
-    private boolean isHovering(int wx, int wy, int ww, int wh, int mouseX, int mouseY) {
-        int x = (width - imageWidth)   / 2;
-        int y = (height - imageHeight) / 2;
-        return mouseX >= x + wx && mouseX <= x + wx + ww
-                && mouseY >= y + wy && mouseY <= y + wy + wh;
+    private boolean isOver(int wx, int wy, int ww, int wh, int mx, int my) {
+        return mx >= this.leftPos + wx && mx <= this.leftPos + wx + ww
+                && my >= this.topPos + wy && my <= this.topPos + wy + wh;
     }
 }

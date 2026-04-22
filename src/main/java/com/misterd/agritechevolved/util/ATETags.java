@@ -1,6 +1,6 @@
 package com.misterd.agritechevolved.util;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
@@ -15,16 +15,15 @@ public class ATETags {
         public static final TagKey<Item> ATE_MODULES = createTag("agritechevolved_modules");
 
         private static TagKey<Item> createTag(String name) {
-            return ItemTags.create(ResourceLocation.fromNamespaceAndPath("agritechevolved", name));
+            return ItemTags.create(Identifier.fromNamespaceAndPath("agritechevolved", name));
         }
     }
 
     public static class Blocks {
         public static final TagKey<Block> BASIC_PLANTERS = createTag("basic_planters");
-        public static final TagKey<Block> DIRT_LIKE_BLOCKS = createTag("dirt_like_blocks");
 
         private static TagKey<Block> createTag(String name) {
-            return BlockTags.create(ResourceLocation.fromNamespaceAndPath("agritechevolved", name));
+            return BlockTags.create(Identifier.fromNamespaceAndPath("agritechevolved", name));
         }
     }
 }

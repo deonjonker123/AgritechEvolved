@@ -8,14 +8,12 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
-import javax.annotation.Nullable;
 import java.util.concurrent.CompletableFuture;
 
 public class ATEBlockTagProvider extends BlockTagsProvider {
-    public ATEBlockTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, @Nullable ExistingFileHelper existingFileHelper) {
-        super(output, lookupProvider, AgritechEvolved.MODID, existingFileHelper);
+    public ATEBlockTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider) {
+        super(output, lookupProvider, AgritechEvolved.MODID);
     }
 
     @Override
@@ -58,14 +56,7 @@ public class ATEBlockTagProvider extends BlockTagsProvider {
                 .add(ATEBlocks.MANGROVE_PLANTER.get())
                 .add(ATEBlocks.OAK_PLANTER.get())
                 .add(ATEBlocks.SPRUCE_PLANTER.get())
-                .add(ATEBlocks.WARPED_PLANTER.get());
-
-        tag(ATETags.Blocks.DIRT_LIKE_BLOCKS)
-                .add(Blocks.DIRT)
-                .add(Blocks.PODZOL)
-                .add(Blocks.MYCELIUM)
-                .add(Blocks.COARSE_DIRT)
-                .add(Blocks.ROOTED_DIRT)
-                .add(Blocks.GRASS_BLOCK);
+                .add(ATEBlocks.WARPED_PLANTER.get())
+                .add(ATEBlocks.PALE_OAK_PLANTER.get());
     }
 }

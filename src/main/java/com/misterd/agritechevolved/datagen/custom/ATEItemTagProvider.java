@@ -1,20 +1,18 @@
 package com.misterd.agritechevolved.datagen.custom;
 
 import com.misterd.agritechevolved.AgritechEvolved;
+import com.misterd.agritechevolved.block.ATEBlocks;
 import com.misterd.agritechevolved.item.ATEItems;
 import com.misterd.agritechevolved.util.ATETags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
-import net.minecraft.data.tags.ItemTagsProvider;
-import net.minecraft.world.level.block.Block;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.common.data.ItemTagsProvider;
 
-import javax.annotation.Nullable;
 import java.util.concurrent.CompletableFuture;
 
 public class ATEItemTagProvider extends ItemTagsProvider {
-    public ATEItemTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, CompletableFuture<TagLookup<Block>> blockTags, @Nullable ExistingFileHelper existingFileHelper) {
-        super(output, lookupProvider, blockTags, AgritechEvolved.MODID, existingFileHelper);
+    public ATEItemTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider) {
+        super(output, lookupProvider, AgritechEvolved.MODID);
     }
 
     protected void addTags(HolderLookup.Provider provider) {
@@ -31,10 +29,18 @@ public class ATEItemTagProvider extends ItemTagsProvider {
                 .add(ATEItems.YM_MK2.get())
                 .add(ATEItems.YM_MK3.get());
 
-        copy(ATETags.Blocks.DIRT_LIKE_BLOCKS,
-                ATETags.Items.DIRT_LIKE_BLOCK_ITEMS);
-
-        copy(ATETags.Blocks.BASIC_PLANTERS,
-                ATETags.Items.BASIC_PLANTER_ITEMS);
+        tag(ATETags.Items.BASIC_PLANTER_ITEMS)
+                .add(ATEBlocks.ACACIA_PLANTER.asItem())
+                .add(ATEBlocks.BAMBOO_PLANTER.asItem())
+                .add(ATEBlocks.BIRCH_PLANTER.asItem())
+                .add(ATEBlocks.CHERRY_PLANTER.asItem())
+                .add(ATEBlocks.CRIMSON_PLANTER.asItem())
+                .add(ATEBlocks.DARK_OAK_PLANTER.asItem())
+                .add(ATEBlocks.JUNGLE_PLANTER.asItem())
+                .add(ATEBlocks.MANGROVE_PLANTER.asItem())
+                .add(ATEBlocks.OAK_PLANTER.asItem())
+                .add(ATEBlocks.SPRUCE_PLANTER.asItem())
+                .add(ATEBlocks.WARPED_PLANTER.asItem())
+                .add(ATEBlocks.PALE_OAK_PLANTER.asItem());
     }
 }
