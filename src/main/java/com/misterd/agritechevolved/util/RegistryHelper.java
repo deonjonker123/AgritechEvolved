@@ -1,8 +1,8 @@
-package com.misterd.agritechevolved.util;
+package com.misterd.agritechtwo.util;
 
 import com.mojang.logging.LogUtils;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
@@ -12,8 +12,7 @@ public class RegistryHelper {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     public static String getItemId(Item item) {
-        ResourceLocation registryName = BuiltInRegistries.ITEM.getKey(item);
-        return registryName.toString();
+        return BuiltInRegistries.ITEM.getKey(item).toString();
     }
 
     public static String getItemId(ItemStack stack) {
@@ -21,33 +20,30 @@ public class RegistryHelper {
     }
 
     public static String getBlockId(Block block) {
-        ResourceLocation registryName = BuiltInRegistries.BLOCK.getKey(block);
-        return registryName.toString();
+        return BuiltInRegistries.BLOCK.getKey(block).toString();
     }
 
     public static Item getItem(String id) {
         try {
-            ResourceLocation resourceLocation = ResourceLocation.parse(id);
-            if (BuiltInRegistries.ITEM.containsKey(resourceLocation)) {
-                return BuiltInRegistries.ITEM.get(resourceLocation);
-            }
-        } catch (Exception var2) {
-            LOGGER.error("Invalid item ID in config: {}", id, var2);
+            Identifier identifier = Identifier.parse(id);
+            return BuiltInRegistries.ITEM.get(identifier)
+                    .map(ref -> ref.value())
+                    .orElse(null);
+        } catch (Exception e) {
+            LOGGER.error("Invalid item ID in config: {}", id, e);
+            return null;
         }
-
-        return null;
     }
 
     public static Block getBlock(String id) {
         try {
-            ResourceLocation resourceLocation = ResourceLocation.parse(id);
-            if (BuiltInRegistries.BLOCK.containsKey(resourceLocation)) {
-                return BuiltInRegistries.BLOCK.get(resourceLocation);
-            }
-        } catch (Exception var2) {
-            LOGGER.error("Invalid block ID in config: {}", id, var2);
+            Identifier identifier = Identifier.parse(id);
+            return BuiltInRegistries.BLOCK.get(identifier)
+                    .map(ref -> ref.value())
+                    .orElse(null);
+        } catch (Exception e) {
+            LOGGER.error("Invalid block ID in config: {}", id, e);
+            return null;
         }
-
-        return null;
     }
 }
