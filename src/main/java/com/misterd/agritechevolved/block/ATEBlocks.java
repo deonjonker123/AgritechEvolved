@@ -1,13 +1,19 @@
 package com.misterd.agritechevolved.block;
 
 import com.misterd.agritechevolved.AgritechEvolved;
+import com.misterd.agritechevolved.component.ATEDataComponents;
 import com.misterd.agritechevolved.item.ATEItems;
 import com.misterd.agritechevolved.block.custom.*;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -15,6 +21,9 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
+import java.text.NumberFormat;
+import java.util.Locale;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class ATEBlocks {
@@ -132,10 +141,28 @@ public class ATEBlocks {
     }
 
     private static <T extends Block> void registerBlockItem(String name, DeferredBlock<T> block) {
-        ATEItems.ITEMS.register(name, regName -> new BlockItem(block.get(),
-                new Item.Properties()
-                        .setId(ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(AgritechEvolved.MODID, name)))
-                        .useBlockDescriptionPrefix()));
+        ATEItems.ITEMS.register(name, regName -> {
+
+            if (name.equals("capacitor_tier1") || name.equals("capacitor_tier2") || name.equals("capacitor_tier3")) {
+                return new BlockItem(block.get(),
+                        new Item.Properties().setId(ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(AgritechEvolved.MODID, name))).useBlockDescriptionPrefix()) {
+
+                    @Override
+                    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> adder, TooltipFlag flag) {
+
+                        Integer storedEnergy = stack.get(ATEDataComponents.STORED_ENERGY.get());
+
+                        if (storedEnergy != null && storedEnergy > 0) {
+                            NumberFormat format = NumberFormat.getNumberInstance(Locale.US);
+
+                            adder.accept(Component.translatable("tooltip.agritechevolved.capacitor.stored_energy", format.format(storedEnergy)).withStyle(ChatFormatting.GOLD));
+                        }
+                    }
+                };
+            }
+
+            return new BlockItem(block.get(), new Item.Properties().setId(ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(AgritechEvolved.MODID, name))).useBlockDescriptionPrefix());
+        });
     }
 
     public static void register(IEventBus eventBus) {
