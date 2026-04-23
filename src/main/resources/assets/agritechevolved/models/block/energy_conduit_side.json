@@ -1,0 +1,22 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "side": "agritechevolved:block/energy_conduit_side",
+    "particle": "agritechevolved:block/energy_conduit_side"
+  },
+  "elements": [
+    {
+      "from": [6.5, 10, 6.5],
+      "to": [9.5, 16, 9.5],
+      "rotation": {"angle": 0, "axis": "y", "origin": [6.5, 10, 6.5]},
+      "faces": {
+        "north": {"uv": [0, 0, 3, 6], "texture": "#side"},
+        "east": {"uv": [3, 0, 6, 6], "texture": "#side"},
+        "south": {"uv": [0, 6, 3, 12], "texture": "#side"},
+        "west": {"uv": [6, 0, 9, 6], "texture": "#side"},
+        "up": {"uv": [6, 9, 3, 6], "texture": "#side"},
+        "down": {"uv": [9, 6, 6, 9], "texture": "#side"}
+      }
+    }
+  ]
+}

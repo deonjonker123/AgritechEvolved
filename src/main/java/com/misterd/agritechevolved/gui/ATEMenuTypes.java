@@ -19,6 +19,7 @@ public class ATEMenuTypes {
     public static final DeferredHolder<MenuType<?>, MenuType<CapacitorMenu>> CAPACITOR_MENU = registerMenuType("capacitor_menu", CapacitorMenu::new);
     public static final DeferredHolder<MenuType<?>, MenuType<BiomassBurnerMenu>> BURNER_MENU = registerMenuType("burner_menu", BiomassBurnerMenu::new);
 
+
     private static <T extends AbstractContainerMenu> DeferredHolder<MenuType<?>, MenuType<T>> registerMenuType(String name, IContainerFactory<T> factory) {
         return MENUS.register(name, () -> IMenuTypeExtension.create(factory));
     }

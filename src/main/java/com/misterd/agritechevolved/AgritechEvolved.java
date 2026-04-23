@@ -6,6 +6,7 @@ import com.misterd.agritechevolved.blockentity.custom.AdvancedPlanterBlockEntity
 import com.misterd.agritechevolved.blockentity.custom.BiomassBurnerBlockEntity;
 import com.misterd.agritechevolved.blockentity.custom.CapacitorBlockEntity;
 import com.misterd.agritechevolved.blockentity.custom.ComposterBlockEntity;
+import com.misterd.agritechevolved.blockentity.custom.EnergyConduitBlockEntity;
 import com.misterd.agritechevolved.client.ber.PlanterBlockEntityRenderer;
 import com.misterd.agritechevolved.command.ATECommands;
 import com.misterd.agritechevolved.component.ATEDataComponents;
@@ -23,7 +24,6 @@ import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.ModelEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
-
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
@@ -32,6 +32,8 @@ import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
+import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
 @Mod(AgritechEvolved.MODID)
 public class AgritechEvolved {
@@ -52,6 +54,7 @@ public class AgritechEvolved {
         modEventBus.addListener(ComposterBlockEntity::registerCapabilities);
         modEventBus.addListener(BiomassBurnerBlockEntity::registerCapabilities);
         modEventBus.addListener(CapacitorBlockEntity::registerCapabilities);
+        modEventBus.addListener(EnergyConduitBlockEntity::registerCapabilities);
 
         ATERecipe.RECIPE_SERIALIZERS.register(modEventBus);
 
@@ -61,30 +64,22 @@ public class AgritechEvolved {
         modEventBus.register(Config.class);
     }
 
-    private void commonSetup(FMLCommonSetupEvent event) {
-
-    }
+    private void commonSetup(FMLCommonSetupEvent event) {}
 
     @SubscribeEvent
-    public void onServerStarting(ServerStartingEvent event) {
-
-    }
+    public void onServerStarting(ServerStartingEvent event) {}
 
     public void onRegisterCommands(RegisterCommandsEvent event) {
         ATECommands.register(event.getDispatcher());
     }
 
-    @EventBusSubscriber(modid = MODID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+    @EventBusSubscriber(modid = MODID, value = Dist.CLIENT)
     public static class ClientModEvents {
         @SubscribeEvent
-        public static void onClientSetup(FMLClientSetupEvent event) {
-
-        }
+        public static void onClientSetup(FMLClientSetupEvent event) {}
 
         @SubscribeEvent
-        public static void registerParticleFactories(RegisterParticleProvidersEvent event) {
-
-        }
+        public static void registerParticleFactories(RegisterParticleProvidersEvent event) {}
 
         @SubscribeEvent
         public static void registerBER(EntityRenderersEvent.RegisterRenderers event) {

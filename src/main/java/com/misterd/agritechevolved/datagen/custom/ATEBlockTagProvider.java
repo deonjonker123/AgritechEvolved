@@ -41,7 +41,8 @@ public class ATEBlockTagProvider extends BlockTagsProvider {
                 .add(ATEBlocks.CAPACITOR_TIER_2.get())
                 .add(ATEBlocks.CAPACITOR_TIER_3.get())
 
-                .add(ATEBlocks.COMPACTED_BIOMASS_BLOCK.get());
+                .add(ATEBlocks.COMPACTED_BIOMASS_BLOCK.get())
+                .add(ATEBlocks.ENERGY_CONDUIT.get());
 
         tag(BlockTags.MINEABLE_WITH_SHOVEL)
                 .add(ATEBlocks.INFUSED_FARMLAND.get())

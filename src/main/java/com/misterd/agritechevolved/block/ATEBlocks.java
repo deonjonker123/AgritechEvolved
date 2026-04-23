@@ -197,6 +197,14 @@ public class ATEBlocks {
                 }
             });
 
+    public static final DeferredBlock<Block> ENERGY_CONDUIT = registerBlock("energy_conduit",
+            () -> new EnergyConduitBlock(BlockBehaviour.Properties.of()
+                    .strength(2.0F, 3.0F)
+                    .sound(SoundType.METAL)
+                    .noOcclusion()
+                    .requiresCorrectToolForDrops()));
+
+
     private static <T extends Block> DeferredBlock<T> registerBlock(String name, Supplier<T> block) {
         DeferredBlock<T> toReturn = BLOCKS.register(name, block);
         registerBlockItem(name, toReturn);

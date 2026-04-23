@@ -6,6 +6,7 @@
     "agritechevolved:capacitor_tier1",
     "agritechevolved:capacitor_tier2",
     "agritechevolved:capacitor_tier3",
-    "agritechevolved:compacted_biomass_block"
+    "agritechevolved:compacted_biomass_block",
+    "agritechevolved:energy_conduit"
   ]
 }
