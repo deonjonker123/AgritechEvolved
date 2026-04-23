@@ -38,7 +38,6 @@ public class ATECreativeTab {
                         output.accept(ATEBlocks.CAPACITOR_TIER_1);
                         output.accept(ATEBlocks.CAPACITOR_TIER_2);
                         output.accept(ATEBlocks.CAPACITOR_TIER_3);
-                        output.accept(ATEBlocks.ENERGY_CONDUIT);
 
                         output.accept(ATEBlocks.MULCH);
                         output.accept(ATEBlocks.INFUSED_FARMLAND);

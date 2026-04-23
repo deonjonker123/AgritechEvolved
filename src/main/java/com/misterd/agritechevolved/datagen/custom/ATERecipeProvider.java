@@ -226,16 +226,6 @@ public class ATERecipeProvider extends RecipeProvider implements IConditionBuild
                 .unlockedBy("has_capacitor_tier2", has(ATEBlocks.CAPACITOR_TIER_2.get()))
                 .save(recipeOutput);
 
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ATEBlocks.ENERGY_CONDUIT.get(), 16)
-                .pattern("III")
-                .pattern("RHR")
-                .pattern("III")
-                .define('I', Items.IRON_INGOT)
-                .define('R', Items.REDSTONE)
-                .define('H', Items.HOPPER)
-                .unlockedBy("has_iron_ingot", has(Items.IRON_INGOT))
-                .save(recipeOutput);
-
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ATEItems.SM_MK1.get())
                 .pattern(" R ")
                 .pattern("IGI")

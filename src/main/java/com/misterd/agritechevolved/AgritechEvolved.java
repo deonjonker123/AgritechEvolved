@@ -6,7 +6,6 @@ import com.misterd.agritechevolved.blockentity.custom.AdvancedPlanterBlockEntity
 import com.misterd.agritechevolved.blockentity.custom.BiomassBurnerBlockEntity;
 import com.misterd.agritechevolved.blockentity.custom.CapacitorBlockEntity;
 import com.misterd.agritechevolved.blockentity.custom.ComposterBlockEntity;
-import com.misterd.agritechevolved.blockentity.custom.EnergyConduitBlockEntity;
 import com.misterd.agritechevolved.client.ber.PlanterBlockEntityRenderer;
 import com.misterd.agritechevolved.command.ATECommands;
 import com.misterd.agritechevolved.component.ATEDataComponents;
@@ -32,8 +31,6 @@ import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
-import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
-import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
 @Mod(AgritechEvolved.MODID)
 public class AgritechEvolved {
@@ -54,7 +51,6 @@ public class AgritechEvolved {
         modEventBus.addListener(ComposterBlockEntity::registerCapabilities);
         modEventBus.addListener(BiomassBurnerBlockEntity::registerCapabilities);
         modEventBus.addListener(CapacitorBlockEntity::registerCapabilities);
-        modEventBus.addListener(EnergyConduitBlockEntity::registerCapabilities);
 
         ATERecipe.RECIPE_SERIALIZERS.register(modEventBus);
 

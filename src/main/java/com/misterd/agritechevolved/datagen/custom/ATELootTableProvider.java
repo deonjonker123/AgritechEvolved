@@ -45,7 +45,6 @@ public class ATELootTableProvider extends BlockLootSubProvider {
         dropSelf(ATEBlocks.COMPACTED_BIOMASS_BLOCK.get());
         add(ATEBlocks.INFUSED_FARMLAND.get(), createInfusedFarmlandTable());
         dropSelf(ATEBlocks.MULCH.get());
-        dropSelf(ATEBlocks.ENERGY_CONDUIT.get());
     }
 
     private LootTable.Builder createInfusedFarmlandTable() {

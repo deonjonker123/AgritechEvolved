@@ -54,12 +54,6 @@ public class ATEBlockEntities {
             = BLOCK_ENTITIES.register("burner_be", () ->  BlockEntityType.Builder.of(
             BiomassBurnerBlockEntity::new, ATEBlocks.BIOMASS_BURNER.get()).build(null));
 
-    public static final Supplier<BlockEntityType<EnergyConduitBlockEntity>> ENERGY_CONDUIT_BE =
-            BLOCK_ENTITIES.register("energy_conduit_be", () -> BlockEntityType.Builder.of(
-                    EnergyConduitBlockEntity::new, ATEBlocks.ENERGY_CONDUIT.get()
-            ).build(null));
-
-
     private static void registerCapabilities(RegisterCapabilitiesEvent event) {
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, PLANTER_BLOCK_BE.get(),
                 (blockEntity, direction) -> {

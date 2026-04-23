@@ -110,9 +110,6 @@ public class Config {
     public static ModConfigSpec.IntValue CAPACITOR_T3_BUFFER;
     public static ModConfigSpec.IntValue CAPACITOR_T3_TRANSFER_RATE;
 
-    // Machines — Conduit
-    public static ModConfigSpec.IntValue CONDUIT_TRANSFER_RATE;
-
     // -------------------------------------------------------------------------
     // Runtime booleans (populated on config load)
     // -------------------------------------------------------------------------
@@ -225,7 +222,6 @@ public class Config {
         composterConfig();
         burnerConfig();
         capacitorConfig();
-        conduitConfig();
         COMMON_BUILDER.pop();
     }
 
@@ -276,12 +272,6 @@ public class Config {
         CAPACITOR_T3_BUFFER = COMMON_BUILDER.comment("Energy buffer capacity for T3 Capacitor (RF)").defineInRange("buffer_capacity", 4000000, 10000, 100000000);
         CAPACITOR_T3_TRANSFER_RATE = COMMON_BUILDER.comment("Energy transfer rate for T3 Capacitor (RF/t)").defineInRange("transfer_rate", 8192, 1, 100000);
         COMMON_BUILDER.pop();
-        COMMON_BUILDER.pop();
-    }
-
-    private static void conduitConfig() {
-        COMMON_BUILDER.comment("Energy Conduit Configuration").push("energy_conduit");
-        CONDUIT_TRANSFER_RATE = COMMON_BUILDER.comment("Energy transfer rate per tick for conduits (RF/t)").defineInRange("transfer_rate", 1024, 1, 1000000);
         COMMON_BUILDER.pop();
     }
 
@@ -371,12 +361,6 @@ public class Config {
     public static int getCapacitorT2TransferRate() { return CAPACITOR_T2_TRANSFER_RATE.get(); }
     public static int getCapacitorT3Buffer() { return CAPACITOR_T3_BUFFER.get(); }
     public static int getCapacitorT3TransferRate() { return CAPACITOR_T3_TRANSFER_RATE.get(); }
-
-    // =========================================================================
-    // Getters — Conduit
-    // =========================================================================
-
-    public static int getConduitTransferRate() { return CONDUIT_TRANSFER_RATE.get(); }
 
     // =========================================================================
     // Config lifecycle
