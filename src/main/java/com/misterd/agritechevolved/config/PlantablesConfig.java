@@ -367,7 +367,14 @@ public class PlantablesConfig {
             "minecraft:dirt", "minecraft:grass_block", "minecraft:podzol",
             "minecraft:coarse_dirt", "minecraft:mycelium", "minecraft:rooted_dirt",
             "minecraft:moss_block", "minecraft:pale_moss_block", "minecraft:farmland",
-            "minecraft:mud", "minecraft:muddy_mangrove_roots"
+            "minecraft:mud", "minecraft:muddy_mangrove_roots",
+            "mysticalagriculture:inferium_farmland", "mysticalagriculture:prudentium_farmland",
+            "mysticalagriculture:tertium_farmland", "mysticalagriculture:imperium_farmland",
+            "mysticalagriculture:supremium_farmland", "mysticalagradditions:insanium_farmland",
+
+            "justdirethings:goosoil_tier1", "justdirethings:goosoil_tier2",
+            "justdirethings:goosoil_tier3", "justdirethings:goosoil_tier4",
+            "farmersdelight:rich_soil_farmland", "agritechevolved:infused_farmland"
     );
 
     private static TreeEntry makeTree(String sapling, List<String> validSoils, DropEntry... drops) {

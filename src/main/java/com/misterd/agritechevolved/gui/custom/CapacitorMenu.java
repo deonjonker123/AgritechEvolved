@@ -19,13 +19,12 @@ public class CapacitorMenu extends AbstractContainerMenu {
     public final CapacitorBlockEntity blockEntity;
     private final Level level;
 
-    // Split into low/high 16-bit to fit DataSlot's signed short limit
-    private int lastEnergyLow    = 0;
-    private int lastEnergyHigh   = 0;
-    private int lastMaxLow       = 0;
-    private int lastMaxHigh      = 0;
+    private int lastEnergyLow = 0;
+    private int lastEnergyHigh = 0;
+    private int lastMaxLow = 0;
+    private int lastMaxHigh = 0;
     private int lastTransferRate = 0;
-    private int lastTier         = 1;
+    private int lastTier = 1;
 
     public CapacitorMenu(int containerId, Inventory inv, FriendlyByteBuf extraData) {
         this(containerId, inv, inv.player.level().getBlockEntity(extraData.readBlockPos()));
@@ -34,7 +33,7 @@ public class CapacitorMenu extends AbstractContainerMenu {
     public CapacitorMenu(int containerId, Inventory inv, BlockEntity blockEntity) {
         super(ATEMenuTypes.CAPACITOR_MENU.get(), containerId);
         this.blockEntity = (CapacitorBlockEntity) blockEntity;
-        this.level       = inv.player.level();
+        this.level = inv.player.level();
         addPlayerInventory(inv);
         addPlayerHotbar(inv);
         addDataSlots();
@@ -42,40 +41,99 @@ public class CapacitorMenu extends AbstractContainerMenu {
 
     private void addDataSlots() {
         addDataSlot(new DataSlot() {
-            @Override public int get()           { return blockEntity.getEnergyStored() & 0xFFFF; }
-            @Override public void set(int value) { lastEnergyLow = value; }
+            @Override
+            public int get() {
+                return blockEntity.getEnergyStored() & 0xFFFF;
+            }
+
+            @Override
+            public void set(int value) {
+                lastEnergyLow = value;
+            }
         });
+
         addDataSlot(new DataSlot() {
-            @Override public int get()           { return (blockEntity.getEnergyStored() >> 16) & 0xFFFF; }
-            @Override public void set(int value) { lastEnergyHigh = value; }
+            @Override
+            public int get() {
+                return (blockEntity.getEnergyStored() >> 16) & 0xFFFF;
+            }
+
+            @Override
+            public void set(int value) {
+                lastEnergyHigh = value;
+            }
         });
+
         addDataSlot(new DataSlot() {
-            @Override public int get()           { return blockEntity.getMaxEnergyStored() & 0xFFFF; }
-            @Override public void set(int value) { lastMaxLow = value; }
+            @Override
+            public int get() {
+                return blockEntity.getMaxEnergyStored() & 0xFFFF;
+            }
+
+            @Override
+            public void set(int value) {
+                lastMaxLow = value;
+            }
         });
+
         addDataSlot(new DataSlot() {
-            @Override public int get()           { return (blockEntity.getMaxEnergyStored() >> 16) & 0xFFFF; }
-            @Override public void set(int value) { lastMaxHigh = value; }
+            @Override
+            public int get() {
+                return (blockEntity.getMaxEnergyStored() >> 16) & 0xFFFF;
+            }
+
+            @Override
+            public void set(int value) {
+                lastMaxHigh = value;
+            }
         });
+
         addDataSlot(new DataSlot() {
-            @Override public int get()           { return blockEntity.getTransferRate(); }
-            @Override public void set(int value) { lastTransferRate = value; }
+            @Override
+            public int get() {
+                return blockEntity.getTransferRate();
+            }
+
+            @Override
+            public void set(int value) {
+                lastTransferRate = value;
+            }
         });
+
         addDataSlot(new DataSlot() {
-            @Override public int get()           { return blockEntity.getTier(); }
-            @Override public void set(int value) { lastTier = value; }
+            @Override
+            public int get() {
+                return blockEntity.getTier();
+            }
+
+            @Override
+            public void set(int value) {
+                lastTier = value;
+            }
         });
     }
 
-    public int    getEnergyStored()    { return level.isClientSide() ? (lastEnergyHigh << 16) | (lastEnergyLow & 0xFFFF) : blockEntity.getEnergyStored(); }
-    public int    getMaxEnergyStored() { return level.isClientSide() ? (lastMaxHigh    << 16) | (lastMaxLow    & 0xFFFF) : blockEntity.getMaxEnergyStored(); }
-    public int    getTransferRate()    { return level.isClientSide() ? lastTransferRate : blockEntity.getTransferRate(); }
-    public int    getTier()            { return level.isClientSide() ? lastTier         : blockEntity.getTier(); }
+    public int getEnergyStored() {
+        return level.isClientSide() ? (lastEnergyHigh << 16) | (lastEnergyLow & 0xFFFF) : blockEntity.getEnergyStored();
+    }
+
+    public int getMaxEnergyStored() {
+        return level.isClientSide() ? (lastMaxHigh << 16) | (lastMaxLow & 0xFFFF) : blockEntity.getMaxEnergyStored();
+    }
+
+    public int getTransferRate() {
+        return level.isClientSide() ? lastTransferRate : blockEntity.getTransferRate();
+    }
+
+    public int getTier() {
+        return level.isClientSide() ? lastTier : blockEntity.getTier();
+    }
+
     public String getTierName() {
         return switch (getTier()) {
-            case 1  -> "Tier 1";
-            case 2  -> "Tier 2";
-            case 3  -> "Tier 3";
+            case 1 -> "Tier 1";
+            case 2 -> "Tier 2";
+            case 3 -> "Tier 3";
             default -> "Unknown";
         };
     }
