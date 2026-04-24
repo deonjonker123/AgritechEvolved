@@ -359,7 +359,7 @@ public class PlantablesConfig {
 
     private static final List<String> STANDARD_TREE_SOILS = List.of(
             "minecraft:dirt", "minecraft:grass_block", "minecraft:podzol",
-            "minecraft:coarse_dirt", "minecraft:mycelium", "agritechevolved:mulch", "minecraft:farmland",
+            "minecraft:coarse_dirt", "minecraft:mycelium", "agritechevolved:mulch", "minecraft:farmland", "minecraft:moss_block",
             "mysticalagriculture:inferium_farmland", "mysticalagriculture:prudentium_farmland",
             "mysticalagriculture:tertium_farmland", "mysticalagriculture:imperium_farmland",
             "mysticalagriculture:supremium_farmland", "mysticalagradditions:insanium_farmland",
