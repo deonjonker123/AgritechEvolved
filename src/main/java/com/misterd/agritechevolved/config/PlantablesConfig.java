@@ -359,7 +359,14 @@ public class PlantablesConfig {
 
     private static final List<String> STANDARD_TREE_SOILS = List.of(
             "minecraft:dirt", "minecraft:grass_block", "minecraft:podzol",
-            "minecraft:coarse_dirt", "minecraft:mycelium", "agritechevolved:mulch"
+            "minecraft:coarse_dirt", "minecraft:mycelium", "agritechevolved:mulch", "minecraft:farmland",
+            "mysticalagriculture:inferium_farmland", "mysticalagriculture:prudentium_farmland",
+            "mysticalagriculture:tertium_farmland", "mysticalagriculture:imperium_farmland",
+            "mysticalagriculture:supremium_farmland", "mysticalagradditions:insanium_farmland",
+
+            "justdirethings:goosoil_tier1", "justdirethings:goosoil_tier2",
+            "justdirethings:goosoil_tier3", "justdirethings:goosoil_tier4",
+            "farmersdelight:rich_soil_farmland","farmersdelight:organic_compost","agritechevolved:infused_farmland"
     );
 
     private static TreeEntry makeTree(String sapling, List<String> validSoils, DropEntry... drops) {
