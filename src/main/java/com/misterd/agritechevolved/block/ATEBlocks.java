@@ -1,10 +1,12 @@
 package com.misterd.agritechevolved.block;
 
 import com.misterd.agritechevolved.AgritechEvolved;
+import com.misterd.agritechevolved.Config;
 import com.misterd.agritechevolved.component.ATEDataComponents;
 import com.misterd.agritechevolved.item.ATEItems;
 import com.misterd.agritechevolved.block.custom.*;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -170,7 +172,23 @@ public class ATEBlocks {
                     .strength(1.0F, 3.0F)
                     .sound(SoundType.STONE)
                     .noOcclusion()
-                    .requiresCorrectToolForDrops()));
+                    .requiresCorrectToolForDrops())
+            {
+                @Override
+                public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    NumberFormat fmt = NumberFormat.getNumberInstance(Locale.US);
+                    int totalRF = Config.getBurnerCompactedBiomassBlockRfValue();
+                    int burnDuration = Config.getBurnerCompactedBiomassBlockBurnDuration();
+                    if (Screen.hasShiftDown()) {
+                        tooltipComponents.add(Component.translatable("tooltip.agritechevolved.compacted_biomass.rf_generation", fmt.format(totalRF)).withStyle(ChatFormatting.GREEN));
+                        double burnSeconds = burnDuration / 20.0D;
+                        tooltipComponents.add(Component.translatable("tooltip.agritechevolved.fuel.burn_duration", String.format("%.1f", burnSeconds)).withStyle(ChatFormatting.AQUA));
+                        tooltipComponents.add(Component.translatable("tooltip.agritechevolved.fuel.rf_per_second", fmt.format((int) Math.round(totalRF / burnSeconds))).withStyle(ChatFormatting.YELLOW));
+                    } else {
+                        tooltipComponents.add(Component.translatable("tooltip.agritechevolved.crude_fuel.shift_info"));
+                    }
+                }
+            });
 
     public static final DeferredBlock<Block> INFUSED_FARMLAND = registerBlock("infused_farmland",
             () -> new InfusedFarmlandBlock(BlockBehaviour.Properties.of()
