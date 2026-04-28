@@ -6,6 +6,7 @@ import com.misterd.agritechevolved.item.ATEItems;
 import com.misterd.agritechevolved.util.ATETags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
+import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.data.ItemTagsProvider;
 
 import java.util.concurrent.CompletableFuture;
@@ -42,5 +43,13 @@ public class ATEItemTagProvider extends ItemTagsProvider {
                 .add(ATEBlocks.SPRUCE_PLANTER.asItem())
                 .add(ATEBlocks.WARPED_PLANTER.asItem())
                 .add(ATEBlocks.PALE_OAK_PLANTER.asItem());
+
+        tag(ATETags.Items.DIRT_LIKE_BLOCK_ITEMS)
+                .add(Blocks.DIRT.asItem())
+                .add(Blocks.PODZOL.asItem())
+                .add(Blocks.MYCELIUM.asItem())
+                .add(Blocks.COARSE_DIRT.asItem())
+                .add(Blocks.ROOTED_DIRT.asItem())
+                .add(Blocks.GRASS_BLOCK.asItem());
     }
 }
