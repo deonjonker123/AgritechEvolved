@@ -153,8 +153,7 @@ public class CompostableConfig {
                 "minecraft:pumpkin", "minecraft:sugar_cane", "minecraft:bamboo",
                 "minecraft:kelp", "minecraft:cactus", "minecraft:apple",
                 "minecraft:sweet_berries", "minecraft:glow_berries",
-                "minecraft:pitcher_plant", "minecraft:poisonous_potato",
-                "minecraft:melon"
+                "minecraft:poisonous_potato", "minecraft:melon"
         ));
         // Leaves and natural blocks
         items.addAll(Arrays.asList(
@@ -164,7 +163,8 @@ public class CompostableConfig {
                 "minecraft:cherry_leaves", "minecraft:azalea_leaves",
                 "minecraft:flowering_azalea_leaves", "minecraft:mangrove_leaves",
                 "minecraft:muddy_mangrove_roots", "minecraft:mangrove_roots",
-                "minecraft:moss_block", "minecraft:vine", "minecraft:lily_pad", "minecraft:moss_carpet", "minecraft:pale_moss_carpet",
+                "minecraft:moss_block", "minecraft:vine", "minecraft:lily_pad",
+                "minecraft:moss_carpet", "minecraft:pale_moss_carpet",
                 "minecraft:spore_blossom", "minecraft:pink_petals",
                 "minecraft:sculk_vein", "minecraft:glow_lichen", "minecraft:sea_pickle",
                 "minecraft:twisting_vines", "minecraft:weeping_vines", "minecraft:leaf_litter"
@@ -188,7 +188,9 @@ public class CompostableConfig {
                 "minecraft:oxeye_daisy", "minecraft:cornflower",
                 "minecraft:lily_of_the_valley", "minecraft:sunflower",
                 "minecraft:lilac", "minecraft:rose_bush", "minecraft:peony",
-                "minecraft:wither_rose"
+                "minecraft:wither_rose", "minecraft:torchflower", "minecraft:pitcher_plant",
+                "minecraft:closed_eyeblossom", "minecraft:open_eyeblossom",
+                "minecraft:cactus_flower", "minecraft:wildflowers"
         ));
         // Mushrooms
         items.addAll(Arrays.asList(

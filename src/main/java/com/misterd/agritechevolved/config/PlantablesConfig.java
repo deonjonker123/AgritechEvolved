@@ -271,7 +271,8 @@ public class PlantablesConfig {
 
         crops.add(makeCrop("minecraft:cactus",
                 List.of("minecraft:sand", "minecraft:red_sand", "snad:snad", "snad:red_snad"),
-                makeDrop("minecraft:cactus", 1, 3)));
+                makeDrop("minecraft:cactus", 1, 3),
+                makeDrop("minecraft:cactus_flower", 1, 1, 0.25F)));
 
         crops.add(makeCrop("minecraft:bamboo",
                 List.of("minecraft:dirt", "minecraft:grass_block", "minecraft:rooted_dirt", "minecraft:coarse_dirt",
@@ -356,7 +357,8 @@ public class PlantablesConfig {
                 "minecraft:oxeye_daisy", "minecraft:poppy", "minecraft:red_tulip",
                 "minecraft:orange_tulip", "minecraft:white_tulip", "minecraft:pink_tulip",
                 "minecraft:wither_rose", "minecraft:lilac", "minecraft:peony",
-                "minecraft:rose_bush", "minecraft:sunflower"
+                "minecraft:rose_bush", "minecraft:sunflower",
+                "minecraft:closed_eyeblossom","minecraft:open_eyeblossom"
         }) {
             crops.add(makeCrop(flower, STANDARD_GROUND_SOILS, makeDrop(flower, 1, 1)));
         }
