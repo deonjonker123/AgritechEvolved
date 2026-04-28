@@ -1,10 +1,14 @@
 package com.misterd.agritechevolved.block;
 
 import com.misterd.agritechevolved.AgritechEvolved;
+import com.misterd.agritechevolved.Config;
 import com.misterd.agritechevolved.component.ATEDataComponents;
 import com.misterd.agritechevolved.item.ATEItems;
 import com.misterd.agritechevolved.block.custom.*;
+import com.mojang.blaze3d.platform.InputConstants;
+import com.mojang.blaze3d.platform.Window;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -20,6 +24,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import org.lwjgl.glfw.GLFW;
 
 import java.text.NumberFormat;
 import java.util.Locale;
@@ -161,8 +166,34 @@ public class ATEBlocks {
                 };
             }
 
+            if (name.equals("compacted_biomass_block")) {
+                return new BlockItem(block.get(),
+                        new Item.Properties().setId(ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(AgritechEvolved.MODID, name))).useBlockDescriptionPrefix()) {
+
+                    @Override
+                    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> adder, TooltipFlag flag) {
+                        NumberFormat fmt = NumberFormat.getNumberInstance(Locale.US);
+                        int totalRF = Config.getBurnerCompactedBiomassBlockRfValue();
+                        int burnDuration = Config.getBurnerCompactedBiomassBlockBurnDuration();
+                        if (isShiftDown()) {
+                            adder.accept(Component.translatable("tooltip.agritechevolved.compacted_biomass.rf_generation", fmt.format(totalRF)).withStyle(ChatFormatting.GREEN));
+                            double burnSeconds = burnDuration / 20.0D;
+                            adder.accept(Component.translatable("tooltip.agritechevolved.fuel.burn_duration", String.format("%.1f", burnSeconds)).withStyle(ChatFormatting.AQUA));
+                            adder.accept(Component.translatable("tooltip.agritechevolved.fuel.rf_per_second", fmt.format((int) Math.round(totalRF / burnSeconds))).withStyle(ChatFormatting.YELLOW));
+                        } else {
+                            adder.accept(Component.translatable("tooltip.agritechevolved.crude_fuel.shift_info"));
+                        }
+                    }
+                };
+            }
+
             return new BlockItem(block.get(), new Item.Properties().setId(ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(AgritechEvolved.MODID, name))).useBlockDescriptionPrefix());
         });
+    }
+
+    private static boolean isShiftDown() {
+        Window window = Minecraft.getInstance().getWindow();
+        return InputConstants.isKeyDown(window, GLFW.GLFW_KEY_LEFT_SHIFT) || InputConstants.isKeyDown(window, GLFW.GLFW_KEY_RIGHT_SHIFT);
     }
 
     public static void register(IEventBus eventBus) {
