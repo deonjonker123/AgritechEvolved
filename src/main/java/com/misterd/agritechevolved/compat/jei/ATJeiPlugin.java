@@ -72,14 +72,14 @@ public class ATJeiPlugin implements IModPlugin {
             String seedId = entry.getKey();
             for (String soilId : entry.getValue()) {
                 try {
-                    if (RegistryHelper.getBlock(soilId) == null) {
+                    if (!soilId.equals("minecraft:water_bucket") && RegistryHelper.getBlock(soilId) == null) {
                         LogUtils.getLogger().error("Invalid soil block in config: {} for seed {}", soilId, seedId);
                         continue;
                     }
                     PlanterRecipe recipe = PlanterRecipe.createCrop(seedId, soilId);
                     if (recipe != null && !recipe.getOutputs().isEmpty()) recipes.add(recipe);
                 } catch (Exception e) {
-                    LogUtils.getLogger().error("Error creating recipe for seed {} and soil {}: {}", seedId, soilId, e.getMessage());
+                    LogUtils.getLogger().error("Error creating recipe for seed {} and soil {}: {}", seedId, soilId, e.getMessage(), e);
                 }
             }
         }
