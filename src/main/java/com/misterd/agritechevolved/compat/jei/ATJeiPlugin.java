@@ -50,12 +50,8 @@ public class ATJeiPlugin implements IModPlugin {
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        registration.addRecipeCatalyst(
-                new ItemStack(ATEBlocks.OAK_PLANTER.get()),
-                PlanterRecipeCategory.PLANTER_RECIPE_TYPE);
-        registration.addRecipeCatalyst(
-                new ItemStack(ATEBlocks.COMPOSTER.get()),
-                CompostRecipeCategory.COMPOST_RECIPE_TYPE);
+        registration.addCraftingStation(PlanterRecipeCategory.PLANTER_RECIPE_TYPE, ATEBlocks.OAK_PLANTER);
+        registration.addCraftingStation(CompostRecipeCategory.COMPOST_RECIPE_TYPE, ATEBlocks.COMPOSTER);
     }
 
     private List<PlanterRecipe> generatePlanterRecipes() {

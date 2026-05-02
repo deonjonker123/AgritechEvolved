@@ -10,8 +10,8 @@ import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
-import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
+import mezz.jei.api.recipe.types.IRecipeType;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
@@ -23,7 +23,7 @@ import java.util.List;
 public class PlanterRecipeCategory implements IRecipeCategory<PlanterRecipe> {
     public static final Identifier UID = Identifier.fromNamespaceAndPath("agritechevolved", "planter");
     public static final Identifier TEXTURE = Identifier.fromNamespaceAndPath("agritechevolved", "textures/gui/jei/jei_planters_gui.png");
-    public static final RecipeType<PlanterRecipe> PLANTER_RECIPE_TYPE = new RecipeType<>(UID, PlanterRecipe.class);
+    public static final IRecipeType<PlanterRecipe> PLANTER_RECIPE_TYPE = IRecipeType.create(UID, PlanterRecipe.class);
 
     private final IDrawable background;
     private final IDrawable icon;
@@ -34,7 +34,7 @@ public class PlanterRecipeCategory implements IRecipeCategory<PlanterRecipe> {
     }
 
     @Override
-    public RecipeType<PlanterRecipe> getRecipeType() {
+    public IRecipeType<PlanterRecipe> getRecipeType() {
         return PLANTER_RECIPE_TYPE;
     }
 
@@ -85,8 +85,7 @@ public class PlanterRecipeCategory implements IRecipeCategory<PlanterRecipe> {
                     tooltip.add(Component.literal("Count: " + countStr).withStyle(ChatFormatting.GRAY));
 
                     if (info.chance < 1.0F) {
-                        tooltip.add(Component.literal(String.format("%.0f%% chance", info.chance * 100))
-                                .withStyle(ChatFormatting.GOLD));
+                        tooltip.add(Component.literal(String.format("%.0f%% chance", info.chance * 100)).withStyle(ChatFormatting.GOLD));
                     }
                 });
             }

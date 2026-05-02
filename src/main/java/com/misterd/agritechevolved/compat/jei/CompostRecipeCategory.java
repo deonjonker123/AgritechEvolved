@@ -10,8 +10,8 @@ import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
-import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
+import mezz.jei.api.recipe.types.IRecipeType;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -23,7 +23,7 @@ public class CompostRecipeCategory implements IRecipeCategory<CompostRecipe> {
 
     public static final Identifier UID = Identifier.fromNamespaceAndPath("agritechevolved", "composting");
     public static final Identifier TEXTURE = Identifier.fromNamespaceAndPath("agritechevolved", "textures/gui/jei/jei_composter_gui.png");
-    public static final RecipeType<CompostRecipe> COMPOST_RECIPE_TYPE = new RecipeType<>(UID, CompostRecipe.class);
+    public static final IRecipeType<CompostRecipe> COMPOST_RECIPE_TYPE = IRecipeType.create(UID, CompostRecipe.class);
 
     private final IDrawable background;
     private final IDrawable icon;
@@ -34,7 +34,7 @@ public class CompostRecipeCategory implements IRecipeCategory<CompostRecipe> {
     }
 
     @Override
-    public RecipeType<CompostRecipe> getRecipeType() {
+    public IRecipeType<CompostRecipe> getRecipeType() {
         return COMPOST_RECIPE_TYPE;
     }
 
