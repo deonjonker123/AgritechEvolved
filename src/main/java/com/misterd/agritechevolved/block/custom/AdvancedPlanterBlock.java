@@ -9,6 +9,7 @@ import com.misterd.agritechevolved.item.custom.ClocheItem;
 import com.misterd.agritechevolved.util.ATETags;
 import com.misterd.agritechevolved.util.RegistryHelper;
 import com.mojang.serialization.MapCodec;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -190,7 +191,7 @@ public class AdvancedPlanterBlock extends BaseEntityBlock {
                     ? PlantablesConfig.isSoilValidForSeed(soilId, heldItemId)
                     : PlantablesConfig.isSoilValidForSapling(soilId, heldItemId);
             if (!valid) {
-                player.sendSystemMessage(Component.translatable("message.agritechevolved.invalid_seed_soil_combination"));
+                player.sendOverlayMessage(Component.translatable("message.agritechevolved.invalid_seed_soil_combination").withStyle(ChatFormatting.GOLD));
                 return InteractionResult.SUCCESS;
             }
         }
@@ -220,7 +221,7 @@ public class AdvancedPlanterBlock extends BaseEntityBlock {
                     ? PlantablesConfig.isSoilValidForSeed(heldItemId, plantId)
                     : PlantablesConfig.isSoilValidForSapling(heldItemId, plantId);
             if (!valid) {
-                player.sendSystemMessage(Component.translatable("message.agritechevolved.invalid_seed_soil_combination"));
+                player.sendOverlayMessage(Component.translatable("message.agritechevolved.invalid_seed_soil_combination").withStyle(ChatFormatting.GOLD));
                 return InteractionResult.SUCCESS;
             }
         }
@@ -310,7 +311,7 @@ public class AdvancedPlanterBlock extends BaseEntityBlock {
                 if (resultBlock != null) {
                     if (soilId.equals(farmlandId)) {
                         if (!level.isClientSide()) {
-                            player.sendSystemMessage(Component.translatable("message.agritechevolved.same_farmland"));
+                            player.sendOverlayMessage(Component.translatable("message.agritechevolved.same_farmland").withStyle(ChatFormatting.GOLD));
                         }
                         return level.isClientSide() ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
                     }

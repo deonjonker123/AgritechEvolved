@@ -167,7 +167,8 @@ public class CompostableConfig {
                 "minecraft:moss_carpet", "minecraft:pale_moss_carpet",
                 "minecraft:spore_blossom", "minecraft:pink_petals",
                 "minecraft:sculk_vein", "minecraft:glow_lichen", "minecraft:sea_pickle",
-                "minecraft:twisting_vines", "minecraft:weeping_vines", "minecraft:leaf_litter"
+                "minecraft:twisting_vines", "minecraft:weeping_vines", "minecraft:leaf_litter",
+                "minecraft:big_dripleaf", "minecraft:small_dripleaf"
         ));
         // Grass and foliage
         items.addAll(Arrays.asList(
