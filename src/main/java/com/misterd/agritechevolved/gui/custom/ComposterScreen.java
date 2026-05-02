@@ -21,30 +21,28 @@ public class ComposterScreen extends AbstractContainerScreen<ComposterMenu> {
     private static final Identifier GUI_TEXTURE =
             Identifier.fromNamespaceAndPath("agritechevolved", "textures/gui/composter_gui.png");
 
-    private static final int GUI_W = 176, GUI_H = 166;
+    private static final int GUI_W = 176, GUI_H = 171;
 
-    private static final int PROGRESS_BAR_X     = 85;
-    private static final int PROGRESS_BAR_Y     = 15;
-    private static final int PROGRESS_BAR_W     = 6;
-    private static final int PROGRESS_BAR_H     = 52;
+    private static final int PROGRESS_BAR_X = 85;
+    private static final int PROGRESS_BAR_Y = 19;
+    private static final int PROGRESS_BAR_W = 6;
+    private static final int PROGRESS_BAR_H = 52;
     private static final int PROGRESS_BAR_TEX_X = 186;
 
-    private static final int ENERGY_BAR_X     = 158;
-    private static final int ENERGY_BAR_Y     = 15;
-    private static final int ENERGY_BAR_W     = 10;
-    private static final int ENERGY_BAR_H     = 52;
+    private static final int ENERGY_BAR_X = 158;
+    private static final int ENERGY_BAR_Y = 19;
+    private static final int ENERGY_BAR_W = 10;
+    private static final int ENERGY_BAR_H = 52;
     private static final int ENERGY_BAR_TEX_X = 176;
 
     public ComposterScreen(ComposterMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title, GUI_W, GUI_H);
-        this.inventoryLabelY = GUI_H - 96;
+        this.inventoryLabelY = GUI_H - 94;
     }
 
     @Override
     protected void init() {
         super.init();
-        this.titleLabelX = (this.imageWidth - this.font.width(this.title)) / 2;
-        this.titleLabelY -= 2;
     }
 
     @Override

@@ -24,29 +24,27 @@ public class AdvancedPlanterScreen extends AbstractContainerScreen<AdvancedPlant
     private static final int GUI_W = 212;
     private static final int GUI_H = 170;
 
-    private static final int GROWTH_BAR_X     = 40;
-    private static final int GROWTH_BAR_Y     = 16;
-    private static final int GROWTH_BAR_W     = 6;
-    private static final int GROWTH_BAR_H     = 52;
+    private static final int GROWTH_BAR_X = 40;
+    private static final int GROWTH_BAR_Y = 19;
+    private static final int GROWTH_BAR_W = 6;
+    private static final int GROWTH_BAR_H = 52;
     private static final int GROWTH_BAR_TEX_X = 222;
 
-    private static final int ENERGY_BAR_X     = 194;
-    private static final int ENERGY_BAR_Y     = 16;
-    private static final int ENERGY_BAR_W     = 10;
-    private static final int ENERGY_BAR_H     = 52;
+    private static final int ENERGY_BAR_X = 194;
+    private static final int ENERGY_BAR_Y = 19;
+    private static final int ENERGY_BAR_W = 10;
+    private static final int ENERGY_BAR_H = 52;
     private static final int ENERGY_BAR_TEX_X = 212;
 
     public AdvancedPlanterScreen(AdvancedPlanterMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title, GUI_W, GUI_H);
         this.inventoryLabelX = 26;
-        this.inventoryLabelY = GUI_H - 96;
+        this.inventoryLabelY = GUI_H - 93;
     }
 
     @Override
     protected void init() {
         super.init();
-        this.titleLabelX = (this.imageWidth - this.font.width(this.title)) / 2;
-        this.titleLabelY -= 2;
     }
 
     @Override

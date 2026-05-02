@@ -21,20 +21,18 @@ public class CapacitorScreen extends AbstractContainerScreen<CapacitorMenu> {
     private static final int GUI_W = 176, GUI_H = 151;
 
     private static final int BAR_X = 8;
-    private static final int BAR_Y = 15;
+    private static final int BAR_Y = 19;
     private static final int BAR_W = 160;
     private static final int BAR_H = 34;
 
     public CapacitorScreen(CapacitorMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title, GUI_W, GUI_H);
-        this.inventoryLabelY = GUI_H - 96;
+        this.inventoryLabelY = GUI_H - 92;
     }
 
     @Override
     protected void init() {
         super.init();
-        this.titleLabelX = (this.imageWidth - this.minecraft.font.width(this.title)) / 2;
-        this.titleLabelY -= 2;
     }
 
     @Override
@@ -43,19 +41,17 @@ public class CapacitorScreen extends AbstractContainerScreen<CapacitorMenu> {
                 this.leftPos, this.topPos, 0.0F, 0.0F,
                 this.imageWidth, this.imageHeight, 256, 256);
 
-        // Energy bar (horizontal, left-to-right)
         int energy = menu.getEnergyStored(), maxEnergy = menu.getMaxEnergyStored();
         if (maxEnergy > 0) {
             int fillWidth = (int) (BAR_W * (double) energy / maxEnergy);
             if (fillWidth > 0) {
                 graphics.blit(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE,
                         this.leftPos + BAR_X, this.topPos + BAR_Y,
-                        0.0F, 151.0F,
+                        0.0F, 153.0F,
                         fillWidth, BAR_H, 256, 256);
             }
         }
 
-        // Energy text centred in bar
         Component energyText = Component.literal(NumberFormat.getNumberInstance(Locale.US).format(energy) + " RF");
         int barCenterX = this.leftPos + BAR_X + BAR_W / 2;
         int barCenterY = this.topPos  + BAR_Y + BAR_H / 2 - this.minecraft.font.lineHeight;

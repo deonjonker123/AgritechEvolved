@@ -154,11 +154,11 @@ public class CapacitorMenu extends AbstractContainerMenu {
     private void addPlayerInventory(Inventory inv) {
         for (int row = 0; row < 3; row++)
             for (int col = 0; col < 9; col++)
-                addSlot(new Slot(inv, col + row * 9 + 9, 8 + col * 18, 66 + row * 18));
+                addSlot(new Slot(inv, col + row * 9 + 9, 8 + col * 18, 70 + row * 18));
     }
 
     private void addPlayerHotbar(Inventory inv) {
         for (int i = 0; i < 9; i++)
-            addSlot(new Slot(inv, i, 8 + i * 18, 125));
+            addSlot(new Slot(inv, i, 8 + i * 18, 129));
     }
 }

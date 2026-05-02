@@ -40,14 +40,12 @@ public class BiomassBurnerScreen extends AbstractContainerScreen<BiomassBurnerMe
 
     public BiomassBurnerScreen(BiomassBurnerMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title, GUI_W, GUI_H);
-        this.inventoryLabelY = GUI_H - 94;
+        this.inventoryLabelY = GUI_H - 96;
     }
 
     @Override
     protected void init() {
         super.init();
-        this.titleLabelX = (this.imageWidth - this.font.width(this.title)) / 2;
-        this.titleLabelY -= 2;
     }
 
     @Override

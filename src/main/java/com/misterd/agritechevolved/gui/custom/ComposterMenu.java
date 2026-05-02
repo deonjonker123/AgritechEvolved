@@ -64,12 +64,12 @@ public class ComposterMenu extends AbstractContainerMenu {
         int idx = INPUT_SLOTS_START;
         for (int row = 0; row < 3; row++)
             for (int col = 0; col < 4; col++)
-                addSlot(new CompostableSlot(blockEntity, idx++, 8 + col * 18, 15 + row * 18));
+                addSlot(new CompostableSlot(blockEntity, idx++, 8 + col * 18, 19 + row * 18));
 
         for (int i = 0; i < OUTPUT_SLOTS_COUNT; i++)
-            addSlot(new OutputSlot(blockEntity, OUTPUT_SLOTS_START + i, 98, 15 + i * 18));
+            addSlot(new OutputSlot(blockEntity, OUTPUT_SLOTS_START + i, 98, 19 + i * 18));
 
-        addSlot(new ModuleSlot(blockEntity, MODULE_SLOT, 134, 15));
+        addSlot(new ModuleSlot(blockEntity, MODULE_SLOT, 134, 19));
     }
 
     private void addDataSlots() {
@@ -199,12 +199,12 @@ public class ComposterMenu extends AbstractContainerMenu {
     private void addPlayerInventory(Inventory inv) {
         for (int row = 0; row < 3; row++)
             for (int col = 0; col < 9; col++)
-                addSlot(new Slot(inv, col + row * 9 + 9, 8 + col * 18, 81 + row * 18));
+                addSlot(new Slot(inv, col + row * 9 + 9, 8 + col * 18, 88 + row * 18));
     }
 
     private void addPlayerHotbar(Inventory inv) {
         for (int i = 0; i < 9; i++)
-            addSlot(new Slot(inv, i, 8 + i * 18, 140));
+            addSlot(new Slot(inv, i, 8 + i * 18, 147));
     }
 
     private static class ComposterSlot extends Slot {
