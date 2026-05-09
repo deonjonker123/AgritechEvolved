@@ -187,6 +187,50 @@ public class ATEBlocks {
                 };
             }
 
+            if (name.equals("infused_farmland")) {
+                return new BlockItem(block.get(),
+                        new Item.Properties().setId(ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(AgritechEvolved.MODID, name))).useBlockDescriptionPrefix()) {
+                    @Override
+                    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> adder, TooltipFlag flag) {
+                        adder.accept(Component.translatable("tooltip.agritechevolved.infused_farmland.growth_boost").withStyle(ChatFormatting.GREEN));
+                        adder.accept(Component.translatable("tooltip.agritechevolved.infused_farmland.hoe_craft").withStyle(ChatFormatting.GRAY));
+                        adder.accept(Component.translatable("tooltip.agritechevolved.infused_farmland.hoe_craft2").withStyle(ChatFormatting.GRAY));
+                    }
+                };
+            }
+
+            if (name.equals("mulch")) {
+                return new BlockItem(block.get(),
+                        new Item.Properties().setId(ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(AgritechEvolved.MODID, name))).useBlockDescriptionPrefix()) {
+                    @Override
+                    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> adder, TooltipFlag flag) {
+                        adder.accept(Component.translatable("tooltip.agritechevolved.mulch.growth_boost").withStyle(ChatFormatting.GREEN));
+                        adder.accept(Component.translatable("tooltip.agritechevolved.mulch.hoe_craft").withStyle(ChatFormatting.GRAY));
+                    }
+                };
+            }
+
+            if (name.startsWith("basic_") && name.endsWith("_planter")) {
+                return new BlockItem(block.get(),
+                        new Item.Properties().setId(ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(AgritechEvolved.MODID, name))).useBlockDescriptionPrefix()) {
+                    @Override
+                    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> adder, TooltipFlag flag) {
+                        adder.accept(Component.translatable("tooltip.agritechevolved.planter.till").withStyle(ChatFormatting.GRAY));
+                        adder.accept(Component.translatable("tooltip.agritechevolved.planter.fertilize").withStyle(ChatFormatting.GRAY));
+                    }
+                };
+            }
+
+            if (name.equals("advanced_planter")) {
+                return new BlockItem(block.get(),
+                        new Item.Properties().setId(ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(AgritechEvolved.MODID, name))).useBlockDescriptionPrefix()) {
+                    @Override
+                    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> adder, TooltipFlag flag) {
+                        adder.accept(Component.translatable("tooltip.agritechevolved.planter.till").withStyle(ChatFormatting.GRAY));
+                    }
+                };
+            }
+
             return new BlockItem(block.get(), new Item.Properties().setId(ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(AgritechEvolved.MODID, name))).useBlockDescriptionPrefix());
         });
     }

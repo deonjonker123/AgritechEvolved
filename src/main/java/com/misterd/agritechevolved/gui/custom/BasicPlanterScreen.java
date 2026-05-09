@@ -62,6 +62,24 @@ public class BasicPlanterScreen extends AbstractContainerScreen<BasicPlanterMenu
             ), mouseX, mouseY);
             return;
         }
+        if (isHovering(8, 18, 16, 16, mouseX, mouseY) && menu.slots.get(36).getItem().isEmpty()) {
+            graphics.setComponentTooltipForNextFrame(this.font, List.of(
+                    Component.translatable("tooltip.agritechevolved.slot.plant")
+            ), mouseX, mouseY);
+            return;
+        }
+        if (isHovering(8, 54, 16, 16, mouseX, mouseY) && menu.slots.get(37).getItem().isEmpty()) {
+            graphics.setComponentTooltipForNextFrame(this.font, List.of(
+                    Component.translatable("tooltip.agritechevolved.slot.soil")
+            ), mouseX, mouseY);
+            return;
+        }
+        if (isHovering(152, 18, 16, 16, mouseX, mouseY) && menu.slots.get(38).getItem().isEmpty()) {
+            graphics.setComponentTooltipForNextFrame(this.font, List.of(
+                    Component.translatable("tooltip.agritechevolved.slot.fertilizer")
+            ), mouseX, mouseY);
+            return;
+        }
         super.extractTooltip(graphics, mouseX, mouseY);
     }
 

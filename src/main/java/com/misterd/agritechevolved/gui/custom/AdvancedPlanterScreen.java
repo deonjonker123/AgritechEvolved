@@ -53,7 +53,6 @@ public class AdvancedPlanterScreen extends AbstractContainerScreen<AdvancedPlant
                 this.leftPos, this.topPos, 0.0F, 0.0F,
                 this.imageWidth, this.imageHeight, 256, 256);
 
-        // Growth bar (bottom-up)
         float progress = menu.getGrowthProgress();
         if (progress > 0.0F) {
             int filled = (int) (GROWTH_BAR_H * progress);
@@ -63,7 +62,6 @@ public class AdvancedPlanterScreen extends AbstractContainerScreen<AdvancedPlant
                     GROWTH_BAR_W, filled, 256, 256);
         }
 
-        // Energy bar (bottom-up)
         int energy = menu.getEnergyStored(), maxEnergy = menu.getMaxEnergyStored();
         if (maxEnergy > 0) {
             int filled = (int) (ENERGY_BAR_H * ((float) energy / maxEnergy));
@@ -101,7 +99,36 @@ public class AdvancedPlanterScreen extends AbstractContainerScreen<AdvancedPlant
             ), mouseX, mouseY);
             return;
         }
-
+        if (isHovering(8, 19, 16, 16, mouseX, mouseY) && menu.slots.get(36).getItem().isEmpty()) {
+            graphics.setComponentTooltipForNextFrame(this.font, List.of(
+                    Component.translatable("tooltip.agritechevolved.slot.plant")
+            ), mouseX, mouseY);
+            return;
+        }
+        if (isHovering(8, 55, 16, 16, mouseX, mouseY) && menu.slots.get(37).getItem().isEmpty()) {
+            graphics.setComponentTooltipForNextFrame(this.font, List.of(
+                    Component.translatable("tooltip.agritechevolved.slot.soil")
+            ), mouseX, mouseY);
+            return;
+        }
+        if (isHovering(152, 19, 16, 16, mouseX, mouseY) && menu.slots.get(38).getItem().isEmpty()) {
+            graphics.setComponentTooltipForNextFrame(this.font, List.of(
+                    Component.translatable("tooltip.agritechevolved.slot.upgrade_1")
+            ), mouseX, mouseY);
+            return;
+        }
+        if (isHovering(170, 19, 16, 16, mouseX, mouseY) && menu.slots.get(39).getItem().isEmpty()) {
+            graphics.setComponentTooltipForNextFrame(this.font, List.of(
+                    Component.translatable("tooltip.agritechevolved.slot.upgrade_2")
+            ), mouseX, mouseY);
+            return;
+        }
+        if (isHovering(161, 55, 16, 16, mouseX, mouseY) && menu.slots.get(40).getItem().isEmpty()) {
+            graphics.setComponentTooltipForNextFrame(this.font, List.of(
+                    Component.translatable("tooltip.agritechevolved.slot.fertilizer")
+            ), mouseX, mouseY);
+            return;
+        }
         super.extractTooltip(graphics, mouseX, mouseY);
     }
 

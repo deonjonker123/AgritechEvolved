@@ -29,16 +29,16 @@
   "block.agritechevolved.infused_farmland": "Infused Farmland",
   "block.agritechevolved.mulch": "Mulch",
 
-  "item.agritechevolved.sm_mk1": "SM-MK1",
-  "item.agritechevolved.sm_mk2": "SM-MK2",
-  "item.agritechevolved.sm_mk3": "SM-MK3",
-  "item.agritechevolved.ym_mk1": "YM-MK1",
-  "item.agritechevolved.ym_mk2": "YM-MK2",
-  "item.agritechevolved.ym_mk3": "YM-MK3",
+  "item.agritechevolved.sm_mk1": "Speed Upgrade MK1",
+  "item.agritechevolved.sm_mk2": "Speed Upgrade MK2",
+  "item.agritechevolved.sm_mk3": "Speed Upgrade MK3",
+  "item.agritechevolved.ym_mk1": "Yield Upgrade MK1",
+  "item.agritechevolved.ym_mk2": "Yield Upgrade YM-MK2",
+  "item.agritechevolved.ym_mk3": "Yield Upgrade YM-MK3",
 
   "item.agritechevolved.cloche_dome": "Cloche Dome",
 
-  "item.agritechevolved.cloche.tooltip.line1": "Place on a planter to boost growth and yield.",
+  "item.agritechevolved.cloche.tooltip.line1": "Place on a planter to increases growth and yield.",
   "item.agritechevolved.cloche.tooltip.line2": "Stacks with fertilizer for maximum efficiency.",
   "item.agritechevolved.cloche.tooltip.line3": "Shift-right-click with empty hand to remove.",
 
@@ -112,14 +112,14 @@
   "tooltip.agritechevolved.crude_biomass.inefficient": "Very inefficient",
 
   "tooltip.agritechevolved.module.shift_info": "§6§oHold Shift for info§r",
-  "tooltip.agritechevolved.module.speed_boost": "§aBoosts Advanced Planter and Machine processing speed by %s%%§r",
-  "tooltip.agritechevolved.module.power_increase": "§cbut increases power consumption by %s%%§r",
-  "tooltip.agritechevolved.module.yield_boost": "§aBoosts Advanced Planter yield by %s%%§r",
-  "tooltip.agritechevolved.module.speed_reduction": "§cbut reduces processing speed by %s%%§r",
+  "tooltip.agritechevolved.module.speed_boost": "§aIncreases processing speed by %s%%§r",
+  "tooltip.agritechevolved.module.power_increase": "§cand increases power consumption by %s%%§r",
+  "tooltip.agritechevolved.module.yield_boost": "§aIncreases yield by %s%%§r",
+  "tooltip.agritechevolved.module.speed_reduction": "§cand reduces processing speed by %s%%§r",
 
   "tooltip.agritechevolved.fertilizer.effects": "Fertilizer Effects:",
-  "tooltip.agritechevolved.fertilizer.speed_boost": "§aBoosts planter speed by %s%%§r",
-  "tooltip.agritechevolved.fertilizer.yield_boost": "§aBoosts planter yield by %s%%§r",
+  "tooltip.agritechevolved.fertilizer.speed_boost": "§aIncreases planter speed by %s%%§r",
+  "tooltip.agritechevolved.fertilizer.yield_boost": "§aIncreases planter yield by %s%%§r",
 
   "tooltip.agritechevolved.fuel.burn_duration": "§bBurns for %s seconds§r",
   "tooltip.agritechevolved.fuel.rf_per_second": "§eGenerates %s RF/second§r",
@@ -127,6 +127,21 @@
   "tooltip.agritechevolved.fuel.duration_penalty": "§c-%s%% RF from shorter burn§r",
   "tooltip.agritechevolved.fuel.shift_info": "§6§oHold Shift for Fuel & Fertilizer info§r",
   "tooltip.agritechevolved.crude_fuel.shift_info": "§6§oHold Shift for Fuel info§r",
+
+  "tooltip.agritechevolved.infused_farmland.growth_boost": "Increases crop growth speed by 100%",
+  "tooltip.agritechevolved.infused_farmland.hoe_craft": "Crafted by combining Mulch and a Hoe in a Crafting Table",
+  "tooltip.agritechevolved.infused_farmland.hoe_craft2": "or by Tilling Mulch in a Planter",
+  "tooltip.agritechevolved.mulch.growth_boost": "Increases crop growth speed by 50%",
+  "tooltip.agritechevolved.mulch.hoe_craft": "Combine with a hoe in a Crafting Table for Infused Farmland",
+  "tooltip.agritechevolved.planter.till": "Right-click with a Hoe to till soil placed inside",
+  "tooltip.agritechevolved.planter.fertilize": "Right-click with Bone Meal or fertilizer to boost crop growth",
+
+  "tooltip.agritechevolved.slot.plant": "Plant Slot",
+  "tooltip.agritechevolved.slot.soil": "Soil Slot",
+  "tooltip.agritechevolved.slot.fertilizer": "Fertilizer Slot",
+  "tooltip.agritechevolved.slot.upgrade_1": "Upgrade Slot 1",
+  "tooltip.agritechevolved.slot.upgrade_2": "Upgrade Slot 2",
+  "tooltip.agritechevolved.slot.upgrade": "Speed Upgrade Slot",
 
   "jade.agritechevolved.crop_ready": "%s - Ready to Harvest!",
   "jade.agritechevolved.crop_progress": "%s - Stage %d/%d (%d%%)",

@@ -51,7 +51,6 @@ public class ComposterScreen extends AbstractContainerScreen<ComposterMenu> {
                 this.leftPos, this.topPos, 0.0F, 0.0F,
                 this.imageWidth, this.imageHeight, 256, 256);
 
-        // Progress bar (bottom-up)
         int progress = menu.getProgress(), maxProgress = menu.getMaxProgress();
         if (maxProgress > 0) {
             int filled = (int) (PROGRESS_BAR_H * (float) progress / maxProgress);
@@ -63,7 +62,6 @@ public class ComposterScreen extends AbstractContainerScreen<ComposterMenu> {
             }
         }
 
-        // Energy bar (bottom-up)
         int energy = menu.getEnergyStored(), maxEnergy = menu.getMaxEnergyStored();
         if (maxEnergy > 0) {
             int filled = (int) (ENERGY_BAR_H * (float) energy / maxEnergy);
@@ -102,6 +100,13 @@ public class ComposterScreen extends AbstractContainerScreen<ComposterMenu> {
                     Component.translatable("tooltip.agritechevolved.stored_energy").withStyle(ChatFormatting.YELLOW),
                     Component.literal(fmt.format(energy) + " / " + fmt.format(maxEnergy) + " RF").withStyle(ChatFormatting.GREEN),
                     Component.literal(String.format("%.1f%%", pct)).withStyle(ChatFormatting.GRAY)
+            ), mouseX, mouseY);
+            return;
+        }
+
+        if (isHovering(134, 19, 16, 16, mouseX, mouseY) && menu.slots.get(51).getItem().isEmpty()) {
+            graphics.setComponentTooltipForNextFrame(this.font, List.of(
+                    Component.translatable("tooltip.agritechevolved.slot.upgrade")
             ), mouseX, mouseY);
             return;
         }

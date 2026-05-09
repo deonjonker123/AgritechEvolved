@@ -14,6 +14,7 @@ import com.misterd.agritechevolved.gui.ATEMenuTypes;
 import com.misterd.agritechevolved.gui.custom.*;
 import com.misterd.agritechevolved.item.ATECreativeTab;
 import com.misterd.agritechevolved.item.ATEItems;
+import com.misterd.agritechevolved.recipe.ATERecipe;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
@@ -45,6 +46,7 @@ public class AgritechEvolved {
         ATECreativeTab.register(modEventBus);
         ATEMenuTypes.register(modEventBus);
         ATEDataComponents.register(modEventBus);
+        ATERecipe.RECIPE_SERIALIZERS.register(modEventBus);
 
         modEventBus.addListener(AdvancedPlanterBlockEntity::registerCapabilities);
         modEventBus.addListener(ComposterBlockEntity::registerCapabilities);

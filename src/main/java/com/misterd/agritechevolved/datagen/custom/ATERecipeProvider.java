@@ -1,15 +1,27 @@
 package com.misterd.agritechevolved.datagen.custom;
 
+import com.misterd.agritechevolved.Config;
 import com.misterd.agritechevolved.block.ATEBlocks;
 import com.misterd.agritechevolved.item.ATEItems;
+import com.misterd.agritechevolved.recipe.DurabilityShapelessRecipe;
 import com.misterd.agritechevolved.util.ATETags;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.HolderSet;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
 import net.neoforged.neoforge.common.Tags;
 
 import java.util.concurrent.CompletableFuture;
@@ -355,5 +367,48 @@ public class ATERecipeProvider extends RecipeProvider {
                 .define('D', ATETags.Items.DIRT_LIKE_BLOCK_ITEMS)
                 .unlockedBy("has_leaves", has(ItemTags.LEAVES))
                 .save(output);
+
+        saveTillingRecipe("dirt_to_farmland",         Items.DIRT,         Items.FARMLAND);
+        saveTillingRecipe("rooted_dirt_to_farmland",  Items.ROOTED_DIRT,  Items.FARMLAND);
+        saveTillingRecipe("coarse_dirt_to_farmland",  Items.COARSE_DIRT,  Items.FARMLAND);
+        saveTillingRecipe("grass_to_farmland",        Items.GRASS_BLOCK,  Items.FARMLAND);
+        saveTillingRecipe("mulch_to_infused_farmland",
+                ATEBlocks.MULCH.get().asItem(), ATEBlocks.INFUSED_FARMLAND.get().asItem());
+
+        if (Config.enableFarmersDelight) {
+            saveTillingRecipeModded("rich_soil_to_rich_soil_farmland",
+                    "farmersdelight:rich_soil", "farmersdelight:rich_soil_farmland");
+        }
+    }
+
+    private void saveTillingRecipe(String name, Item input, Item result) {
+        HolderSet<Item> hoeTag = registries
+                .lookupOrThrow(Registries.ITEM)
+                .getOrThrow(ItemTags.HOES);
+
+        NonNullList<Ingredient> ingredients = NonNullList.create();
+        ingredients.add(Ingredient.of(input));
+
+        DurabilityShapelessRecipe recipe = new DurabilityShapelessRecipe(
+                CraftingBookCategory.MISC,
+                new ItemStackTemplate(result),
+                ingredients,
+                Ingredient.of(hoeTag),
+                1
+        );
+
+        ResourceKey<Recipe<?>> key = ResourceKey.create(
+                Registries.RECIPE,
+                Identifier.fromNamespaceAndPath("agritechevolved", name)
+        );
+        output.accept(key, recipe, null);
+    }
+
+    private void saveTillingRecipeModded(String name, String inputId, String resultId) {
+        var inputOpt  = BuiltInRegistries.ITEM.get(Identifier.parse(inputId));
+        var resultOpt = BuiltInRegistries.ITEM.get(Identifier.parse(resultId));
+        if (inputOpt.isEmpty()  || inputOpt.get().value()  == Items.AIR) return;
+        if (resultOpt.isEmpty() || resultOpt.get().value() == Items.AIR) return;
+        saveTillingRecipe(name, inputOpt.get().value(), resultOpt.get().value());
     }
 }
