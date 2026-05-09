@@ -143,6 +143,8 @@
   "tooltip.agritechevolved.slot.upgrade_2": "Upgrade Slot 2",
   "tooltip.agritechevolved.slot.upgrade": "Speed Upgrade Slot",
 
+  "config.jade.agritechevolved.planter_info": "Planter Info",
+  "config.jade.plugin_agritechevolved.planter_info": "Planter Info",
   "jade.agritechevolved.crop_ready": "%s - Ready to Harvest!",
   "jade.agritechevolved.crop_progress": "%s - Stage %d/%d (%d%%)",
   "jade.agritechevolved.soil_info": "Soil: %s (%s growth)",
