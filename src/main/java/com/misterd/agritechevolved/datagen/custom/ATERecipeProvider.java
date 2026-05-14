@@ -368,12 +368,11 @@ public class ATERecipeProvider extends RecipeProvider {
                 .unlockedBy("has_leaves", has(ItemTags.LEAVES))
                 .save(output);
 
-        saveTillingRecipe("dirt_to_farmland",         Items.DIRT,         Items.FARMLAND);
-        saveTillingRecipe("rooted_dirt_to_farmland",  Items.ROOTED_DIRT,  Items.FARMLAND);
-        saveTillingRecipe("coarse_dirt_to_farmland",  Items.COARSE_DIRT,  Items.FARMLAND);
-        saveTillingRecipe("grass_to_farmland",        Items.GRASS_BLOCK,  Items.FARMLAND);
-        saveTillingRecipe("mulch_to_infused_farmland",
-                ATEBlocks.MULCH.get().asItem(), ATEBlocks.INFUSED_FARMLAND.get().asItem());
+        saveTillingRecipe("dirt_to_farmland", Items.DIRT, Items.FARMLAND);
+        saveTillingRecipe("rooted_dirt_to_farmland", Items.ROOTED_DIRT, Items.FARMLAND);
+        saveTillingRecipe("coarse_dirt_to_farmland", Items.COARSE_DIRT, Items.FARMLAND);
+        saveTillingRecipe("grass_to_farmland", Items.GRASS_BLOCK, Items.FARMLAND);
+        saveTillingRecipe("mulch_to_infused_farmland",ATEBlocks.MULCH.get().asItem(), ATEBlocks.INFUSED_FARMLAND.get().asItem());
 
         if (Config.enableFarmersDelight) {
             saveTillingRecipeModded("rich_soil_to_rich_soil_farmland",
@@ -405,9 +404,9 @@ public class ATERecipeProvider extends RecipeProvider {
     }
 
     private void saveTillingRecipeModded(String name, String inputId, String resultId) {
-        var inputOpt  = BuiltInRegistries.ITEM.get(Identifier.parse(inputId));
+        var inputOpt= BuiltInRegistries.ITEM.get(Identifier.parse(inputId));
         var resultOpt = BuiltInRegistries.ITEM.get(Identifier.parse(resultId));
-        if (inputOpt.isEmpty()  || inputOpt.get().value()  == Items.AIR) return;
+        if (inputOpt.isEmpty()  || inputOpt.get().value() == Items.AIR) return;
         if (resultOpt.isEmpty() || resultOpt.get().value() == Items.AIR) return;
         saveTillingRecipe(name, inputOpt.get().value(), resultOpt.get().value());
     }

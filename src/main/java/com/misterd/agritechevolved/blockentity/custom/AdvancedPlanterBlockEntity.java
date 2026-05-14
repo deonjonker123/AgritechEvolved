@@ -470,7 +470,7 @@ public class AdvancedPlanterBlockEntity extends BlockEntity implements MenuProvi
     private int getBaseGrowthTime(ItemStack plant) {
         String id = RegistryHelper.getItemId(plant);
         if (PlantablesConfig.isValidSapling(id)) return PlantablesConfig.getBaseSaplingGrowthTime(id);
-        return Config.getPlanterBaseProcessingTime();
+        return Config.getAdvancedPlanterBaseProcessingTime();
     }
 
     private void resetGrowth() {

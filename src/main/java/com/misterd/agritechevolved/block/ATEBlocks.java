@@ -231,6 +231,16 @@ public class ATEBlocks {
                 };
             }
 
+            if (name.equals("composter")) {
+                return new BlockItem(block.get(),
+                        new Item.Properties().setId(ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(AgritechEvolved.MODID, name))).useBlockDescriptionPrefix()) {
+                    @Override
+                    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> adder, TooltipFlag flag) {
+                        adder.accept(Component.translatable("tooltip.agritechevolved.composting_info").withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC));
+                    }
+                };
+            }
+
             return new BlockItem(block.get(), new Item.Properties().setId(ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(AgritechEvolved.MODID, name))).useBlockDescriptionPrefix());
         });
     }

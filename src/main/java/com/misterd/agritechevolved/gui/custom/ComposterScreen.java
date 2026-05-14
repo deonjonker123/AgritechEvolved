@@ -83,6 +83,7 @@ public class ComposterScreen extends AbstractContainerScreen<ComposterMenu> {
             int organicItems = menu.getOrganicItemsCollected(), requiredItems = menu.getRequiredOrganicItems();
             float pct = maxProgress > 0 ? (float) progress / maxProgress * 100.0F : 0.0F;
             graphics.setComponentTooltipForNextFrame(this.font, List.of(
+                    Component.translatable("tooltip.agritechevolved.composting_info").withStyle(ChatFormatting.GOLD).withStyle(ChatFormatting.ITALIC),
                     Component.translatable("tooltip.agritechevolved.composting_progress").withStyle(ChatFormatting.GREEN),
                     Component.literal(String.format("%.1f%%", pct)).withStyle(ChatFormatting.GREEN),
                     Component.literal(String.format("Organic Items: %d/%d", organicItems, requiredItems)).withStyle(ChatFormatting.GRAY),

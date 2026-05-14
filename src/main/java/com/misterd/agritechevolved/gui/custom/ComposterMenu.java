@@ -2,7 +2,6 @@ package com.misterd.agritechevolved.gui.custom;
 
 import com.misterd.agritechevolved.block.ATEBlocks;
 import com.misterd.agritechevolved.blockentity.custom.ComposterBlockEntity;
-import com.misterd.agritechevolved.config.CompostableConfig;
 import com.misterd.agritechevolved.gui.ATEMenuTypes;
 import com.misterd.agritechevolved.util.RegistryHelper;
 import net.minecraft.network.FriendlyByteBuf;
@@ -33,7 +32,7 @@ public class ComposterMenu extends AbstractContainerMenu {
     private static final int TE_OUTPUT_START = TE_INPUT_END;
     private static final int TE_OUTPUT_END = TE_OUTPUT_START + OUTPUT_SLOTS_COUNT;
     private static final int TE_MODULE_SLOT = TE_OUTPUT_END;
-    private static final int TE_LAST_SLOT  = TE_MODULE_SLOT + 1;
+    private static final int TE_LAST_SLOT = TE_MODULE_SLOT + 1;
 
     private static final String SM_MK1 = "agritechevolved:sm_mk1";
     private static final String SM_MK2 = "agritechevolved:sm_mk2";
@@ -74,52 +73,23 @@ public class ComposterMenu extends AbstractContainerMenu {
 
     private void addDataSlots() {
         addDataSlot(new DataSlot() {
-            @Override
-            public int get() {
-                return blockEntity.getEnergyStored();
-            }
-
-            @Override
-            public void set(int value) {
-                lastEnergyStored = value;
-            }
+            @Override public int get() { return blockEntity.getEnergyStored(); }
+            @Override public void set(int value) { lastEnergyStored = value; }
         });
         addDataSlot(new DataSlot() {
-            @Override
-            public int get() {
-                return blockEntity.getProgress();
-            }
-
-            @Override
-            public void set(int value) {
-                lastProgress = value;
-            }
+            @Override public int get() { return blockEntity.getProgress(); }
+            @Override public void set(int value) { lastProgress = value; }
         });
     }
 
-    public int getEnergyStored() {
-        return level.isClientSide() ? lastEnergyStored : blockEntity.getEnergyStored();
-    }
-
-    public int getMaxEnergyStored() {
-        return blockEntity.getMaxEnergyStored();
-    }
-
-    public int getProgress() {
-        return level.isClientSide() ? lastProgress     : blockEntity.getProgress();
-    }
-
-    public int getMaxProgress() {
-        return blockEntity.getMaxProgress();
-    }
-
-    public int getOrganicItemsCollected() {
-        return blockEntity.getOrganicItemsCollected();
-    }
-
-    public int getRequiredOrganicItems() {
-        return blockEntity.getRequiredOrganicItems();
-    }
+    public int getEnergyStored() { return level.isClientSide() ? lastEnergyStored : blockEntity.getEnergyStored(); }
+    public int getMaxEnergyStored() { return blockEntity.getMaxEnergyStored(); }
+    public int getProgress() { return level.isClientSide() ? lastProgress : blockEntity.getProgress(); }
+    public int getMaxProgress() { return blockEntity.getMaxProgress(); }
+    public int getOrganicItemsCollected() { return blockEntity.getOrganicItemsCollected(); }
+    public int getRequiredOrganicItems() { return blockEntity.getRequiredOrganicItems(); }
+    public int getDenseItemsCollected() { return blockEntity.getDenseItemsCollected(); }
+    public int getRequiredDenseItems() { return blockEntity.getRequiredDenseItems(); }
 
     @Override
     public ItemStack quickMoveStack(Player player, int index) {
@@ -127,7 +97,7 @@ public class ComposterMenu extends AbstractContainerMenu {
         if (source == null || !source.hasItem()) return ItemStack.EMPTY;
 
         ItemStack stack = source.getItem();
-        ItemStack copy  = stack.copy();
+        ItemStack copy = stack.copy();
 
         if (index < PLAYER_SLOTS) {
             if (!moveToBlockEntity(stack)) return ItemStack.EMPTY;
@@ -146,13 +116,11 @@ public class ComposterMenu extends AbstractContainerMenu {
     private boolean moveToBlockEntity(ItemStack stack) {
         String id = RegistryHelper.getItemId(stack);
 
-        if (id.equals(SM_MK1) || id.equals(SM_MK2) || id.equals(SM_MK3)) {
+        if (id.equals(SM_MK1) || id.equals(SM_MK2) || id.equals(SM_MK3))
             return moveItemStackTo(stack, TE_MODULE_SLOT, TE_LAST_SLOT, false);
-        }
 
-        if (CompostableConfig.isCompostable(id)) {
+        if (blockEntity.isCompostableItem(stack))
             return insertIntoBlockEntity(stack, INPUT_SLOTS_START, INPUT_SLOTS_START + INPUT_SLOTS_COUNT);
-        }
 
         return false;
     }
@@ -207,6 +175,10 @@ public class ComposterMenu extends AbstractContainerMenu {
             addSlot(new Slot(inv, i, 8 + i * 18, 147));
     }
 
+    // -------------------------------------------------------------------------
+    // Slot types
+    // -------------------------------------------------------------------------
+
     private static class ComposterSlot extends Slot {
         protected final ComposterBlockEntity be;
         protected final int index;
@@ -258,7 +230,7 @@ public class ComposterMenu extends AbstractContainerMenu {
 
         @Override
         public boolean mayPlace(ItemStack stack) {
-            return !stack.isEmpty() && CompostableConfig.isCompostable(RegistryHelper.getItemId(stack));
+            return be.isCompostableItem(stack);
         }
     }
 
@@ -266,9 +238,7 @@ public class ComposterMenu extends AbstractContainerMenu {
         OutputSlot(ComposterBlockEntity be, int index, int x, int y) { super(be, index, x, y); }
 
         @Override
-        public boolean mayPlace(ItemStack stack) {
-            return false;
-        }
+        public boolean mayPlace(ItemStack stack) { return false; }
     }
 
     private static class ModuleSlot extends ComposterSlot {
@@ -282,8 +252,6 @@ public class ComposterMenu extends AbstractContainerMenu {
         }
 
         @Override
-        public int getMaxStackSize() {
-            return 1;
-        }
+        public int getMaxStackSize() { return 1; }
     }
 }

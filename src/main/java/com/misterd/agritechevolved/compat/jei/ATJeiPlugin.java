@@ -1,5 +1,6 @@
 package com.misterd.agritechevolved.compat.jei;
 
+import com.misterd.agritechevolved.Config;
 import com.misterd.agritechevolved.block.ATEBlocks;
 import com.misterd.agritechevolved.config.CompostableConfig;
 import com.misterd.agritechevolved.config.PlantablesConfig;
@@ -12,8 +13,12 @@ import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import mezz.jei.api.runtime.IJeiRuntime;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +43,8 @@ public class ATJeiPlugin implements IModPlugin {
         IGuiHelper guiHelper = registration.getJeiHelpers().getGuiHelper();
         registration.addRecipeCategories(
                 new PlanterRecipeCategory(guiHelper),
-                new CompostRecipeCategory(guiHelper)
+                new CompostRecipeCategory(guiHelper),
+                new FarmlandRecipeCategory(guiHelper)
         );
     }
 
@@ -46,12 +52,14 @@ public class ATJeiPlugin implements IModPlugin {
     public void registerRecipes(IRecipeRegistration registration) {
         registration.addRecipes(PlanterRecipeCategory.PLANTER_RECIPE_TYPE, generatePlanterRecipes());
         registration.addRecipes(CompostRecipeCategory.COMPOST_RECIPE_TYPE, generateCompostRecipes());
+        registration.addRecipes(FarmlandRecipeCategory.FARMLAND_RECIPE_TYPE, generateFarmlandRecipes());
     }
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
         registration.addCraftingStation(PlanterRecipeCategory.PLANTER_RECIPE_TYPE, ATEBlocks.OAK_PLANTER);
         registration.addCraftingStation(CompostRecipeCategory.COMPOST_RECIPE_TYPE, ATEBlocks.COMPOSTER);
+        registration.addCraftingStation(FarmlandRecipeCategory.FARMLAND_RECIPE_TYPE, new ItemStack(Items.DIAMOND_HOE));
     }
 
     private List<PlanterRecipe> generatePlanterRecipes() {
@@ -118,6 +126,43 @@ public class ATJeiPlugin implements IModPlugin {
                 .toList();
         LogUtils.getLogger().info("Generated {} compost recipes for JEI", recipes.size());
         return recipes;
+    }
+
+    private List<FarmlandRecipe> generateFarmlandRecipes() {
+        List<FarmlandRecipe> recipes = new ArrayList<>();
+        try {
+            Ingredient hoe = Ingredient.of(BuiltInRegistries.ITEM.getOrThrow(ItemTags.HOES));
+
+            addTilling(recipes, hoe, Items.DIRT, Items.FARMLAND);
+            addTilling(recipes, hoe, Items.ROOTED_DIRT, Items.FARMLAND);
+            addTilling(recipes, hoe, Items.COARSE_DIRT, Items.FARMLAND);
+            addTilling(recipes, hoe, Items.GRASS_BLOCK, Items.FARMLAND);
+            addTilling(recipes, hoe, ATEBlocks.MULCH.get().asItem(), ATEBlocks.INFUSED_FARMLAND.get().asItem());
+
+            if (Config.enableFarmersDelight) {
+                addTillingModded(recipes, hoe, "farmersdelight:rich_soil", "farmersdelight:rich_soil_farmland");
+            }
+        } catch (Exception e) {
+            LogUtils.getLogger().error("Failed to generate farmland recipes for JEI: {}", e.getMessage());
+        }
+        LogUtils.getLogger().info("Generated {} farmland recipes for JEI", recipes.size());
+        return recipes;
+    }
+
+    private void addTilling(List<FarmlandRecipe> recipes, Ingredient hoe, net.minecraft.world.item.Item input, net.minecraft.world.item.Item result) {
+        recipes.add(new FarmlandRecipe(Ingredient.of(input), hoe, new ItemStack(result)));
+    }
+
+    private void addTillingModded(List<FarmlandRecipe> recipes, Ingredient hoe, String inputId, String resultId) {
+        try {
+            var inputOpt = BuiltInRegistries.ITEM.get(Identifier.parse(inputId));
+            var resultOpt = BuiltInRegistries.ITEM.get(Identifier.parse(resultId));
+            if (inputOpt.isEmpty() || inputOpt.get().value() == Items.AIR) return;
+            if (resultOpt.isEmpty() || resultOpt.get().value() == Items.AIR) return;
+            addTilling(recipes, hoe, inputOpt.get().value(), resultOpt.get().value());
+        } catch (Exception e) {
+            LogUtils.getLogger().error("Failed to add modded tilling recipe for {} -> {}: {}", inputId, resultId, e.getMessage());
+        }
     }
 
     @Override

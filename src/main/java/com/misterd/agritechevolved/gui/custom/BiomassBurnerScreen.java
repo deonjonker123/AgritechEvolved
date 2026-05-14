@@ -125,8 +125,10 @@ public class BiomassBurnerScreen extends AbstractContainerScreen<BiomassBurnerMe
             graphics.setComponentTooltipForNextFrame(this.font, List.of(
                     Component.translatable("tooltip.agritechevolved.burner.fuel_slot").withStyle(ChatFormatting.GOLD),
                     Component.translatable("tooltip.agritechevolved.burner.accepts").withStyle(ChatFormatting.GRAY),
+                    Component.translatable("tooltip.agritechevolved.burner.accepts_crude_biomass").withStyle(ChatFormatting.GREEN),
                     Component.translatable("tooltip.agritechevolved.burner.accepts_biomass").withStyle(ChatFormatting.GREEN),
-                    Component.translatable("tooltip.agritechevolved.burner.accepts_compacted_biomass").withStyle(ChatFormatting.GREEN)
+                    Component.translatable("tooltip.agritechevolved.burner.accepts_compacted_biomass").withStyle(ChatFormatting.GREEN),
+                    Component.translatable("tooltip.agritechevolved.burner.accepts_compacted_biomass_block").withStyle(ChatFormatting.GREEN)
             ), mouseX, mouseY);
             return;
         }

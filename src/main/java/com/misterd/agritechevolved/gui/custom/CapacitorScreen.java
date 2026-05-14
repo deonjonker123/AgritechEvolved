@@ -84,8 +84,7 @@ public class CapacitorScreen extends AbstractContainerScreen<CapacitorMenu> {
                             String.format("%.1f", pct)).withStyle(ChatFormatting.GRAY),
                     Component.translatable("tooltip.agritechevolved.capacitor.transfer_rate",
                             fmt.format(transferRate)).withStyle(ChatFormatting.AQUA),
-                    Component.translatable("tooltip.agritechevolved.capacitor.connects_all_sides").withStyle(ChatFormatting.GREEN),
-                    Component.translatable("tooltip.agritechevolved.capacitor.except_bottom").withStyle(ChatFormatting.DARK_GREEN)
+                    Component.translatable("tooltip.agritechevolved.capacitor.connects_all_sides").withStyle(ChatFormatting.GREEN)
             ), mouseX, mouseY);
             return;
         }

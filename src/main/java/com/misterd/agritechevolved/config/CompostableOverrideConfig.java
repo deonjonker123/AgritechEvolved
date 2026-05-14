@@ -29,7 +29,7 @@ public class CompostableOverrideConfig {
     private static boolean HAS_LOGGED_ERRORS = false;
     private static Path ERROR_LOG_PATH = null;
 
-    private static final Pattern SECTION_PATTERN   = Pattern.compile("\\[(\\w+)\\]");
+    private static final Pattern SECTION_PATTERN = Pattern.compile("\\[(\\w+)\\]");
     private static final Pattern KEY_VALUE_PATTERN = Pattern.compile("(\\w+)\\s*=\\s*(.+)");
 
     // -------------------------------------------------------------------------
@@ -92,8 +92,8 @@ public class CompostableOverrideConfig {
     // Public entry point
     // -------------------------------------------------------------------------
 
-    public static void loadOverrides(Set<String> compostableItems) {
-        Path configDir    = FMLPaths.CONFIGDIR.get().resolve("agritechevolved/compostable_overrides");
+    public static void loadOverrides(Set<String> compostableItems, Set<String> denseItems) {
+        Path configDir = FMLPaths.CONFIGDIR.get().resolve("agritechevolved/compostable_overrides");
         Path overridePath = configDir.resolve("compostable_config_overrides.toml");
         setupErrorLogger();
 
@@ -104,8 +104,11 @@ public class CompostableOverrideConfig {
         try {
             MAIN_LOGGER.info("Loading compostable overrides from {}", overridePath);
             Map<String, List<String>> sections = parseTomlFile(overridePath);
-            int count = processCompostableEntries(sections.getOrDefault("compostable", Collections.emptyList()), compostableItems);
-            MAIN_LOGGER.info("Successfully loaded {} compostable overrides", count);
+
+            int compostCount = processEntries(sections.getOrDefault("compostable", Collections.emptyList()), compostableItems, "compostable");
+            int denseCount = processEntries(sections.getOrDefault("dense", Collections.emptyList()), denseItems, "dense");
+
+            MAIN_LOGGER.info("Successfully loaded {} compostable and {} dense overrides", compostCount, denseCount);
         } catch (Exception e) {
             MAIN_LOGGER.error("Failed to load compostable override.toml file: {}", e.getMessage());
             logError("Failed to load compostable override.toml file: {}", e.getMessage());
@@ -139,7 +142,7 @@ public class CompostableOverrideConfig {
                 }
 
                 Matcher kvMatcher = KEY_VALUE_PATTERN.matcher(line);
-                if (kvMatcher.matches() && "compostable".equals(currentSection) && currentItems != null) {
+                if (kvMatcher.matches() && currentItems != null) {
                     String value = kvMatcher.group(2).trim();
                     if (value.startsWith("\"") && value.endsWith("\"")) {
                         value = value.substring(1, value.length() - 1);
@@ -156,22 +159,22 @@ public class CompostableOverrideConfig {
     // Entry processor
     // -------------------------------------------------------------------------
 
-    private static int processCompostableEntries(List<String> itemIds, Set<String> compostableItems) {
+    private static int processEntries(List<String> itemIds, Set<String> target, String sectionName) {
         int count = 0;
 
         for (String itemId : itemIds) {
             try {
                 if (RegistryHelper.getItem(itemId) == null) {
-                    MAIN_LOGGER.warn("Compostable override uses non-existent item: {}", itemId);
-                    logWarning("Compostable override uses non-existent item: {}", itemId);
+                    MAIN_LOGGER.warn("[{}] Override uses non-existent item: {}", sectionName, itemId);
+                    logWarning("[{}] Override uses non-existent item: {}", sectionName, itemId);
                     continue;
                 }
-                compostableItems.add(itemId);
+                target.add(itemId);
                 count++;
-                MAIN_LOGGER.info("Added compostable override for item: {}", itemId);
+                MAIN_LOGGER.info("[{}] Added override for item: {}", sectionName, itemId);
             } catch (Exception e) {
-                MAIN_LOGGER.error("Error processing compostable override for '{}': {}", itemId, e.getMessage());
-                logError("Error processing compostable override for '{}': {}", itemId, e.getMessage());
+                MAIN_LOGGER.error("[{}] Error processing override for '{}': {}", sectionName, itemId, e.getMessage());
+                logError("[{}] Error processing override for '{}': {}", sectionName, itemId, e.getMessage());
             }
         }
 
@@ -204,11 +207,11 @@ public class CompostableOverrideConfig {
     private static String createBasicTemplate() {
         return """
                 # Compostable Items Override Configuration
-                # This file allows you to add custom compostable items without modifying the core configuration.
+                # This file allows you to add custom compostable or dense items without modifying the core configuration.
                 # Any entries here will be ADDED to the existing configurations.
 
                 # How to use:
-                # 1. Add items to the [compostable] section using the format: item_name = "mod:item_id"
+                # 1. Add items to the appropriate section using the format: item_name = "mod:item_id"
                 # 2. Save the file and restart your game
 
                 # IMPORTANT: Make sure to verify the exact item IDs from your mods
@@ -216,16 +219,16 @@ public class CompostableOverrideConfig {
                 # The mod uses resource location format (e.g., "minecraft:wheat" not just "wheat")
                 # The easiest way to check IDs is with F3+H enabled (shows tooltip IDs) or via JEI/REI
 
-                # Example compostable items (organic materials for the Composter):
+                # Normal compostable items — use the items_per_biomass count from the main config
                 [compostable]
-                # clay = "minecraft:clay"
                 # custom_crop = "examplemod:corn"
                 # organic_waste = "examplemod:organic_matter"
 
-                # Notes:
-                # - All vanilla organic items are already included by default
-                # - Major mod compatibility (Mystical Agriculture, Farmer's Delight, etc.) is automatic
-                # - This file is only for adding items from mods that aren't automatically supported
+                # Dense items — compressed or pre-processed organics
+                # These use the dense_items_per_biomass count from the main config instead
+                [dense]
+                # compressed_plants = "examplemod:plant_bundle"
+                # crop_crate = "examplemod:wheat_crate"
                 """;
     }
 }

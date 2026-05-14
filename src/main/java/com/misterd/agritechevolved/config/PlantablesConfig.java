@@ -1859,8 +1859,8 @@ public class PlantablesConfig {
     private static void addImmersiveEngineeringFertilizers(List<FertilizerEntry> fertilizers) {
         FertilizerEntry f = new FertilizerEntry();
         f.item = "immersiveengineering:fertilizer";
-        f.speedMultiplier = (float) Config.getFertilizerFertilizedEssenceSpeedMultiplier();
-        f.yieldMultiplier = (float) Config.getFertilizerFertilizedEssenceYieldMultiplier();
+        f.speedMultiplier = (float) Config.getFertilizerImmersiveFertilizerSpeedMultiplier();
+        f.yieldMultiplier = (float) Config.getFertilizerImmersiveFertilizerYieldMultiplier();
         fertilizers.add(f);
     }
 

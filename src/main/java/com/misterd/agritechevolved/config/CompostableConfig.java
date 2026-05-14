@@ -17,6 +17,7 @@ public class CompostableConfig {
     private static final Logger LOGGER = LogUtils.getLogger();
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static Set<String> compostableItems = new HashSet<>();
+    private static Set<String> denseItems = new HashSet<>();
 
     public static void loadConfig() {
         LOGGER.info("CompostableConfig.loadConfig() invoked.");
@@ -35,7 +36,7 @@ public class CompostableConfig {
             processConfig(getDefaultConfig());
         }
 
-        CompostableOverrideConfig.loadOverrides(compostableItems);
+        CompostableOverrideConfig.loadOverrides(compostableItems, denseItems);
     }
 
     private static void createDefaultConfig(Path configPath) {
@@ -53,8 +54,10 @@ public class CompostableConfig {
         LOGGER.info("Generating default compostable config.");
         CompostableConfigData config = new CompostableConfigData();
         config.compostableItems = new ArrayList<>();
+        config.denseItems = new ArrayList<>();
 
         addVanillaCompostables(config.compostableItems);
+        addVanillaDenseItems(config.denseItems);
 
         if (Config.enableMysticalAgriculture) {
             LOGGER.info("Adding Mystical Agriculture compostables");
@@ -67,6 +70,8 @@ public class CompostableConfig {
         if (Config.enableFarmersDelight) {
             LOGGER.info("Adding Farmer's Delight compostables");
             addFarmersDelightCompostables(config.compostableItems);
+            LOGGER.info("Adding Farmer's Delight dense items");
+            addFarmersDelightDenseItems(config.denseItems);
         }
         if (Config.enableArsNouveau) {
             LOGGER.info("Adding Ars Nouveau compostables");
@@ -91,6 +96,8 @@ public class CompostableConfig {
         if (Config.enableEvilCraft) {
             LOGGER.info("Adding EvilCraft compostables");
             addEvilCraftCompostables(config.compostableItems);
+            LOGGER.info("Adding EvilCraft dense items");
+            addEvilCraftDenseItems(config.denseItems);
         }
         if (Config.enableIntegratedDynamics) {
             LOGGER.info("Adding Integrated Dynamics compostables");
@@ -125,6 +132,38 @@ public class CompostableConfig {
     }
 
     // -------------------------------------------------------------------------
+    // Dense item lists
+    // -------------------------------------------------------------------------
+
+    private static void addVanillaDenseItems(List<String> items) {
+        items.addAll(Arrays.asList(
+                "minecraft:hay_block",
+                "agritechevolved:crude_biomass"
+        ));
+    }
+
+    private static void addFarmersDelightDenseItems(List<String> items) {
+        items.addAll(Arrays.asList(
+                "farmersdelight:carrot_crate",
+                "farmersdelight:potato_crate",
+                "farmersdelight:beetroot_crate",
+                "farmersdelight:cabbage_crate",
+                "farmersdelight:tomato_crate",
+                "farmersdelight:onion_crate",
+                "farmersdelight:rice_bale",
+                "farmersdelight:rice_bag",
+                "farmersdelight:straw_bale",
+                "farmersdelight:organic_compost"
+        ));
+    }
+
+    private static void addEvilCraftDenseItems(List<String> items) {
+        items.addAll(Arrays.asList(
+                "evilcraft:condensed_blood"
+        ));
+    }
+
+    // -------------------------------------------------------------------------
     // Compostable item lists
     // -------------------------------------------------------------------------
 
@@ -145,7 +184,8 @@ public class CompostableConfig {
                 "minecraft:acacia_sapling", "minecraft:dark_oak_sapling",
                 "minecraft:cherry_sapling", "minecraft:mangrove_propagule",
                 "minecraft:azalea", "minecraft:flowering_azalea",
-                "minecraft:crimson_fungus", "minecraft:warped_fungus","minecraft:pale_oak_sapling"
+                "minecraft:crimson_fungus", "minecraft:warped_fungus",
+                "minecraft:pale_oak_sapling"
         ));
         // Crops and food
         items.addAll(Arrays.asList(
@@ -153,7 +193,8 @@ public class CompostableConfig {
                 "minecraft:pumpkin", "minecraft:sugar_cane", "minecraft:bamboo",
                 "minecraft:kelp", "minecraft:cactus", "minecraft:apple",
                 "minecraft:sweet_berries", "minecraft:glow_berries",
-                "minecraft:poisonous_potato", "minecraft:melon"
+                "minecraft:poisonous_potato", "minecraft:melon",
+                "minecraft:sugar", "minecraft:paper"
         ));
         // Leaves and natural blocks
         items.addAll(Arrays.asList(
@@ -200,7 +241,11 @@ public class CompostableConfig {
         // Animal drops
         items.addAll(Arrays.asList(
                 "minecraft:rotten_flesh", "minecraft:bone", "minecraft:spider_eye",
-                "minecraft:leather", "minecraft:feather", "minecraft:string"
+                "minecraft:leather", "minecraft:feather", "minecraft:string",
+                "minecraft:rabbit_hide", "minecraft:ink_sac", "minecraft:glow_ink_sac",
+                "minecraft:salmon", "minecraft:cod", "minecraft:tropical_fish",
+                "minecraft:pufferfish", "minecraft:fermented_spider_eye",
+                "minecraft:phantom_membrane"
         ));
     }
 
@@ -230,7 +275,7 @@ public class CompostableConfig {
                 "mysticalagriculture:grains_of_infinity_seeds",
                 "mysticalagriculture:mystical_flower_seeds",
                 "mysticalagriculture:marble_seeds", "mysticalagriculture:limestone_seeds",
-                "mysticalagriculture:basalt_seeds", "mysticalagriculture:menril_seeds",
+                "mysticalagriculture:basalt_seats", "mysticalagriculture:menril_seeds",
                 "mysticalagriculture:prudentium_essence"
         ));
         // Tier 3
@@ -330,7 +375,14 @@ public class CompostableConfig {
                 "farmersdelight:cabbage_seeds", "farmersdelight:tomato_seeds",
                 "farmersdelight:onion", "farmersdelight:cabbage",
                 "farmersdelight:tomato", "farmersdelight:rice",
-                "farmersdelight:rice_panicle", "farmersdelight:organic_compost"
+                "farmersdelight:rice_panicle", "farmersdelight:straw",
+                "farmersdelight:tree_bark", "farmersdelight:sandy_shrub",
+                "farmersdelight:wild_cabbages", "farmersdelight:wild_onions",
+                "farmersdelight:wild_tomatoes", "farmersdelight:wild_carrots",
+                "farmersdelight:wild_potatoes", "farmersdelight:wild_beetroots",
+                "farmersdelight:wild_rice", "farmersdelight:brown_mushroom_colony",
+                "farmersdelight:red_mushroom_colony", "farmersdelight:rotten_tomato",
+                "farmersdelight:cabbage_leaf", "farmersdelight:pumpkin_slice"
         ));
     }
 
@@ -688,7 +740,7 @@ public class CompostableConfig {
                 "cobblemon:watmel_berry", "cobblemon:wepear_berry",
                 "cobblemon:wiki_berry", "cobblemon:yache_berry"
         ));
-        // Apricorn saplings and fruits
+
         items.addAll(Arrays.asList(
                 "cobblemon:red_apricorn_seed", "cobblemon:red_apricorn",
                 "cobblemon:yellow_apricorn_seed", "cobblemon:yellow_apricorn",
@@ -699,7 +751,7 @@ public class CompostableConfig {
                 "cobblemon:white_apricorn_seed", "cobblemon:white_apricorn",
                 "cobblemon:saccharine_sapling"
         ));
-        // Plants and herbs
+
         items.addAll(Arrays.asList(
                 "cobblemon:revival_herb", "cobblemon:pep_up_flower",
                 "cobblemon:vivichoke_seeds", "cobblemon:vivichoke",
@@ -724,31 +776,37 @@ public class CompostableConfig {
         ));
     }
 
-    // -------------------------------------------------------------------------
-    // Config processing
-    // -------------------------------------------------------------------------
-
     private static void processConfig(CompostableConfigData configData) {
         compostableItems.clear();
+        denseItems.clear();
         if (configData.compostableItems != null) {
             compostableItems.addAll(configData.compostableItems);
         }
-        LOGGER.info("Loaded {} compostable items from config", compostableItems.size());
+        if (configData.denseItems != null) {
+            denseItems.addAll(configData.denseItems);
+        }
+        LOGGER.info("Loaded {} compostable items and {} dense items from config",
+                compostableItems.size(), denseItems.size());
     }
 
     public static boolean isCompostable(String itemId) {
         return compostableItems.contains(itemId);
     }
 
+    public static boolean isDenseItem(String itemId) {
+        return denseItems.contains(itemId);
+    }
+
     public static Set<String> getCompostableItems() {
         return new HashSet<>(compostableItems);
     }
 
-    // -------------------------------------------------------------------------
-    // Data class
-    // -------------------------------------------------------------------------
+    public static Set<String> getDenseItems() {
+        return new HashSet<>(denseItems);
+    }
 
     public static class CompostableConfigData {
         public List<String> compostableItems;
+        public List<String> denseItems;
     }
 }

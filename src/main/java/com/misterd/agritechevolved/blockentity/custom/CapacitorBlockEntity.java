@@ -75,7 +75,6 @@ public class CapacitorBlockEntity extends BlockEntity implements MenuProvider {
 
         if (be.energyStored > 0) {
             for (Direction dir : Direction.values()) {
-                if (dir == Direction.DOWN) continue;
                 if (be.energyStored <= 0) break;
 
                 BlockPos neighborPos = pos.relative(dir);
@@ -115,7 +114,6 @@ public class CapacitorBlockEntity extends BlockEntity implements MenuProvider {
     }
 
     public EnergyHandler getEnergyHandler(@Nullable Direction side) {
-        if (side == Direction.DOWN) return null;
         return new BEEnergyHandler(this);
     }
 

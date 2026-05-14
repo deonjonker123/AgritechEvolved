@@ -65,7 +65,7 @@ public class ComposterBlockEntity extends BlockEntity implements MenuProvider {
         public boolean isValid(int index, ItemResource resource) {
             if (resource.isEmpty()) return false;
             if (index >= INPUT_SLOTS_START && index < INPUT_SLOTS_START + INPUT_SLOTS_COUNT)
-                return isCompostable(resource.toStack());
+                return isCompostableItem(resource.toStack());
             if (index >= OUTPUT_SLOTS_START && index < OUTPUT_SLOTS_START + OUTPUT_SLOTS_COUNT)
                 return true;
             return index == MODULE_SLOT && isSpeedModule(resource.toStack());
@@ -84,6 +84,7 @@ public class ComposterBlockEntity extends BlockEntity implements MenuProvider {
         super(ATEBlockEntities.COMPOSTER_BE.get(), pos, blockState);
     }
 
+
     public static void tick(Level level, BlockPos pos, BlockState state, ComposterBlockEntity be) {
         if (level.isClientSide()) return;
 
@@ -92,7 +93,7 @@ public class ComposterBlockEntity extends BlockEntity implements MenuProvider {
         boolean hasPower = be.energyStored >= requiredEnergy;
 
         int baseTime = Config.getComposterBaseProcessingTime();
-        if (!hasPower) baseTime *= 3;
+        if (hasPower) baseTime /= 3;
         int actualTime = (int) Math.max(1, baseTime / be.getModuleSpeedModifier());
 
         if (be.canProcess()) {
@@ -125,14 +126,27 @@ public class ComposterBlockEntity extends BlockEntity implements MenuProvider {
     }
 
     private boolean canProcess() {
-        return countAvailableOrganicItems() >= Config.getComposterItemsPerBiomass() && hasSpaceForBiomass();
+        return (countNormalItems() >= Config.getComposterItemsPerBiomass()
+                || countDenseItems() >= Config.getComposterDenseItemsPerBiomass())
+                && hasSpaceForBiomass();
     }
 
-    private int countAvailableOrganicItems() {
+    private int countNormalItems() {
         int count = 0;
         for (int i = INPUT_SLOTS_START; i < INPUT_SLOTS_START + INPUT_SLOTS_COUNT; i++) {
             ItemStack stack = getStack(i);
-            if (!stack.isEmpty() && isCompostable(stack)) count += stack.getCount();
+            if (!stack.isEmpty() && CompostableConfig.isCompostable(RegistryHelper.getItemId(stack)))
+                count += stack.getCount();
+        }
+        return count;
+    }
+
+    private int countDenseItems() {
+        int count = 0;
+        for (int i = INPUT_SLOTS_START; i < INPUT_SLOTS_START + INPUT_SLOTS_COUNT; i++) {
+            ItemStack stack = getStack(i);
+            if (!stack.isEmpty() && CompostableConfig.isDenseItem(RegistryHelper.getItemId(stack)))
+                count += stack.getCount();
         }
         return count;
     }
@@ -148,10 +162,12 @@ public class ComposterBlockEntity extends BlockEntity implements MenuProvider {
     }
 
     private void processItems() {
-        int toConsume = Config.getComposterItemsPerBiomass();
-        for (int i = INPUT_SLOTS_START; i < INPUT_SLOTS_START + INPUT_SLOTS_COUNT && toConsume > 0; i++) {
-            ItemStack stack = getStack(i);
-            if (!stack.isEmpty() && isCompostable(stack)) {
+        int denseNeeded = Config.getComposterDenseItemsPerBiomass();
+        if (countDenseItems() >= denseNeeded) {
+            int toConsume = denseNeeded;
+            for (int i = INPUT_SLOTS_START; i < INPUT_SLOTS_START + INPUT_SLOTS_COUNT && toConsume > 0; i++) {
+                ItemStack stack = getStack(i);
+                if (stack.isEmpty() || !CompostableConfig.isDenseItem(RegistryHelper.getItemId(stack))) continue;
                 int taken = Math.min(toConsume, stack.getCount());
                 try (Transaction tx = Transaction.openRoot()) {
                     inventory.extract(i, ItemResource.of(stack), taken, tx);
@@ -159,6 +175,20 @@ public class ComposterBlockEntity extends BlockEntity implements MenuProvider {
                 }
                 toConsume -= taken;
             }
+            addBiomassToOutput();
+            return;
+        }
+
+        int toConsume = Config.getComposterItemsPerBiomass();
+        for (int i = INPUT_SLOTS_START; i < INPUT_SLOTS_START + INPUT_SLOTS_COUNT && toConsume > 0; i++) {
+            ItemStack stack = getStack(i);
+            if (stack.isEmpty() || !CompostableConfig.isCompostable(RegistryHelper.getItemId(stack))) continue;
+            int taken = Math.min(toConsume, stack.getCount());
+            try (Transaction tx = Transaction.openRoot()) {
+                inventory.extract(i, ItemResource.of(stack), taken, tx);
+                tx.commit();
+            }
+            toConsume -= taken;
         }
         addBiomassToOutput();
     }
@@ -173,8 +203,10 @@ public class ComposterBlockEntity extends BlockEntity implements MenuProvider {
         }
     }
 
-    private boolean isCompostable(ItemStack stack) {
-        return !stack.isEmpty() && CompostableConfig.isCompostable(RegistryHelper.getItemId(stack));
+    public boolean isCompostableItem(ItemStack stack) {
+        if (stack.isEmpty()) return false;
+        String id = RegistryHelper.getItemId(stack);
+        return CompostableConfig.isCompostable(id) || CompostableConfig.isDenseItem(id);
     }
 
     private boolean isSpeedModule(ItemStack stack) {
@@ -234,7 +266,7 @@ public class ComposterBlockEntity extends BlockEntity implements MenuProvider {
 
             @Override
             public int insert(int index, ItemResource resource, int amount, TransactionContext tx) {
-                boolean isInput  = index >= INPUT_SLOTS_START && index < INPUT_SLOTS_START + INPUT_SLOTS_COUNT;
+                boolean isInput = index >= INPUT_SLOTS_START && index < INPUT_SLOTS_START + INPUT_SLOTS_COUNT;
                 boolean isModule = index == MODULE_SLOT;
                 return (isInput || isModule) ? inventory.insert(index, resource, amount, tx) : 0;
             }
@@ -266,19 +298,23 @@ public class ComposterBlockEntity extends BlockEntity implements MenuProvider {
             be.energyStored = snapshot;
         }
 
-        @Override protected void onRootCommit(Integer originalState) {
+        @Override
+        protected void onRootCommit(Integer originalState) {
             be.setChanged();
         }
 
-        @Override public long getAmountAsLong() {
+        @Override
+        public long getAmountAsLong() {
             return be.energyStored;
         }
 
-        @Override public long getCapacityAsLong() {
+        @Override
+        public long getCapacityAsLong() {
             return Config.getComposterEnergyBuffer();
         }
 
-        @Override public int insert(int amount, TransactionContext tx) {
+        @Override
+        public int insert(int amount, TransactionContext tx) {
             int received = Math.min(amount, Config.getComposterEnergyBuffer() - be.energyStored);
             if (received <= 0) return 0;
             updateSnapshots(tx);
@@ -286,7 +322,8 @@ public class ComposterBlockEntity extends BlockEntity implements MenuProvider {
             return received;
         }
 
-        @Override public int extract(int amount, TransactionContext tx) { return 0; }
+        @Override
+        public int extract(int amount, TransactionContext tx) { return 0; }
     }
 
     public static void registerCapabilities(RegisterCapabilitiesEvent event) {
@@ -329,18 +366,20 @@ public class ComposterBlockEntity extends BlockEntity implements MenuProvider {
 
     public int getMaxProgress() {
         int baseTime = Config.getComposterBaseProcessingTime();
-        if (energyStored < Config.getComposterBasePowerConsumption()) baseTime *= 4;
+        if (energyStored >= Config.getComposterBasePowerConsumption()) baseTime /= 3;
         return (int) Math.max(1, baseTime / getModuleSpeedModifier());
     }
 
-    public int getOrganicItemsCollected() { return countAvailableOrganicItems(); }
-    public int getRequiredOrganicItems()  { return Config.getComposterItemsPerBiomass(); }
+    public int getOrganicItemsCollected() { return countNormalItems(); }
+    public int getRequiredOrganicItems() { return Config.getComposterItemsPerBiomass(); }
+    public int getDenseItemsCollected() { return countDenseItems(); }
+    public int getRequiredDenseItems() { return Config.getComposterDenseItemsPerBiomass(); }
 
     @Override
     protected void saveAdditional(ValueOutput output) {
         super.saveAdditional(output);
         inventory.serialize(output);
-        output.putInt("progress",     progress);
+        output.putInt("progress", progress);
         output.putInt("energyStored", energyStored);
     }
 
