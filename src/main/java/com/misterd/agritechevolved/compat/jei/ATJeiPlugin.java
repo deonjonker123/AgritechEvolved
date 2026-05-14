@@ -113,18 +113,32 @@ public class ATJeiPlugin implements IModPlugin {
     }
 
     private List<CompostRecipe> generateCompostRecipes() {
-        List<CompostRecipe> recipes = CompostableConfig.getCompostableItems().stream()
+        List<CompostRecipe> recipes = new ArrayList<>();
+
+        CompostableConfig.getCompostableItems().stream()
                 .map(itemId -> {
-                    try {
-                        return CompostRecipe.create(itemId);
-                    } catch (Exception e) {
+                    try { return CompostRecipe.create(itemId); }
+                    catch (Exception e) {
                         LogUtils.getLogger().error("Failed to create compost recipe for {}: {}", itemId, e.getMessage());
                         return null;
                     }
                 })
                 .filter(Objects::nonNull)
-                .toList();
-        LogUtils.getLogger().info("Generated {} compost recipes for JEI", recipes.size());
+                .forEach(recipes::add);
+
+        CompostableConfig.getDenseItems().stream()
+                .map(itemId -> {
+                    try { return CompostRecipe.createDense(itemId); }
+                    catch (Exception e) {
+                        LogUtils.getLogger().error("Failed to create dense compost recipe for {}: {}", itemId, e.getMessage());
+                        return null;
+                    }
+                })
+                .filter(Objects::nonNull)
+                .forEach(recipes::add);
+
+        LogUtils.getLogger().info("Generated {} compost recipes for JEI ({} dense)", recipes.size(),
+                CompostableConfig.getDenseItems().size());
         return recipes;
     }
 

@@ -60,7 +60,9 @@ public class CompostRecipeCategory implements IRecipeCategory<CompostRecipe> {
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, CompostRecipe recipe, IFocusGroup focuses) {
-        int itemsRequired = Config.getComposterItemsPerBiomass();
+        int itemsRequired = recipe.isDense()
+                ? Config.getComposterDenseItemsPerBiomass()
+                : Config.getComposterItemsPerBiomass();
 
         IRecipeSlotBuilder inputSlot = builder.addSlot(RecipeIngredientRole.INPUT, 10, 10);
         recipe.getInput().items()
