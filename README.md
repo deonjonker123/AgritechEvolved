@@ -57,6 +57,7 @@ Fertilizer can be automated via hopper or pipe into any of the four cardinal sid
 - Pam's HarvestCraft 2 - Crops
 - Actually Additions
 - Croptopia
+- The Aether II
 
 ### **Supported Tree Mods**
 
@@ -69,12 +70,14 @@ Fertilizer can be automated via hopper or pipe into any of the four cardinal sid
 - Pam's HarvestCraft 2 - Trees
 - Croptopia
 - EvilCraft
+- The Aether II
 
 ### **Supported Soil Mods**
 
 -   Mystical Agriculture farmlands
 -   Farmer's Delight soils
 -   Just Dire Things goosoils
+- The Aether II
 
 ## Advanced Configuration System
 
