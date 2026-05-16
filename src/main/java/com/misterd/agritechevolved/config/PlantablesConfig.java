@@ -73,6 +73,10 @@ public class PlantablesConfig {
             LOGGER.info("Adding Silent Gear crops to AgriTech: Evolved config");
             addSilentGearCrops(defaultCrops);
         }
+        if (Config.enableTheAetherII) {
+            LOGGER.info("Adding The Aether II crops to AgriTech: Evolved config");
+            addTheAetherIICrops(defaultCrops);
+        }
         if (Config.enableImmersiveEngineering) {
             LOGGER.info("Adding Immersive Engineering Hemp Fiber to AgriTech: Evolved config");
             addImmersiveEngineering(defaultCrops);
@@ -129,6 +133,10 @@ public class PlantablesConfig {
             LOGGER.info("Adding Occultism trees to AgriTech: Evolved config");
             addOccultismTrees(defaultTrees);
         }
+        if (Config.enableTheAetherII) {
+            LOGGER.info("Adding The Aether II trees to AgriTech: Evolved config");
+            addTheAetherIITrees(defaultTrees);
+        }
         if (Config.enablePamsTrees) {
             LOGGER.info("Adding Pam's HarvestCraft - Trees to AgriTech: Evolved config");
             addPamsTrees(defaultTrees);
@@ -156,6 +164,10 @@ public class PlantablesConfig {
         if (Config.enableJustDireThings) {
             LOGGER.info("Adding Just Dire Things soils to AgriTech: Evolved config");
             addJustDireThingsSoils(defaultSoils);
+        }
+        if (Config.enableTheAetherII) {
+            LOGGER.info("Adding The Aether II Soils to the Agritech: Evolved config");
+            addTheAetherIISoils(defaultSoils);
         }
         config.allowedSoils = defaultSoils;
 
@@ -192,7 +204,8 @@ public class PlantablesConfig {
             "justdirethings:goosoil_tier3",
             "justdirethings:goosoil_tier4",
             "farmersdelight:rich_soil_farmland",
-            "agritechevolved:infused_farmland"
+            "agritechevolved:infused_farmland",
+            "aether_ii:aether_farmland"
     );
 
     // Standard soils accepted by most ground-planted crops (flowers, berries, etc.)
@@ -206,6 +219,7 @@ public class PlantablesConfig {
             "minecraft:mycelium",
             "minecraft:mud",
             "minecraft:moss_block",
+            "minecraft:pale_moss_block",
             "minecraft:muddy_mangrove_roots",
             "minecraft:water_bucket",
             "mysticalagriculture:inferium_farmland",
@@ -220,7 +234,16 @@ public class PlantablesConfig {
             "justdirethings:goosoil_tier4",
             "farmersdelight:rich_soil_farmland",
             "agritechevolved:infused_farmland",
-            "agritechevolved:mulch"
+            "agritechevolved:mulch",
+            "aether_ii:aether_farmland",
+            "aether_ii:aether_dirt",
+            "aether_ii:coarse_aether_dirt",
+            "aether_ii:mycelial_aether_dirt",
+            "aether_ii:aether_grass_block",
+            "aether_ii:enchanted_aether_grass_block",
+            "aether_ii:bryalinn_moss_block",
+            "aether_ii:shayelinn_moss_block",
+            "aether_ii:ambrelinn_moss_block"
     );
 
     private static CropEntry makeCrop(String seed, List<String> validSoils, DropEntry... drops) {
@@ -266,11 +289,17 @@ public class PlantablesConfig {
                 makeDrop("minecraft:pumpkin", 1, 1)));
 
         crops.add(makeCrop("minecraft:sugar_cane",
-                List.of("minecraft:dirt", "minecraft:grass_block", "minecraft:sand", "minecraft:red_sand", "snad:snad", "snad:red_snad", "agritechevolved:mulch"),
+                List.of("minecraft:dirt", "minecraft:grass_block", "minecraft:sand", "minecraft:red_sand",
+                        "snad:snad", "snad:red_snad", "agritechevolved:mulch",
+                        "utilitarian:snad", "utilitarian:red_snad",
+                        "aether_ii:aether_dirt", "aether_ii:coarse_aether_dirt", "aether_ii:mycelial_aether_dirt",
+                        "aether_ii:aether_grass_block","aether_ii:enchanted_aether_grass_block",
+                        "aether_ii:bryalinn_moss_block", "aether_ii:shayelinn_moss_block", "aether_ii:ambrelinn_moss_block"),
                 makeDrop("minecraft:sugar_cane", 1, 3)));
 
         crops.add(makeCrop("minecraft:cactus",
-                List.of("minecraft:sand", "minecraft:red_sand", "snad:snad", "snad:red_snad"),
+                List.of("minecraft:sand", "minecraft:red_sand", "snad:snad", "snad:red_snad",
+                        "utilitarian:snad", "utilitarian:red_snad"),
                 makeDrop("minecraft:cactus", 1, 3),
                 makeDrop("minecraft:cactus_flower", 1, 1, 0.25F)));
 
@@ -278,28 +307,22 @@ public class PlantablesConfig {
                 List.of("minecraft:dirt", "minecraft:grass_block", "minecraft:rooted_dirt", "minecraft:coarse_dirt",
                         "minecraft:podzol", "minecraft:mycelium", "minecraft:mud", "minecraft:moss_block",
                         "minecraft:muddy_mangrove_roots",
-                        "farmersdelight:rich_soil", "farmersdelight:organic_compost", "agritechevolved:mulch"),
+                        "farmersdelight:rich_soil", "farmersdelight:organic_compost", "agritechevolved:mulch",
+                        "aether_ii:aether_dirt", "aether_ii:coarse_aether_dirt", "aether_ii:mycelial_aether_dirt",
+                        "aether_ii:aether_grass_block","aether_ii:enchanted_aether_grass_block",
+                        "aether_ii:bryalinn_moss_block", "aether_ii:shayelinn_moss_block", "aether_ii:ambrelinn_moss_block"),
                 makeDrop("minecraft:bamboo", 2, 4)));
 
-        crops.add(makeCrop("minecraft:sweet_berries",
-                List.of("minecraft:farmland", "minecraft:dirt", "minecraft:grass_block", "minecraft:rooted_dirt",
-                        "minecraft:coarse_dirt", "minecraft:podzol", "minecraft:mycelium", "minecraft:mud",
-                        "minecraft:moss_block", "minecraft:muddy_mangrove_roots", "minecraft:pale_moss_block",
-                        "mysticalagriculture:inferium_farmland", "mysticalagriculture:prudentium_farmland",
-                        "mysticalagriculture:tertium_farmland", "mysticalagriculture:imperium_farmland",
-                        "mysticalagriculture:supremium_farmland", "mysticalagradditions:insanium_farmland",
-
-                        "justdirethings:goosoil_tier1", "justdirethings:goosoil_tier2",
-                        "justdirethings:goosoil_tier3", "justdirethings:goosoil_tier4",
-                        "farmersdelight:rich_soil_farmland", "farmersdelight:rich_soil", "farmersdelight:organic_compost"),
+        crops.add(makeCrop("minecraft:sweet_berries", STANDARD_GROUND_SOILS,
                 makeDrop("minecraft:sweet_berries", 2, 4)));
 
         crops.add(makeCrop("minecraft:glow_berries",
-                List.of("minecraft:moss_block", "minecraft:pale_moss_block"),
+                List.of("minecraft:moss_block", "minecraft:pale_moss_block",
+                        "aether_ii:bryalinn_moss_block", "aether_ii:shayelinn_moss_block", "aether_ii:ambrelinn_moss_block"),
                 makeDrop("minecraft:glow_berries", 2, 4)));
 
         crops.add(makeCrop("minecraft:nether_wart",
-                List.of("minecraft:soul_sand", "snad:suol_snad"),
+                List.of("minecraft:soul_sand", "snad:suol_snad", "utilitarian:soul_snad"),
                 makeDrop("minecraft:nether_wart", 1, 3)));
 
         crops.add(makeCrop("minecraft:chorus_flower",
@@ -332,12 +355,14 @@ public class PlantablesConfig {
 
         crops.add(makeCrop("minecraft:brown_mushroom",
                 List.of("minecraft:mycelium", "minecraft:podzol",
-                        "farmersdelight:rich_soil", "farmersdelight:organic_compost", "agritechevolved:mulch"),
+                        "farmersdelight:rich_soil", "farmersdelight:organic_compost", "agritechevolved:mulch",
+                        "aether_ii:mycelial_aether_dirt"),
                 makeDrop("minecraft:brown_mushroom", 1, 1)));
 
         crops.add(makeCrop("minecraft:red_mushroom",
                 List.of("minecraft:mycelium", "minecraft:podzol",
-                        "farmersdelight:rich_soil", "farmersdelight:organic_compost", "agritechevolved:mulch"),
+                        "farmersdelight:rich_soil", "farmersdelight:organic_compost", "agritechevolved:mulch",
+                        "aether_ii:mycelial_aether_dirt"),
                 makeDrop("minecraft:red_mushroom", 1, 1)));
 
         crops.add(makeCrop("minecraft:cocoa_beans",
@@ -364,6 +389,77 @@ public class PlantablesConfig {
         }
     }
 
+    private static void addTheAetherIICrops(List<CropEntry> crops) {
+        crops.add(makeCrop("aether_ii:orange_tree", STANDARD_GROUND_SOILS,
+                makeDrop("aether_ii:orange", 1, 3),
+                makeDrop("aether_ii:orange_tree", 1, 1, 0.2F)));
+
+        crops.add(makeCrop("aether_ii:blueberry_bush_stem", STANDARD_GROUND_SOILS,
+                makeDrop("aether_ii:blueberry", 1, 3),
+                makeDrop("aether_ii:blueberry_bush_stem", 1, 1, 0.2F)));
+
+        crops.add(makeCrop("aether_ii:blueberry_bush", STANDARD_GROUND_SOILS,
+                makeDrop("aether_ii:blueberry", 1, 3),
+                makeDrop("aether_ii:blueberry_bush_stem", 1, 1, 0.2F)));
+
+        crops.add(makeCrop("aether_ii:brettl_cane",
+                List.of("aether_ii:quicksoil"),
+                makeDrop("aether_ii:brettl_grass", 1, 1),
+                makeDrop("aether_ii:brettl_flower", 1, 1, 0.2F)));
+
+        crops.add(makeCrop("aether_ii:bryalinn_moss_block",
+                List.of("aether_ii:holystone"),
+                makeDrop("aether_ii:bryalinn_moss_block", 1, 3),
+                makeDrop("aether_ii:bryalinn_moss_vines", 1, 2, 0.5F),
+                makeDrop("aether_ii:bryalinn_moss_flowers", 1, 2, 0.5F),
+                makeDrop("aether_ii:bryalinn_moss_carpet", 1, 2, 0.5F)));
+
+        crops.add(makeCrop("aether_ii:shayelinn_moss_block",
+                List.of("aether_ii:aether_dirt"),
+                makeDrop("aether_ii:shayelinn_moss_block", 1, 3),
+                makeDrop("aether_ii:bryalinn_moss_vines", 1, 2, 0.5F),
+                makeDrop("aether_ii:shayelinn_moss_carpet", 1, 2, 0.5F)));
+
+        crops.add(makeCrop("aether_ii:ambrelinn_moss_block",
+                List.of("aether_ii:aether_dirt"),
+                makeDrop("aether_ii:ambrelinn_moss_block", 1, 3),
+                makeDrop("aether_ii:ambrelinn_moss_vines", 1, 2, 0.5F),
+                makeDrop("aether_ii:ambrelinn_moss_carpet", 1, 2, 0.5F)));
+
+        crops.add(makeCrop("aether_ii:magnetic_shroom",
+                List.of("minecraft:mycelium", "minecraft:podzol",
+                        "farmersdelight:rich_soil", "farmersdelight:organic_compost", "agritechevolved:mulch",
+                        "aether_ii:mycelial_aether_dirt"),
+                makeDrop("aether_ii:ambrelinn_moss_block", 1, 3),
+                makeDrop("aether_ii:ambrelinn_moss_vines", 1, 2, 0.5F),
+                makeDrop("aether_ii:ambrelinn_moss_carpet", 1, 2, 0.5F)));
+
+        crops.add(makeCrop("aether_ii:arilum_bulbs",
+                List.of("minecraft:water_bucket"),
+                makeDrop("aether_ii:arilum_bulbs", 1, 1)));
+
+        crops.add(makeCrop("aether_ii:shield_fern", STANDARD_GROUND_SOILS,
+                makeDrop("aether_ii:shield_fern", 1, 1)));
+
+        crops.add(makeCrop("aether_ii:aether_fern", STANDARD_GROUND_SOILS,
+                makeDrop("aether_ii:aether_fern", 1, 1)));
+
+        crops.add(makeCrop("aether_ii:blade_poa", STANDARD_GROUND_SOILS,
+                makeDrop("aether_ii:blade_poa", 1, 1)));
+
+        crops.add(makeCrop("aether_ii:valkyrie_sprout", STANDARD_GROUND_SOILS,
+                makeDrop("aether_ii:valkyrie_sprout", 1, 1),
+                makeDrop("aether_ii:valkyrie_wings", 1, 1)));
+
+        for (String flower : new String[]{
+                "aether_ii:tarabloom", "aether_ii:hesperose", "aether_ii:poasprout",
+                "aether_ii:lilichime", "aether_ii:pluracian", "aether_ii:satival_shoot",
+                "aether_ii:aechor_cutting", "aether_ii:carrion_cutting"
+        }) {
+            crops.add(makeCrop(flower, STANDARD_GROUND_SOILS, makeDrop(flower, 1, 1)));
+        }
+    }
+
     private static final List<String> STANDARD_TREE_SOILS = List.of(
             "agritechevolved:infused_farmland", "agritechevolved:mulch",
             "minecraft:dirt", "minecraft:grass_block", "minecraft:podzol",
@@ -378,7 +474,11 @@ public class PlantablesConfig {
             "justdirethings:goosoil_tier1", "justdirethings:goosoil_tier2",
             "justdirethings:goosoil_tier3", "justdirethings:goosoil_tier4",
 
-            "farmersdelight:rich_soil_farmland", "farmersdelight:organic_compost"
+            "farmersdelight:rich_soil_farmland", "farmersdelight:organic_compost",
+
+            "aether_ii:aether_dirt", "aether_ii:coarse_aether_dirt", "aether_ii:mycelial_aether_dirt",
+            "aether_ii:aether_grass_block","aether_ii:enchanted_aether_grass_block",
+            "aether_ii:bryalinn_moss_block", "aether_ii:shayelinn_moss_block", "aether_ii:ambrelinn_moss_block"
     );
 
     private static TreeEntry makeTree(String sapling, List<String> validSoils, DropEntry... drops) {
@@ -558,18 +658,7 @@ public class PlantablesConfig {
         crops.add(makeCrop("ars_nouveau:magebloom_crop", STANDARD_FARMLAND_SOILS,
                 makeDrop("ars_nouveau:magebloom", 1, 1, 1.0F)));
 
-        crops.add(makeCrop("ars_nouveau:sourceberry_bush",
-                List.of("minecraft:farmland", "minecraft:dirt", "minecraft:grass_block",
-                        "minecraft:rooted_dirt", "minecraft:coarse_dirt", "minecraft:podzol",
-                        "minecraft:mycelium", "minecraft:mud", "minecraft:moss_block",
-                        "minecraft:muddy_mangrove_roots",
-                        "mysticalagriculture:inferium_farmland", "mysticalagriculture:prudentium_farmland",
-                        "mysticalagriculture:tertium_farmland", "mysticalagriculture:imperium_farmland",
-                        "mysticalagriculture:supremium_farmland", "mysticalagradditions:insanium_farmland",
-                        "justdirethings:goosoil_tier1", "justdirethings:goosoil_tier2",
-                        "justdirethings:goosoil_tier3", "justdirethings:goosoil_tier4",
-                        "farmersdelight:rich_soil_farmland", "farmersdelight:organic_compost",
-                        "farmersdelight:rich_soil", "agritechevolved:mulch"),
+        crops.add(makeCrop("ars_nouveau:sourceberry_bush", STANDARD_GROUND_SOILS,
                 makeDrop("ars_nouveau:sourceberry_bush", 2, 4, 1.0F)));
     }
 
@@ -1183,7 +1272,9 @@ public class PlantablesConfig {
         trees.add(makeTree("minecraft:mangrove_propagule",
                 List.of("minecraft:mud", "minecraft:muddy_mangrove_roots", "minecraft:dirt",
                         "minecraft:coarse_dirt", "minecraft:grass_block", "minecraft:podzol",
-                        "minecraft:mycelium"),
+                        "minecraft:mycelium", "aether_ii:aether_dirt", "aether_ii:coarse_aether_dirt", "aether_ii:mycelial_aether_dirt",
+                        "aether_ii:aether_grass_block","aether_ii:enchanted_aether_grass_block",
+                        "aether_ii:bryalinn_moss_block", "aether_ii:shayelinn_moss_block", "aether_ii:ambrelinn_moss_block"),
                 makeDrop("minecraft:mangrove_log", 2, 6),
                 makeDrop("minecraft:mangrove_propagule", 1, 2, 0.5F),
                 makeDrop("minecraft:stick", 1, 2, 0.5F),
@@ -1202,7 +1293,7 @@ public class PlantablesConfig {
 
         List<String> azaleaSoils = List.of("minecraft:dirt", "minecraft:grass_block", "minecraft:podzol",
                 "minecraft:coarse_dirt", "minecraft:rooted_dirt", "minecraft:moss_block",
-                "minecraft:mycelium", "agritechevolved:mulch");
+                "minecraft:mycelium", "agritechevolved:mulch", "aether_ii:bryalinn_moss_block", "aether_ii:shayelinn_moss_block", "aether_ii:ambrelinn_moss_block");
 
         trees.add(makeTree("minecraft:azalea", azaleaSoils,
                 makeDrop("minecraft:oak_log", 2, 6),
@@ -1294,6 +1385,72 @@ public class PlantablesConfig {
                 makeDrop("silentgear:netherwood_log", 2, 6),
                 makeDrop("silentgear:netherwood_sapling", 1, 1, 0.3F),
                 makeDrop("minecraft:stick", 1, 2, 0.5F)));
+    }
+
+    private static void addTheAetherIITrees(List<TreeEntry> trees) {
+        trees.add(makeTree("aether_ii:skyroot_sapling", STANDARD_TREE_SOILS,
+                makeDrop("aether_ii:skyroot_log", 4, 6),
+                makeDrop("aether_ii:skyroot_sapling", 1, 1, 0.3F),
+                makeDrop("aether_ii:skyroot_pinecone", 1, 3, 1.0F),
+                makeDrop("aether_ii:skyroot_stick", 1, 2, 0.5F)));
+
+        trees.add(makeTree("aether_ii:skyplane_sapling", STANDARD_TREE_SOILS,
+                makeDrop("aether_ii:skyroot_log", 4, 6),
+                makeDrop("aether_ii:skyplane_sapling", 1, 1, 0.3F),
+                makeDrop("aether_ii:skyroot_pinecone", 1, 3, 1.0F),
+                makeDrop("aether_ii:skyroot_stick", 1, 2, 0.5F)));
+
+        trees.add(makeTree("aether_ii:skybirch_sapling", STANDARD_TREE_SOILS,
+                makeDrop("aether_ii:skyroot_log", 4, 6),
+                makeDrop("aether_ii:skybirch_sapling", 1, 1, 0.3F),
+                makeDrop("aether_ii:skyroot_pinecone", 1, 3, 1.0F),
+                makeDrop("aether_ii:skyroot_stick", 1, 2, 0.5F)));
+
+        trees.add(makeTree("aether_ii:skypine_sapling", STANDARD_TREE_SOILS,
+                makeDrop("aether_ii:skyroot_log", 4, 6),
+                makeDrop("aether_ii:skypine_sapling", 1, 1, 0.3F),
+                makeDrop("aether_ii:skyroot_pinecone", 1, 3, 1.0F),
+                makeDrop("aether_ii:skyroot_stick", 1, 2, 0.5F)));
+
+        trees.add(makeTree("aether_ii:wisproot_sapling", STANDARD_TREE_SOILS,
+                makeDrop("aether_ii:wisproot_log", 6, 8),
+                makeDrop("aether_ii:mossy_wisproot_log_base", 1, 1),
+                makeDrop("aether_ii:wisproot_sapling", 1, 1, 0.3F),
+                makeDrop("aether_ii:skyroot_pinecone", 1, 3, 1.0F),
+                makeDrop("aether_ii:skyroot_stick", 1, 2, 0.5F)));
+
+        trees.add(makeTree("aether_ii:wisptop_sapling", STANDARD_TREE_SOILS,
+                makeDrop("aether_ii:wisproot_log", 6, 8),
+                makeDrop("aether_ii:mossy_wisproot_log_base", 1, 1),
+                makeDrop("aether_ii:wisptop_sapling", 1, 1, 0.3F),
+                makeDrop("aether_ii:skyroot_pinecone", 1, 3, 1.0F),
+                makeDrop("aether_ii:skyroot_stick", 1, 2, 0.5F)));
+
+        trees.add(makeTree("aether_ii:greatroot_sapling", STANDARD_TREE_SOILS,
+                makeDrop("aether_ii:greatroot_log", 6, 8),
+                makeDrop("aether_ii:greatroot_sapling", 1, 1, 0.3F),
+                makeDrop("aether_ii:skyroot_pinecone", 1, 3, 1.0F),
+                makeDrop("aether_ii:skyroot_stick", 1, 2, 0.5F)));
+
+        trees.add(makeTree("aether_ii:greatoak_sapling", STANDARD_TREE_SOILS,
+                makeDrop("aether_ii:greatroot_log", 6, 8),
+                makeDrop("aether_ii:greatoak_sapling", 1, 1, 0.3F),
+                makeDrop("aether_ii:skyroot_pinecone", 1, 3, 1.0F),
+                makeDrop("aether_ii:skyroot_stick", 1, 2, 0.5F)));
+
+        trees.add(makeTree("aether_ii:greatboa_sapling", STANDARD_TREE_SOILS,
+                makeDrop("aether_ii:greatroot_log", 6, 8),
+                makeDrop("aether_ii:greatboa_sapling", 1, 1, 0.3F),
+                makeDrop("aether_ii:skyroot_pinecone", 1, 3, 1.0F),
+                makeDrop("aether_ii:skyroot_stick", 1, 2, 0.5F)));
+
+        trees.add(makeTree("aether_ii:amberoot_sapling", STANDARD_TREE_SOILS,
+                makeDrop("aether_ii:amberoot_log", 6, 8),
+                makeDrop("aether_ii:amberoot_deposit", 2, 4),
+                makeDrop("aether_ii:amberoot_sapling", 1, 1, 0.3F),
+                makeDrop("aether_ii:golden_amber", 1, 1, 0.1F),
+                makeDrop("aether_ii:skyroot_pinecone", 1, 3, 1.0F),
+                makeDrop("aether_ii:skyroot_stick", 1, 2, 0.5F)));
     }
 
     private static void addPamsTrees(List<TreeEntry> trees) {
@@ -1731,35 +1888,59 @@ public class PlantablesConfig {
     private static void addVanillaSoils(List<SoilEntry> soils) {
         record S(String id, float mod) {}
         for (S s : new S[]{
-                new S("minecraft:dirt",                   0.475F),
-                new S("minecraft:coarse_dirt",            0.475F),
-                new S("minecraft:podzol",                 0.475F),
-                new S("minecraft:mycelium",               0.475F),
-                new S("minecraft:mud",                    0.5F),
-                new S("minecraft:muddy_mangrove_roots",   0.5F),
-                new S("minecraft:rooted_dirt",            0.475F),
-                new S("minecraft:moss_block",             0.475F),
-                new S("minecraft:pale_moss_block",        0.475F),
-                new S("minecraft:farmland",               0.5F),
-                new S("minecraft:sand",                   0.5F),
-                new S("minecraft:red_sand",               0.5F),
-                new S("minecraft:grass_block",            0.475F),
-                new S("minecraft:soul_sand",              0.5F),
-                new S("minecraft:end_stone",              0.5F),
-                new S("minecraft:jungle_log",             0.5F),
-                new S("minecraft:jungle_wood",            0.5F),
-                new S("minecraft:stripped_jungle_log",    0.5F),
-                new S("minecraft:water_bucket",           0.5F),
-                new S("minecraft:stripped_jungle_wood",   0.5F),
-                new S("minecraft:crimson_nylium",         0.6F),
-                new S("minecraft:warped_nylium",          0.6F),
-                new S("minecraft:stone",                  0.6F),
-                new S("snad:suol_snad",                  1.2F),
-                new S("snad:snad",                  1.2F),
-                new S("snad:red_snad",                  1.2F),
+                new S("minecraft:dirt",0.475F),
+                new S("minecraft:coarse_dirt",0.475F),
+                new S("minecraft:podzol",0.475F),
+                new S("minecraft:mycelium",0.475F),
+                new S("minecraft:mud",0.5F),
+                new S("minecraft:muddy_mangrove_roots",0.5F),
+                new S("minecraft:rooted_dirt", 0.475F),
+                new S("minecraft:moss_block", 0.475F),
+                new S("minecraft:pale_moss_block", 0.475F),
+                new S("minecraft:farmland", 0.5F),
+                new S("minecraft:sand", 0.5F),
+                new S("minecraft:red_sand", 0.5F),
+                new S("minecraft:grass_block", 0.475F),
+                new S("minecraft:soul_sand", 0.5F),
+                new S("minecraft:end_stone", 0.5F),
+                new S("minecraft:jungle_log", 0.5F),
+                new S("minecraft:jungle_wood", 0.5F),
+                new S("minecraft:stripped_jungle_log",0.5F),
+                new S("minecraft:water_bucket", 0.5F),
+                new S("minecraft:stripped_jungle_wood", 0.5F),
+                new S("minecraft:crimson_nylium", 0.6F),
+                new S("minecraft:warped_nylium",0.6F),
+                new S("minecraft:stone",0.6F),
+                new S("snad:suol_snad", 1.2F),
+                new S("snad:snad", 1.2F),
+                new S("snad:red_snad", 1.2F),
+                new S("utilitarian:soul_snad", 1.2F),
+                new S("utilitarian:snad", 1.2F),
+                new S("utilitarian:red_snad", 1.2F),
                 new S("agritechevolved:infused_farmland", 1.5F),
                 new S("agritechevolved:mulch", 1.0F)
+        }) {
+            SoilEntry e = new SoilEntry();
+            e.soil = s.id();
+            e.growthModifier = s.mod();
+            soils.add(e);
+        }
+    }
 
+    private static void addTheAetherIISoils(List<SoilEntry> soils) {
+        record S(String id, float mod) {}
+        for (S s : new S[]{
+                new S("aether_ii:aether_dirt", 0.475F),
+                new S("aether_ii:coarse_aether_dirt",  0.475F),
+                new S("aether_ii:mycelial_aether_dirt", 0.475F),
+                new S("aether_ii:aether_grass_block", 0.475F),
+                new S("aether_ii:enchanted_aether_grass_block", 1.0F),
+                new S("aether_ii:bryalinn_moss_block",  0.475F),
+                new S("aether_ii:shayelinn_moss_block", 0.475F),
+                new S("aether_ii:ambrelinn_moss_block", 0.475F),
+                new S("aether_ii:aether_farmland", 0.6F),
+                new S("aether_ii:quicksoil", 0.5F),
+                new S("aether_ii:holystone", 0.6F)
         }) {
             SoilEntry e = new SoilEntry();
             e.soil = s.id();

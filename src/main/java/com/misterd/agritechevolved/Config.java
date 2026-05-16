@@ -37,6 +37,7 @@ public class Config {
     public static ModConfigSpec.BooleanValue ENABLE_CROPTOPIA;
     public static ModConfigSpec.BooleanValue ENABLE_COBBLEMON;
     public static ModConfigSpec.BooleanValue ENABLE_ACTUALLY_ADDITIONS;
+    public static ModConfigSpec.BooleanValue ENABLE_THE_AETHER_II;
 
     // -------------------------------------------------------------------------
     // Modules
@@ -132,6 +133,7 @@ public class Config {
     public static boolean enableCroptopia;
     public static boolean enableCobblemon;
     public static boolean enableActuallyAdditions;
+    public static boolean enableTheAetherII;
 
     // =========================================================================
     // Registration
@@ -170,6 +172,7 @@ public class Config {
         ENABLE_CROPTOPIA = COMMON_BUILDER.comment("Enable Croptopia compatibility").define("enable_croptopia", true);
         ENABLE_COBBLEMON = COMMON_BUILDER.comment("Enable Cobblemon compatibility").define("enable_cobblemon", true);
         ENABLE_ACTUALLY_ADDITIONS = COMMON_BUILDER.comment("Enable Actually Additions compatibility").define("enable_actually_additions", true);
+        ENABLE_THE_AETHER_II = COMMON_BUILDER.comment("Enable The Aether II compatibility").define("enable_the_aether_ii", true);
         COMMON_BUILDER.pop();
     }
 
@@ -397,6 +400,7 @@ public class Config {
         enableCroptopia = ENABLE_CROPTOPIA.get() && ModList.get().isLoaded("croptopia");
         enableCobblemon = ENABLE_COBBLEMON.get() && ModList.get().isLoaded("cobblemon");
         enableActuallyAdditions = ENABLE_ACTUALLY_ADDITIONS.get() && ModList.get().isLoaded("actuallyadditions");
+        enableTheAetherII = ENABLE_THE_AETHER_II.get() && ModList.get().isLoaded("aether_ii");
         LOGGER.info("AgriTech: Evolved configuration loaded");
         CompostableConfig.loadConfig();
         PlantablesConfig.loadConfig();
@@ -423,7 +427,8 @@ public class Config {
                 new Mod(enablePamsTrees, "pamhc2trees", "Pam's HarvestCraft - Trees"),
                 new Mod(enableCroptopia, "croptopia", "Croptopia"),
                 new Mod(enableCobblemon, "cobblemon", "Cobblemon"),
-                new Mod(enableActuallyAdditions, "actuallyadditions", "Actually Additions")
+                new Mod(enableActuallyAdditions, "actuallyadditions", "Actually Additions"),
+                new Mod(enableTheAetherII, "aether_ii", "The Aether II")
         }) {
             if (m.enabled() && ModList.get().isLoaded(m.modId())) {
                 LOGGER.info("  - {}: ENABLED", m.label());

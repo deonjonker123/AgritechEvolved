@@ -119,6 +119,12 @@ public class CompostableConfig {
             LOGGER.info("Adding Croptopia compostables");
             addCroptopiaCompostables(config.compostableItems);
         }
+        if (Config.enableTheAetherII) {
+            LOGGER.info("Adding The Aether II compostables");
+            addTheAetherIICompostables(config.compostableItems);
+            LOGGER.info("Adding The Aether II dense items");
+            addTheAetherIIDenseItems(config.denseItems);
+        }
         if (Config.enableCobblemon) {
             LOGGER.info("Adding Cobblemon compostables");
             addCobblemonCompostables(config.compostableItems);
@@ -138,7 +144,19 @@ public class CompostableConfig {
     private static void addVanillaDenseItems(List<String> items) {
         items.addAll(Arrays.asList(
                 "minecraft:hay_block",
-                "agritechevolved:crude_biomass"
+                "agritechevolved:crude_biomass",
+                "minecraft:bread",
+                "minecraft:cookie",
+                "minecraft:baked_potato",
+                "minecraft:cake",
+                "minecraft:pumpkin_pie",
+                "minecraft:dried_kelp_block",
+                "minecraft:shroomlight",
+                "minecraft:mushroom_stem",
+                "minecraft:brown_mushroom_block",
+                "minecraft:red_mushroom_block",
+                "minecraft:nether_wart_block",
+                "minecraft:warped_wart_block"
         ));
     }
 
@@ -154,6 +172,20 @@ public class CompostableConfig {
                 "farmersdelight:rice_bag",
                 "farmersdelight:straw_bale",
                 "farmersdelight:organic_compost"
+        ));
+    }
+
+    private static void addTheAetherIIDenseItems(List<String> items) {
+        items.addAll(Arrays.asList(
+                "aether_ii:enchanted_blueberry",
+                "aether_ii:enchanted_orange",
+                "aether_ii:enchanted_wyndberry",
+                "aether_ii:golden_wyndberry",
+                "aether_ii:brettl_grass_bundle",
+                "aether_ii:blueberry_bush",
+                "aether_ii:magnetic_shroom_block",
+                "aether_ii:spotted_magnetic_shroom_block",
+                "aether_ii:magnetic_shroom_stem"
         ));
     }
 
@@ -190,8 +222,8 @@ public class CompostableConfig {
         // Crops and food
         items.addAll(Arrays.asList(
                 "minecraft:wheat", "minecraft:beetroot", "minecraft:melon_slice",
-                "minecraft:pumpkin", "minecraft:sugar_cane", "minecraft:bamboo",
-                "minecraft:kelp", "minecraft:cactus", "minecraft:apple",
+                "minecraft:pumpkin","minecraft:carved_pumpkin", "minecraft:sugar_cane", "minecraft:bamboo",
+                "minecraft:kelp", "minecraft:cactus", "minecraft:apple", "minecraft:dried_kelp",
                 "minecraft:sweet_berries", "minecraft:glow_berries",
                 "minecraft:poisonous_potato", "minecraft:melon",
                 "minecraft:sugar", "minecraft:paper"
@@ -209,18 +241,14 @@ public class CompostableConfig {
                 "minecraft:spore_blossom", "minecraft:pink_petals",
                 "minecraft:sculk_vein", "minecraft:glow_lichen", "minecraft:sea_pickle",
                 "minecraft:twisting_vines", "minecraft:weeping_vines", "minecraft:leaf_litter",
-                "minecraft:big_dripleaf", "minecraft:small_dripleaf"
+                "minecraft:big_dripleaf", "minecraft:small_dripleaf",
+                "minecraft:crimson_roots", "minecraft:warped_roots"
         ));
         // Grass and foliage
         items.addAll(Arrays.asList(
                 "minecraft:short_grass", "minecraft:fern",
                 "minecraft:tall_grass", "minecraft:large_fern",
-                "minecraft:dead_bush", "minecraft:stick"
-        ));
-        // Dirt variants
-        items.addAll(Arrays.asList(
-                "minecraft:dirt", "minecraft:grass_block", "minecraft:coarse_dirt",
-                "minecraft:podzol", "minecraft:mycelium"
+                "minecraft:dead_bush", "minecraft:stick", "minecraft:nether_sprouts"
         ));
         // Flowers
         items.addAll(Arrays.asList(
@@ -774,6 +802,33 @@ public class CompostableConfig {
                 "actuallyadditions:flax_seeds",
                 "actuallyadditions:coffee_beans"
         ));
+    }
+
+    private static void addTheAetherIICompostables(List<String> items) {
+        items.addAll(Arrays.asList(
+                "aether_ii:skyroot_leaf_pile", "aether_ii:skyplane_leaf_pile","aether_ii:skybirch_leaf_pile","aether_ii:skypine_leaf_pile",
+                "aether_ii:wisproot_leaf_pile","aether_ii:wisptop_leaf_pile","aether_ii:greatroot_leaf_pile","aether_ii:greatoak_leaf_pile",
+                "aether_ii:greatboa_leaf_pile","aether_ii:amberoot_leaf_pile",
+
+                "aether_ii:skyroot_leaves", "aether_ii:skyplane_leaves","aether_ii:skybirch_leaves","aether_ii:skypine_leaves",
+                "aether_ii:wisproot_leaves","aether_ii:wisptop_leaves","aether_ii:greatroot_leaves","aether_ii:greatoak_leaves",
+                "aether_ii:greatboa_leaves","aether_ii:amberoot_leaves",
+
+                "aether_ii:skyroot_sapling", "aether_ii:skyplane_sapling","aether_ii:skybirch_sapling","aether_ii:skypine_sapling",
+                "aether_ii:wisproot_sapling","aether_ii:wisptop_sapling","aether_ii:greatroot_sapling","aether_ii:greatoak_sapling",
+                "aether_ii:greatboa_sapling","aether_ii:amberoot_sapling",
+
+                "aether_ii:short_aether_grass", "aether_ii:medium_aether_grass","aether_ii:tall_aether_grass","aether_ii:brettl_flower","aether_ii:brettl_grass",
+                "aether_ii:blueberry","aether_ii:orange","aether_ii:wyndberry","aether_ii:satival_bulb","aether_ii:arilum_bulbs",
+                "aether_ii:aether_bush","aether_ii:blueberry_bush_stem","aether_ii:orange_tree","aether_ii:aether_fern",
+                "aether_ii:shield_fern", "aether_ii:blade_poa", "aether_ii:tarabloom", "aether_ii:hesperose", "aether_ii:poasprout",
+                "aether_ii:lilichime", "aether_ii:pluracian", "aether_ii:satival_shoot",
+                "aether_ii:aechor_cutting", "aether_ii:carrion_cutting", "aether_ii:brettl_cane",
+                "aether_ii:bryalinn_moss_block", "aether_ii:shayelinn_moss_block", "aether_ii:ambrelinn_moss_block",
+                "aether_ii:bryalinn_moss_carpet", "aether_ii:shayelinn_moss_carpet", "aether_ii:ambrelinn_moss_carpet",
+                "aether_ii:bryalinn_moss_vines", "aether_ii:shayelinn_moss_vines", "aether_ii:ambrelinn_moss_vines",
+                "aether_ii:bryalinn_moss_flowers", "aether_ii:valkyrie_wings", "aether_ii:valkyrie_sprout", "aether_ii:magnetic_shroom"
+                ));
     }
 
     private static void processConfig(CompostableConfigData configData) {
