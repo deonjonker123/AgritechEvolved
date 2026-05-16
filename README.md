@@ -1,4 +1,6 @@
 
+![ATE](https://raw.githubusercontent.com/deonjonker123/AgritechEvolved/refs/heads/26.1.2/ate_ban.png)
+
 # AgriTech: Evolved
 
 AgriTech: Evolved is a comprehensive agricultural automation mod for Minecraft that enhances farming with advanced machines, modules, and extensive mod compatibility.
