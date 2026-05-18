@@ -18,20 +18,20 @@ public class BiomassBurnerScreen extends AbstractContainerScreen<BiomassBurnerMe
     private static final Identifier GUI_TEXTURE =
             Identifier.fromNamespaceAndPath("agritechevolved", "textures/gui/burner_gui.png");
 
-    private static final int GUI_W = 176, GUI_H = 166;
+    private static final int GUI_W = 176, GUI_H = 165;
 
-    private static final int PROGRESS_BAR_X     = 62;
-    private static final int PROGRESS_BAR_Y     = 59;
-    private static final int PROGRESS_BAR_W     = 52;
-    private static final int PROGRESS_BAR_H     = 6;
-    private static final int PROGRESS_BAR_TEX_X = 0;
-    private static final int PROGRESS_BAR_TEX_Y = 166;
+    private static final int PROGRESS_BAR_X = 103;
+    private static final int PROGRESS_BAR_Y = 28;
+    private static final int PROGRESS_BAR_W = 6;
+    private static final int PROGRESS_BAR_H = 24;
+    private static final int PROGRESS_BAR_TEX_X = 176;
+    private static final int PROGRESS_BAR_TEX_Y = 0;
 
-    private static final int ENERGY_BAR_X     = 158;
-    private static final int ENERGY_BAR_Y     = 15;
-    private static final int ENERGY_BAR_W     = 10;
-    private static final int ENERGY_BAR_H     = 52;
-    private static final int ENERGY_BAR_TEX_X = 176;
+    private static final int ENERGY_BAR_X = 163;
+    private static final int ENERGY_BAR_Y = 14;
+    private static final int ENERGY_BAR_W = 6;
+    private static final int ENERGY_BAR_H = 54;
+    private static final int ENERGY_BAR_TEX_X = 182;
 
     private static final int FUEL_SLOT_X = 79;
     private static final int FUEL_SLOT_Y = 31;
@@ -40,7 +40,7 @@ public class BiomassBurnerScreen extends AbstractContainerScreen<BiomassBurnerMe
 
     public BiomassBurnerScreen(BiomassBurnerMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title, GUI_W, GUI_H);
-        this.inventoryLabelY = GUI_H - 96;
+        this.inventoryLabelY = GUI_H - 94;
     }
 
     @Override
@@ -54,19 +54,17 @@ public class BiomassBurnerScreen extends AbstractContainerScreen<BiomassBurnerMe
                 this.leftPos, this.topPos, 0.0F, 0.0F,
                 this.imageWidth, this.imageHeight, 256, 256);
 
-        // Progress bar (horizontal, left-to-right)
         int progress = menu.getProgress(), maxProgress = menu.getMaxProgress();
         if (maxProgress > 0) {
-            int filled = (int) (PROGRESS_BAR_W * (double) progress / maxProgress);
+            int filled = (int) (PROGRESS_BAR_H * (double) progress / maxProgress);
             if (filled > 0) {
                 graphics.blit(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE,
-                        this.leftPos + PROGRESS_BAR_X, this.topPos + PROGRESS_BAR_Y,
-                        (float) PROGRESS_BAR_TEX_X, (float) PROGRESS_BAR_TEX_Y,
-                        filled, PROGRESS_BAR_H, 256, 256);
+                        this.leftPos + PROGRESS_BAR_X, this.topPos + PROGRESS_BAR_Y + PROGRESS_BAR_H - filled,
+                        (float) PROGRESS_BAR_TEX_X, (float) (PROGRESS_BAR_TEX_Y + PROGRESS_BAR_H - filled),
+                        PROGRESS_BAR_W, filled, 256, 256);
             }
         }
 
-        // Energy bar (vertical, bottom-up)
         int energy = menu.getEnergyStored(), maxEnergy = menu.getMaxEnergyStored();
         if (maxEnergy > 0) {
             int filled = (int) (ENERGY_BAR_H * (double) energy / maxEnergy);

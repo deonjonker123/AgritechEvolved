@@ -58,14 +58,14 @@ public class AdvancedPlanterMenu extends AbstractContainerMenu {
     private void addBlockEntitySlots() {
         addSlot(new AdvancedSlot(blockEntity, SLOT_PLANT, 8, 19));
         addSlot(new AdvancedSlot(blockEntity, SLOT_SOIL, 8, 55));
-        addSlot(new AdvancedSlot(blockEntity, SLOT_MODULE_1, 152, 19));
-        addSlot(new AdvancedSlot(blockEntity, SLOT_MODULE_2, 170, 19));
-        addSlot(new AdvancedSlot(blockEntity, SLOT_FERTILIZER, 161, 55));
+        addSlot(new AdvancedSlot(blockEntity, SLOT_MODULE_1, 134, 19));
+        addSlot(new AdvancedSlot(blockEntity, SLOT_MODULE_2, 134, 36));
+        addSlot(new AdvancedSlot(blockEntity, SLOT_FERTILIZER, 134, 55));
 
         int idx = SLOT_OUTPUT_MIN;
         for (int row = 0; row < 3; row++)
             for (int col = 0; col < 4; col++)
-                addSlot(new AdvancedSlot(blockEntity, idx++, 62 + col * 18, 19 + row * 18));
+                addSlot(new AdvancedSlot(blockEntity, idx++, 44 + col * 18, 19 + row * 18));
     }
 
     private void addDataSlots() {
@@ -225,12 +225,12 @@ public class AdvancedPlanterMenu extends AbstractContainerMenu {
     private void addPlayerInventory(Inventory inv) {
         for (int row = 0; row < 3; row++)
             for (int col = 0; col < 9; col++)
-                addSlot(new Slot(inv, col + row * 9 + 9, 26 + col * 18, 88 + row * 18));
+                addSlot(new Slot(inv, col + row * 9 + 9, 8 + col * 18, 88 + row * 18));
     }
 
     private void addPlayerHotbar(Inventory inv) {
         for (int i = 0; i < 9; i++)
-            addSlot(new Slot(inv, i, 26 + i * 18, 146));
+            addSlot(new Slot(inv, i, 8 + i * 18, 146));
     }
 
     private static class AdvancedSlot extends Slot {

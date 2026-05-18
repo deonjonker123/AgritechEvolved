@@ -172,7 +172,7 @@ public class BiomassBurnerMenu extends AbstractContainerMenu {
 
     private void addPlayerHotbar(Inventory inv) {
         for (int i = 0; i < 9; i++)
-            addSlot(new Slot(inv, i, 8 + i * 18, 140));
+            addSlot(new Slot(inv, i, 8 + i * 18, 139));
     }
 
     private static boolean isFuel(ItemStack stack) {

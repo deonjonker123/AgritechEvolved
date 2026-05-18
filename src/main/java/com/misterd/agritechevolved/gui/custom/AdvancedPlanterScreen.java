@@ -21,25 +21,24 @@ public class AdvancedPlanterScreen extends AbstractContainerScreen<AdvancedPlant
     private static final Identifier GUI_TEXTURE =
             Identifier.fromNamespaceAndPath("agritechevolved", "textures/gui/advanced_planter_gui.png");
 
-    private static final int GUI_W = 212;
-    private static final int GUI_H = 170;
+    private static final int GUI_W = 176;
+    private static final int GUI_H = 172;
 
-    private static final int GROWTH_BAR_X = 40;
-    private static final int GROWTH_BAR_Y = 19;
+    private static final int GROWTH_BAR_X = 31;
+    private static final int GROWTH_BAR_Y = 18;
     private static final int GROWTH_BAR_W = 6;
-    private static final int GROWTH_BAR_H = 52;
-    private static final int GROWTH_BAR_TEX_X = 222;
+    private static final int GROWTH_BAR_H = 54;
+    private static final int GROWTH_BAR_TEX_X = 176;
 
-    private static final int ENERGY_BAR_X = 194;
-    private static final int ENERGY_BAR_Y = 19;
-    private static final int ENERGY_BAR_W = 10;
-    private static final int ENERGY_BAR_H = 52;
-    private static final int ENERGY_BAR_TEX_X = 212;
+    private static final int ENERGY_BAR_X = 163;
+    private static final int ENERGY_BAR_Y = 18;
+    private static final int ENERGY_BAR_W = 6;
+    private static final int ENERGY_BAR_H = 54;
+    private static final int ENERGY_BAR_TEX_X = 182;
 
     public AdvancedPlanterScreen(AdvancedPlanterMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title, GUI_W, GUI_H);
-        this.inventoryLabelX = 26;
-        this.inventoryLabelY = GUI_H - 93;
+        this.inventoryLabelY = GUI_H - 94;
     }
 
     @Override
@@ -111,19 +110,19 @@ public class AdvancedPlanterScreen extends AbstractContainerScreen<AdvancedPlant
             ), mouseX, mouseY);
             return;
         }
-        if (isHovering(152, 19, 16, 16, mouseX, mouseY) && menu.slots.get(38).getItem().isEmpty()) {
+        if (isHovering(134, 19, 16, 16, mouseX, mouseY) && menu.slots.get(38).getItem().isEmpty()) {
             graphics.setComponentTooltipForNextFrame(this.font, List.of(
                     Component.translatable("tooltip.agritechevolved.slot.upgrade_1")
             ), mouseX, mouseY);
             return;
         }
-        if (isHovering(170, 19, 16, 16, mouseX, mouseY) && menu.slots.get(39).getItem().isEmpty()) {
+        if (isHovering(134, 36, 16, 16, mouseX, mouseY) && menu.slots.get(39).getItem().isEmpty()) {
             graphics.setComponentTooltipForNextFrame(this.font, List.of(
                     Component.translatable("tooltip.agritechevolved.slot.upgrade_2")
             ), mouseX, mouseY);
             return;
         }
-        if (isHovering(161, 55, 16, 16, mouseX, mouseY) && menu.slots.get(40).getItem().isEmpty()) {
+        if (isHovering(134, 55, 16, 16, mouseX, mouseY) && menu.slots.get(40).getItem().isEmpty()) {
             graphics.setComponentTooltipForNextFrame(this.font, List.of(
                     Component.translatable("tooltip.agritechevolved.slot.fertilizer")
             ), mouseX, mouseY);

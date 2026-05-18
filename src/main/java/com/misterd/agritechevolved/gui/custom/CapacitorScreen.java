@@ -18,7 +18,7 @@ public class CapacitorScreen extends AbstractContainerScreen<CapacitorMenu> {
     private static final Identifier GUI_TEXTURE =
             Identifier.fromNamespaceAndPath("agritechevolved", "textures/gui/capacitor_gui.png");
 
-    private static final int GUI_W = 176, GUI_H = 151;
+    private static final int GUI_W = 176, GUI_H = 154;
 
     private static final int BAR_X = 8;
     private static final int BAR_Y = 19;
@@ -27,7 +27,7 @@ public class CapacitorScreen extends AbstractContainerScreen<CapacitorMenu> {
 
     public CapacitorScreen(CapacitorMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title, GUI_W, GUI_H);
-        this.inventoryLabelY = GUI_H - 92;
+        this.inventoryLabelY = GUI_H - 94;
     }
 
     @Override
@@ -47,7 +47,7 @@ public class CapacitorScreen extends AbstractContainerScreen<CapacitorMenu> {
             if (fillWidth > 0) {
                 graphics.blit(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE,
                         this.leftPos + BAR_X, this.topPos + BAR_Y,
-                        0.0F, 153.0F,
+                        0.0F, 154.0F,
                         fillWidth, BAR_H, 256, 256);
             }
         }
@@ -56,12 +56,12 @@ public class CapacitorScreen extends AbstractContainerScreen<CapacitorMenu> {
         int barCenterX = this.leftPos + BAR_X + BAR_W / 2;
         int barCenterY = this.topPos  + BAR_Y + BAR_H / 2 - this.minecraft.font.lineHeight;
         graphics.text(this.minecraft.font, energyText,
-                barCenterX - this.minecraft.font.width(energyText) / 2, barCenterY, 0xFFFFFF, true);
+                barCenterX - this.minecraft.font.width(energyText) / 2, barCenterY, 0xFFFFFFFF, true);
 
         if (maxEnergy > 0) {
             Component pctText = Component.literal(String.format("%.1f%%", (double) energy * 100.0 / maxEnergy));
             graphics.text(this.minecraft.font, pctText,
-                    barCenterX - this.minecraft.font.width(pctText) / 2, barCenterY + 10, 0xCCCCCC, true);
+                    barCenterX - this.minecraft.font.width(pctText) / 2, barCenterY + 10, 0xFFCCCCCC, true);
         }
 
         super.extractContents(graphics, mouseX, mouseY, partialTick);

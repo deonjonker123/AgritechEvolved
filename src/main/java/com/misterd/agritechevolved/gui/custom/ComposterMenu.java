@@ -172,12 +172,8 @@ public class ComposterMenu extends AbstractContainerMenu {
 
     private void addPlayerHotbar(Inventory inv) {
         for (int i = 0; i < 9; i++)
-            addSlot(new Slot(inv, i, 8 + i * 18, 147));
+            addSlot(new Slot(inv, i, 8 + i * 18, 146));
     }
-
-    // -------------------------------------------------------------------------
-    // Slot types
-    // -------------------------------------------------------------------------
 
     private static class ComposterSlot extends Slot {
         protected final ComposterBlockEntity be;
