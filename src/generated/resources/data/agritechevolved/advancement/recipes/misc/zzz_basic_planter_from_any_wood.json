@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "agritechevolved:basic_planter_from_any_wood"
+        "recipe": "agritechevolved:zzz_basic_planter_from_any_wood"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -26,7 +26,7 @@
   ],
   "rewards": {
     "recipes": [
-      "agritechevolved:basic_planter_from_any_wood"
+      "agritechevolved:zzz_basic_planter_from_any_wood"
     ]
   }
 }

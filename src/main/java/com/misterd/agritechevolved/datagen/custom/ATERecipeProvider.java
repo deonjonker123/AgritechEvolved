@@ -157,7 +157,7 @@ public class ATERecipeProvider extends RecipeProvider {
                 .define('H', Items.HOPPER)
                 .define('D', ItemTags.WOODEN_SLABS)
                 .unlockedBy("has_oak_log", has(Items.OAK_LOG))
-                .save(output, "agritechevolved:basic_planter_from_any_wood");
+                .save(output, "agritechevolved:zzz_basic_planter_from_any_wood");
 
         shaped(RecipeCategory.MISC, ATEBlocks.SPRUCE_PLANTER.get())
                 .pattern("P P")
