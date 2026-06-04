@@ -6,7 +6,10 @@ All notable changes to this project will be documented here.
 ### Added
 - Japanese translation (ja_jp) - thanks hamu6251ren0725-hue!
 
-
 ## [2.0.15.4+neoforge-mc26.1.2] - 2026-05-26
 ### Fixed
 - Fallback recipe for planters
+
+## [2.0.15.5+neoforge-mc26.1.2] - 2026-06-04
+### Main
+- Version Bump
