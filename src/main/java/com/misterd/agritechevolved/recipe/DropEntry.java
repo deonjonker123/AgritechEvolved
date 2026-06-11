@@ -3,6 +3,7 @@ package com.misterd.agritechevolved.recipe;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -18,7 +19,7 @@ public record DropEntry(Item item, int min, int max, float chance) {
     ).apply(instance, DropEntry::new));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, DropEntry> STREAM_CODEC = StreamCodec.composite(
-            ByteBufCodecs.registry(net.minecraft.core.registries.Registries.ITEM), DropEntry::item,
+            ByteBufCodecs.registry(Registries.ITEM), DropEntry::item,
             ByteBufCodecs.INT, DropEntry::min,
             ByteBufCodecs.INT, DropEntry::max,
             ByteBufCodecs.FLOAT, DropEntry::chance,
