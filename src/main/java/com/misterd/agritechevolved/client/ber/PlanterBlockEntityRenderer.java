@@ -3,7 +3,6 @@ package com.misterd.agritechevolved.client.ber;
 import com.misterd.agritechevolved.AgritechEvolved;
 import com.misterd.agritechevolved.block.custom.PlanterBlock;
 import com.misterd.agritechevolved.blockentity.custom.PlanterBlockEntity;
-import com.misterd.agritechevolved.config.PlantablesConfig;
 import com.misterd.agritechevolved.util.RegistryHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.QuadInstance;
@@ -67,6 +66,7 @@ public class PlanterBlockEntityRenderer
         public float growthProgress = 0f;
         public int growthStage = 0;
         public boolean soilIsWater = false;
+        public boolean isTree = false;
         public double distanceSq = 0.0;
         final ItemStackRenderState soilRenderState = new ItemStackRenderState();
         final BlockModelRenderState plantModel = new BlockModelRenderState();
@@ -86,18 +86,19 @@ public class PlanterBlockEntityRenderer
         state.plantStack = be.getStack(0).copy();
         state.growthProgress = be.getGrowthProgress();
         state.growthStage = be.getGrowthStage();
+        state.isTree = be.isTree();
         state.distanceSq = cameraPos.distanceToSqr(Vec3.atCenterOf(be.getBlockPos()));
         state.soilIsWater = !state.soilStack.isEmpty() && RegistryHelper.getItemId(state.soilStack).equals("minecraft:water_bucket");
 
         populateRenderState(state, state.soilStack, state.soilIsWater, state.plantStack,
-                state.growthStage, be.getLevel(), itemModelResolver, blockModelResolver);
+                state.isTree, state.growthStage, be.getLevel(), itemModelResolver, blockModelResolver);
     }
 
     @Override
     public void submit(RenderState state, PoseStack poseStack, SubmitNodeCollector collector, CameraRenderState cameraState) {
         submitShared(state.cloched, state.distanceSq,
                 state.soilStack, state.soilIsWater, state.soilRenderState,
-                state.plantStack, state.plantModel,
+                state.plantStack, state.isTree, state.plantModel,
                 state.growthProgress, state.lightCoords,
                 poseStack, collector);
     }
@@ -105,7 +106,7 @@ public class PlanterBlockEntityRenderer
     static void populateRenderState(
             RenderState state,
             ItemStack soilStack, boolean soilIsWater, ItemStack plantStack,
-            int growthStage, @Nullable Level level,
+            boolean isTree, int growthStage, @Nullable Level level,
             ItemModelResolver itemModelResolver, BlockModelResolver blockModelResolver) {
 
         if (!soilStack.isEmpty() && !soilIsWater) {
@@ -116,14 +117,10 @@ public class PlanterBlockEntityRenderer
 
         state.plantModel.clear();
         if (!plantStack.isEmpty() && !soilStack.isEmpty() && plantStack.getItem() instanceof BlockItem) {
-            String plantId = RegistryHelper.getItemId(plantStack);
-            boolean isTree = PlantablesConfig.isValidSapling(plantId);
-            boolean isCrop = PlantablesConfig.isValidSeed(plantId);
-
             if (isTree) {
                 BlockState saplingState = ((BlockItem) plantStack.getItem()).getBlock().defaultBlockState();
                 blockModelResolver.update(state.plantModel, saplingState, BLOCK_DISPLAY_CONTEXT);
-            } else if (isCrop) {
+            } else {
                 BlockState cropState = getCropBlockState(plantStack, growthStage);
                 if (cropState != null) {
                     blockModelResolver.update(state.plantModel, cropState, BLOCK_DISPLAY_CONTEXT);
@@ -135,7 +132,7 @@ public class PlanterBlockEntityRenderer
     public static void submitShared(
             boolean cloched, double distanceSq,
             ItemStack soilStack, boolean soilIsWater, ItemStackRenderState soilRenderState,
-            ItemStack plantStack, BlockModelRenderState plantModel,
+            ItemStack plantStack, boolean isTree, BlockModelRenderState plantModel,
             float growthProgress, int light,
             PoseStack poseStack, SubmitNodeCollector collector) {
 
@@ -168,9 +165,6 @@ public class PlanterBlockEntityRenderer
         }
 
         if (!plantModel.isEmpty()) {
-            String plantId = RegistryHelper.getItemId(plantStack);
-            boolean isTree = PlantablesConfig.isValidSapling(plantId);
-
             poseStack.pushPose();
             if (isTree) {
                 float scale = 0.3f + growthProgress * 0.4f;
@@ -205,11 +199,11 @@ public class PlanterBlockEntityRenderer
         float v0 = sprite.getV0(), v1 = sprite.getV1();
 
         collector.submitCustomGeometry(poseStack, RenderTypes.entityTranslucent(TextureAtlas.LOCATION_BLOCKS), (pose, consumer) -> {
-                    addWaterVertex(consumer, pose, xMin, y, zMin, u0, v0, light);
-                    addWaterVertex(consumer, pose, xMin, y, zMax, u0, v1, light);
-                    addWaterVertex(consumer, pose, xMax, y, zMax, u1, v1, light);
-                    addWaterVertex(consumer, pose, xMax, y, zMin, u1, v0, light);
-                });
+            addWaterVertex(consumer, pose, xMin, y, zMin, u0, v0, light);
+            addWaterVertex(consumer, pose, xMin, y, zMax, u0, v1, light);
+            addWaterVertex(consumer, pose, xMax, y, zMax, u1, v1, light);
+            addWaterVertex(consumer, pose, xMax, y, zMin, u1, v0, light);
+        });
     }
 
     private static void addWaterVertex(VertexConsumer c, PoseStack.Pose pose, float x, float y, float z, float u, float v, int light) {
@@ -230,9 +224,9 @@ public class PlanterBlockEntityRenderer
                 return def.setValue(ip, Math.min(age, max));
             }
         }
-        if (def.hasProperty(BlockStateProperties.AGE_7))  return def.setValue(BlockStateProperties.AGE_7,  Math.min(age, 7));
-        if (def.hasProperty(BlockStateProperties.AGE_3))  return def.setValue(BlockStateProperties.AGE_3,  Math.min(age, 3));
-        if (def.hasProperty(BlockStateProperties.AGE_5))  return def.setValue(BlockStateProperties.AGE_5,  Math.min(age, 5));
+        if (def.hasProperty(BlockStateProperties.AGE_7)) return def.setValue(BlockStateProperties.AGE_7, Math.min(age, 7));
+        if (def.hasProperty(BlockStateProperties.AGE_3)) return def.setValue(BlockStateProperties.AGE_3, Math.min(age, 3));
+        if (def.hasProperty(BlockStateProperties.AGE_5)) return def.setValue(BlockStateProperties.AGE_5, Math.min(age, 5));
         if (def.hasProperty(BlockStateProperties.AGE_15)) return def.setValue(BlockStateProperties.AGE_15, Math.min(age, 15));
         if (def.hasProperty(BlockStateProperties.AGE_25)) return def.setValue(BlockStateProperties.AGE_25, Math.min(age, 25));
         return def;

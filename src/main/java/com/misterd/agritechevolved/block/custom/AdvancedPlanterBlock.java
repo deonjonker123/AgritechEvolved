@@ -2,7 +2,7 @@ package com.misterd.agritechevolved.block.custom;
 
 import com.misterd.agritechevolved.blockentity.ATEBlockEntities;
 import com.misterd.agritechevolved.blockentity.custom.AdvancedPlanterBlockEntity;
-import com.misterd.agritechevolved.config.PlantablesConfig;
+import com.misterd.agritechevolved.datamap.ATEDataMaps;
 import com.misterd.agritechevolved.gui.custom.AdvancedPlanterMenu;
 import com.misterd.agritechevolved.item.ATEItems;
 import com.misterd.agritechevolved.item.custom.ClocheItem;
@@ -130,13 +130,13 @@ public class AdvancedPlanterBlock extends BaseEntityBlock {
         if (heldItem.getItem() instanceof ClocheItem) {
             return handleClochePlace(state, level, pos, player, heldItem);
         }
-        if (PlantablesConfig.isValidSeed(heldItemId) || PlantablesConfig.isValidSapling(heldItemId)) {
-            return handlePlantInsert(state, level, pos, player, planter, heldItem, heldItemId);
+        if (planter.isValidPlant(heldItem)) {
+            return handlePlantInsert(state, level, pos, player, planter, heldItem);
         }
-        if (PlantablesConfig.isValidSoil(heldItemId)) {
-            return handleSoilInsert(state, level, pos, player, planter, heldItem, heldItemId);
+        if (planter.isValidSoilForAnyRecipe(heldItem)) {
+            return handleSoilInsert(state, level, pos, player, planter, heldItem);
         }
-        if (PlantablesConfig.isValidFertilizer(heldItemId)) {
+        if (isFertilizer(heldItem)) {
             return handleFertilizer(state, level, pos, player, planter, heldItem);
         }
         if (heldItem.getItem() instanceof HoeItem) {
@@ -151,6 +151,10 @@ public class AdvancedPlanterBlock extends BaseEntityBlock {
 
         if (!level.isClientSide()) openGui(player, planter, pos);
         return InteractionResult.SUCCESS;
+    }
+
+    private static boolean isFertilizer(ItemStack stack) {
+        return !stack.isEmpty() && stack.getItem().builtInRegistryHolder().getData(ATEDataMaps.FERTILIZERS) != null;
     }
 
     private InteractionResult handleClocheRemoval(BlockState state, Level level, BlockPos pos, Player player) {
@@ -177,7 +181,7 @@ public class AdvancedPlanterBlock extends BaseEntityBlock {
         return InteractionResult.SUCCESS;
     }
 
-    private InteractionResult handlePlantInsert(BlockState state, Level level, BlockPos pos, Player player, AdvancedPlanterBlockEntity planter, ItemStack heldItem, String heldItemId) {
+    private InteractionResult handlePlantInsert(BlockState state, Level level, BlockPos pos, Player player, AdvancedPlanterBlockEntity planter, ItemStack heldItem) {
         if (!planter.getStack(0).isEmpty()) {
             if (!level.isClientSide()) openGui(player, planter, pos);
             return InteractionResult.SUCCESS;
@@ -185,15 +189,9 @@ public class AdvancedPlanterBlock extends BaseEntityBlock {
         if (level.isClientSide()) return InteractionResult.SUCCESS;
 
         ItemStack existingSoil = planter.getStack(1);
-        if (!existingSoil.isEmpty()) {
-            String soilId = RegistryHelper.getItemId(existingSoil);
-            boolean valid = PlantablesConfig.isValidSeed(heldItemId)
-                    ? PlantablesConfig.isSoilValidForSeed(soilId, heldItemId)
-                    : PlantablesConfig.isSoilValidForSapling(soilId, heldItemId);
-            if (!valid) {
-                player.sendOverlayMessage(Component.translatable("message.agritechevolved.invalid_seed_soil_combination").withStyle(ChatFormatting.GOLD));
-                return InteractionResult.SUCCESS;
-            }
+        if (!existingSoil.isEmpty() && !planter.isValidPlantSoilCombination(heldItem, existingSoil)) {
+            player.sendOverlayMessage(Component.translatable("message.agritechevolved.invalid_seed_soil_combination").withStyle(ChatFormatting.GOLD));
+            return InteractionResult.SUCCESS;
         }
 
         try (Transaction tx = Transaction.openRoot()) {
@@ -207,7 +205,7 @@ public class AdvancedPlanterBlock extends BaseEntityBlock {
         return InteractionResult.SUCCESS;
     }
 
-    private InteractionResult handleSoilInsert(BlockState state, Level level, BlockPos pos, Player player, AdvancedPlanterBlockEntity planter, ItemStack heldItem, String heldItemId) {
+    private InteractionResult handleSoilInsert(BlockState state, Level level, BlockPos pos, Player player, AdvancedPlanterBlockEntity planter, ItemStack heldItem) {
         if (!planter.getStack(1).isEmpty()) {
             if (!level.isClientSide()) openGui(player, planter, pos);
             return InteractionResult.SUCCESS;
@@ -215,15 +213,9 @@ public class AdvancedPlanterBlock extends BaseEntityBlock {
         if (level.isClientSide()) return InteractionResult.SUCCESS;
 
         ItemStack existingPlant = planter.getStack(0);
-        if (!existingPlant.isEmpty()) {
-            String plantId = RegistryHelper.getItemId(existingPlant);
-            boolean valid = PlantablesConfig.isValidSeed(plantId)
-                    ? PlantablesConfig.isSoilValidForSeed(heldItemId, plantId)
-                    : PlantablesConfig.isSoilValidForSapling(heldItemId, plantId);
-            if (!valid) {
-                player.sendOverlayMessage(Component.translatable("message.agritechevolved.invalid_seed_soil_combination").withStyle(ChatFormatting.GOLD));
-                return InteractionResult.SUCCESS;
-            }
+        if (!existingPlant.isEmpty() && !planter.isValidPlantSoilCombination(existingPlant, heldItem)) {
+            player.sendOverlayMessage(Component.translatable("message.agritechevolved.invalid_seed_soil_combination").withStyle(ChatFormatting.GOLD));
+            return InteractionResult.SUCCESS;
         }
 
         try (Transaction tx = Transaction.openRoot()) {

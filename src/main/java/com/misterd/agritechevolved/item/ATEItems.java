@@ -161,12 +161,6 @@ public class ATEItems {
                             if (pct > 0) adder.accept(Component.translatable("tooltip.agritechevolved.fuel.duration_bonus", pct).withStyle(ChatFormatting.GREEN));
                             else if (pct < 0) adder.accept(Component.translatable("tooltip.agritechevolved.fuel.duration_penalty", Math.abs(pct)).withStyle(ChatFormatting.RED));
                         }
-                        int speedBoost = (int) Math.round((Config.getFertilizerBiomassSpeedMultiplier() - 1.0D) * 100.0D);
-                        int yieldBoost = (int) Math.round((Config.getFertilizerBiomassYieldMultiplier() - 1.0D) * 100.0D);
-                        adder.accept(Component.literal(""));
-                        adder.accept(Component.translatable("tooltip.agritechevolved.fertilizer.effects").withStyle(ChatFormatting.GOLD));
-                        adder.accept(Component.translatable("tooltip.agritechevolved.fertilizer.speed_boost", speedBoost));
-                        adder.accept(Component.translatable("tooltip.agritechevolved.fertilizer.yield_boost", yieldBoost));
                     } else {
                         adder.accept(Component.translatable("tooltip.agritechevolved.fuel.shift_info"));
                     }
@@ -193,12 +187,6 @@ public class ATEItems {
                             if (pct > 0) adder.accept(Component.translatable("tooltip.agritechevolved.fuel.duration_bonus", pct).withStyle(ChatFormatting.GREEN));
                             else if (pct < 0) adder.accept(Component.translatable("tooltip.agritechevolved.fuel.duration_penalty", Math.abs(pct)).withStyle(ChatFormatting.RED));
                         }
-                        int speedBoost = (int) Math.round((Config.getFertilizerCompactedBiomassSpeedMultiplier() - 1.0D) * 100.0D);
-                        int yieldBoost = (int) Math.round((Config.getFertilizerCompactedBiomassYieldMultiplier() - 1.0D) * 100.0D);
-                        adder.accept(Component.literal(""));
-                        adder.accept(Component.translatable("tooltip.agritechevolved.fertilizer.effects").withStyle(ChatFormatting.GOLD));
-                        adder.accept(Component.translatable("tooltip.agritechevolved.fertilizer.speed_boost", speedBoost));
-                        adder.accept(Component.translatable("tooltip.agritechevolved.fertilizer.yield_boost", yieldBoost));
                     } else {
                         adder.accept(Component.translatable("tooltip.agritechevolved.fuel.shift_info"));
                     }

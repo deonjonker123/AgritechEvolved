@@ -30,7 +30,7 @@ public class DataGenerators {
         BlockTagsProvider blockTagsProvider = new ATEBlockTagProvider(packOutput, lookupProvider);
         generator.addProvider(true, blockTagsProvider);
 
-        generator.addProvider(true, new ATEItemModelProvider(packOutput));
+        generator.addProvider(true, new ATEModelProvider(packOutput));
         generator.addProvider(true, new ATEItemTagProvider(packOutput, lookupProvider));
     }
 
@@ -46,7 +46,7 @@ public class DataGenerators {
         BlockTagsProvider blockTagsProvider = new ATEBlockTagProvider(packOutput, lookupProvider);
         generator.addProvider(true, blockTagsProvider);
 
-        generator.addProvider(true, new ATEItemModelProvider(packOutput));
+        generator.addProvider(true, new ATEModelProvider(packOutput));
         generator.addProvider(true, new ATEItemTagProvider(packOutput, lookupProvider));
     }
 }

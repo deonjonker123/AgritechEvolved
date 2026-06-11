@@ -1,0 +1,16 @@
+{
+  "type": "agritechevolved:crop",
+  "drops": [
+    {
+      "chance": 1.0,
+      "item": "minecraft:azure_bluet",
+      "max": 1,
+      "min": 1
+    }
+  ],
+  "growth_ticks": 1200,
+  "seed": "minecraft:azure_bluet",
+  "soils": [
+    "#agritechevolved:dirt_soils"
+  ]
+}

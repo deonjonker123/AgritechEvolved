@@ -121,15 +121,11 @@
   "tooltip.agritechevolved.module.yield_boost": "§aIncreases yield by %s%%§r",
   "tooltip.agritechevolved.module.speed_reduction": "§cand reduces processing speed by %s%%§r",
 
-  "tooltip.agritechevolved.fertilizer.effects": "Fertilizer Effects:",
-  "tooltip.agritechevolved.fertilizer.speed_boost": "§aIncreases planter speed by %s%%§r",
-  "tooltip.agritechevolved.fertilizer.yield_boost": "§aIncreases planter yield by %s%%§r",
-
   "tooltip.agritechevolved.fuel.burn_duration": "§bBurns for %s seconds§r",
   "tooltip.agritechevolved.fuel.rf_per_second": "§eGenerates %s RF/second§r",
   "tooltip.agritechevolved.fuel.duration_bonus": "§a+%s%% RF from longer burn§r",
   "tooltip.agritechevolved.fuel.duration_penalty": "§c-%s%% RF from shorter burn§r",
-  "tooltip.agritechevolved.fuel.shift_info": "§6§oHold Shift for Fuel & Fertilizer info§r",
+  "tooltip.agritechevolved.fuel.shift_info": "§6§oHold Shift for Fuel & info§r",
   "tooltip.agritechevolved.crude_fuel.shift_info": "§6§oHold Shift for Fuel info§r",
 
   "tooltip.agritechevolved.infused_farmland.growth_boost": "Increases growth speed by 100%",

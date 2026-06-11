@@ -1,0 +1,22 @@
+{
+  "type": "agritechevolved:crop",
+  "drops": [
+    {
+      "chance": 1.0,
+      "item": "minecraft:pale_moss_block",
+      "max": 2,
+      "min": 1
+    },
+    {
+      "chance": 0.1,
+      "item": "minecraft:pale_moss_carpet",
+      "max": 1,
+      "min": 1
+    }
+  ],
+  "growth_ticks": 1200,
+  "seed": "minecraft:pale_moss_block",
+  "soils": [
+    "#agritechevolved:stone_soils"
+  ]
+}

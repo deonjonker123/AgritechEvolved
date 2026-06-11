@@ -20,7 +20,7 @@ A glass bell jar that attaches to any planter, boosting both growth speed and ha
 - Breaking a cloched planter drops both items separately
 
 ### **Machines**
-- **Composter**: Converts organic materials into biomass fuel with configurable input ratios
+- **Composter**: Converts organic materials into biomass fuel and fertilizer
 - **Biomass Burner**: Generates RF energy from crude biomass, biomass, and compacted biomass
 - **Energy Capacitors**: Three tiers of energy storage (Tier 1: 500k RF, Tier 2: 1M RF, Tier 3: 4M RF)
 
@@ -32,16 +32,16 @@ A glass bell jar that attaches to any planter, boosting both growth speed and ha
 - **Mulch**: Natural growth accelerator providing 50% speed boost
 - **Infused Farmland**: Premium soil offering 100% growth speed increase
 
-### **Fertilizer System**
+### **Fertilizer Support**
 
-Fertilizer support with configurable speed and yield multipliers:
+Fertilizer support via data-maps:
 
 -   Vanilla bone meal
 -   Mystical Agriculture fertilizers
 -   Immersive Engineering fertilizers
 -   Forbidden & Arcanus arcane bone meal
 
-Fertilizer can be automated via hopper or pipe into any of the four cardinal sides of the planter.
+Fertilizer can be automated via hopper or pipe into any of the four cardinal sides of the planters.
 
 ## Mod Compatibility
 
@@ -77,13 +77,11 @@ Fertilizer can be automated via hopper or pipe into any of the four cardinal sid
 -   Mystical Agriculture farmlands
 -   Farmer's Delight soils
 -   Just Dire Things goosoils
-- The Aether II
+-   The Aether II
 
-## Advanced Configuration System
+## Balance Configuration
 
-1.  **Mod Compatibility Toggles**: Enable/disable specific mod integrations per-mod, so you only load what you need.
-2.  **Crop/Sapling/Soil Database**: Comprehensive JSON-based system defining what grows on what, with full TOML override support for custom rules.
-3.  **Balance Configuration**: Fine-tune module effectiveness, power consumption, and processing times
+Fine-tune module effectiveness, power consumption, and processing times
 
 ### **Live Config Reloading**
 
@@ -92,9 +90,6 @@ No server/client restart required. Changes to crops, soils, fertilizers via the 
 | Command                                | Effect                                      |
 |----------------------------------------|---------------------------------------------|
 | `/agritechevolved reload`              | Reloads all configs                         |
-| `/agritechevolved reload plantables`   | Reloads the crop/soil/sapling database only |
-| `/agritechevolved reload compostables` | Reloads the compostable database only       |
-| `/agritechevolved reload config`       | Reloads the main TOML config only           |
 
 Failed reloads report errors directly in chat rather than silently failing.
 
@@ -104,7 +99,7 @@ Failed reloads report errors directly in chat rather than silently failing.
 -   Right-click with saplings for instant placement
 -   Right-click with soil blocks for instant placement
 -   Right-click with hoes to till compatible blocks
-- Right-click with mystical essence to convert vanilla farmland to the mystical farmland
+-   Right-click with mystical essence to convert vanilla farmland to the mystical farmland
 
 ### **Visual Feedback**
 
@@ -128,4 +123,4 @@ Uses RF power with configurable consumption rates:
 -   Shows growth stage and progress percentage
 -   Shows active soil type and its growth modifier
 -   Shows active fertilizer when one is slotted
-- Shows cloche status with speed and yield modifiers
+-   Shows cloche status with speed and yield modifiers

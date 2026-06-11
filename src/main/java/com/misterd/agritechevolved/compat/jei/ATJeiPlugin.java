@@ -1,10 +1,9 @@
 package com.misterd.agritechevolved.compat.jei;
 
-import com.misterd.agritechevolved.Config;
 import com.misterd.agritechevolved.block.ATEBlocks;
-import com.misterd.agritechevolved.config.CompostableConfig;
-import com.misterd.agritechevolved.config.PlantablesConfig;
-import com.misterd.agritechevolved.util.RegistryHelper;
+import com.misterd.agritechevolved.recipe.ATERecipeTypes;
+import com.misterd.agritechevolved.recipe.CropRecipe;
+import com.misterd.agritechevolved.recipe.TreeRecipe;
 import com.mojang.logging.LogUtils;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
@@ -13,23 +12,27 @@ import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import mezz.jei.api.runtime.IJeiRuntime;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.level.block.ComposterBlock;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 
 @JeiPlugin
 public class ATJeiPlugin implements IModPlugin {
 
     private static final Identifier PLUGIN_ID =
             Identifier.fromNamespaceAndPath("agritechevolved", "jei_plugin");
+
+    private static final float DENSE_THRESHOLD = 0.65f;
 
     private static IJeiRuntime jeiRuntime;
 
@@ -70,21 +73,26 @@ public class ATJeiPlugin implements IModPlugin {
         return recipes;
     }
 
+    private RecipeManager getRecipeManager() {
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.level == null) return null;
+        if (mc.level.recipeAccess() instanceof RecipeManager rm) return rm;
+        return null;
+    }
+
     private List<PlanterRecipe> generateCropRecipes() {
         List<PlanterRecipe> recipes = new ArrayList<>();
-        for (Map.Entry<String, List<String>> entry : PlantablesConfig.getAllSeedToSoilMappings().entrySet()) {
-            String seedId = entry.getKey();
-            for (String soilId : entry.getValue()) {
-                try {
-                    if (!soilId.equals("minecraft:water_bucket") && RegistryHelper.getBlock(soilId) == null) {
-                        LogUtils.getLogger().error("Invalid soil block in config: {} for seed {}", soilId, seedId);
-                        continue;
-                    }
-                    PlanterRecipe recipe = PlanterRecipe.createCrop(seedId, soilId);
-                    if (recipe != null && !recipe.getOutputs().isEmpty()) recipes.add(recipe);
-                } catch (Exception e) {
-                    LogUtils.getLogger().error("Error creating recipe for seed {} and soil {}: {}", seedId, soilId, e.getMessage(), e);
-                }
+        RecipeManager rm = getRecipeManager();
+        if (rm == null) {
+            LogUtils.getLogger().warn("RecipeManager unavailable during JEI crop recipe generation");
+            return recipes;
+        }
+        for (RecipeHolder<?> holder : rm.getRecipes()) {
+            if (holder.value().getType() != ATERecipeTypes.CROP_TYPE.get()) continue;
+            try {
+                recipes.add(PlanterRecipe.fromCrop((CropRecipe) holder.value()));
+            } catch (Exception e) {
+                LogUtils.getLogger().error("Error creating JEI crop recipe for {}: {}", holder.id(), e.getMessage());
             }
         }
         LogUtils.getLogger().info("Generated {} crop planter recipes for JEI", recipes.size());
@@ -93,19 +101,17 @@ public class ATJeiPlugin implements IModPlugin {
 
     private List<PlanterRecipe> generateTreeRecipes() {
         List<PlanterRecipe> recipes = new ArrayList<>();
-        for (Map.Entry<String, List<String>> entry : PlantablesConfig.getAllSaplingToSoilMappings().entrySet()) {
-            String saplingId = entry.getKey();
-            for (String soilId : entry.getValue()) {
-                try {
-                    if (RegistryHelper.getBlock(soilId) == null) {
-                        LogUtils.getLogger().error("Invalid soil block in config: {} for sapling {}", soilId, saplingId);
-                        continue;
-                    }
-                    PlanterRecipe recipe = PlanterRecipe.createTree(saplingId, soilId);
-                    if (recipe != null && !recipe.getOutputs().isEmpty()) recipes.add(recipe);
-                } catch (Exception e) {
-                    LogUtils.getLogger().error("Error creating recipe for sapling {} and soil {}: {}", saplingId, soilId, e.getMessage());
-                }
+        RecipeManager rm = getRecipeManager();
+        if (rm == null) {
+            LogUtils.getLogger().warn("RecipeManager unavailable during JEI tree recipe generation");
+            return recipes;
+        }
+        for (RecipeHolder<?> holder : rm.getRecipes()) {
+            if (holder.value().getType() != ATERecipeTypes.TREE_TYPE.get()) continue;
+            try {
+                recipes.add(PlanterRecipe.fromTree((TreeRecipe) holder.value()));
+            } catch (Exception e) {
+                LogUtils.getLogger().error("Error creating JEI tree recipe for {}: {}", holder.id(), e.getMessage());
             }
         }
         LogUtils.getLogger().info("Generated {} tree planter recipes for JEI", recipes.size());
@@ -114,31 +120,25 @@ public class ATJeiPlugin implements IModPlugin {
 
     private List<CompostRecipe> generateCompostRecipes() {
         List<CompostRecipe> recipes = new ArrayList<>();
+        int denseCount = 0;
 
-        CompostableConfig.getCompostableItems().stream()
-                .map(itemId -> {
-                    try { return CompostRecipe.create(itemId); }
-                    catch (Exception e) {
-                        LogUtils.getLogger().error("Failed to create compost recipe for {}: {}", itemId, e.getMessage());
-                        return null;
-                    }
-                })
-                .filter(Objects::nonNull)
-                .forEach(recipes::add);
+        for (var entry : ComposterBlock.COMPOSTABLES.object2FloatEntrySet()) {
+            String itemId = BuiltInRegistries.ITEM.getKey(entry.getKey().asItem()).toString();
+            float chance = entry.getFloatValue();
+            try {
+                CompostRecipe recipe = chance >= DENSE_THRESHOLD
+                        ? CompostRecipe.createDense(itemId)
+                        : CompostRecipe.create(itemId);
+                if (recipe != null) {
+                    recipes.add(recipe);
+                    if (chance >= DENSE_THRESHOLD) denseCount++;
+                }
+            } catch (Exception e) {
+                LogUtils.getLogger().error("Failed to create compost recipe for {}: {}", itemId, e.getMessage());
+            }
+        }
 
-        CompostableConfig.getDenseItems().stream()
-                .map(itemId -> {
-                    try { return CompostRecipe.createDense(itemId); }
-                    catch (Exception e) {
-                        LogUtils.getLogger().error("Failed to create dense compost recipe for {}: {}", itemId, e.getMessage());
-                        return null;
-                    }
-                })
-                .filter(Objects::nonNull)
-                .forEach(recipes::add);
-
-        LogUtils.getLogger().info("Generated {} compost recipes for JEI ({} dense)", recipes.size(),
-                CompostableConfig.getDenseItems().size());
+        LogUtils.getLogger().info("Generated {} compost recipes for JEI ({} dense)", recipes.size(), denseCount);
         return recipes;
     }
 
@@ -152,10 +152,7 @@ public class ATJeiPlugin implements IModPlugin {
             addTilling(recipes, hoe, Items.COARSE_DIRT, Items.FARMLAND);
             addTilling(recipes, hoe, Items.GRASS_BLOCK, Items.FARMLAND);
             addTilling(recipes, hoe, ATEBlocks.MULCH.get().asItem(), ATEBlocks.INFUSED_FARMLAND.get().asItem());
-
-            if (Config.enableFarmersDelight) {
-                addTillingModded(recipes, hoe, "farmersdelight:rich_soil", "farmersdelight:rich_soil_farmland");
-            }
+            addTillingModded(recipes, hoe, "farmersdelight:rich_soil", "farmersdelight:rich_soil_farmland");
         } catch (Exception e) {
             LogUtils.getLogger().error("Failed to generate farmland recipes for JEI: {}", e.getMessage());
         }

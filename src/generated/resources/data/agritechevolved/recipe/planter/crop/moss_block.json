@@ -1,0 +1,28 @@
+{
+  "type": "agritechevolved:crop",
+  "drops": [
+    {
+      "chance": 1.0,
+      "item": "minecraft:moss_block",
+      "max": 2,
+      "min": 1
+    },
+    {
+      "chance": 0.1,
+      "item": "minecraft:moss_carpet",
+      "max": 1,
+      "min": 1
+    },
+    {
+      "chance": 0.1,
+      "item": "minecraft:wheat_seeds",
+      "max": 1,
+      "min": 1
+    }
+  ],
+  "growth_ticks": 1200,
+  "seed": "minecraft:moss_block",
+  "soils": [
+    "#agritechevolved:stone_soils"
+  ]
+}

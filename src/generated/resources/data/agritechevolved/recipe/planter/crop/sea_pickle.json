@@ -1,0 +1,16 @@
+{
+  "type": "agritechevolved:crop",
+  "drops": [
+    {
+      "chance": 1.0,
+      "item": "minecraft:sea_pickle",
+      "max": 1,
+      "min": 1
+    }
+  ],
+  "growth_ticks": 1200,
+  "seed": "minecraft:sea_pickle",
+  "soils": [
+    "#agritechevolved:water_soils"
+  ]
+}

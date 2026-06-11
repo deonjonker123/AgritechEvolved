@@ -121,15 +121,11 @@
   "tooltip.agritechevolved.module.yield_boost": "§a収穫量を%s%%増加させる§r",
   "tooltip.agritechevolved.module.speed_reduction": "§c処理速度を%s%%減少させる§r",
 
-  "tooltip.agritechevolved.fertilizer.effects": "肥料効果:",
-  "tooltip.agritechevolved.fertilizer.speed_boost": "§aプランターの速度を%s%%増加させる§r",
-  "tooltip.agritechevolved.fertilizer.yield_boost": "§aプランターの収穫量を%s%%増加させる§r",
-
   "tooltip.agritechevolved.fuel.burn_duration": "§b%s秒間燃焼します§r",
   "tooltip.agritechevolved.fuel.rf_per_second": "§e毎秒%s RFを発電§r",
   "tooltip.agritechevolved.fuel.duration_bonus": "§a長時間燃焼: RF +%s%§r",
   "tooltip.agritechevolved.fuel.duration_penalty": "§c短時間燃焼: RF -%s%§r",
-  "tooltip.agritechevolved.fuel.shift_info": "§6§oShiftで燃料と肥料の情報を表示§r",
+  "tooltip.agritechevolved.fuel.shift_info": "§6§oShiftで燃料の情報を表示§r",
   "tooltip.agritechevolved.crude_fuel.shift_info": "§6§oShiftで燃料の情報を表示§r",
 
   "tooltip.agritechevolved.infused_farmland.growth_boost": "作物の成長速度を100%上昇させる",

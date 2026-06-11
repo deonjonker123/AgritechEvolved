@@ -2,9 +2,8 @@ package com.misterd.agritechevolved.gui.custom;
 
 import com.misterd.agritechevolved.block.custom.PlanterBlock;
 import com.misterd.agritechevolved.blockentity.custom.PlanterBlockEntity;
-import com.misterd.agritechevolved.config.PlantablesConfig;
+import com.misterd.agritechevolved.datamap.ATEDataMaps;
 import com.misterd.agritechevolved.gui.ATEMenuTypes;
-import com.misterd.agritechevolved.util.RegistryHelper;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
@@ -25,11 +24,11 @@ public class BasicPlanterMenu extends AbstractContainerMenu {
     private final Level level;
 
     private static final int PLAYER_SLOTS = 36;
-    private static final int TE_SLOT_PLANT = PLAYER_SLOTS;      // 36
-    private static final int TE_SLOT_SOIL = PLAYER_SLOTS + 1;  // 37
-    private static final int TE_SLOT_FERT = PLAYER_SLOTS + 2;  // 38
-    private static final int TE_OUTPUT_START = PLAYER_SLOTS + 3;  // 39
-    private static final int TE_OUTPUT_END = PLAYER_SLOTS + 15; // 50 (exclusive)
+    private static final int TE_SLOT_PLANT = PLAYER_SLOTS;
+    private static final int TE_SLOT_SOIL = PLAYER_SLOTS + 1;
+    private static final int TE_SLOT_FERT = PLAYER_SLOTS + 2;
+    private static final int TE_OUTPUT_START = PLAYER_SLOTS + 3;
+    private static final int TE_OUTPUT_END = PLAYER_SLOTS + 15;
     private static final int TE_LAST_SLOT = TE_OUTPUT_END;
 
     public BasicPlanterMenu(int containerId, Inventory inv, FriendlyByteBuf extraData) {
@@ -76,41 +75,31 @@ public class BasicPlanterMenu extends AbstractContainerMenu {
     }
 
     private boolean moveToBlockEntity(ItemStack stack) {
-        String id = RegistryHelper.getItemId(stack);
-
-        if (PlantablesConfig.isValidSeed(id) || PlantablesConfig.isValidSapling(id)) {
+        if (blockEntity.isValidPlant(stack)) {
             if (!blockEntity.getStack(0).isEmpty()) return false;
             ItemStack soil = blockEntity.getStack(1);
-            if (!soil.isEmpty()) {
-                String soilId = RegistryHelper.getItemId(soil);
-                boolean valid = PlantablesConfig.isValidSeed(id)
-                        ? PlantablesConfig.isSoilValidForSeed(soilId, id)
-                        : PlantablesConfig.isSoilValidForSapling(soilId, id);
-                if (!valid) return false;
-            }
+            if (!soil.isEmpty() && !blockEntity.isValidPlantSoilCombination(stack, soil)) return false;
             insertSingle(stack, 0);
             return true;
         }
 
-        if (PlantablesConfig.isValidSoil(id)) {
+        if (blockEntity.isValidSoilForAnyRecipe(stack)) {
             if (!blockEntity.getStack(1).isEmpty()) return false;
             ItemStack plant = blockEntity.getStack(0);
-            if (!plant.isEmpty()) {
-                String plantId = RegistryHelper.getItemId(plant);
-                boolean valid = PlantablesConfig.isValidSeed(plantId)
-                        ? PlantablesConfig.isSoilValidForSeed(id, plantId)
-                        : PlantablesConfig.isSoilValidForSapling(id, plantId);
-                if (!valid) return false;
-            }
+            if (!plant.isEmpty() && !blockEntity.isValidPlantSoilCombination(plant, stack)) return false;
             insertSingle(stack, 1);
             return true;
         }
 
-        if (PlantablesConfig.isValidFertilizer(id)) {
+        if (isFertilizer(stack)) {
             return insertIntoBlockEntity(stack, 2, 3);
         }
 
         return false;
+    }
+
+    private static boolean isFertilizer(ItemStack stack) {
+        return !stack.isEmpty() && stack.getItem().builtInRegistryHolder().getData(ATEDataMaps.FERTILIZERS) != null;
     }
 
     private boolean insertIntoBlockEntity(ItemStack stack, int startSlot, int endSlot) {
@@ -180,15 +169,24 @@ public class BasicPlanterMenu extends AbstractContainerMenu {
             super(new SimpleContainer(be.inventory.size()), index, x, y);
             this.be = be;
             this.index = index;
+            container.setItem(index, be.getStack(index));
         }
 
         @Override
         public ItemStack getItem() {
+            Level lvl = be.getLevel();
+            if (lvl != null && lvl.isClientSide()) return container.getItem(index);
             return be.getStack(index);
         }
 
         @Override
         public void set(ItemStack stack) {
+            container.setItem(index, stack.copy());
+            Level lvl = be.getLevel();
+            if (lvl == null || lvl.isClientSide()) {
+                setChanged();
+                return;
+            }
             try (Transaction tx = Transaction.openRoot()) {
                 ItemStack existing = be.getStack(index);
                 if (!existing.isEmpty())
@@ -207,7 +205,7 @@ public class BasicPlanterMenu extends AbstractContainerMenu {
 
         @Override
         public ItemStack remove(int amount) {
-            ItemStack existing = getItem();
+            ItemStack existing = be.getStack(index);
             if (existing.isEmpty()) return ItemStack.EMPTY;
             int toExtract = Math.min(amount, existing.getCount());
             try (Transaction tx = Transaction.openRoot()) {
@@ -225,7 +223,7 @@ public class BasicPlanterMenu extends AbstractContainerMenu {
 
         @Override
         public boolean mayPlace(ItemStack stack) {
-            return PlantablesConfig.isValidFertilizer(RegistryHelper.getItemId(stack));
+            return !stack.isEmpty() && stack.getItem().builtInRegistryHolder().getData(ATEDataMaps.FERTILIZERS) != null;
         }
     }
 }

@@ -5,8 +5,8 @@ import com.misterd.agritechevolved.block.custom.AdvancedPlanterBlock;
 import com.misterd.agritechevolved.block.custom.PlanterBlock;
 import com.misterd.agritechevolved.blockentity.custom.AdvancedPlanterBlockEntity;
 import com.misterd.agritechevolved.blockentity.custom.PlanterBlockEntity;
-import com.misterd.agritechevolved.config.PlantablesConfig;
-import com.misterd.agritechevolved.util.RegistryHelper;
+import com.misterd.agritechevolved.datamap.ATEDataMaps;
+import com.misterd.agritechevolved.datamap.FertilizerData;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
@@ -48,7 +48,7 @@ public enum PlanterProvider implements IServerDataProvider<BlockAccessor> {
 
         appendCommonCropData(data, seedStack, soilStack,
                 planter.getGrowthStage(), planter.getGrowthProgress(),
-                planter.getSoilGrowthModifier(soilStack));
+                planter.getSoilGrowthModifier(soilStack), planter.isTree());
         appendFertilizerData(data, planter.getStack(2));
         appendClocheData(data, state.getValue(PlanterBlock.CLOCHED));
     }
@@ -65,7 +65,7 @@ public enum PlanterProvider implements IServerDataProvider<BlockAccessor> {
 
         appendCommonCropData(data, seedStack, soilStack,
                 planter.getGrowthStage(), planter.getGrowthProgress(),
-                planter.getSoilGrowthModifier(soilStack));
+                planter.getSoilGrowthModifier(soilStack), planter.isTree());
         appendFertilizerData(data, planter.getStack(4));
         appendClocheData(data, state.getValue(AdvancedPlanterBlock.CLOCHED));
 
@@ -80,11 +80,11 @@ public enum PlanterProvider implements IServerDataProvider<BlockAccessor> {
         }
     }
 
-    private void appendCommonCropData(CompoundTag data, ItemStack seedStack, ItemStack soilStack, int growthStage, float growthProgress, float soilModifier) {
+    private void appendCommonCropData(CompoundTag data, ItemStack seedStack, ItemStack soilStack, int growthStage, float growthProgress, float soilModifier, boolean isTree) {
         data.putBoolean("hasCrop", true);
         data.putString("cropName", seedStack.getDisplayName().getString());
         data.putInt("currentStage", growthStage);
-        data.putInt("maxStage", getMaxStage(seedStack));
+        data.putInt("maxStage", isTree ? 1 : 8);
         data.putFloat("progressPercent", growthProgress * 100.0F);
         data.putString("soilName", soilStack.getDisplayName().getString());
         data.putFloat("growthModifier", soilModifier);
@@ -95,11 +95,13 @@ public enum PlanterProvider implements IServerDataProvider<BlockAccessor> {
             data.putBoolean("hasFertilizer", false);
             return;
         }
-        String id = RegistryHelper.getItemId(fertStack);
-        data.putBoolean("hasFertilizer", true);
-        data.putString("fertilizerName", fertStack.getDisplayName().getString());
-        data.putFloat("fertilizerSpeedModifier", getFertilizerSpeedModifier(id));
-        data.putFloat("fertilizerYieldModifier", getFertilizerYieldModifier(id));
+        FertilizerData fertData = fertStack.getItem().builtInRegistryHolder().getData(ATEDataMaps.FERTILIZERS);
+        data.putBoolean("hasFertilizer", fertData != null);
+        if (fertData != null) {
+            data.putString("fertilizerName", fertStack.getDisplayName().getString());
+            data.putFloat("fertilizerSpeedModifier", fertData.speedMultiplier());
+            data.putFloat("fertilizerYieldModifier", fertData.yieldMultiplier());
+        }
     }
 
     private void appendClocheData(CompoundTag data, boolean cloched) {
@@ -108,19 +110,5 @@ public enum PlanterProvider implements IServerDataProvider<BlockAccessor> {
             data.putFloat("clocheSpeedModifier", (float) Config.getClocheSpeedMultiplier());
             data.putFloat("clocheYieldModifier", (float) Config.getClocheYieldMultiplier());
         }
-    }
-
-    private float getFertilizerSpeedModifier(String id) {
-        PlantablesConfig.FertilizerInfo info = PlantablesConfig.getFertilizerInfo(id);
-        return info != null ? info.speedMultiplier : 1.0F;
-    }
-
-    private float getFertilizerYieldModifier(String id) {
-        PlantablesConfig.FertilizerInfo info = PlantablesConfig.getFertilizerInfo(id);
-        return info != null ? info.yieldMultiplier : 1.0F;
-    }
-
-    private int getMaxStage(ItemStack plantStack) {
-        return PlantablesConfig.isValidSapling(RegistryHelper.getItemId(plantStack)) ? 1 : 8;
     }
 }

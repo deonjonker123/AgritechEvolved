@@ -10,6 +10,7 @@ import com.misterd.agritechevolved.client.ber.AdvancedPlanterBlockEntityRenderer
 import com.misterd.agritechevolved.client.ber.PlanterBlockEntityRenderer;
 import com.misterd.agritechevolved.command.ATECommands;
 import com.misterd.agritechevolved.component.ATEDataComponents;
+import com.misterd.agritechevolved.datamap.ATEDataMaps;
 import com.misterd.agritechevolved.gui.ATEMenuTypes;
 import com.misterd.agritechevolved.gui.custom.*;
 import com.misterd.agritechevolved.item.ATECreativeTab;
@@ -46,7 +47,8 @@ public class AgritechEvolved {
         ATECreativeTab.register(modEventBus);
         ATEMenuTypes.register(modEventBus);
         ATEDataComponents.register(modEventBus);
-        ATERecipe.RECIPE_SERIALIZERS.register(modEventBus);
+        ATERecipe.register(modEventBus);
+        ATEDataMaps.register(modEventBus);
 
         modEventBus.addListener(AdvancedPlanterBlockEntity::registerCapabilities);
         modEventBus.addListener(ComposterBlockEntity::registerCapabilities);

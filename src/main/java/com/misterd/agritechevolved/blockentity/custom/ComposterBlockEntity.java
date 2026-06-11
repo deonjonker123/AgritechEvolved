@@ -3,7 +3,6 @@ package com.misterd.agritechevolved.blockentity.custom;
 import com.misterd.agritechevolved.Config;
 import com.misterd.agritechevolved.block.custom.ComposterBlock;
 import com.misterd.agritechevolved.blockentity.ATEBlockEntities;
-import com.misterd.agritechevolved.config.CompostableConfig;
 import com.misterd.agritechevolved.gui.custom.ComposterMenu;
 import com.misterd.agritechevolved.item.ATEItems;
 import com.misterd.agritechevolved.util.RegistryHelper;
@@ -52,6 +51,8 @@ public class ComposterBlockEntity extends BlockEntity implements MenuProvider {
     private static final String SM_MK2 = "agritechevolved:sm_mk2";
     private static final String SM_MK3 = "agritechevolved:sm_mk3";
 
+    private static final float DENSE_THRESHOLD = 0.65f;
+
     private int progress = 0;
     private int energyStored = 0;
 
@@ -83,7 +84,6 @@ public class ComposterBlockEntity extends BlockEntity implements MenuProvider {
     public ComposterBlockEntity(BlockPos pos, BlockState blockState) {
         super(ATEBlockEntities.COMPOSTER_BE.get(), pos, blockState);
     }
-
 
     public static void tick(Level level, BlockPos pos, BlockState state, ComposterBlockEntity be) {
         if (level.isClientSide()) return;
@@ -135,7 +135,7 @@ public class ComposterBlockEntity extends BlockEntity implements MenuProvider {
         int count = 0;
         for (int i = INPUT_SLOTS_START; i < INPUT_SLOTS_START + INPUT_SLOTS_COUNT; i++) {
             ItemStack stack = getStack(i);
-            if (!stack.isEmpty() && CompostableConfig.isCompostable(RegistryHelper.getItemId(stack)))
+            if (!stack.isEmpty() && isNormalCompostable(stack))
                 count += stack.getCount();
         }
         return count;
@@ -145,7 +145,7 @@ public class ComposterBlockEntity extends BlockEntity implements MenuProvider {
         int count = 0;
         for (int i = INPUT_SLOTS_START; i < INPUT_SLOTS_START + INPUT_SLOTS_COUNT; i++) {
             ItemStack stack = getStack(i);
-            if (!stack.isEmpty() && CompostableConfig.isDenseItem(RegistryHelper.getItemId(stack)))
+            if (!stack.isEmpty() && isDenseCompostable(stack))
                 count += stack.getCount();
         }
         return count;
@@ -167,7 +167,7 @@ public class ComposterBlockEntity extends BlockEntity implements MenuProvider {
             int toConsume = denseNeeded;
             for (int i = INPUT_SLOTS_START; i < INPUT_SLOTS_START + INPUT_SLOTS_COUNT && toConsume > 0; i++) {
                 ItemStack stack = getStack(i);
-                if (stack.isEmpty() || !CompostableConfig.isDenseItem(RegistryHelper.getItemId(stack))) continue;
+                if (stack.isEmpty() || !isDenseCompostable(stack)) continue;
                 int taken = Math.min(toConsume, stack.getCount());
                 try (Transaction tx = Transaction.openRoot()) {
                     inventory.extract(i, ItemResource.of(stack), taken, tx);
@@ -182,7 +182,7 @@ public class ComposterBlockEntity extends BlockEntity implements MenuProvider {
         int toConsume = Config.getComposterItemsPerBiomass();
         for (int i = INPUT_SLOTS_START; i < INPUT_SLOTS_START + INPUT_SLOTS_COUNT && toConsume > 0; i++) {
             ItemStack stack = getStack(i);
-            if (stack.isEmpty() || !CompostableConfig.isCompostable(RegistryHelper.getItemId(stack))) continue;
+            if (stack.isEmpty() || !isNormalCompostable(stack)) continue;
             int taken = Math.min(toConsume, stack.getCount());
             try (Transaction tx = Transaction.openRoot()) {
                 inventory.extract(i, ItemResource.of(stack), taken, tx);
@@ -205,8 +205,18 @@ public class ComposterBlockEntity extends BlockEntity implements MenuProvider {
 
     public boolean isCompostableItem(ItemStack stack) {
         if (stack.isEmpty()) return false;
-        String id = RegistryHelper.getItemId(stack);
-        return CompostableConfig.isCompostable(id) || CompostableConfig.isDenseItem(id);
+        return net.minecraft.world.level.block.ComposterBlock.COMPOSTABLES.containsKey(stack.getItem());
+    }
+
+    private boolean isNormalCompostable(ItemStack stack) {
+        if (stack.isEmpty()) return false;
+        float chance = net.minecraft.world.level.block.ComposterBlock.COMPOSTABLES.getFloat(stack.getItem());
+        return chance > 0f && chance < DENSE_THRESHOLD;
+    }
+
+    private boolean isDenseCompostable(ItemStack stack) {
+        if (stack.isEmpty()) return false;
+        return net.minecraft.world.level.block.ComposterBlock.COMPOSTABLES.getFloat(stack.getItem()) >= DENSE_THRESHOLD;
     }
 
     private boolean isSpeedModule(ItemStack stack) {
@@ -240,19 +250,13 @@ public class ComposterBlockEntity extends BlockEntity implements MenuProvider {
     public ResourceHandler<ItemResource> getItemHandler(@Nullable Direction side) {
         return new ResourceHandler<>() {
             @Override
-            public int size() {
-                return inventory.size();
-            }
+            public int size() { return inventory.size(); }
 
             @Override
-            public ItemResource getResource(int index) {
-                return inventory.getResource(index);
-            }
+            public ItemResource getResource(int index) { return inventory.getResource(index); }
 
             @Override
-            public long getAmountAsLong(int index) {
-                return inventory.getAmountAsLong(index);
-            }
+            public long getAmountAsLong(int index) { return inventory.getAmountAsLong(index); }
 
             @Override
             public long getCapacityAsLong(int index, ItemResource resource) {
@@ -289,29 +293,19 @@ public class ComposterBlockEntity extends BlockEntity implements MenuProvider {
         BEEnergyHandler(ComposterBlockEntity be) { this.be = be; }
 
         @Override
-        protected Integer createSnapshot() {
-            return be.energyStored;
-        }
+        protected Integer createSnapshot() { return be.energyStored; }
 
         @Override
-        protected void revertToSnapshot(Integer snapshot) {
-            be.energyStored = snapshot;
-        }
+        protected void revertToSnapshot(Integer snapshot) { be.energyStored = snapshot; }
 
         @Override
-        protected void onRootCommit(Integer originalState) {
-            be.setChanged();
-        }
+        protected void onRootCommit(Integer originalState) { be.setChanged(); }
 
         @Override
-        public long getAmountAsLong() {
-            return be.energyStored;
-        }
+        public long getAmountAsLong() { return be.energyStored; }
 
         @Override
-        public long getCapacityAsLong() {
-            return Config.getComposterEnergyBuffer();
-        }
+        public long getCapacityAsLong() { return Config.getComposterEnergyBuffer(); }
 
         @Override
         public int insert(int amount, TransactionContext tx) {
@@ -352,17 +346,9 @@ public class ComposterBlockEntity extends BlockEntity implements MenuProvider {
         Containers.dropContents(level, worldPosition, inv);
     }
 
-    public int getEnergyStored() {
-        return energyStored;
-    }
-
-    public int getMaxEnergyStored() {
-        return Config.getComposterEnergyBuffer();
-    }
-
-    public int getProgress() {
-        return progress;
-    }
+    public int getEnergyStored() { return energyStored; }
+    public int getMaxEnergyStored() { return Config.getComposterEnergyBuffer(); }
+    public int getProgress() { return progress; }
 
     public int getMaxProgress() {
         int baseTime = Config.getComposterBaseProcessingTime();

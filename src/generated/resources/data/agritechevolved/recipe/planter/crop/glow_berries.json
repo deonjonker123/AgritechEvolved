@@ -1,0 +1,16 @@
+{
+  "type": "agritechevolved:crop",
+  "drops": [
+    {
+      "chance": 1.0,
+      "item": "minecraft:glow_berries",
+      "max": 4,
+      "min": 2
+    }
+  ],
+  "growth_ticks": 1200,
+  "seed": "minecraft:glow_berries",
+  "soils": [
+    "#agritechevolved:moss_soils"
+  ]
+}

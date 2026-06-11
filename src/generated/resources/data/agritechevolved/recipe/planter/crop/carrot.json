@@ -1,0 +1,16 @@
+{
+  "type": "agritechevolved:crop",
+  "drops": [
+    {
+      "chance": 1.0,
+      "item": "minecraft:carrot",
+      "max": 5,
+      "min": 2
+    }
+  ],
+  "growth_ticks": 1200,
+  "seed": "minecraft:carrot",
+  "soils": [
+    "#agritechevolved:farmland_soils"
+  ]
+}

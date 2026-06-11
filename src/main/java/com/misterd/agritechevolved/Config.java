@@ -1,11 +1,8 @@
 package com.misterd.agritechevolved;
 
-import com.misterd.agritechevolved.config.CompostableConfig;
-import com.misterd.agritechevolved.config.PlantablesConfig;
 import com.mojang.logging.LogUtils;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
-import net.neoforged.fml.ModList;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.common.ModConfigSpec;
@@ -16,28 +13,6 @@ public class Config {
     public static final ModConfigSpec.Builder COMMON_BUILDER = new ModConfigSpec.Builder();
     public static ModConfigSpec COMMON_CONFIG;
     public static ModConfigSpec SPEC;
-
-    // -------------------------------------------------------------------------
-    // Compatibility
-    // -------------------------------------------------------------------------
-    public static ModConfigSpec.BooleanValue ENABLE_MYSTICAL_AGRICULTURE;
-    public static ModConfigSpec.BooleanValue ENABLE_MYSTICAL_AGRADDITIONS;
-    public static ModConfigSpec.BooleanValue ENABLE_FARMERS_DELIGHT;
-    public static ModConfigSpec.BooleanValue ENABLE_ARS_NOUVEAU;
-    public static ModConfigSpec.BooleanValue ENABLE_ARS_ELEMENTAL;
-    public static ModConfigSpec.BooleanValue ENABLE_SILENT_GEAR;
-    public static ModConfigSpec.BooleanValue ENABLE_JUST_DIRE_THINGS;
-    public static ModConfigSpec.BooleanValue ENABLE_IMMERSIVE_ENGINEERING;
-    public static ModConfigSpec.BooleanValue ENABLE_EVILCRAFT;
-    public static ModConfigSpec.BooleanValue ENABLE_FORBIDDEN_ARCANUS;
-    public static ModConfigSpec.BooleanValue ENABLE_INTEGRATED_DYNAMICS;
-    public static ModConfigSpec.BooleanValue ENABLE_OCCULTISM;
-    public static ModConfigSpec.BooleanValue ENABLE_PAMS_CROPS;
-    public static ModConfigSpec.BooleanValue ENABLE_PAMS_TREES;
-    public static ModConfigSpec.BooleanValue ENABLE_CROPTOPIA;
-    public static ModConfigSpec.BooleanValue ENABLE_COBBLEMON;
-    public static ModConfigSpec.BooleanValue ENABLE_ACTUALLY_ADDITIONS;
-    public static ModConfigSpec.BooleanValue ENABLE_THE_AETHER_II;
 
     // -------------------------------------------------------------------------
     // Modules
@@ -54,26 +29,6 @@ public class Config {
     public static ModConfigSpec.DoubleValue YIELD_MODULE_MK2_SPEED_PENALTY;
     public static ModConfigSpec.DoubleValue YIELD_MODULE_MK3_MULTIPLIER;
     public static ModConfigSpec.DoubleValue YIELD_MODULE_MK3_SPEED_PENALTY;
-
-    // -------------------------------------------------------------------------
-    // Fertilizers
-    // -------------------------------------------------------------------------
-    public static ModConfigSpec.DoubleValue FERTILIZER_BONE_MEAL_SPEED_MULTIPLIER;
-    public static ModConfigSpec.DoubleValue FERTILIZER_BONE_MEAL_YIELD_MULTIPLIER;
-    public static ModConfigSpec.DoubleValue FERTILIZER_CRUDE_BIOMASS_SPEED_MULTIPLIER;
-    public static ModConfigSpec.DoubleValue FERTILIZER_CRUDE_BIOMASS_YIELD_MULTIPLIER;
-    public static ModConfigSpec.DoubleValue FERTILIZER_BIOMASS_SPEED_MULTIPLIER;
-    public static ModConfigSpec.DoubleValue FERTILIZER_BIOMASS_YIELD_MULTIPLIER;
-    public static ModConfigSpec.DoubleValue FERTILIZER_COMPACTED_BIOMASS_SPEED_MULTIPLIER;
-    public static ModConfigSpec.DoubleValue FERTILIZER_COMPACTED_BIOMASS_YIELD_MULTIPLIER;
-    public static ModConfigSpec.DoubleValue FERTILIZER_FERTILIZED_ESSENCE_SPEED_MULTIPLIER;
-    public static ModConfigSpec.DoubleValue FERTILIZER_FERTILIZED_ESSENCE_YIELD_MULTIPLIER;
-    public static ModConfigSpec.DoubleValue FERTILIZER_MYSTICAL_FERTILIZER_SPEED_MULTIPLIER;
-    public static ModConfigSpec.DoubleValue FERTILIZER_MYSTICAL_FERTILIZER_YIELD_MULTIPLIER;
-    public static ModConfigSpec.DoubleValue FERTILIZER_IMMERSIVE_FERTILIZER_SPEED_MULTIPLIER;
-    public static ModConfigSpec.DoubleValue FERTILIZER_IMMERSIVE_FERTILIZER_YIELD_MULTIPLIER;
-    public static ModConfigSpec.DoubleValue FERTILIZER_ARCANE_BONE_MEAL_SPEED_MULTIPLIER;
-    public static ModConfigSpec.DoubleValue FERTILIZER_ARCANE_BONE_MEAL_YIELD_MULTIPLIER;
 
     // -------------------------------------------------------------------------
     // Machines — Planter
@@ -113,36 +68,12 @@ public class Config {
     public static ModConfigSpec.IntValue CAPACITOR_T3_BUFFER;
     public static ModConfigSpec.IntValue CAPACITOR_T3_TRANSFER_RATE;
 
-    // -------------------------------------------------------------------------
-    // Runtime booleans (populated on config load)
-    // -------------------------------------------------------------------------
-    public static boolean enableMysticalAgriculture;
-    public static boolean enableMysticalAgradditions;
-    public static boolean enableFarmersDelight;
-    public static boolean enableArsNouveau;
-    public static boolean enableArsElemental;
-    public static boolean enableSilentGear;
-    public static boolean enableJustDireThings;
-    public static boolean enableImmersiveEngineering;
-    public static boolean enableEvilCraft;
-    public static boolean enableForbiddenArcanus;
-    public static boolean enableIntegratedDynamics;
-    public static boolean enableOccultism;
-    public static boolean enablePamsCrops;
-    public static boolean enablePamsTrees;
-    public static boolean enableCroptopia;
-    public static boolean enableCobblemon;
-    public static boolean enableActuallyAdditions;
-    public static boolean enableTheAetherII;
-
     // =========================================================================
     // Registration
     // =========================================================================
 
     public static void register(ModContainer container) {
-        compatibilityConfig();
         moduleConfig();
-        fertilizerConfig();
         machineConfig();
         COMMON_CONFIG = COMMON_BUILDER.build();
         SPEC = COMMON_CONFIG;
@@ -153,71 +84,27 @@ public class Config {
     // Config builders
     // =========================================================================
 
-    private static void compatibilityConfig() {
-        COMMON_BUILDER.comment("Mod Compatibility Settings").push("compatibility");
-        ENABLE_MYSTICAL_AGRICULTURE = COMMON_BUILDER.comment("Enable Mystical Agriculture compatibility").define("enable_mystical_agriculture", true);
-        ENABLE_MYSTICAL_AGRADDITIONS = COMMON_BUILDER.comment("Enable Mystical Agradditions compatibility").define("enable_mystical_agradditions", true);
-        ENABLE_FARMERS_DELIGHT = COMMON_BUILDER.comment("Enable Farmer's Delight compatibility").define("enable_farmers_delight", true);
-        ENABLE_ARS_NOUVEAU = COMMON_BUILDER.comment("Enable Ars Nouveau compatibility").define("enable_ars_nouveau", true);
-        ENABLE_ARS_ELEMENTAL = COMMON_BUILDER.comment("Enable Ars Elemental compatibility").define("enable_ars_elemental", true);
-        ENABLE_SILENT_GEAR = COMMON_BUILDER.comment("Enable Silent Gear compatibility").define("enable_silent_gear", true);
-        ENABLE_JUST_DIRE_THINGS = COMMON_BUILDER.comment("Enable Just Dire Things compatibility").define("enable_just_dire_things", true);
-        ENABLE_IMMERSIVE_ENGINEERING = COMMON_BUILDER.comment("Enable Immersive Engineering compatibility").define("enable_immersive_engineering", true);
-        ENABLE_EVILCRAFT = COMMON_BUILDER.comment("Enable EvilCraft compatibility").define("enable_evilcraft", true);
-        ENABLE_FORBIDDEN_ARCANUS = COMMON_BUILDER.comment("Enable Forbidden and Arcanus compatibility").define("enable_forbidden_arcanus", true);
-        ENABLE_INTEGRATED_DYNAMICS = COMMON_BUILDER.comment("Enable Integrated Dynamics compatibility").define("enable_integrated_dynamics", true);
-        ENABLE_OCCULTISM = COMMON_BUILDER.comment("Enable Occultism compatibility").define("enable_occultism", true);
-        ENABLE_PAMS_CROPS = COMMON_BUILDER.comment("Enable Pam's HarvestCraft - Crops compatibility").define("enable_pams_crops", true);
-        ENABLE_PAMS_TREES = COMMON_BUILDER.comment("Enable Pam's HarvestCraft - Trees compatibility").define("enable_pams_trees", true);
-        ENABLE_CROPTOPIA = COMMON_BUILDER.comment("Enable Croptopia compatibility").define("enable_croptopia", true);
-        ENABLE_COBBLEMON = COMMON_BUILDER.comment("Enable Cobblemon compatibility").define("enable_cobblemon", true);
-        ENABLE_ACTUALLY_ADDITIONS = COMMON_BUILDER.comment("Enable Actually Additions compatibility").define("enable_actually_additions", true);
-        ENABLE_THE_AETHER_II = COMMON_BUILDER.comment("Enable The Aether II compatibility").define("enable_the_aether_ii", true);
-        COMMON_BUILDER.pop();
-    }
-
     private static void moduleConfig() {
         COMMON_BUILDER.comment("Module Effectiveness Settings").push("modules");
 
         COMMON_BUILDER.comment("Speed Module Configuration").push("speed_modules");
-        SPEED_MODULE_MK1_MULTIPLIER = COMMON_BUILDER.comment("Speed multiplier for SM-MK1 module").defineInRange("mk1_speed_multiplier", 1.5D, 0.1D, 10.0D);
-        SPEED_MODULE_MK1_POWER_MULTIPLIER = COMMON_BUILDER.comment("Power consumption multiplier for SM-MK1 module").defineInRange("mk1_power_multiplier", 1.5D, 0.1D, 10.0D);
-        SPEED_MODULE_MK2_MULTIPLIER = COMMON_BUILDER.comment("Speed multiplier for SM-MK2 module").defineInRange("mk2_speed_multiplier", 1.75D, 0.1D, 10.0D);
-        SPEED_MODULE_MK2_POWER_MULTIPLIER = COMMON_BUILDER.comment("Power consumption multiplier for SM-MK2 module").defineInRange("mk2_power_multiplier", 1.75D, 0.1D, 10.0D);
-        SPEED_MODULE_MK3_MULTIPLIER = COMMON_BUILDER.comment("Speed multiplier for SM-MK3 module").defineInRange("mk3_speed_multiplier", 2.0D, 0.1D, 10.0D);
-        SPEED_MODULE_MK3_POWER_MULTIPLIER = COMMON_BUILDER.comment("Power consumption multiplier for SM-MK3 module").defineInRange("mk3_power_multiplier", 2.0D, 0.1D, 10.0D);
+        SPEED_MODULE_MK1_MULTIPLIER = COMMON_BUILDER.comment("Speed multiplier for Speed Module-MK1").defineInRange("mk1_speed_multiplier", 1.5D, 0.1D, 10.0D);
+        SPEED_MODULE_MK1_POWER_MULTIPLIER = COMMON_BUILDER.comment("Power consumption multiplier for Speed Module-MK1").defineInRange("mk1_power_multiplier", 1.5D, 0.1D, 10.0D);
+        SPEED_MODULE_MK2_MULTIPLIER = COMMON_BUILDER.comment("Speed multiplier for Speed Module-MK2").defineInRange("mk2_speed_multiplier", 1.75D, 0.1D, 10.0D);
+        SPEED_MODULE_MK2_POWER_MULTIPLIER = COMMON_BUILDER.comment("Power consumption multiplier for Speed Module-MK2").defineInRange("mk2_power_multiplier", 1.75D, 0.1D, 10.0D);
+        SPEED_MODULE_MK3_MULTIPLIER = COMMON_BUILDER.comment("Speed multiplier for Speed Module-MK3").defineInRange("mk3_speed_multiplier", 2.0D, 0.1D, 10.0D);
+        SPEED_MODULE_MK3_POWER_MULTIPLIER = COMMON_BUILDER.comment("Power consumption multiplier for Speed Module-MK3").defineInRange("mk3_power_multiplier", 2.0D, 0.1D, 10.0D);
         COMMON_BUILDER.pop();
 
         COMMON_BUILDER.comment("Yield Module Configuration").push("yield_modules");
-        YIELD_MODULE_MK1_MULTIPLIER = COMMON_BUILDER.comment("Yield multiplier for YM-MK1 module").defineInRange("mk1_yield_multiplier", 1.5D, 0.1D, 10.0D);
-        YIELD_MODULE_MK1_SPEED_PENALTY = COMMON_BUILDER.comment("Speed penalty for YM-MK1 module (multiplier)").defineInRange("mk1_speed_penalty", 0.95D, 0.1D, 1.0D);
-        YIELD_MODULE_MK2_MULTIPLIER = COMMON_BUILDER.comment("Yield multiplier for YM-MK2 module").defineInRange("mk2_yield_multiplier", 1.75D, 0.1D, 10.0D);
-        YIELD_MODULE_MK2_SPEED_PENALTY = COMMON_BUILDER.comment("Speed penalty for YM-MK2 module (multiplier)").defineInRange("mk2_speed_penalty", 0.90D, 0.1D, 1.0D);
-        YIELD_MODULE_MK3_MULTIPLIER = COMMON_BUILDER.comment("Yield multiplier for YM-MK3 module").defineInRange("mk3_yield_multiplier", 2.0D, 0.1D, 10.0D);
-        YIELD_MODULE_MK3_SPEED_PENALTY = COMMON_BUILDER.comment("Speed penalty for YM-MK3 module (multiplier)").defineInRange("mk3_speed_penalty", 0.75D, 0.1D, 1.0D);
+        YIELD_MODULE_MK1_MULTIPLIER = COMMON_BUILDER.comment("Yield multiplier for Yield Module-MK1").defineInRange("mk1_yield_multiplier", 1.5D, 0.1D, 10.0D);
+        YIELD_MODULE_MK1_SPEED_PENALTY = COMMON_BUILDER.comment("Speed penalty for Yield Module-MK1 (multiplier)").defineInRange("mk1_speed_penalty", 0.95D, 0.1D, 1.0D);
+        YIELD_MODULE_MK2_MULTIPLIER = COMMON_BUILDER.comment("Yield multiplier for Yield Module-MK2").defineInRange("mk2_yield_multiplier", 1.75D, 0.1D, 10.0D);
+        YIELD_MODULE_MK2_SPEED_PENALTY = COMMON_BUILDER.comment("Speed penalty for Yield Module-MK2 (multiplier)").defineInRange("mk2_speed_penalty", 0.90D, 0.1D, 1.0D);
+        YIELD_MODULE_MK3_MULTIPLIER = COMMON_BUILDER.comment("Yield multiplier for Yield Module-MK3").defineInRange("mk3_yield_multiplier", 2.0D, 0.1D, 10.0D);
+        YIELD_MODULE_MK3_SPEED_PENALTY = COMMON_BUILDER.comment("Speed penalty for Yield Module-MK3 (multiplier)").defineInRange("mk3_speed_penalty", 0.75D, 0.1D, 1.0D);
         COMMON_BUILDER.pop();
 
-        COMMON_BUILDER.pop();
-    }
-
-    private static void fertilizerConfig() {
-        COMMON_BUILDER.comment("Fertilizer Configuration").push("fertilizers");
-        FERTILIZER_BONE_MEAL_SPEED_MULTIPLIER = COMMON_BUILDER.comment("Speed multiplier for Bone Meal").defineInRange("bone_meal_speed_multiplier", 1.2D, 0.1D, 10.0D);
-        FERTILIZER_BONE_MEAL_YIELD_MULTIPLIER = COMMON_BUILDER.comment("Yield multiplier for Bone Meal").defineInRange("bone_meal_yield_multiplier", 1.2D, 0.1D, 10.0D);
-        FERTILIZER_CRUDE_BIOMASS_SPEED_MULTIPLIER = COMMON_BUILDER.comment("Speed multiplier for Crude Biomass fertilizer").defineInRange("crude_biomass_speed_multiplier", 1.25D, 0.1D, 10.0D);
-        FERTILIZER_CRUDE_BIOMASS_YIELD_MULTIPLIER = COMMON_BUILDER.comment("Yield multiplier for Crude Biomass fertilizer").defineInRange("crude_biomass_yield_multiplier", 1.25D, 0.1D, 10.0D);
-        FERTILIZER_BIOMASS_SPEED_MULTIPLIER = COMMON_BUILDER.comment("Speed multiplier for Biomass fertilizer").defineInRange("biomass_speed_multiplier", 1.3D, 0.1D, 10.0D);
-        FERTILIZER_BIOMASS_YIELD_MULTIPLIER = COMMON_BUILDER.comment("Yield multiplier for Biomass fertilizer").defineInRange("biomass_yield_multiplier", 1.3D, 0.1D, 10.0D);
-        FERTILIZER_COMPACTED_BIOMASS_SPEED_MULTIPLIER = COMMON_BUILDER.comment("Speed multiplier for Compacted Biomass fertilizer").defineInRange("compacted_biomass_speed_multiplier", 1.8D, 0.1D, 10.0D);
-        FERTILIZER_COMPACTED_BIOMASS_YIELD_MULTIPLIER = COMMON_BUILDER.comment("Yield multiplier for Compacted Biomass fertilizer").defineInRange("compacted_biomass_yield_multiplier", 1.8D, 0.1D, 10.0D);
-        FERTILIZER_FERTILIZED_ESSENCE_SPEED_MULTIPLIER = COMMON_BUILDER.comment("Speed multiplier for Fertilized Essence").defineInRange("fertilized_essence_speed_multiplier", 1.3D, 0.1D, 10.0D);
-        FERTILIZER_FERTILIZED_ESSENCE_YIELD_MULTIPLIER = COMMON_BUILDER.comment("Yield multiplier for Fertilized Essence").defineInRange("fertilized_essence_yield_multiplier", 1.3D, 0.1D, 10.0D);
-        FERTILIZER_MYSTICAL_FERTILIZER_SPEED_MULTIPLIER = COMMON_BUILDER.comment("Speed multiplier for Mystical Fertilizer").defineInRange("mystical_fertilizer_speed_multiplier", 1.6D, 0.1D, 10.0D);
-        FERTILIZER_MYSTICAL_FERTILIZER_YIELD_MULTIPLIER = COMMON_BUILDER.comment("Yield multiplier for Mystical Fertilizer").defineInRange("mystical_fertilizer_yield_multiplier", 1.6D, 0.1D, 10.0D);
-        FERTILIZER_IMMERSIVE_FERTILIZER_SPEED_MULTIPLIER = COMMON_BUILDER.comment("Speed multiplier for Immersive Engineering Fertilizer").defineInRange("immersive_fertilizer_speed_multiplier", 1.4D, 0.1D, 10.0D);
-        FERTILIZER_IMMERSIVE_FERTILIZER_YIELD_MULTIPLIER = COMMON_BUILDER.comment("Yield multiplier for Immersive Engineering Fertilizer").defineInRange("immersive_fertilizer_yield_multiplier", 1.4D, 0.1D, 10.0D);
-        FERTILIZER_ARCANE_BONE_MEAL_SPEED_MULTIPLIER = COMMON_BUILDER.comment("Speed multiplier for Arcane Bone Meal").defineInRange("arcane_bone_meal_speed_multiplier", 1.5D, 0.1D, 10.0D);
-        FERTILIZER_ARCANE_BONE_MEAL_YIELD_MULTIPLIER = COMMON_BUILDER.comment("Yield multiplier for Arcane Bone Meal").defineInRange("arcane_bone_meal_yield_multiplier", 1.5D, 0.1D, 10.0D);
         COMMON_BUILDER.pop();
     }
 
@@ -300,27 +187,6 @@ public class Config {
     public static double getYieldModuleMk3SpeedPenalty() { return YIELD_MODULE_MK3_SPEED_PENALTY.get(); }
 
     // =========================================================================
-    // Getters — Fertilizers
-    // =========================================================================
-
-    public static double getFertilizerBoneMealSpeedMultiplier() { return FERTILIZER_BONE_MEAL_SPEED_MULTIPLIER.get(); }
-    public static double getFertilizerBoneMealYieldMultiplier() { return FERTILIZER_BONE_MEAL_YIELD_MULTIPLIER.get(); }
-    public static double getFertilizerCrudeBiomassSpeedMultiplier() { return FERTILIZER_CRUDE_BIOMASS_SPEED_MULTIPLIER.get(); }
-    public static double getFertilizerCrudeBiomassYieldMultiplier() { return FERTILIZER_CRUDE_BIOMASS_YIELD_MULTIPLIER.get(); }
-    public static double getFertilizerBiomassSpeedMultiplier() { return FERTILIZER_BIOMASS_SPEED_MULTIPLIER.get(); }
-    public static double getFertilizerBiomassYieldMultiplier() { return FERTILIZER_BIOMASS_YIELD_MULTIPLIER.get(); }
-    public static double getFertilizerCompactedBiomassSpeedMultiplier() { return FERTILIZER_COMPACTED_BIOMASS_SPEED_MULTIPLIER.get(); }
-    public static double getFertilizerCompactedBiomassYieldMultiplier() { return FERTILIZER_COMPACTED_BIOMASS_YIELD_MULTIPLIER.get(); }
-    public static double getFertilizerFertilizedEssenceSpeedMultiplier() { return FERTILIZER_FERTILIZED_ESSENCE_SPEED_MULTIPLIER.get(); }
-    public static double getFertilizerFertilizedEssenceYieldMultiplier() { return FERTILIZER_FERTILIZED_ESSENCE_YIELD_MULTIPLIER.get(); }
-    public static double getFertilizerMysticalFertilizerSpeedMultiplier() { return FERTILIZER_MYSTICAL_FERTILIZER_SPEED_MULTIPLIER.get(); }
-    public static double getFertilizerMysticalFertilizerYieldMultiplier() { return FERTILIZER_MYSTICAL_FERTILIZER_YIELD_MULTIPLIER.get(); }
-    public static double getFertilizerImmersiveFertilizerSpeedMultiplier() { return FERTILIZER_IMMERSIVE_FERTILIZER_SPEED_MULTIPLIER.get(); }
-    public static double getFertilizerImmersiveFertilizerYieldMultiplier() { return FERTILIZER_IMMERSIVE_FERTILIZER_YIELD_MULTIPLIER.get(); }
-    public static double getFertilizerArcaneBoneMealSpeedMultiplier() { return FERTILIZER_ARCANE_BONE_MEAL_SPEED_MULTIPLIER.get(); }
-    public static double getFertilizerArcaneBoneMealYieldMultiplier() { return FERTILIZER_ARCANE_BONE_MEAL_YIELD_MULTIPLIER.get(); }
-
-    // =========================================================================
     // Getters — Cloche
     // =========================================================================
 
@@ -376,63 +242,11 @@ public class Config {
     // =========================================================================
 
     public static void loadConfig() {
-        CompostableConfig.loadConfig();
-        PlantablesConfig.loadConfig();
-        LOGGER.info("AgriTech: Evolved configs reloaded");
+        LOGGER.info("AgriTech: Evolved config reloaded");
     }
 
     @SubscribeEvent
     static void onLoad(ModConfigEvent event) {
-        enableMysticalAgriculture = ENABLE_MYSTICAL_AGRICULTURE.get() && ModList.get().isLoaded("mysticalagriculture");
-        enableMysticalAgradditions = ENABLE_MYSTICAL_AGRADDITIONS.get() && ModList.get().isLoaded("mysticalagradditions");
-        enableFarmersDelight = ENABLE_FARMERS_DELIGHT.get() && ModList.get().isLoaded("farmersdelight");
-        enableArsNouveau = ENABLE_ARS_NOUVEAU.get() && ModList.get().isLoaded("ars_nouveau");
-        enableArsElemental = ENABLE_ARS_ELEMENTAL.get() && ModList.get().isLoaded("ars_elemental");
-        enableSilentGear = ENABLE_SILENT_GEAR.get() && ModList.get().isLoaded("silentgear");
-        enableJustDireThings = ENABLE_JUST_DIRE_THINGS.get() && ModList.get().isLoaded("justdirethings");
-        enableImmersiveEngineering = ENABLE_IMMERSIVE_ENGINEERING.get() && ModList.get().isLoaded("immersiveengineering");
-        enableEvilCraft = ENABLE_EVILCRAFT.get() && ModList.get().isLoaded("evilcraft");
-        enableForbiddenArcanus = ENABLE_FORBIDDEN_ARCANUS.get() && ModList.get().isLoaded("forbidden_arcanus");
-        enableIntegratedDynamics = ENABLE_INTEGRATED_DYNAMICS.get() && ModList.get().isLoaded("integrateddynamics");
-        enableOccultism = ENABLE_OCCULTISM.get() && ModList.get().isLoaded("occultism");
-        enablePamsCrops = ENABLE_PAMS_CROPS.get() && ModList.get().isLoaded("pamhc2crops");
-        enablePamsTrees = ENABLE_PAMS_TREES.get() && ModList.get().isLoaded("pamhc2trees");
-        enableCroptopia = ENABLE_CROPTOPIA.get() && ModList.get().isLoaded("croptopia");
-        enableCobblemon = ENABLE_COBBLEMON.get() && ModList.get().isLoaded("cobblemon");
-        enableActuallyAdditions = ENABLE_ACTUALLY_ADDITIONS.get() && ModList.get().isLoaded("actuallyadditions");
-        enableTheAetherII = ENABLE_THE_AETHER_II.get() && ModList.get().isLoaded("aether_ii");
         LOGGER.info("AgriTech: Evolved configuration loaded");
-        CompostableConfig.loadConfig();
-        PlantablesConfig.loadConfig();
-        logModCompatibility();
-    }
-
-    private static void logModCompatibility() {
-        record Mod(boolean enabled, String modId, String label) {}
-        LOGGER.info("Mod Compatibility Status:");
-        for (Mod m : new Mod[]{
-                new Mod(enableMysticalAgriculture, "mysticalagriculture", "Mystical Agriculture"),
-                new Mod(enableMysticalAgradditions, "mysticalagradditions", "Mystical Agradditions"),
-                new Mod(enableFarmersDelight, "farmersdelight", "Farmer's Delight"),
-                new Mod(enableArsNouveau, "ars_nouveau", "Ars Nouveau"),
-                new Mod(enableArsElemental, "ars_elemental", "Ars Elemental"),
-                new Mod(enableSilentGear, "silentgear", "Silent Gear"),
-                new Mod(enableJustDireThings, "justdirethings", "Just Dire Things"),
-                new Mod(enableImmersiveEngineering, "immersiveengineering", "Immersive Engineering"),
-                new Mod(enableEvilCraft, "evilcraft", "EvilCraft"),
-                new Mod(enableForbiddenArcanus, "forbidden_arcanus", "Forbidden and Arcanus"),
-                new Mod(enableIntegratedDynamics, "integrateddynamics", "Integrated Dynamics"),
-                new Mod(enableOccultism, "occultism", "Occultism"),
-                new Mod(enablePamsCrops, "pamhc2crops", "Pam's HarvestCraft - Crops"),
-                new Mod(enablePamsTrees, "pamhc2trees", "Pam's HarvestCraft - Trees"),
-                new Mod(enableCroptopia, "croptopia", "Croptopia"),
-                new Mod(enableCobblemon, "cobblemon", "Cobblemon"),
-                new Mod(enableActuallyAdditions, "actuallyadditions", "Actually Additions"),
-                new Mod(enableTheAetherII, "aether_ii", "The Aether II")
-        }) {
-            if (m.enabled() && ModList.get().isLoaded(m.modId())) {
-                LOGGER.info("  - {}: ENABLED", m.label());
-            }
-        }
     }
 }
