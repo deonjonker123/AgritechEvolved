@@ -3,6 +3,7 @@ package com.misterd.agritechevolved.compat.jei;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.misterd.agritechevolved.block.ATEBlocks;
+import com.misterd.agritechevolved.recipe.ATERecipeTypes;
 import com.misterd.agritechevolved.recipe.CropRecipe;
 import com.misterd.agritechevolved.recipe.TreeRecipe;
 import com.mojang.logging.LogUtils;
@@ -159,6 +160,29 @@ public class ATJeiPlugin implements IModPlugin {
                 }
             } catch (Exception e) {
                 LogUtils.getLogger().error("[ATE JEI] Failed to access datapack dir: {}", e.getMessage());
+            }
+
+            // Pick up KubeJS and other runtime-injected recipes from server RecipeManager
+            try {
+                server.getRecipeManager().getRecipes().forEach(holder -> {
+                    try {
+                        if (holder.value().getType() == ATERecipeTypes.CROP_TYPE.get()) {
+                            PlanterRecipe pr = PlanterRecipe.fromCrop((CropRecipe) holder.value());
+                            if (recipes.stream().noneMatch(r -> r.getPlant().equals(pr.getPlant()))) {
+                                recipes.add(pr);
+                            }
+                        } else if (holder.value().getType() == ATERecipeTypes.TREE_TYPE.get()) {
+                            PlanterRecipe pr = PlanterRecipe.fromTree((TreeRecipe) holder.value());
+                            if (recipes.stream().noneMatch(r -> r.getPlant().equals(pr.getPlant()))) {
+                                recipes.add(pr);
+                            }
+                        }
+                    } catch (Exception e) {
+                        LogUtils.getLogger().error("[ATE JEI] Failed to process server recipe: {}", e.getMessage());
+                    }
+                });
+            } catch (Exception e) {
+                LogUtils.getLogger().error("[ATE JEI] Failed to read server RecipeManager: {}", e.getMessage());
             }
         }
 
