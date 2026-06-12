@@ -8,7 +8,6 @@
       "min": 1
     }
   ],
-  "growth_ticks": 1200,
   "seed": "minecraft:red_tulip",
   "soils": [
     "#agritechevolved:dirt_soils"

@@ -32,8 +32,6 @@ import java.util.concurrent.CompletableFuture;
 
 public class ATERecipeProvider extends RecipeProvider {
 
-    private static final int DEFAULT_CROP_TICKS = 1200;
-
     public ATERecipeProvider(HolderLookup.Provider provider, RecipeOutput recipeOutput) {
         super(provider, recipeOutput);
     }
@@ -464,13 +462,10 @@ public class ATERecipeProvider extends RecipeProvider {
                 drop(Items.CHORUS_FLOWER, 1, 1, 0.02f));
 
         saveCropRecipe("moss_block", Items.MOSS_BLOCK, List.of(stoneSoils),
-                drop(Items.MOSS_BLOCK, 1, 2),
-                drop(Items.MOSS_CARPET, 1, 1, 0.1f),
-                drop(Items.WHEAT_SEEDS, 1, 1, 0.1f));
+                drop(Items.MOSS_BLOCK, 1, 2));
 
         saveCropRecipe("pale_moss_block", Items.PALE_MOSS_BLOCK, List.of(stoneSoils),
-                drop(Items.PALE_MOSS_BLOCK, 1, 2),
-                drop(Items.PALE_MOSS_CARPET, 1, 1, 0.1f));
+                drop(Items.PALE_MOSS_BLOCK, 1, 2));
 
         saveCropRecipe("brown_mushroom", Items.BROWN_MUSHROOM, List.of(mushroomSoils),
                 drop(Items.BROWN_MUSHROOM, 1, 1));
@@ -588,7 +583,7 @@ public class ATERecipeProvider extends RecipeProvider {
     }
 
     private void saveCropRecipe(String name, Item seed, List<Ingredient> soils, DropEntry... drops) {
-        CropRecipe recipe = new CropRecipe(Ingredient.of(seed), soils, DEFAULT_CROP_TICKS, List.of(drops));
+        CropRecipe recipe = new CropRecipe(Ingredient.of(seed), soils, List.of(drops));
         ResourceKey<Recipe<?>> key = ResourceKey.create(
                 Registries.RECIPE,
                 Identifier.fromNamespaceAndPath("agritechevolved", "planter/crop/" + name)
