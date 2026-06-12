@@ -125,8 +125,8 @@
   "tooltip.agritechevolved.fuel.rf_per_second": "§eGenerates %s RF/second§r",
   "tooltip.agritechevolved.fuel.duration_bonus": "§a+%s%% RF from longer burn§r",
   "tooltip.agritechevolved.fuel.duration_penalty": "§c-%s%% RF from shorter burn§r",
-  "tooltip.agritechevolved.fuel.shift_info": "§6§oHold Shift for Fuel & info§r",
-  "tooltip.agritechevolved.crude_fuel.shift_info": "§6§oHold Shift for Fuel info§r",
+  "tooltip.agritechevolved.fuel.shift_info": "§6§oHold Shift more info§r",
+  "tooltip.agritechevolved.crude_fuel.shift_info": "§6§oHold Shift for more info§r",
 
   "tooltip.agritechevolved.infused_farmland.growth_boost": "Increases growth speed by 100%",
   "tooltip.agritechevolved.infused_farmland.hoe_craft": "Crafted by combining Mulch and a Hoe in a Crafting Table",
@@ -143,13 +143,19 @@
   "tooltip.agritechevolved.slot.upgrade_2": "Upgrade Slot 2",
   "tooltip.agritechevolved.slot.upgrade": "Speed Upgrade Slot",
 
+  "tooltip.agritechevolved.soil_type": "Agritech: Evolved Soil Info",
+  "tooltip.agritechevolved.soil_growth_modifier": "Growth Speed: %s",
+  "tooltip.agritechevolved.fertilizer_type": "Agritech: Evolved Fertilizer Info",
+  "tooltip.agritechevolved.fertilizer_speed": "Growth Speed: %s",
+  "tooltip.agritechevolved.fertilizer_yield": "Yield Bonus: %s",
+
   "config.jade.agritechevolved.planter_info": "Planter Info",
   "config.jade.plugin_agritechevolved.planter_info": "Planter Info",
   "jade.agritechevolved.crop_ready": "%s - Ready to Harvest!",
   "jade.agritechevolved.crop_progress": "%s - Stage %d/%d (%d%%)",
   "jade.agritechevolved.soil_info": "Soil: %s (%s growth)",
   "jade.agritechevolved.modules_installed": "Modules: %s",
-  "jade.agritechevolved.fertilizer_info": "Fertilizer: %s",
+  "jade.agritechevolved.fertilizer_info": "Fertilizer: %s (Speed: %s, Yield: %s)",
   "jade.agritechevolved.cloche_installed": "Cloche: Installed (Speed: %s, Yield: %s)",
   "jade.agritechevolved.energy_info": "Energy: %s / %s RF",
   "jade.agritechevolved.module_info": "Modules: Speed %s | Yield %s"

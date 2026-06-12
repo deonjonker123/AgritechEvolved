@@ -230,20 +230,23 @@ public class AdvancedPlanterBlock extends BaseEntityBlock {
     }
 
     private InteractionResult handleFertilizer(BlockState state, Level level, BlockPos pos, Player player, AdvancedPlanterBlockEntity planter, ItemStack heldItem) {
-        if (!planter.getStack(4).isEmpty()) {
+        if (planter.getStack(0).isEmpty() || planter.getStack(1).isEmpty() || planter.isReadyToHarvest()) {
             if (!level.isClientSide()) openGui(player, planter, pos);
             return InteractionResult.SUCCESS;
         }
-        if (level.isClientSide()) return InteractionResult.SUCCESS;
-
-        try (Transaction tx = Transaction.openRoot()) {
-            planter.inventory.insert(4, ItemResource.of(heldItem), heldItem.getCount(), tx);
-            tx.commit();
+        if (!level.isClientSide()) {
+            var fertData = heldItem.getItem().builtInRegistryHolder().getData(ATEDataMaps.FERTILIZERS);
+            if (fertData != null) {
+                planter.applyManualFertilizer(fertData.speedMultiplier());
+                if (!player.getAbilities().instabuild) heldItem.shrink(1);
+                level.playSound(null, pos, SoundEvents.BONE_MEAL_USE, SoundSource.BLOCKS, 1.0F, 1.0F);
+                if (level instanceof ServerLevel serverLevel) {
+                    serverLevel.sendParticles(net.minecraft.core.particles.ParticleTypes.HAPPY_VILLAGER,
+                            pos.getX() + 0.5, pos.getY() + 0.8, pos.getZ() + 0.5, 6, 0.3, 0.2, 0.3, 0.0);
+                }
+                level.sendBlockUpdated(pos, state, state, 3);
+            }
         }
-        if (!player.getAbilities().instabuild) heldItem.shrink(1);
-        level.playSound(null, pos, SoundEvents.BONE_MEAL_USE, SoundSource.BLOCKS, 1.0F, 1.0F);
-        level.sendBlockUpdated(pos, state, state, 2);
-        planter.setChanged();
         return InteractionResult.SUCCESS;
     }
 

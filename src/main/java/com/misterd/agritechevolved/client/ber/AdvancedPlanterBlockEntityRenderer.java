@@ -40,7 +40,7 @@ public class AdvancedPlanterBlockEntityRenderer
         state.plantStack = be.getStack(0).copy();
         state.growthProgress = be.getGrowthProgress();
         state.growthStage = be.getGrowthStage();
-        state.isTree = be.isTree();
+        state.isTree = PlanterBlockEntityRenderer.isTreePlant(state.plantStack);
         state.distanceSq = cameraPos.distanceToSqr(Vec3.atCenterOf(be.getBlockPos()));
         state.soilIsWater = !state.soilStack.isEmpty() && RegistryHelper.getItemId(state.soilStack).equals("minecraft:water_bucket");
 

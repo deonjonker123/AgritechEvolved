@@ -50,7 +50,7 @@ public class ATERecipeProvider extends RecipeProvider {
 
         @Override
         public String getName() {
-            return "ATE Recipes";
+            return "Agritech: Evolved Recipes";
         }
     }
 
@@ -497,6 +497,7 @@ public class ATERecipeProvider extends RecipeProvider {
 
     private void generateTreeRecipes() {
         Ingredient treeSoils = tagIngredient(ATETags.Items.TREE_SOILS);
+        Ingredient netherSoils = tagIngredient(ATETags.Items.NETHER_SOILS);
 
         saveTreeRecipe("oak", Items.OAK_SAPLING, List.of(treeSoils),
                 drop(Items.OAK_LOG, 2, 6),
@@ -559,6 +560,18 @@ public class ATERecipeProvider extends RecipeProvider {
                 drop(Items.AZALEA, 1, 1, 0.2f),
                 drop(Items.FLOWERING_AZALEA, 1, 1, 0.2f),
                 drop(Items.STICK, 1, 2, 0.5f));
+
+        saveTreeRecipe("crimson_fungus", Items.CRIMSON_FUNGUS, List.of(netherSoils),
+                drop(Items.CRIMSON_STEM, 2, 6),
+                drop(Items.NETHER_WART_BLOCK, 2, 6, 1f),
+                drop(Items.WEEPING_VINES, 1, 2, 0.5f),
+                drop(Items.SHROOMLIGHT, 1, 2, 0.5f));
+
+        saveTreeRecipe("warped_fungus", Items.WARPED_FUNGUS, List.of(netherSoils),
+                drop(Items.WARPED_STEM, 2, 6),
+                drop(Items.WARPED_WART_BLOCK, 2, 6, 1f),
+                drop(Items.TWISTING_VINES, 1, 2, 0.5f),
+                drop(Items.SHROOMLIGHT, 1, 2, 0.5f));
     }
 
     private Ingredient tagIngredient(TagKey<Item> tag) {

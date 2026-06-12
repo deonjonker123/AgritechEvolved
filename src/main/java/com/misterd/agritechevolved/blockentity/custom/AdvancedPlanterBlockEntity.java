@@ -557,6 +557,28 @@ public class AdvancedPlanterBlockEntity extends BlockEntity implements MenuProvi
         resetGrowth();
     }
 
+    public boolean isReadyToHarvest() {
+        return readyToHarvest;
+    }
+
+    public void applyManualFertilizer(float speedMultiplier) {
+        if (readyToHarvest) return;
+        ItemStack soil = getStack(SLOT_SOIL);
+        float totalMod = getSoilGrowthModifier(soil)
+                * getModuleSpeedModifier()
+                * getClocheGrowthModifier()
+                * speedMultiplier;
+        int growthTime = Math.max(1, Math.round(Config.getAdvancedPlanterBaseProcessingTime() / totalMod));
+        int boost = Math.max(1, Math.round(growthTime * 0.1f * speedMultiplier));
+        growthTicks = Math.min(growthTicks + boost, growthTime);
+        growthProgress = (int) (growthTicks / (float) growthTime * 100);
+        if (growthTicks >= growthTime) {
+            readyToHarvest = true;
+            growthProgress = 100;
+        }
+        setChanged();
+    }
+
     private void consumeFertilizer() {
         ItemStack stack = getStack(SLOT_FERTILIZER);
         if (stack.isEmpty()) return;

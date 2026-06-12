@@ -86,7 +86,7 @@ public class PlanterBlockEntityRenderer
         state.plantStack = be.getStack(0).copy();
         state.growthProgress = be.getGrowthProgress();
         state.growthStage = be.getGrowthStage();
-        state.isTree = be.isTree();
+        state.isTree = isTreePlant(state.plantStack);
         state.distanceSq = cameraPos.distanceToSqr(Vec3.atCenterOf(be.getBlockPos()));
         state.soilIsWater = !state.soilStack.isEmpty() && RegistryHelper.getItemId(state.soilStack).equals("minecraft:water_bucket");
 
@@ -184,6 +184,12 @@ public class PlanterBlockEntityRenderer
         event.register(
                 CLOCHE_DOME_KEY, SimpleUnbakedStandaloneModel.quadCollection(Identifier.fromNamespaceAndPath(AgritechEvolved.MODID, "block/cloche_dome"))
         );
+    }
+
+    static boolean isTreePlant(ItemStack stack) {
+        if (stack.isEmpty() || !(stack.getItem() instanceof BlockItem bi)) return false;
+        BlockState def = bi.getBlock().defaultBlockState();
+        return def.getProperties().stream().noneMatch(p -> p.getName().equals("age"));
     }
 
     private static void submitWater(PoseStack poseStack, SubmitNodeCollector collector, int light) {
