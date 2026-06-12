@@ -1,10 +1,13 @@
 package com.misterd.agritechevolved.compat.jei;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import com.misterd.agritechevolved.block.ATEBlocks;
-import com.misterd.agritechevolved.recipe.ATERecipeTypes;
 import com.misterd.agritechevolved.recipe.CropRecipe;
 import com.misterd.agritechevolved.recipe.TreeRecipe;
 import com.mojang.logging.LogUtils;
+import com.mojang.serialization.DynamicOps;
+import com.mojang.serialization.JsonOps;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.helpers.IGuiHelper;
@@ -15,16 +18,23 @@ import mezz.jei.api.runtime.IJeiRuntime;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.RegistryOps;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.RecipeHolder;
-import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.block.ComposterBlock;
+import net.minecraft.world.level.storage.LevelResource;
+import net.neoforged.fml.ModList;
 
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @JeiPlugin
 public class ATJeiPlugin implements IModPlugin {
@@ -32,9 +42,8 @@ public class ATJeiPlugin implements IModPlugin {
     private static final Identifier PLUGIN_ID =
             Identifier.fromNamespaceAndPath("agritechevolved", "jei_plugin");
 
-    private static final float DENSE_THRESHOLD = 0.65f;
-
     private static IJeiRuntime jeiRuntime;
+    private static boolean recipesRegistered = false;
 
     @Override
     public Identifier getPluginUid() {
@@ -53,92 +62,148 @@ public class ATJeiPlugin implements IModPlugin {
 
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
-        registration.addRecipes(PlanterRecipeCategory.PLANTER_RECIPE_TYPE, generatePlanterRecipes());
+        List<PlanterRecipe> planter = buildPlanterRecipes();
+        recipesRegistered = !planter.isEmpty();
+        if (recipesRegistered) {
+            registration.addRecipes(PlanterRecipeCategory.PLANTER_RECIPE_TYPE, planter);
+        }
         registration.addRecipes(CompostRecipeCategory.COMPOST_RECIPE_TYPE, generateCompostRecipes());
         registration.addRecipes(FarmlandRecipeCategory.FARMLAND_RECIPE_TYPE, generateFarmlandRecipes());
     }
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        registration.addCraftingStation(PlanterRecipeCategory.PLANTER_RECIPE_TYPE, ATEBlocks.OAK_PLANTER);
-        registration.addCraftingStation(CompostRecipeCategory.COMPOST_RECIPE_TYPE, ATEBlocks.COMPOSTER);
+        registration.addCraftingStation(PlanterRecipeCategory.PLANTER_RECIPE_TYPE, new ItemStack(ATEBlocks.OAK_PLANTER.get()));
+        registration.addCraftingStation(CompostRecipeCategory.COMPOST_RECIPE_TYPE, new ItemStack(ATEBlocks.COMPOSTER.get()));
         registration.addCraftingStation(FarmlandRecipeCategory.FARMLAND_RECIPE_TYPE, new ItemStack(Items.DIAMOND_HOE));
     }
 
-    private List<PlanterRecipe> generatePlanterRecipes() {
-        List<PlanterRecipe> recipes = new ArrayList<>();
-        recipes.addAll(generateCropRecipes());
-        recipes.addAll(generateTreeRecipes());
-        LogUtils.getLogger().info("Generated {} total planter recipes for JEI", recipes.size());
-        return recipes;
+    @Override
+    public void onRuntimeAvailable(IJeiRuntime runtime) {
+        jeiRuntime = runtime;
+        if (!recipesRegistered && Minecraft.getInstance().getConnection() != null) {
+            List<PlanterRecipe> recipes = buildPlanterRecipes();
+            if (!recipes.isEmpty()) {
+                runtime.getRecipeManager().addRecipes(PlanterRecipeCategory.PLANTER_RECIPE_TYPE, recipes);
+                LogUtils.getLogger().info("[ATE JEI] Injected {} planter recipes from onRuntimeAvailable", recipes.size());
+            }
+        }
     }
 
-    private RecipeManager getRecipeManager() {
+    public static IJeiRuntime getJeiRuntime() {
+        return jeiRuntime;
+    }
+
+    static List<PlanterRecipe> buildPlanterRecipes() {
         Minecraft mc = Minecraft.getInstance();
-        if (mc.level == null) return null;
-        if (mc.level.recipeAccess() instanceof RecipeManager rm) return rm;
-        return null;
-    }
-
-    private List<PlanterRecipe> generateCropRecipes() {
-        List<PlanterRecipe> recipes = new ArrayList<>();
-        RecipeManager rm = getRecipeManager();
-        if (rm == null) {
-            LogUtils.getLogger().warn("RecipeManager unavailable during JEI crop recipe generation");
-            return recipes;
+        if (mc.getConnection() == null) {
+            LogUtils.getLogger().warn("[ATE JEI] No connection — deferred");
+            return List.of();
         }
-        for (RecipeHolder<?> holder : rm.getRecipes()) {
-            if (holder.value().getType() != ATERecipeTypes.CROP_TYPE.get()) continue;
+        List<PlanterRecipe> recipes = new ArrayList<>();
+        DynamicOps<JsonElement> ops = RegistryOps.create(JsonOps.INSTANCE, mc.getConnection().registryAccess());
+
+        // Walk mod JAR / dev resources
+        Path modFilePath = ModList.get().getModFileById("agritechevolved").getFile().getFilePath();
+        try {
+            if (Files.isDirectory(modFilePath)) {
+                Path resourcesDir = modFilePath.getParent().getParent().getParent().resolve("resources").resolve("main");
+                Path recipePath = resourcesDir.resolve("data").resolve("agritechevolved").resolve("recipe");
+                if (!Files.exists(recipePath)) {
+                    recipePath = modFilePath.resolve("data").resolve("agritechevolved").resolve("recipe");
+                }
+                if (Files.exists(recipePath)) {
+                    walkRecipes(recipePath, ops, recipes);
+                } else {
+                    LogUtils.getLogger().error("[ATE JEI] Recipe path not found: {}", recipePath);
+                }
+            } else {
+                try (FileSystem fs = FileSystems.newFileSystem(modFilePath, Map.of())) {
+                    Path recipePath = fs.getPath("/data/agritechevolved/recipe");
+                    if (Files.exists(recipePath)) {
+                        walkRecipes(recipePath, ops, recipes);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            LogUtils.getLogger().error("[ATE JEI] Failed to walk mod recipes: {}", e.getMessage());
+        }
+
+        // Walk world datapacks (singleplayer only)
+        var server = mc.getSingleplayerServer();
+        if (server != null) {
             try {
-                recipes.add(PlanterRecipe.fromCrop((CropRecipe) holder.value()));
+                Path datapackDir = server.getWorldPath(LevelResource.DATAPACK_DIR);
+                if (Files.isDirectory(datapackDir)) {
+                    try (var dpStream = Files.list(datapackDir)) {
+                        dpStream.forEach(dp -> {
+                            try {
+                                if (Files.isDirectory(dp)) {
+                                    Path recipePath = dp.resolve("data").resolve("agritechevolved").resolve("recipe");
+                                    if (Files.exists(recipePath)) {
+                                        walkRecipes(recipePath, ops, recipes);
+                                    }
+                                } else if (dp.toString().endsWith(".zip")) {
+                                    try (FileSystem fs = FileSystems.newFileSystem(dp, Map.of())) {
+                                        Path recipePath = fs.getPath("/data/agritechevolved/recipe");
+                                        if (Files.exists(recipePath)) {
+                                            walkRecipes(recipePath, ops, recipes);
+                                        }
+                                    }
+                                }
+                            } catch (Exception e) {
+                                LogUtils.getLogger().error("[ATE JEI] Failed to walk datapack {}: {}", dp.getFileName(), e.getMessage());
+                            }
+                        });
+                    }
+                }
             } catch (Exception e) {
-                LogUtils.getLogger().error("Error creating JEI crop recipe for {}: {}", holder.id(), e.getMessage());
+                LogUtils.getLogger().error("[ATE JEI] Failed to access datapack dir: {}", e.getMessage());
             }
         }
-        LogUtils.getLogger().info("Generated {} crop planter recipes for JEI", recipes.size());
+
+        LogUtils.getLogger().info("[ATE JEI] Built {} planter recipes", recipes.size());
         return recipes;
     }
 
-    private List<PlanterRecipe> generateTreeRecipes() {
-        List<PlanterRecipe> recipes = new ArrayList<>();
-        RecipeManager rm = getRecipeManager();
-        if (rm == null) {
-            LogUtils.getLogger().warn("RecipeManager unavailable during JEI tree recipe generation");
-            return recipes;
+    private static void walkRecipes(Path recipePath, DynamicOps<JsonElement> ops, List<PlanterRecipe> recipes) throws Exception {
+        try (var stream = Files.walk(recipePath)) {
+            stream.filter(p -> p.toString().endsWith(".json")).forEach(p -> {
+                try (var reader = Files.newBufferedReader(p)) {
+                    JsonElement json = JsonParser.parseReader(reader);
+                    if (!json.isJsonObject()) return;
+                    var obj = json.getAsJsonObject();
+                    var typeEl = obj.get("type");
+                    if (typeEl == null) return;
+                    String type = typeEl.getAsString();
+                    if ("agritechevolved:crop".equals(type)) {
+                        CropRecipe.CODEC.codec().parse(ops, obj)
+                                .result().ifPresent(crop -> recipes.add(PlanterRecipe.fromCrop(crop)));
+                    } else if ("agritechevolved:tree".equals(type)) {
+                        TreeRecipe.CODEC.codec().parse(ops, obj)
+                                .result().ifPresent(tree -> recipes.add(PlanterRecipe.fromTree(tree)));
+                    }
+                } catch (Exception e) {
+                    LogUtils.getLogger().error("[ATE JEI] Failed to parse {}: {}", p, e.getMessage());
+                }
+            });
         }
-        for (RecipeHolder<?> holder : rm.getRecipes()) {
-            if (holder.value().getType() != ATERecipeTypes.TREE_TYPE.get()) continue;
-            try {
-                recipes.add(PlanterRecipe.fromTree((TreeRecipe) holder.value()));
-            } catch (Exception e) {
-                LogUtils.getLogger().error("Error creating JEI tree recipe for {}: {}", holder.id(), e.getMessage());
-            }
-        }
-        LogUtils.getLogger().info("Generated {} tree planter recipes for JEI", recipes.size());
-        return recipes;
     }
 
     private List<CompostRecipe> generateCompostRecipes() {
         List<CompostRecipe> recipes = new ArrayList<>();
-        int denseCount = 0;
-
-        for (var entry : ComposterBlock.COMPOSTABLES.object2FloatEntrySet()) {
-            String itemId = BuiltInRegistries.ITEM.getKey(entry.getKey().asItem()).toString();
-            float chance = entry.getFloatValue();
+        for (var item : BuiltInRegistries.ITEM) {
+            ItemStack stack = new ItemStack(item);
+            float chance = ComposterBlock.getValue(stack);
+            if (chance <= 0f) continue;
+            String itemId = BuiltInRegistries.ITEM.getKey(item).toString();
             try {
-                CompostRecipe recipe = chance >= DENSE_THRESHOLD
-                        ? CompostRecipe.createDense(itemId)
-                        : CompostRecipe.create(itemId);
-                if (recipe != null) {
-                    recipes.add(recipe);
-                    if (chance >= DENSE_THRESHOLD) denseCount++;
-                }
+                recipes.add(CompostRecipe.create(itemId, chance));
             } catch (Exception e) {
-                LogUtils.getLogger().error("Failed to create compost recipe for {}: {}", itemId, e.getMessage());
+                LogUtils.getLogger().error("[ATE JEI] Failed compost recipe for {}: {}", itemId, e.getMessage());
             }
         }
-
-        LogUtils.getLogger().info("Generated {} compost recipes for JEI ({} dense)", recipes.size(), denseCount);
+        LogUtils.getLogger().info("[ATE JEI] Generated {} compost recipes", recipes.size());
         return recipes;
     }
 
@@ -146,7 +211,6 @@ public class ATJeiPlugin implements IModPlugin {
         List<FarmlandRecipe> recipes = new ArrayList<>();
         try {
             Ingredient hoe = Ingredient.of(BuiltInRegistries.ITEM.getOrThrow(ItemTags.HOES));
-
             addTilling(recipes, hoe, Items.DIRT, Items.FARMLAND);
             addTilling(recipes, hoe, Items.ROOTED_DIRT, Items.FARMLAND);
             addTilling(recipes, hoe, Items.COARSE_DIRT, Items.FARMLAND);
@@ -154,13 +218,13 @@ public class ATJeiPlugin implements IModPlugin {
             addTilling(recipes, hoe, ATEBlocks.MULCH.get().asItem(), ATEBlocks.INFUSED_FARMLAND.get().asItem());
             addTillingModded(recipes, hoe, "farmersdelight:rich_soil", "farmersdelight:rich_soil_farmland");
         } catch (Exception e) {
-            LogUtils.getLogger().error("Failed to generate farmland recipes for JEI: {}", e.getMessage());
+            LogUtils.getLogger().error("[ATE JEI] Failed to generate farmland recipes: {}", e.getMessage());
         }
-        LogUtils.getLogger().info("Generated {} farmland recipes for JEI", recipes.size());
+        LogUtils.getLogger().info("[ATE JEI] Generated {} farmland recipes", recipes.size());
         return recipes;
     }
 
-    private void addTilling(List<FarmlandRecipe> recipes, Ingredient hoe, net.minecraft.world.item.Item input, net.minecraft.world.item.Item result) {
+    private void addTilling(List<FarmlandRecipe> recipes, Ingredient hoe, Item input, Item result) {
         recipes.add(new FarmlandRecipe(Ingredient.of(input), hoe, new ItemStack(result)));
     }
 
@@ -172,16 +236,7 @@ public class ATJeiPlugin implements IModPlugin {
             if (resultOpt.isEmpty() || resultOpt.get().value() == Items.AIR) return;
             addTilling(recipes, hoe, inputOpt.get().value(), resultOpt.get().value());
         } catch (Exception e) {
-            LogUtils.getLogger().error("Failed to add modded tilling recipe for {} -> {}: {}", inputId, resultId, e.getMessage());
+            LogUtils.getLogger().error("[ATE JEI] Failed modded tilling {} -> {}: {}", inputId, resultId, e.getMessage());
         }
-    }
-
-    @Override
-    public void onRuntimeAvailable(IJeiRuntime runtime) {
-        jeiRuntime = runtime;
-    }
-
-    public static IJeiRuntime getJeiRuntime() {
-        return jeiRuntime;
     }
 }

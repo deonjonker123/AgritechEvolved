@@ -1,0 +1,15 @@
+{
+  "type": "agritechevolved:crop",
+  "seed": "pamhc2crops:flaxseeditem",
+  "soils": [
+    "#agritechevolved:farmland_soils"
+  ],
+  "drops": [
+    {
+      "item": "pamhc2crops:flaxitem",
+      "min": 2,
+      "max": 4,
+      "chance": 1.0
+    }
+  ]
+}

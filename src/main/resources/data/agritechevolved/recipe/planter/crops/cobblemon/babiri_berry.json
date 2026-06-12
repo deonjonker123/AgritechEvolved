@@ -1,0 +1,15 @@
+{
+  "type": "agritechevolved:crop",
+  "seed": "cobblemon:babiri_berry",
+  "soils": [
+    "#agritechevolved:farmland_soils"
+  ],
+  "drops": [
+    {
+      "item": "cobblemon:babiri_berry",
+      "min": 1,
+      "max": 3,
+      "chance": 1.0
+    }
+  ]
+}

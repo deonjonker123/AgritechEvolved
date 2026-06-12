@@ -86,10 +86,8 @@ public class ComposterMenu extends AbstractContainerMenu {
     public int getMaxEnergyStored() { return blockEntity.getMaxEnergyStored(); }
     public int getProgress() { return level.isClientSide() ? lastProgress : blockEntity.getProgress(); }
     public int getMaxProgress() { return blockEntity.getMaxProgress(); }
-    public int getOrganicItemsCollected() { return blockEntity.getOrganicItemsCollected(); }
-    public int getRequiredOrganicItems() { return blockEntity.getRequiredOrganicItems(); }
-    public int getDenseItemsCollected() { return blockEntity.getDenseItemsCollected(); }
-    public int getRequiredDenseItems() { return blockEntity.getRequiredDenseItems(); }
+    public int getOrganicItemsCollected() { return blockEntity.getCompostValueCollected(); }
+    public int getRequiredOrganicItems() { return blockEntity.getCompostValueRequired(); }
 
     @Override
     public ItemStack quickMoveStack(Player player, int index) {

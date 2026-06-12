@@ -1,0 +1,15 @@
+{
+  "type": "agritechevolved:crop",
+  "seed": "pamhc2crops:pineappleseeditem",
+  "soils": [
+    "#agritechevolved:farmland_soils"
+  ],
+  "drops": [
+    {
+      "item": "pamhc2crops:pineappleitem",
+      "min": 2,
+      "max": 4,
+      "chance": 1.0
+    }
+  ]
+}

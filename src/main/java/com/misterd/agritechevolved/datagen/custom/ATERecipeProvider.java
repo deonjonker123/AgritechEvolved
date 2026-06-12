@@ -583,19 +583,21 @@ public class ATERecipeProvider extends RecipeProvider {
     }
 
     private void saveCropRecipe(String name, Item seed, List<Ingredient> soils, DropEntry... drops) {
+        String namespace = BuiltInRegistries.ITEM.getKey(seed).getNamespace();
         CropRecipe recipe = new CropRecipe(Ingredient.of(seed), soils, List.of(drops));
         ResourceKey<Recipe<?>> key = ResourceKey.create(
                 Registries.RECIPE,
-                Identifier.fromNamespaceAndPath("agritechevolved", "planter/crop/" + name)
+                Identifier.fromNamespaceAndPath("agritechevolved", "planter/crop/" + namespace + "/" + name)
         );
         output.accept(key, recipe, null);
     }
 
     private void saveTreeRecipe(String name, Item sapling, List<Ingredient> soils, DropEntry... drops) {
+        String namespace = BuiltInRegistries.ITEM.getKey(sapling).getNamespace();
         TreeRecipe recipe = new TreeRecipe(Ingredient.of(sapling), soils, List.of(drops));
         ResourceKey<Recipe<?>> key = ResourceKey.create(
                 Registries.RECIPE,
-                Identifier.fromNamespaceAndPath("agritechevolved", "planter/tree/" + name)
+                Identifier.fromNamespaceAndPath("agritechevolved", "planter/tree/" + namespace + "/" + name)
         );
         output.accept(key, recipe, null);
     }

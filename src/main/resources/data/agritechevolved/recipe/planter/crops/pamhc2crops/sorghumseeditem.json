@@ -1,0 +1,15 @@
+{
+  "type": "agritechevolved:crop",
+  "seed": "pamhc2crops:sorghumseeditem",
+  "soils": [
+    "#agritechevolved:farmland_soils"
+  ],
+  "drops": [
+    {
+      "item": "pamhc2crops:sorghumitem",
+      "min": 2,
+      "max": 4,
+      "chance": 1.0
+    }
+  ]
+}

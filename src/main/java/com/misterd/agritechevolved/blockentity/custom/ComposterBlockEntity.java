@@ -51,7 +51,7 @@ public class ComposterBlockEntity extends BlockEntity implements MenuProvider {
     private static final String SM_MK2 = "agritechevolved:sm_mk2";
     private static final String SM_MK3 = "agritechevolved:sm_mk3";
 
-    private static final float DENSE_THRESHOLD = 0.65f;
+    private static final float COMPOST_TARGET = 7.0f;
 
     private int progress = 0;
     private int energyStored = 0;
@@ -125,30 +125,19 @@ public class ComposterBlockEntity extends BlockEntity implements MenuProvider {
         }
     }
 
+    private float getTotalCompostValue() {
+        float total = 0f;
+        for (int i = INPUT_SLOTS_START; i < INPUT_SLOTS_START + INPUT_SLOTS_COUNT; i++) {
+            ItemStack stack = getStack(i);
+            if (!stack.isEmpty()) {
+                total += getCompostChance(stack) * stack.getCount();
+            }
+        }
+        return total;
+    }
+
     private boolean canProcess() {
-        return (countNormalItems() >= Config.getComposterItemsPerBiomass()
-                || countDenseItems() >= Config.getComposterDenseItemsPerBiomass())
-                && hasSpaceForBiomass();
-    }
-
-    private int countNormalItems() {
-        int count = 0;
-        for (int i = INPUT_SLOTS_START; i < INPUT_SLOTS_START + INPUT_SLOTS_COUNT; i++) {
-            ItemStack stack = getStack(i);
-            if (!stack.isEmpty() && isNormalCompostable(stack))
-                count += stack.getCount();
-        }
-        return count;
-    }
-
-    private int countDenseItems() {
-        int count = 0;
-        for (int i = INPUT_SLOTS_START; i < INPUT_SLOTS_START + INPUT_SLOTS_COUNT; i++) {
-            ItemStack stack = getStack(i);
-            if (!stack.isEmpty() && isDenseCompostable(stack))
-                count += stack.getCount();
-        }
-        return count;
+        return getTotalCompostValue() >= COMPOST_TARGET && hasSpaceForBiomass();
     }
 
     private boolean hasSpaceForBiomass() {
@@ -162,33 +151,19 @@ public class ComposterBlockEntity extends BlockEntity implements MenuProvider {
     }
 
     private void processItems() {
-        int denseNeeded = Config.getComposterDenseItemsPerBiomass();
-        if (countDenseItems() >= denseNeeded) {
-            int toConsume = denseNeeded;
-            for (int i = INPUT_SLOTS_START; i < INPUT_SLOTS_START + INPUT_SLOTS_COUNT && toConsume > 0; i++) {
-                ItemStack stack = getStack(i);
-                if (stack.isEmpty() || !isDenseCompostable(stack)) continue;
-                int taken = Math.min(toConsume, stack.getCount());
-                try (Transaction tx = Transaction.openRoot()) {
-                    inventory.extract(i, ItemResource.of(stack), taken, tx);
-                    tx.commit();
-                }
-                toConsume -= taken;
-            }
-            addBiomassToOutput();
-            return;
-        }
-
-        int toConsume = Config.getComposterItemsPerBiomass();
-        for (int i = INPUT_SLOTS_START; i < INPUT_SLOTS_START + INPUT_SLOTS_COUNT && toConsume > 0; i++) {
+        float remaining = COMPOST_TARGET;
+        for (int i = INPUT_SLOTS_START; i < INPUT_SLOTS_START + INPUT_SLOTS_COUNT && remaining > 0f; i++) {
             ItemStack stack = getStack(i);
-            if (stack.isEmpty() || !isNormalCompostable(stack)) continue;
-            int taken = Math.min(toConsume, stack.getCount());
+            if (stack.isEmpty()) continue;
+            float chance = getCompostChance(stack);
+            if (chance <= 0f) continue;
+            int needed = (int) Math.ceil(remaining / chance);
+            int taken = Math.min(needed, stack.getCount());
             try (Transaction tx = Transaction.openRoot()) {
                 inventory.extract(i, ItemResource.of(stack), taken, tx);
                 tx.commit();
             }
-            toConsume -= taken;
+            remaining -= chance * taken;
         }
         addBiomassToOutput();
     }
@@ -203,20 +178,13 @@ public class ComposterBlockEntity extends BlockEntity implements MenuProvider {
         }
     }
 
+    private float getCompostChance(ItemStack stack) {
+        return net.minecraft.world.level.block.ComposterBlock.getValue(stack);
+    }
+
     public boolean isCompostableItem(ItemStack stack) {
         if (stack.isEmpty()) return false;
-        return net.minecraft.world.level.block.ComposterBlock.COMPOSTABLES.containsKey(stack.getItem());
-    }
-
-    private boolean isNormalCompostable(ItemStack stack) {
-        if (stack.isEmpty()) return false;
-        float chance = net.minecraft.world.level.block.ComposterBlock.COMPOSTABLES.getFloat(stack.getItem());
-        return chance > 0f && chance < DENSE_THRESHOLD;
-    }
-
-    private boolean isDenseCompostable(ItemStack stack) {
-        if (stack.isEmpty()) return false;
-        return net.minecraft.world.level.block.ComposterBlock.COMPOSTABLES.getFloat(stack.getItem()) >= DENSE_THRESHOLD;
+        return getCompostChance(stack) > 0f;
     }
 
     private boolean isSpeedModule(ItemStack stack) {
@@ -356,10 +324,8 @@ public class ComposterBlockEntity extends BlockEntity implements MenuProvider {
         return (int) Math.max(1, baseTime / getModuleSpeedModifier());
     }
 
-    public int getOrganicItemsCollected() { return countNormalItems(); }
-    public int getRequiredOrganicItems() { return Config.getComposterItemsPerBiomass(); }
-    public int getDenseItemsCollected() { return countDenseItems(); }
-    public int getRequiredDenseItems() { return Config.getComposterDenseItemsPerBiomass(); }
+    public int getCompostValueCollected() { return (int)(getTotalCompostValue() * 100 / COMPOST_TARGET); }
+    public int getCompostValueRequired() { return 100; }
 
     @Override
     protected void saveAdditional(ValueOutput output) {

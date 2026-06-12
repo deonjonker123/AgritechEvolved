@@ -46,8 +46,6 @@ public class Config {
     public static ModConfigSpec.IntValue COMPOSTER_BASE_POWER_CONSUMPTION;
     public static ModConfigSpec.IntValue COMPOSTER_BASE_PROCESSING_TIME;
     public static ModConfigSpec.IntValue COMPOSTER_ENERGY_BUFFER;
-    public static ModConfigSpec.IntValue COMPOSTER_ITEMS_PER_BIOMASS;
-    public static ModConfigSpec.IntValue COMPOSTER_DENSE_ITEMS_PER_BIOMASS;
 
     // Machines — Burner
     public static ModConfigSpec.IntValue BURNER_ENERGY_BUFFER;
@@ -133,8 +131,6 @@ public class Config {
         COMPOSTER_BASE_POWER_CONSUMPTION = COMMON_BUILDER.comment("Base power consumption for Composter (RF/t)").defineInRange("base_power_consumption", 128, 1, 100000);
         COMPOSTER_BASE_PROCESSING_TIME = COMMON_BUILDER.comment("Base processing time for Composter (ticks)").defineInRange("base_processing_time", 600, 1, 72000);
         COMPOSTER_ENERGY_BUFFER = COMMON_BUILDER.comment("Energy buffer capacity for Composter (RF)").defineInRange("energy_buffer", 100000, 1000, 10000000);
-        COMPOSTER_ITEMS_PER_BIOMASS = COMMON_BUILDER.comment("Number of normal organic items required to produce one biomass").defineInRange("items_per_biomass", 32, 1, 256);
-        COMPOSTER_DENSE_ITEMS_PER_BIOMASS = COMMON_BUILDER.comment("Number of dense organic items (e.g. hay blocks, crates) required to produce one biomass").defineInRange("dense_items_per_biomass", 3, 1, 64);
         COMMON_BUILDER.pop();
     }
 
@@ -209,8 +205,6 @@ public class Config {
     public static int getComposterBasePowerConsumption() { return COMPOSTER_BASE_POWER_CONSUMPTION.get(); }
     public static int getComposterBaseProcessingTime() { return COMPOSTER_BASE_PROCESSING_TIME.get(); }
     public static int getComposterEnergyBuffer() { return COMPOSTER_ENERGY_BUFFER.get(); }
-    public static int getComposterItemsPerBiomass() { return COMPOSTER_ITEMS_PER_BIOMASS.get(); }
-    public static int getComposterDenseItemsPerBiomass() { return COMPOSTER_DENSE_ITEMS_PER_BIOMASS.get(); }
 
     // =========================================================================
     // Getters — Burner

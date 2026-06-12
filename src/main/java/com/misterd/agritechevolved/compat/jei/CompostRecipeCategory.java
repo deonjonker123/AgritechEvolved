@@ -1,6 +1,5 @@
 package com.misterd.agritechevolved.compat.jei;
 
-import com.misterd.agritechevolved.Config;
 import com.misterd.agritechevolved.block.ATEBlocks;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
@@ -24,6 +23,8 @@ public class CompostRecipeCategory implements IRecipeCategory<CompostRecipe> {
     public static final Identifier UID = Identifier.fromNamespaceAndPath("agritechevolved", "composting");
     public static final Identifier TEXTURE = Identifier.fromNamespaceAndPath("agritechevolved", "textures/gui/jei/jei_composter_gui.png");
     public static final IRecipeType<CompostRecipe> COMPOST_RECIPE_TYPE = IRecipeType.create(UID, CompostRecipe.class);
+
+    private static final float COMPOST_TARGET = 7.0f;
 
     private final IDrawable background;
     private final IDrawable icon;
@@ -60,9 +61,7 @@ public class CompostRecipeCategory implements IRecipeCategory<CompostRecipe> {
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, CompostRecipe recipe, IFocusGroup focuses) {
-        int itemsRequired = recipe.isDense()
-                ? Config.getComposterDenseItemsPerBiomass()
-                : Config.getComposterItemsPerBiomass();
+        int itemsRequired = Math.max(1, (int) Math.ceil(COMPOST_TARGET / recipe.getChance()));
 
         IRecipeSlotBuilder inputSlot = builder.addSlot(RecipeIngredientRole.INPUT, 10, 10);
         recipe.getInput().items()

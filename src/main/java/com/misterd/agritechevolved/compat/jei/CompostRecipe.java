@@ -13,27 +13,19 @@ public class CompostRecipe implements IRecipeCategoryExtension {
 
     private final Ingredient input;
     private final List<ItemStack> outputs;
-    private final boolean dense;
+    private final float chance;
 
-    public CompostRecipe(Ingredient input, List<ItemStack> outputs, boolean dense) {
+    public CompostRecipe(Ingredient input, List<ItemStack> outputs, float chance) {
         this.input = input;
         this.outputs = outputs;
-        this.dense = dense;
+        this.chance = chance;
     }
 
     public Ingredient getInput() { return input; }
     public List<ItemStack> getOutputs() { return outputs; }
-    public boolean isDense() { return dense; }
+    public float getChance() { return chance; }
 
-    public static CompostRecipe create(String itemId) {
-        return create(itemId, false);
-    }
-
-    public static CompostRecipe createDense(String itemId) {
-        return create(itemId, true);
-    }
-
-    private static CompostRecipe create(String itemId, boolean dense) {
+    public static CompostRecipe create(String itemId, float chance) {
         var item = RegistryHelper.getItem(itemId);
         if (item == null) {
             LogUtils.getLogger().error("Failed to create compost recipe: item not found for ID: {}", itemId);
@@ -42,7 +34,7 @@ public class CompostRecipe implements IRecipeCategoryExtension {
         return new CompostRecipe(
                 Ingredient.of(item),
                 List.of(new ItemStack(ATEItems.BIOMASS.get(), 1)),
-                dense
+                chance
         );
     }
 }
