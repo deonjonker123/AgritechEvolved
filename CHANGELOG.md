@@ -22,3 +22,4 @@ All notable changes to this project will be documented here.
 - Tooltip injection on all valid soil blocks and fertilizers showing their planter growth modifiers
 ### Bug Fixes
 - Fixed fertilizer item duplicating when right-clicking the Advanced Planter
+- Fixed a bug that allowed more than one upgrade module to be inserted into the Advanced Planter module slots
