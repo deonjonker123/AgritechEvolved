@@ -100,26 +100,28 @@ public class PlanterBlockEntity extends BlockEntity implements MenuProvider {
         if (seed.isEmpty()) return Optional.empty();
         RecipeManager recipes = getRecipes();
         if (recipes == null) return Optional.empty();
+        CropRecipe found = null;
         for (RecipeHolder<?> holder : recipes.getRecipes()) {
             if (holder.value().getType() == ATERecipeTypes.CROP_TYPE.get()) {
                 CropRecipe crop = (CropRecipe) holder.value();
-                if (crop.matchesSeed(seed)) return Optional.of(crop);
+                if (crop.matchesSeed(seed)) found = crop;
             }
         }
-        return Optional.empty();
+        return Optional.ofNullable(found);
     }
 
     private Optional<TreeRecipe> findTreeRecipe(ItemStack sapling) {
         if (sapling.isEmpty()) return Optional.empty();
         RecipeManager recipes = getRecipes();
         if (recipes == null) return Optional.empty();
+        TreeRecipe found = null;
         for (RecipeHolder<?> holder : recipes.getRecipes()) {
             if (holder.value().getType() == ATERecipeTypes.TREE_TYPE.get()) {
                 TreeRecipe tree = (TreeRecipe) holder.value();
-                if (tree.matchesSapling(sapling)) return Optional.of(tree);
+                if (tree.matchesSapling(sapling)) found = tree;
             }
         }
-        return Optional.empty();
+        return Optional.ofNullable(found);
     }
 
     public boolean isValidPlant(ItemStack stack) {
