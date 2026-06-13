@@ -43,6 +43,21 @@ Fertilizer support via data-maps:
 
 Fertilizer can be automated via hopper or pipe into any of the four cardinal sides of the planters.
 
+## Data-Driven
+
+The entire system is data-driven. Seeds, saplings, soils, and fertilizers are all defined through data rather than hard-coded, meaning you can fully customize, extend, or override any of them.
+
+**This is supported through:**
+
+- **Datapacks** — Add or remove crop/sapling/soil/fertilizer entries using standard datapack JSON files. Drop a datapack into your world or modpack.
+- **KubeJS** — Script additions, removals, and overrides directly in KubeJS server scripts for tighter modpack integration and dynamic control.
+
+This means you can:
+- Register entirely new seeds or saplings from any mod not natively supported
+- Define custom soils and their growth speed modifiers (or override existing supported soils' modifiers)
+- Add new fertilizer types and their effect values (or override existing supported fertilizers' modifiers)
+- Override any built-in entry to suit your modpack's needs
+
 ## Mod Compatibility
 
 ### **Supported Crop Mods**
