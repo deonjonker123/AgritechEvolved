@@ -117,7 +117,7 @@
   "tooltip.agritechevolved.soil_growth_modifier": "成長速度: %s",
   "tooltip.agritechevolved.fertilizer_type": "肥料情報",
   "tooltip.agritechevolved.fertilizer_speed": "成長速度: %s",
-  "tooltip.agritechevolved.fertilizer_yield": "肥料情報: %s",
+  "tooltip.agritechevolved.fertilizer_yield": "利回りボーナス: %s",
   "config.jade.agritechevolved.planter_info": "プランターの情報",
   "config.jade.plugin_agritechevolved.planter_info": "プランターの情報",
   "jade.agritechevolved.crop_ready": "%s - 収穫可能！",
