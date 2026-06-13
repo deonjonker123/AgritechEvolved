@@ -101,7 +101,6 @@
   "tooltip.agritechevolved.capacitor.energy": "%s / %s RF",
   "tooltip.agritechevolved.capacitor.energy_percentage": "%s%% Full",
   "tooltip.agritechevolved.capacitor.transfer_rate": "Transfer Rate: %s RF/t",
-  "tooltip.agritechevolved.capacitor.connects_all_sides": "Inputs and outputs on all sides",
   "tooltip.agritechevolved.capacitor.description": "RF Storage & Distribution",
   "tooltip.agritechevolved.capacitor.max_transfer": "Max Transfer: %s RF/t",
   "tooltip.agritechevolved.capacitor.information": "Capacitor Information",

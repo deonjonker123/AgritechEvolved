@@ -58,7 +58,7 @@ public class AdvancedPlanterMenu extends AbstractContainerMenu {
         addSlot(new AdvancedSlot(blockEntity, SLOT_PLANT, 8, 19));
         addSlot(new AdvancedSlot(blockEntity, SLOT_SOIL, 8, 55));
         addSlot(new AdvancedSlot(blockEntity, SLOT_MODULE_1, 134, 19));
-        addSlot(new AdvancedSlot(blockEntity, SLOT_MODULE_2, 134, 36));
+        addSlot(new AdvancedSlot(blockEntity, SLOT_MODULE_2, 134, 37));
         addSlot(new AdvancedSlot(blockEntity, SLOT_FERTILIZER, 134, 55));
 
         int idx = SLOT_OUTPUT_MIN;
