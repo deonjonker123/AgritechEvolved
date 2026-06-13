@@ -13,6 +13,7 @@
     {"id": "mysticalagriculture:tertium_farmland", "required": false},
     {"id": "mysticalagriculture:imperium_farmland", "required": false},
     {"id": "mysticalagriculture:supremium_farmland", "required": false},
-    {"id": "mysticalagradditions:insanium_farmland", "required": false}
+    {"id": "mysticalagradditions:insanium_farmland", "required": false},
+    {"id": "forbidden_arcanus:magical_farmland", "required": false}
   ]
 }

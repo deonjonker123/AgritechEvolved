@@ -54,6 +54,7 @@
     "aether_ii:quicksoil": { "growth_modifier": 0.5 },
     "aether_ii:enchanted_aether_grass_block": { "growth_modifier": 1.0 },
     "aether_ii:aether_farmland": { "growth_modifier": 0.5 },
-    "aether_ii:holystone": { "growth_modifier": 0.6 }
+    "aether_ii:holystone": { "growth_modifier": 0.6 },
+    "forbidden_arcanus:magical_farmland": { "growth_modifier": 0.5 }
   }
 }
