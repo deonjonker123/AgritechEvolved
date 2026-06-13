@@ -143,9 +143,9 @@
   "tooltip.agritechevolved.slot.upgrade_2": "Upgrade Slot 2",
   "tooltip.agritechevolved.slot.upgrade": "Speed Upgrade Slot",
 
-  "tooltip.agritechevolved.soil_type": "Agritech: Evolved Soil Info",
+  "tooltip.agritechevolved.soil_type": "Soil Info",
   "tooltip.agritechevolved.soil_growth_modifier": "Growth Speed: %s",
-  "tooltip.agritechevolved.fertilizer_type": "Agritech: Evolved Fertilizer Info",
+  "tooltip.agritechevolved.fertilizer_type": "Fertilizer Info",
   "tooltip.agritechevolved.fertilizer_speed": "Growth Speed: %s",
   "tooltip.agritechevolved.fertilizer_yield": "Yield Bonus: %s",
 
