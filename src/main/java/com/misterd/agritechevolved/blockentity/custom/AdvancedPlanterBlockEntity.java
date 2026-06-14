@@ -1,5 +1,6 @@
 package com.misterd.agritechevolved.blockentity.custom;
 
+import com.misterd.agritechevolved.AgritechEvolved;
 import com.misterd.agritechevolved.Config;
 import com.misterd.agritechevolved.block.custom.AdvancedPlanterBlock;
 import com.misterd.agritechevolved.blockentity.ATEBlockEntities;
@@ -16,6 +17,7 @@ import com.misterd.agritechevolved.util.ATETags;
 import com.misterd.agritechevolved.util.RegistryHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -32,8 +34,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -69,6 +73,13 @@ public class AdvancedPlanterBlockEntity extends BlockEntity implements MenuProvi
     private static final String YM_MK1 = "agritechevolved:ym_mk1";
     private static final String YM_MK2 = "agritechevolved:ym_mk2";
     private static final String YM_MK3 = "agritechevolved:ym_mk3";
+
+    private @Nullable CropRecipe cachedCropRecipe = null;
+    private @Nullable TreeRecipe cachedTreeRecipe = null;
+    private @Nullable Item cachedSeedItem = null;
+    private Set<Item> cachedValidSoils = null;
+    private int soilCacheRevision = -1;
+    private int cachedRevision = -1;
 
     public final ItemStacksResourceHandler inventory = new ItemStacksResourceHandler(TOTAL_SLOTS) {
         @Override
@@ -123,6 +134,13 @@ public class AdvancedPlanterBlockEntity extends BlockEntity implements MenuProvi
         super(ATEBlockEntities.ADVANCED_PLANTER_BLOCK_BE.get(), pos, blockState);
     }
 
+    private void invalidateRecipeCache() {
+        cachedCropRecipe = null;
+        cachedTreeRecipe = null;
+        cachedSeedItem = null;
+        cachedRevision = -1;
+    }
+
     @Override
     public Component getDisplayName() {
         return Component.translatable("gui.agritechevolved.advanced_planter");
@@ -140,32 +158,39 @@ public class AdvancedPlanterBlockEntity extends BlockEntity implements MenuProvi
         return null;
     }
 
+    private void refreshRecipeCacheIfNeeded(ItemStack seed) {
+        if (seed.isEmpty()) {
+            invalidateRecipeCache();
+            return;
+        }
+        Item seedItem = seed.getItem();
+        if (seedItem == cachedSeedItem && cachedRevision == AgritechEvolved.RECIPE_REVISION) return;
+
+        invalidateRecipeCache();
+        RecipeManager rm = getRecipes();
+        if (rm == null) return;
+
+        cachedSeedItem = seedItem;
+        cachedRevision = AgritechEvolved.RECIPE_REVISION;
+        SingleRecipeInput input = new SingleRecipeInput(seed);
+
+        Optional<RecipeHolder<CropRecipe>> crop = rm.getRecipeFor(ATERecipeTypes.CROP_TYPE.get(), input, level);
+        if (crop.isPresent()) { cachedCropRecipe = crop.get().value(); return; }
+
+        Optional<RecipeHolder<TreeRecipe>> tree = rm.getRecipeFor(ATERecipeTypes.TREE_TYPE.get(), input, level);
+        tree.ifPresent(h -> cachedTreeRecipe = h.value());
+    }
+
     private Optional<CropRecipe> findCropRecipe(ItemStack seed) {
         if (seed.isEmpty()) return Optional.empty();
-        RecipeManager recipes = getRecipes();
-        if (recipes == null) return Optional.empty();
-        CropRecipe found = null;
-        for (RecipeHolder<?> holder : recipes.getRecipes()) {
-            if (holder.value().getType() == ATERecipeTypes.CROP_TYPE.get()) {
-                CropRecipe crop = (CropRecipe) holder.value();
-                if (crop.matchesSeed(seed)) found = crop;
-            }
-        }
-        return Optional.ofNullable(found);
+        refreshRecipeCacheIfNeeded(seed);
+        return Optional.ofNullable(cachedCropRecipe);
     }
 
     private Optional<TreeRecipe> findTreeRecipe(ItemStack sapling) {
         if (sapling.isEmpty()) return Optional.empty();
-        RecipeManager recipes = getRecipes();
-        if (recipes == null) return Optional.empty();
-        TreeRecipe found = null;
-        for (RecipeHolder<?> holder : recipes.getRecipes()) {
-            if (holder.value().getType() == ATERecipeTypes.TREE_TYPE.get()) {
-                TreeRecipe tree = (TreeRecipe) holder.value();
-                if (tree.matchesSapling(sapling)) found = tree;
-            }
-        }
-        return Optional.ofNullable(found);
+        refreshRecipeCacheIfNeeded(sapling);
+        return Optional.ofNullable(cachedTreeRecipe);
     }
 
     public boolean isValidPlant(ItemStack stack) {
@@ -173,17 +198,32 @@ public class AdvancedPlanterBlockEntity extends BlockEntity implements MenuProvi
         return findCropRecipe(stack).isPresent() || findTreeRecipe(stack).isPresent();
     }
 
-    public boolean isValidSoilForAnyRecipe(ItemStack stack) {
-        RecipeManager recipes = getRecipes();
-        if (recipes == null) return false;
-        for (RecipeHolder<?> holder : recipes.getRecipes()) {
+    private Set<Item> getValidSoils() {
+        if (cachedValidSoils != null && soilCacheRevision == AgritechEvolved.RECIPE_REVISION) {
+            return cachedValidSoils;
+        }
+        RecipeManager rm = getRecipes();
+        if (rm == null) return Set.of();
+        Set<Item> soils = new HashSet<>();
+        for (RecipeHolder<?> holder : rm.getRecipes()) {
             if (holder.value().getType() == ATERecipeTypes.CROP_TYPE.get()) {
-                if (((CropRecipe) holder.value()).matchesSoil(stack)) return true;
+                for (Ingredient ing : ((CropRecipe) holder.value()).getSoils()) {
+                    ing.items().map(Holder::value).forEach(soils::add);
+                }
             } else if (holder.value().getType() == ATERecipeTypes.TREE_TYPE.get()) {
-                if (((TreeRecipe) holder.value()).matchesSoil(stack)) return true;
+                for (Ingredient ing : ((TreeRecipe) holder.value()).getSoils()) {
+                    ing.items().map(Holder::value).forEach(soils::add);
+                }
             }
         }
-        return false;
+        cachedValidSoils = soils;
+        soilCacheRevision = AgritechEvolved.RECIPE_REVISION;
+        return cachedValidSoils;
+    }
+
+    public boolean isValidSoilForAnyRecipe(ItemStack stack) {
+        if (stack.isEmpty()) return false;
+        return getValidSoils().contains(stack.getItem());
     }
 
     public boolean isValidPlantSoilCombination(ItemStack plant, ItemStack soil) {
@@ -400,8 +440,8 @@ public class AdvancedPlanterBlockEntity extends BlockEntity implements MenuProvi
             } else {
                 be.growthProgress = (int) (be.growthTicks / (float) growthTime * 100);
                 int stage = be.getGrowthStage();
-                if (stage != be.lastGrowthStage) be.lastGrowthStage = stage;
-                if (be.growthTicks % 20 == 0) {
+                if (stage != be.lastGrowthStage) {
+                    be.lastGrowthStage = stage;
                     level.sendBlockUpdated(pos, state, state, 3);
                     be.setChanged();
                 }
@@ -410,9 +450,8 @@ public class AdvancedPlanterBlockEntity extends BlockEntity implements MenuProvi
 
         if (be.readyToHarvest && be.hasOutputSpace()) {
             be.harvestPlant();
+            tryOutputItemsBelow(level, pos, be);
         }
-
-        tryOutputItemsBelow(level, pos, be);
     }
 
     private void resetGrowth() {

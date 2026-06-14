@@ -9,7 +9,9 @@ import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -22,6 +24,7 @@ public class BasicPlanterMenu extends AbstractContainerMenu {
 
     public final PlanterBlockEntity blockEntity;
     private final Level level;
+    private final ContainerData data;
 
     private static final int PLAYER_SLOTS = 36;
     private static final int TE_SLOT_PLANT = PLAYER_SLOTS;
@@ -51,6 +54,22 @@ public class BasicPlanterMenu extends AbstractContainerMenu {
         for (int row = 0; row < 3; row++)
             for (int col = 0; col < 4; col++)
                 addSlot(new PlanterSlot(this.blockEntity, slotIndex++, 62 + col * 18, 18 + row * 18));
+
+        PlanterBlockEntity be = this.blockEntity;
+        if (be != null) {
+            this.data = new ContainerData() {
+                @Override public int get(int index) { return index == 0 ? be.growthProgress : 0; }
+                @Override public void set(int index, int value) { if (index == 0) be.growthProgress = value; }
+                @Override public int getCount() { return 1; }
+            };
+        } else {
+            this.data = new SimpleContainerData(1);
+        }
+        addDataSlots(this.data);
+    }
+
+    public int getGrowthProgress() {
+        return data.get(0);
     }
 
     @Override

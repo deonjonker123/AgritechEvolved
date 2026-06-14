@@ -16,6 +16,10 @@ import com.misterd.agritechevolved.gui.custom.*;
 import com.misterd.agritechevolved.item.ATECreativeTab;
 import com.misterd.agritechevolved.item.ATEItems;
 import com.misterd.agritechevolved.recipe.ATERecipe;
+import net.minecraft.resources.Identifier;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
+import net.minecraft.util.profiling.ProfilerFiller;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
@@ -30,12 +34,14 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.AddServerReloadListenersEvent;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 
 @Mod(AgritechEvolved.MODID)
 public class AgritechEvolved {
     public static final String MODID = "agritechevolved";
+    public static int RECIPE_REVISION = 0;
 
     public AgritechEvolved(IEventBus modEventBus, ModContainer modContainer) {
         modEventBus.addListener(this::commonSetup);
@@ -70,12 +76,28 @@ public class AgritechEvolved {
 
     }
 
+    @SubscribeEvent
+    public void onServerReload(AddServerReloadListenersEvent event) {
+        event.addListener(Identifier.fromNamespaceAndPath(MODID, "recipe_revision_tracker"),
+                new SimplePreparableReloadListener<Void>() {
+                    @Override
+                    protected Void prepare(ResourceManager manager, ProfilerFiller profiler) {
+                        return null;
+                    }
+                    @Override
+                    protected void apply(Void object, ResourceManager manager, ProfilerFiller profiler) {
+                        RECIPE_REVISION++;
+                    }
+                });
+    }
+
     public void onRegisterCommands(RegisterCommandsEvent event) {
         ATECommands.register(event.getDispatcher());
     }
 
     @EventBusSubscriber(modid = MODID, value = Dist.CLIENT)
     public static class ClientModEvents {
+
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
 

@@ -36,7 +36,7 @@ public class BasicPlanterScreen extends AbstractContainerScreen<BasicPlanterMenu
                 this.leftPos, this.topPos, 0.0F, 0.0F,
                 this.imageWidth, this.imageHeight, 256, 256);
 
-        float growthProgress = this.menu.blockEntity.getGrowthProgress();
+        float growthProgress = this.menu.getGrowthProgress() / 100.0F;
         if (growthProgress > 0.0F) {
             int barHeight = (int) (54.0F * growthProgress);
             int barY = this.topPos + 17 + 54 - barHeight;
@@ -52,7 +52,7 @@ public class BasicPlanterScreen extends AbstractContainerScreen<BasicPlanterMenu
     protected void extractTooltip(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
         if (mouseX >= this.leftPos + 40 && mouseX <= this.leftPos + 46
                 && mouseY >= this.topPos + 18 && mouseY <= this.topPos + 71) {
-            float progress = this.menu.blockEntity.getGrowthProgress();
+            float progress = this.menu.getGrowthProgress() / 100.0F;
             graphics.setComponentTooltipForNextFrame(this.font, List.of(
                     Component.translatable("tooltip.agritechevolved.growth_progress"),
                     Component.literal(String.format("%.1f%%", progress * 100.0F))

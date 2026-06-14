@@ -23,3 +23,10 @@ All notable changes to this project will be documented here.
 ### Bug Fixes
 - Fixed fertilizer item duplicating when right-clicking the Advanced Planter
 - Fixed a bug that allowed more than one upgrade module to be inserted into the Advanced Planter module slots
+
+## [2.1.1+neoforge-mc26.1.2] - 2026-06-14
+### Performance
+- Planters no longer scan the full recipe list every tick. Recipe lookups are now cached per seed item and invalidated on datapack reload, reducing server tick time significantly at scale
+- Valid soil items are now cached per datapack revision, eliminating repeated recipe scans on inventory interaction
+- Block update packets now only fire on growth stage change instead of every second per planter
+- Output item transfer now runs only on harvest instead of every tick
