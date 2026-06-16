@@ -66,7 +66,7 @@ public class TreeRecipe implements Recipe<SingleRecipeInput> {
 
     @Override
     public PlacementInfo placementInfo() {
-        return PlacementInfo.NOT_PLACEABLE;
+        return PlacementInfo.create(sapling);
     }
 
     @Override

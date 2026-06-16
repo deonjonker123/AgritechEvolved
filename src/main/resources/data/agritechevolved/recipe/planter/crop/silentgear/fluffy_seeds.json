@@ -1,4 +1,10 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "silentgear"
+    }
+  ],
   "type": "agritechevolved:crop",
   "seed": "silentgear:fluffy_seeds",
   "soils": [

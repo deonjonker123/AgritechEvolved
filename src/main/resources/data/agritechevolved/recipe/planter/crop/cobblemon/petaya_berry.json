@@ -1,4 +1,10 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "cobblemon"
+    }
+  ],
   "type": "agritechevolved:crop",
   "seed": "cobblemon:petaya_berry",
   "soils": [

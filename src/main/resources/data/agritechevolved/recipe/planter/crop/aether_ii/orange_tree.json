@@ -1,4 +1,10 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "aether_ii"
+    }
+  ],
   "type": "agritechevolved:crop",
   "seed": "aether_ii:orange_tree",
   "soils": [

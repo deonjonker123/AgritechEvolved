@@ -1,4 +1,10 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "cobblemon"
+    }
+  ],
   "type": "agritechevolved:tree",
   "sapling": "cobblemon:blue_apricorn_seed",
   "soils": [

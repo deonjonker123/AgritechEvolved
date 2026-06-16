@@ -271,8 +271,11 @@ public class PlanterBlockEntity extends BlockEntity implements MenuProvider {
             } else {
                 be.growthProgress = (int) ((float) be.growthTicks / adjustedTime * 100.0F);
                 int stage = be.getGrowthStage();
-                if (stage != be.lastGrowthStage) {
+                boolean stageChanged = stage != be.lastGrowthStage;
+                if (stageChanged) {
                     be.lastGrowthStage = stage;
+                }
+                if (stageChanged || (be.isTree() && be.growthTicks % 10 == 0)) {
                     level.sendBlockUpdated(pos, state, state, 3);
                     be.setChanged();
                 }

@@ -1,4 +1,10 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "evilcraft"
+    }
+  ],
   "type": "agritechevolved:tree",
   "sapling": "evilcraft:undead_sapling",
   "soils": [

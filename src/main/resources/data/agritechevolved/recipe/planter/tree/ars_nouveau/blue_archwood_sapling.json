@@ -1,4 +1,10 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "ars_nouveau"
+    }
+  ],
   "type": "agritechevolved:tree",
   "sapling": "ars_nouveau:blue_archwood_sapling",
   "soils": [

@@ -1,4 +1,10 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "mysticalagriculture"
+    }
+  ],
   "type": "agritechevolved:crop",
   "seed": "mysticalagriculture:energized_steel_seeds",
   "soils": [

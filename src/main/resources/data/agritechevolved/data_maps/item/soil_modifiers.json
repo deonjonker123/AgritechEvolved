@@ -25,36 +25,129 @@
     "minecraft:stone": { "growth_modifier": 0.6 },
     "agritechevolved:infused_farmland": { "growth_modifier": 1.5 },
     "agritechevolved:mulch": { "growth_modifier": 1.0 },
-    "farmersdelight:rich_soil": { "growth_modifier": 0.525 },
-    "farmersdelight:rich_soil_farmland": { "growth_modifier": 0.525 },
-    "farmersdelight:organic_compost": { "growth_modifier": 0.525 },
-    "mysticalagriculture:inferium_farmland": { "growth_modifier": 0.55 },
-    "mysticalagriculture:prudentium_farmland": { "growth_modifier": 0.625 },
-    "mysticalagriculture:tertium_farmland": { "growth_modifier": 0.75 },
-    "mysticalagriculture:imperium_farmland": { "growth_modifier": 1.0 },
-    "mysticalagriculture:supremium_farmland": { "growth_modifier": 1.5 },
-    "mysticalagradditions:insanium_farmland": { "growth_modifier": 1.75 },
-    "mysticalagradditions:nether_star_crux": { "growth_modifier": 1.75 },
-    "mysticalagradditions:dragon_egg_crux": { "growth_modifier": 1.75 },
-    "mysticalagradditions:awakened_draconium_crux": { "growth_modifier": 1.75 },
-    "mysticalagradditions:neutronium_crux": { "growth_modifier": 1.75 },
-    "mysticalagradditions:nitro_crystal_crux": { "growth_modifier": 1.75 },
-    "mysticalagradditions:gaia_spirit_crux": { "growth_modifier": 1.75 },
-    "justdirethings:goosoil_tier1": { "growth_modifier": 0.6 },
-    "justdirethings:goosoil_tier2": { "growth_modifier": 0.75 },
-    "justdirethings:goosoil_tier3": { "growth_modifier": 1.0 },
-    "justdirethings:goosoil_tier4": { "growth_modifier": 1.5 },
-    "aether_ii:aether_dirt": { "growth_modifier": 0.475 },
-    "aether_ii:coarse_aether_dirt": { "growth_modifier": 0.475 },
-    "aether_ii:mycelial_aether_dirt": { "growth_modifier": 0.475 },
-    "aether_ii:aether_grass_block": { "growth_modifier": 0.475 },
-    "aether_ii:bryalinn_moss_block": { "growth_modifier": 0.475 },
-    "aether_ii:shayelinn_moss_block": { "growth_modifier": 0.475 },
-    "aether_ii:ambrelinn_moss_block": { "growth_modifier": 0.475 },
-    "aether_ii:quicksoil": { "growth_modifier": 0.5 },
-    "aether_ii:enchanted_aether_grass_block": { "growth_modifier": 1.0 },
-    "aether_ii:aether_farmland": { "growth_modifier": 0.5 },
-    "aether_ii:holystone": { "growth_modifier": 0.6 },
-    "forbidden_arcanus:magical_farmland": { "growth_modifier": 0.5 }
+    "farmersdelight:rich_soil": {
+      "neoforge:conditions": [ { "type": "neoforge:mod_loaded", "modid": "farmersdelight" } ],
+      "value": { "growth_modifier": 0.525 }
+    },
+    "farmersdelight:rich_soil_farmland": {
+      "neoforge:conditions": [ { "type": "neoforge:mod_loaded", "modid": "farmersdelight" } ],
+      "value": { "growth_modifier": 0.525 }
+    },
+    "farmersdelight:organic_compost": {
+      "neoforge:conditions": [ { "type": "neoforge:mod_loaded", "modid": "farmersdelight" } ],
+      "value": { "growth_modifier": 0.525 }
+    },
+    "mysticalagriculture:inferium_farmland": {
+      "neoforge:conditions": [ { "type": "neoforge:mod_loaded", "modid": "mysticalagriculture" } ],
+      "value": { "growth_modifier": 0.55 }
+    },
+    "mysticalagriculture:prudentium_farmland": {
+      "neoforge:conditions": [ { "type": "neoforge:mod_loaded", "modid": "mysticalagriculture" } ],
+      "value": { "growth_modifier": 0.625 }
+    },
+    "mysticalagriculture:tertium_farmland": {
+      "neoforge:conditions": [ { "type": "neoforge:mod_loaded", "modid": "mysticalagriculture" } ],
+      "value": { "growth_modifier": 0.75 }
+    },
+    "mysticalagriculture:imperium_farmland": {
+      "neoforge:conditions": [ { "type": "neoforge:mod_loaded", "modid": "mysticalagriculture" } ],
+      "value": { "growth_modifier": 1.0 }
+    },
+    "mysticalagriculture:supremium_farmland": {
+      "neoforge:conditions": [ { "type": "neoforge:mod_loaded", "modid": "mysticalagriculture" } ],
+      "value": { "growth_modifier": 1.5 }
+    },
+    "mysticalagradditions:insanium_farmland": {
+      "neoforge:conditions": [ { "type": "neoforge:mod_loaded", "modid": "mysticalagradditions" } ],
+      "value": { "growth_modifier": 1.75 }
+    },
+    "mysticalagradditions:nether_star_crux": {
+      "neoforge:conditions": [ { "type": "neoforge:mod_loaded", "modid": "mysticalagradditions" } ],
+      "value": { "growth_modifier": 1.75 }
+    },
+    "mysticalagradditions:dragon_egg_crux": {
+      "neoforge:conditions": [ { "type": "neoforge:mod_loaded", "modid": "mysticalagradditions" } ],
+      "value": { "growth_modifier": 1.75 }
+    },
+    "mysticalagradditions:awakened_draconium_crux": {
+      "neoforge:conditions": [ { "type": "neoforge:mod_loaded", "modid": "mysticalagradditions" } ],
+      "value": { "growth_modifier": 1.75 }
+    },
+    "mysticalagradditions:neutronium_crux": {
+      "neoforge:conditions": [ { "type": "neoforge:mod_loaded", "modid": "mysticalagradditions" } ],
+      "value": { "growth_modifier": 1.75 }
+    },
+    "mysticalagradditions:nitro_crystal_crux": {
+      "neoforge:conditions": [ { "type": "neoforge:mod_loaded", "modid": "mysticalagradditions" } ],
+      "value": { "growth_modifier": 1.75 }
+    },
+    "mysticalagradditions:gaia_spirit_crux": {
+      "neoforge:conditions": [ { "type": "neoforge:mod_loaded", "modid": "mysticalagradditions" } ],
+      "value": { "growth_modifier": 1.75 }
+    },
+    "justdirethings:goosoil_tier1": {
+      "neoforge:conditions": [ { "type": "neoforge:mod_loaded", "modid": "justdirethings" } ],
+      "value": { "growth_modifier": 0.6 }
+    },
+    "justdirethings:goosoil_tier2": {
+      "neoforge:conditions": [ { "type": "neoforge:mod_loaded", "modid": "justdirethings" } ],
+      "value": { "growth_modifier": 0.75 }
+    },
+    "justdirethings:goosoil_tier3": {
+      "neoforge:conditions": [ { "type": "neoforge:mod_loaded", "modid": "justdirethings" } ],
+      "value": { "growth_modifier": 1.0 }
+    },
+    "justdirethings:goosoil_tier4": {
+      "neoforge:conditions": [ { "type": "neoforge:mod_loaded", "modid": "justdirethings" } ],
+      "value": { "growth_modifier": 1.5 }
+    },
+    "aether_ii:aether_dirt": {
+      "neoforge:conditions": [ { "type": "neoforge:mod_loaded", "modid": "aether_ii" } ],
+      "value": { "growth_modifier": 0.475 }
+    },
+    "aether_ii:coarse_aether_dirt": {
+      "neoforge:conditions": [ { "type": "neoforge:mod_loaded", "modid": "aether_ii" } ],
+      "value": { "growth_modifier": 0.475 }
+    },
+    "aether_ii:mycelial_aether_dirt": {
+      "neoforge:conditions": [ { "type": "neoforge:mod_loaded", "modid": "aether_ii" } ],
+      "value": { "growth_modifier": 0.475 }
+    },
+    "aether_ii:aether_grass_block": {
+      "neoforge:conditions": [ { "type": "neoforge:mod_loaded", "modid": "aether_ii" } ],
+      "value": { "growth_modifier": 0.475 }
+    },
+    "aether_ii:bryalinn_moss_block": {
+      "neoforge:conditions": [ { "type": "neoforge:mod_loaded", "modid": "aether_ii" } ],
+      "value": { "growth_modifier": 0.475 }
+    },
+    "aether_ii:shayelinn_moss_block": {
+      "neoforge:conditions": [ { "type": "neoforge:mod_loaded", "modid": "aether_ii" } ],
+      "value": { "growth_modifier": 0.475 }
+    },
+    "aether_ii:ambrelinn_moss_block": {
+      "neoforge:conditions": [ { "type": "neoforge:mod_loaded", "modid": "aether_ii" } ],
+      "value": { "growth_modifier": 0.475 }
+    },
+    "aether_ii:quicksoil": {
+      "neoforge:conditions": [ { "type": "neoforge:mod_loaded", "modid": "aether_ii" } ],
+      "value": { "growth_modifier": 0.5 }
+    },
+    "aether_ii:enchanted_aether_grass_block": {
+      "neoforge:conditions": [ { "type": "neoforge:mod_loaded", "modid": "aether_ii" } ],
+      "value": { "growth_modifier": 1.0 }
+    },
+    "aether_ii:aether_farmland": {
+      "neoforge:conditions": [ { "type": "neoforge:mod_loaded", "modid": "aether_ii" } ],
+      "value": { "growth_modifier": 0.5 }
+    },
+    "aether_ii:holystone": {
+      "neoforge:conditions": [ { "type": "neoforge:mod_loaded", "modid": "aether_ii" } ],
+      "value": { "growth_modifier": 0.6 }
+    },
+    "forbidden_arcanus:magical_farmland": {
+      "neoforge:conditions": [ { "type": "neoforge:mod_loaded", "modid": "forbidden_arcanus" } ],
+      "value": { "growth_modifier": 0.5 }
+    }
   }
 }
