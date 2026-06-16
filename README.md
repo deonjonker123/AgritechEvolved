@@ -1,9 +1,9 @@
 
 ![ATE](https://raw.githubusercontent.com/deonjonker123/AgritechEvolved/refs/heads/26.1.2/ate_ban.png)
 
-# AgriTech: Evolved
+# Agritech: Evolved
 
-AgriTech: Evolved enhances crop and tree farming with planters, advanced machines, modules, and extensive mod compatibility.
+Agritech: Evolved (ATE) enhances crop and tree farming with planters, advanced machines, modules, and extensive mod compatibility.
 
 ## Core Features
 
@@ -98,16 +98,6 @@ This means you can:
 
 Fine-tune module effectiveness, power consumption, and processing times
 
-### **Live Config Reloading**
-
-No server/client restart required. Changes to crops, soils, fertilizers via the overrider toml, or compatibility settings can be applied instantly via in-game commands.
-
-| Command                                | Effect                                      |
-|----------------------------------------|---------------------------------------------|
-| `/agritechevolved reload`              | Reloads all configs                         |
-
-Failed reloads report errors directly in chat rather than silently failing.
-
 ### **Interactive Placement**
 
 -   Right-click with seeds to insert directly into planters
@@ -139,3 +129,9 @@ Uses RF power with configurable consumption rates:
 -   Shows active soil type and its growth modifier
 -   Shows active fertilizer when one is slotted
 -   Shows cloche status with speed and yield modifiers
+
+## Note
+
+AgriTech: Evolved is a separate, standalone mod — it is not an addon, dependency, or successor requiring Agritech (AT2), nor is it built on top of it in any way. The two mods are fully independent and do not interact. Installing both in the same modpack is pointless, as they each implement their own self-contained planter farming systems with no shared functionality or compatibility benefit.
+
+If you do install both, be aware that compatibility datapacks/KubeJS scripts written for one mod will not work for the other — they target different data map and registry namespaces, so seed/soil/fertilizer entries added for Agritech won't carry over to Agritech: Evolved, and vice versa.

@@ -35,3 +35,6 @@ All notable changes to this project will be documented here.
 ### Added
 - New compat API for planters: `PlanterProcessingTimeEvent`, `PlanterPreHarvestEvent`, `PlanterPostHarvestEvent` (in `com.misterd.agritechevolved.integration`). Allows other mods to read/modify seed stats, override growth time, and adjust harvest output via NeoForge events. Fired by the basic and advanced planter
 - `PlanterPreHarvestEvent` writes the returned seed back into the planter's seed slot, allowing persistent stat changes on the planted seed itself without needing to cycle harvested seeds back through the output
+
+### Removed
+- Removed the `/agritechevolved reload` command as it no longer makes sense nor works with the new data-driven approach

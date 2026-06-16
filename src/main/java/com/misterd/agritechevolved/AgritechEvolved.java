@@ -8,7 +8,6 @@ import com.misterd.agritechevolved.blockentity.custom.CapacitorBlockEntity;
 import com.misterd.agritechevolved.blockentity.custom.ComposterBlockEntity;
 import com.misterd.agritechevolved.client.ber.AdvancedPlanterBlockEntityRenderer;
 import com.misterd.agritechevolved.client.ber.PlanterBlockEntityRenderer;
-import com.misterd.agritechevolved.command.ATECommands;
 import com.misterd.agritechevolved.component.ATEDataComponents;
 import com.misterd.agritechevolved.datamap.ATEDataMaps;
 import com.misterd.agritechevolved.gui.ATEMenuTypes;
@@ -22,21 +21,19 @@ import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.ModelEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
-
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
-import net.neoforged.fml.ModContainer;
-import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.AddServerReloadListenersEvent;
-import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import org.slf4j.Logger;
 
@@ -64,8 +61,6 @@ public class AgritechEvolved {
         modEventBus.addListener(BiomassBurnerBlockEntity::registerCapabilities);
         modEventBus.addListener(CapacitorBlockEntity::registerCapabilities);
 
-        NeoForge.EVENT_BUS.addListener(this::onRegisterCommands);
-
         Config.register(modContainer);
         modEventBus.register(Config.class);
     }
@@ -92,10 +87,6 @@ public class AgritechEvolved {
                         RECIPE_REVISION++;
                     }
                 });
-    }
-
-    public void onRegisterCommands(RegisterCommandsEvent event) {
-        ATECommands.register(event.getDispatcher());
     }
 
     @EventBusSubscriber(modid = MODID, value = Dist.CLIENT)
