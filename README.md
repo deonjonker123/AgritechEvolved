@@ -132,6 +132,6 @@ Uses RF power with configurable consumption rates:
 
 ## Note
 
-AgriTech: Evolved is a separate, standalone mod — it is not an addon, dependency, or successor requiring Agritech (AT2), nor is it built on top of it in any way. The two mods are fully independent and do not interact. Installing both in the same modpack is pointless, as they each implement their own self-contained planter farming systems with no shared functionality or compatibility benefit.
+Agritech: Evolved is a separate, standalone mod — it is not an addon, dependency, or successor requiring Agritech (AT2), nor is it built on top of it in any way. The two mods are fully independent and do not interact. Installing both in the same modpack is pointless, as they each implement their own self-contained planter farming systems with no shared functionality or compatibility benefit.
 
 If you do install both, be aware that compatibility datapacks/KubeJS scripts written for one mod will not work for the other — they target different data map and registry namespaces, so seed/soil/fertilizer entries added for Agritech won't carry over to Agritech: Evolved, and vice versa.
