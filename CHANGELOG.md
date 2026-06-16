@@ -30,3 +30,8 @@ All notable changes to this project will be documented here.
 - Valid soil items are now cached per datapack revision, eliminating repeated recipe scans on inventory interaction
 - Block update packets now only fire on growth stage change instead of every second per planter
 - Output item transfer now runs only on harvest instead of every tick
+
+## [2.1.2+neoforge-mc26.1.2] - 2026-06-16
+### Added
+- New compat API for planters: `PlanterProcessingTimeEvent`, `PlanterPreHarvestEvent`, `PlanterPostHarvestEvent` (in `com.misterd.agritechevolved.integration`). Allows other mods to read/modify seed stats, override growth time, and adjust harvest output via NeoForge events. Fired by the basic and advanced planter
+- `PlanterPreHarvestEvent` writes the returned seed back into the planter's seed slot, allowing persistent stat changes on the planted seed itself without needing to cycle harvested seeds back through the output

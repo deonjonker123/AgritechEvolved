@@ -9,6 +9,9 @@ import com.misterd.agritechevolved.datamap.FertilizerData;
 import com.misterd.agritechevolved.datamap.SoilModifierData;
 import com.misterd.agritechevolved.gui.custom.AdvancedPlanterMenu;
 import com.misterd.agritechevolved.item.ATEItems;
+import com.misterd.agritechevolved.integration.PlanterPostHarvestEvent;
+import com.misterd.agritechevolved.integration.PlanterPreHarvestEvent;
+import com.misterd.agritechevolved.integration.PlanterProcessingTimeEvent;
 import com.misterd.agritechevolved.recipe.ATERecipeTypes;
 import com.misterd.agritechevolved.recipe.CropRecipe;
 import com.misterd.agritechevolved.recipe.DropEntry;
@@ -45,6 +48,7 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.transfer.ResourceHandler;
 import net.neoforged.neoforge.transfer.energy.EnergyHandler;
 import net.neoforged.neoforge.transfer.item.ItemResource;
@@ -429,6 +433,11 @@ public class AdvancedPlanterBlockEntity extends BlockEntity implements MenuProvi
             be.currentTotalModifier = totalModifier;
 
             int growthTime = Math.max(1, Math.round(Config.getAdvancedPlanterBaseProcessingTime() / totalModifier));
+
+            PlanterProcessingTimeEvent timeEvent = new PlanterProcessingTimeEvent(be, plant, growthTime);
+            NeoForge.EVENT_BUS.post(timeEvent);
+            growthTime = timeEvent.getProcessingTime();
+
             be.growthTicks++;
 
             if (be.growthTicks >= growthTime) {
@@ -560,8 +569,24 @@ public class AdvancedPlanterBlockEntity extends BlockEntity implements MenuProvi
     public void harvestPlant() {
         if (!readyToHarvest) return;
 
+        PlanterPreHarvestEvent preEvent = new PlanterPreHarvestEvent(this, getStack(SLOT_PLANT));
+        NeoForge.EVENT_BUS.post(preEvent);
+        ItemStack seedForDrops = preEvent.getSeed();
+
+        if (!ItemStack.matches(seedForDrops, getStack(SLOT_PLANT))) {
+            try (Transaction tx = Transaction.openRoot()) {
+                inventory.extract(SLOT_PLANT, ItemResource.of(getStack(SLOT_PLANT)), 1, tx);
+                inventory.insert(SLOT_PLANT, ItemResource.of(seedForDrops), 1, tx);
+                tx.commit();
+            }
+        }
+
         float yieldModifier = getFertilizerYieldModifier() * getModuleYieldModifier() * getClocheYieldModifier();
-        List<ItemStack> drops = applyYieldModifier(getHarvestDrops(getStack(SLOT_PLANT)), yieldModifier);
+        List<ItemStack> drops = new ArrayList<>(applyYieldModifier(getHarvestDrops(seedForDrops), yieldModifier));
+
+        PlanterPostHarvestEvent postEvent = new PlanterPostHarvestEvent(this, getStack(SLOT_PLANT), drops);
+        NeoForge.EVENT_BUS.post(postEvent);
+        drops = postEvent.getDrops();
 
         for (ItemStack drop : drops) {
             int remaining = drop.getCount();

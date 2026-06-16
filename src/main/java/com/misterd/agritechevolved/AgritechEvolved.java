@@ -16,6 +16,7 @@ import com.misterd.agritechevolved.gui.custom.*;
 import com.misterd.agritechevolved.item.ATECreativeTab;
 import com.misterd.agritechevolved.item.ATEItems;
 import com.misterd.agritechevolved.recipe.ATERecipe;
+import com.mojang.logging.LogUtils;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
@@ -37,11 +38,13 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.AddServerReloadListenersEvent;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
+import org.slf4j.Logger;
 
 @Mod(AgritechEvolved.MODID)
 public class AgritechEvolved {
     public static final String MODID = "agritechevolved";
     public static int RECIPE_REVISION = 0;
+    public static final Logger LOGGER = LogUtils.getLogger();
 
     public AgritechEvolved(IEventBus modEventBus, ModContainer modContainer) {
         modEventBus.addListener(this::commonSetup);
