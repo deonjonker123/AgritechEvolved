@@ -662,7 +662,7 @@ public class AdvancedPlanterBlockEntity extends BlockEntity implements MenuProvi
         if (modifier == 1.0F) return drops;
         List<ItemStack> result = new ArrayList<>();
         for (ItemStack drop : drops) {
-            result.add(new ItemStack(drop.getItem(), Math.max(1, Math.round(drop.getCount() * modifier))));
+            result.add(drop.copyWithCount(Math.max(1, Math.round(drop.getCount() * modifier))));
         }
         return result;
     }

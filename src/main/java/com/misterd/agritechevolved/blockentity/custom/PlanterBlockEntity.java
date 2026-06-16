@@ -396,7 +396,7 @@ public class PlanterBlockEntity extends BlockEntity implements MenuProvider {
         if (mod == 1.0F) return drops;
         List<ItemStack> out = new ArrayList<>();
         for (ItemStack drop : drops) {
-            out.add(new ItemStack(drop.getItem(), Math.max(1, Math.round(drop.getCount() * mod))));
+            out.add(drop.copyWithCount(Math.max(1, Math.round(drop.getCount() * mod))));
         }
         return out;
     }

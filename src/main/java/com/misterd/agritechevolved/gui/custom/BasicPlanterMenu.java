@@ -230,7 +230,7 @@ public class BasicPlanterMenu extends AbstractContainerMenu {
             try (Transaction tx = Transaction.openRoot()) {
                 int extracted = be.inventory.extract(index, ItemResource.of(existing), toExtract, tx);
                 tx.commit();
-                return new ItemStack(existing.getItem(), extracted);
+                return existing.copyWithCount(extracted);
             }
         }
     }

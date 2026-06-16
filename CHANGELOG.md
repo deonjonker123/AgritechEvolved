@@ -38,3 +38,7 @@ All notable changes to this project will be documented here.
 
 ### Removed
 - Removed the `/agritechevolved reload` command as it no longer makes sense nor works with the new data-driven approach
+
+## [2.1.2.1+neoforge-mc26.1.2] - 2026-06-16
+### Fixed
+- Fixed data components (NBT) being stripped from items when extracted through menus or scaled through yield modifiers
