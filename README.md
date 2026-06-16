@@ -3,7 +3,7 @@
 
 # AgriTech: Evolved
 
-AgriTech: Evolved is a comprehensive agricultural automation mod for Minecraft that enhances farming with advanced machines, modules, and extensive mod compatibility.
+AgriTech: Evolved enhances crop and tree farming with planters, advanced machines, modules, and extensive mod compatibility.
 
 ## Core Features
 
