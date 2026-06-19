@@ -13,7 +13,9 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
-import net.minecraft.data.recipes.*;
+import net.minecraft.data.recipes.RecipeCategory;
+import net.minecraft.data.recipes.RecipeOutput;
+import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.ItemTags;
@@ -24,10 +26,10 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.level.block.WeatheringCopper;
 import net.neoforged.neoforge.common.Tags;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 public class ATERecipeProvider extends RecipeProvider {
@@ -243,8 +245,8 @@ public class ATERecipeProvider extends RecipeProvider {
                 .pattern("RRR")
                 .define('R', Items.REDSTONE)
                 .define('I', Items.IRON_INGOT)
-                .define('C', Items.COPPER_BLOCK)
-                .unlockedBy("has_copper_block", has(Items.COPPER_BLOCK))
+                .define('C', Items.COPPER_BLOCK.weathering().pick(WeatheringCopper.WeatherState.UNAFFECTED))
+                .unlockedBy("has_copper_block", has(Items.COPPER_BLOCK.weathering().pick(WeatheringCopper.WeatherState.UNAFFECTED)))
                 .save(output);
 
         shaped(RecipeCategory.MISC, ATEBlocks.CAPACITOR_TIER_2.get())
@@ -304,7 +306,7 @@ public class ATERecipeProvider extends RecipeProvider {
                 .pattern(" W ")
                 .define('W', Items.WHEAT)
                 .define('S', Items.WHEAT_SEEDS)
-                .define('C', Items.COPPER_BLOCK)
+                .define('C', Items.COPPER_BLOCK.weathering().pick(WeatheringCopper.WeatherState.UNAFFECTED))
                 .unlockedBy("has_farmland", has(Items.FARMLAND))
                 .save(output);
 
@@ -313,7 +315,7 @@ public class ATERecipeProvider extends RecipeProvider {
                 .pattern("CYC")
                 .pattern(" G ")
                 .define('G', Items.GOLD_BLOCK)
-                .define('C', Items.COPPER_BLOCK)
+                .define('C', Items.COPPER_BLOCK.weathering().pick(WeatheringCopper.WeatherState.UNAFFECTED))
                 .define('Y', ATEItems.YM_MK1.get())
                 .unlockedBy("has_ym_mk1", has(ATEItems.YM_MK1.get()))
                 .save(output);

@@ -5,7 +5,9 @@ import com.misterd.agritechevolved.block.ATEBlocks;
 import com.misterd.agritechevolved.util.ATETags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
 
@@ -16,48 +18,52 @@ public class ATEBlockTagProvider extends BlockTagsProvider {
         super(output, lookupProvider, AgritechEvolved.MODID);
     }
 
+    private static ResourceKey<Block> key(Block block) {
+        return block.builtInRegistryHolder().key();
+    }
+
     @Override
     protected void addTags(HolderLookup.Provider provider) {
         tag(BlockTags.MINEABLE_WITH_AXE)
-                .add(ATEBlocks.ACACIA_PLANTER.get())
-                .add(ATEBlocks.BAMBOO_PLANTER.get())
-                .add(ATEBlocks.BIRCH_PLANTER.get())
-                .add(ATEBlocks.CHERRY_PLANTER.get())
-                .add(ATEBlocks.CRIMSON_PLANTER.get())
-                .add(ATEBlocks.DARK_OAK_PLANTER.get())
-                .add(ATEBlocks.JUNGLE_PLANTER.get())
-                .add(ATEBlocks.MANGROVE_PLANTER.get())
-                .add(ATEBlocks.OAK_PLANTER.get())
-                .add(ATEBlocks.SPRUCE_PLANTER.get())
-                .add(ATEBlocks.WARPED_PLANTER.get())
-                .add(ATEBlocks.PALE_OAK_PLANTER.get());
+                .add(key(ATEBlocks.ACACIA_PLANTER.get()))
+                .add(key(ATEBlocks.BAMBOO_PLANTER.get()))
+                .add(key(ATEBlocks.BIRCH_PLANTER.get()))
+                .add(key(ATEBlocks.CHERRY_PLANTER.get()))
+                .add(key(ATEBlocks.CRIMSON_PLANTER.get()))
+                .add(key(ATEBlocks.DARK_OAK_PLANTER.get()))
+                .add(key(ATEBlocks.JUNGLE_PLANTER.get()))
+                .add(key(ATEBlocks.MANGROVE_PLANTER.get()))
+                .add(key(ATEBlocks.OAK_PLANTER.get()))
+                .add(key(ATEBlocks.SPRUCE_PLANTER.get()))
+                .add(key(ATEBlocks.WARPED_PLANTER.get()))
+                .add(key(ATEBlocks.PALE_OAK_PLANTER.get()));
 
         tag(BlockTags.MINEABLE_WITH_PICKAXE)
-                .add(ATEBlocks.ADVANCED_PLANTER.get())
-                .add(ATEBlocks.BIOMASS_BURNER.get())
-                .add(ATEBlocks.COMPOSTER.get())
-                .add(ATEBlocks.CAPACITOR_TIER_1.get())
-                .add(ATEBlocks.CAPACITOR_TIER_2.get())
-                .add(ATEBlocks.CAPACITOR_TIER_3.get())
+                .add(key(ATEBlocks.ADVANCED_PLANTER.get()))
+                .add(key(ATEBlocks.BIOMASS_BURNER.get()))
+                .add(key(ATEBlocks.COMPOSTER.get()))
+                .add(key(ATEBlocks.CAPACITOR_TIER_1.get()))
+                .add(key(ATEBlocks.CAPACITOR_TIER_2.get()))
+                .add(key(ATEBlocks.CAPACITOR_TIER_3.get()))
 
-                .add(ATEBlocks.COMPACTED_BIOMASS_BLOCK.get());
+                .add(key(ATEBlocks.COMPACTED_BIOMASS_BLOCK.get()));
 
         tag(BlockTags.MINEABLE_WITH_SHOVEL)
-                .add(ATEBlocks.INFUSED_FARMLAND.get())
-                .add(ATEBlocks.MULCH.get());
+                .add(key(ATEBlocks.INFUSED_FARMLAND.get()))
+                .add(key(ATEBlocks.MULCH.get()));
 
         tag(ATETags.Blocks.BASIC_PLANTERS)
-                .add(ATEBlocks.ACACIA_PLANTER.get())
-                .add(ATEBlocks.BAMBOO_PLANTER.get())
-                .add(ATEBlocks.BIRCH_PLANTER.get())
-                .add(ATEBlocks.CHERRY_PLANTER.get())
-                .add(ATEBlocks.CRIMSON_PLANTER.get())
-                .add(ATEBlocks.DARK_OAK_PLANTER.get())
-                .add(ATEBlocks.JUNGLE_PLANTER.get())
-                .add(ATEBlocks.MANGROVE_PLANTER.get())
-                .add(ATEBlocks.OAK_PLANTER.get())
-                .add(ATEBlocks.SPRUCE_PLANTER.get())
-                .add(ATEBlocks.WARPED_PLANTER.get())
-                .add(ATEBlocks.PALE_OAK_PLANTER.get());
+                .add(key(ATEBlocks.ACACIA_PLANTER.get()))
+                .add(key(ATEBlocks.BAMBOO_PLANTER.get()))
+                .add(key(ATEBlocks.BIRCH_PLANTER.get()))
+                .add(key(ATEBlocks.CHERRY_PLANTER.get()))
+                .add(key(ATEBlocks.CRIMSON_PLANTER.get()))
+                .add(key(ATEBlocks.DARK_OAK_PLANTER.get()))
+                .add(key(ATEBlocks.JUNGLE_PLANTER.get()))
+                .add(key(ATEBlocks.MANGROVE_PLANTER.get()))
+                .add(key(ATEBlocks.OAK_PLANTER.get()))
+                .add(key(ATEBlocks.SPRUCE_PLANTER.get()))
+                .add(key(ATEBlocks.WARPED_PLANTER.get()))
+                .add(key(ATEBlocks.PALE_OAK_PLANTER.get()));
     }
 }
