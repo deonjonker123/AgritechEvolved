@@ -15,36 +15,22 @@ import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.SlotItemHandler;
 
 public class BiomassBurnerMenu extends AbstractContainerMenu {
-
-    // -------------------------------------------------------------------------
-    // Slot layout
-    // -------------------------------------------------------------------------
-
-    private static final int FUEL_SLOT      = 0;
+    private static final int FUEL_SLOT = 0;
     private static final int PLAYER_INV_ROWS = 3;
     private static final int PLAYER_INV_COLS = 9;
-    private static final int HOTBAR_SLOTS    = 9;
-    private static final int PLAYER_SLOTS    = PLAYER_INV_ROWS * PLAYER_INV_COLS + HOTBAR_SLOTS; // 36
+    private static final int HOTBAR_SLOTS  = 9;
+    private static final int PLAYER_SLOTS = PLAYER_INV_ROWS * PLAYER_INV_COLS + HOTBAR_SLOTS; // 36
 
-    private static final int TE_FIRST_SLOT  = PLAYER_SLOTS;      // 36
-    private static final int TE_LAST_SLOT   = TE_FIRST_SLOT + 1; // 37
+    private static final int TE_FIRST_SLOT = PLAYER_SLOTS;
+    private static final int TE_LAST_SLOT = TE_FIRST_SLOT + 1;
 
-    // Fuel IDs — mirrors BiomassBurnerBlockEntity constants
-    private static final String BIOMASS                 = "agritechevolved:biomass";
-    private static final String CRUDE_BIOMASS           = "agritechevolved:crude_biomass";
-    private static final String COMPACTED_BIOMASS       = "agritechevolved:compacted_biomass";
+    private static final String BIOMASS = "agritechevolved:biomass";
+    private static final String CRUDE_BIOMASS = "agritechevolved:crude_biomass";
+    private static final String COMPACTED_BIOMASS = "agritechevolved:compacted_biomass";
     private static final String COMPACTED_BIOMASS_BLOCK = "agritechevolved:compacted_biomass_block";
-
-    // -------------------------------------------------------------------------
-    // Fields
-    // -------------------------------------------------------------------------
 
     public final BiomassBurnerBlockEntity blockEntity;
     private final Level level;
-
-    // -------------------------------------------------------------------------
-    // Constructors
-    // -------------------------------------------------------------------------
 
     public BiomassBurnerMenu(int containerId, Inventory inv, FriendlyByteBuf extraData) {
         this(containerId, inv, inv.player.level().getBlockEntity(extraData.readBlockPos()));
@@ -53,7 +39,7 @@ public class BiomassBurnerMenu extends AbstractContainerMenu {
     public BiomassBurnerMenu(int containerId, Inventory inv, BlockEntity blockEntity) {
         super(ATEMenuTypes.BURNER_MENU.get(), containerId);
         this.blockEntity = (BiomassBurnerBlockEntity) blockEntity;
-        this.level       = inv.player.level();
+        this.level = inv.player.level();
 
         addPlayerInventory(inv);
         addPlayerHotbar(inv);
@@ -61,54 +47,37 @@ public class BiomassBurnerMenu extends AbstractContainerMenu {
         addDataSlots();
     }
 
-    // -------------------------------------------------------------------------
-    // Data slots (server → client sync)
-    // -------------------------------------------------------------------------
-
     private void addDataSlots() {
-        // Energy stored
         addDataSlot(new DataSlot() {
-            @Override public int get()           { return blockEntity.getEnergyStored(); }
+            @Override public int get() { return blockEntity.getEnergyStored(); }
             @Override public void set(int value) { }
         });
-        // Progress
         addDataSlot(new DataSlot() {
-            @Override public int get()           { return blockEntity.getProgress(); }
+            @Override public int get() { return blockEntity.getProgress(); }
             @Override public void set(int value) { blockEntity.setProgress(value); }
         });
-        // Max progress
         addDataSlot(new DataSlot() {
-            @Override public int get()           { return blockEntity.getMaxProgress(); }
+            @Override public int get() { return blockEntity.getMaxProgress(); }
             @Override public void set(int value) { }
         });
     }
 
-    // -------------------------------------------------------------------------
-    // Data accessors
-    // -------------------------------------------------------------------------
-
-    public int getEnergyStored()    { return blockEntity.getEnergyStored(); }
+    public int getEnergyStored() { return blockEntity.getEnergyStored(); }
     public int getMaxEnergyStored() { return blockEntity.getMaxEnergyStored(); }
-    public int getProgress()        { return blockEntity.getProgress(); }
-    public int getMaxProgress()     { return blockEntity.getMaxProgress(); }
-
-    // -------------------------------------------------------------------------
-    // Shift-click
-    // -------------------------------------------------------------------------
+    public int getProgress() { return blockEntity.getProgress(); }
+    public int getMaxProgress() { return blockEntity.getMaxProgress(); }
 
     @Override
     public ItemStack quickMoveStack(Player player, int index) {
         Slot source = slots.get(index);
         if (source == null || !source.hasItem()) return ItemStack.EMPTY;
 
-        ItemStack stack     = source.getItem();
+        ItemStack stack = source.getItem();
         ItemStack stackCopy = stack.copy();
 
         if (index < PLAYER_SLOTS) {
-            // Player → fuel slot (all fuel types accepted)
             if (!moveItemStackTo(stack, TE_FIRST_SLOT, TE_LAST_SLOT, false)) return ItemStack.EMPTY;
         } else {
-            // Fuel slot → player inventory
             if (index >= TE_LAST_SLOT) return ItemStack.EMPTY;
             if (!moveItemStackTo(stack, 0, PLAYER_SLOTS, false)) return ItemStack.EMPTY;
         }
@@ -123,19 +92,11 @@ public class BiomassBurnerMenu extends AbstractContainerMenu {
         return stackCopy;
     }
 
-    // -------------------------------------------------------------------------
-    // Validity
-    // -------------------------------------------------------------------------
-
     @Override
     public boolean stillValid(Player player) {
         return stillValid(ContainerLevelAccess.create(level, blockEntity.getBlockPos()),
                 player, ATEBlocks.BIOMASS_BURNER.get());
     }
-
-    // -------------------------------------------------------------------------
-    // Player inventory / hotbar
-    // -------------------------------------------------------------------------
 
     private void addPlayerInventory(Inventory inv) {
         for (int row = 0; row < PLAYER_INV_ROWS; row++) {
@@ -150,10 +111,6 @@ public class BiomassBurnerMenu extends AbstractContainerMenu {
             addSlot(new Slot(inv, i, 8 + i * 18, 140));
         }
     }
-
-    // -------------------------------------------------------------------------
-    // Custom slot
-    // -------------------------------------------------------------------------
 
     private static class BiomassInputSlot extends SlotItemHandler {
         BiomassInputSlot(IItemHandler handler, int index, int x, int y) {

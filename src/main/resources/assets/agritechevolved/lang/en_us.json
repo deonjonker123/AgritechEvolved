@@ -28,12 +28,12 @@
   "block.agritechevolved.infused_farmland": "Infused Farmland",
   "block.agritechevolved.mulch": "Mulch",
 
-  "item.agritechevolved.sm_mk1": "SM-MK1",
-  "item.agritechevolved.sm_mk2": "SM-MK2",
-  "item.agritechevolved.sm_mk3": "SM-MK3",
-  "item.agritechevolved.ym_mk1": "YM-MK1",
-  "item.agritechevolved.ym_mk2": "YM-MK2",
-  "item.agritechevolved.ym_mk3": "YM-MK3",
+  "item.agritechevolved.sm_mk1": "Speed Module MK1",
+  "item.agritechevolved.sm_mk2": "Speed Module MK2",
+  "item.agritechevolved.sm_mk3": "Speed Module MK3",
+  "item.agritechevolved.ym_mk1": "Yield Module MK1",
+  "item.agritechevolved.ym_mk2": "Yield Module MK2",
+  "item.agritechevolved.ym_mk3": "Yield Module MK3",
 
   "item.agritechevolved.cloche_dome": "Cloche Dome",
 
@@ -77,6 +77,7 @@
   "tooltip.agritechevolved.view_recipes": "Click to view recipes",
 
   "tooltip.agritechevolved.composting_progress": "Composting Progress",
+  "tooltip.agritechevolved.composting_info": "Can run without energy at a slower rate",
 
   "tooltip.agritechevolved.burner.energy": "Energy: %s / %s RF",
   "tooltip.agritechevolved.burner.energy_percentage": "%s%% Full",
@@ -87,16 +88,16 @@
   "tooltip.agritechevolved.burner.insert_fuel": "Insert biomass or compacted biomass",
   "tooltip.agritechevolved.burner.fuel_slot": "Fuel Slot",
   "tooltip.agritechevolved.burner.accepts": "Accepts:",
+  "tooltip.agritechevolved.burner.accepts_crude_biomass": "• Crude Biomass",
   "tooltip.agritechevolved.burner.accepts_biomass": "• Biomass",
   "tooltip.agritechevolved.burner.accepts_compacted_biomass": "• Compacted Biomass",
+  "tooltip.agritechevolved.burner.accepts_compacted_biomass_block": "• Compacted Biomass Block",
 
   "tooltip.agritechevolved.capacitor.title": "%s Capacitor",
   "tooltip.agritechevolved.capacitor.energy_storage": "Energy Storage",
   "tooltip.agritechevolved.capacitor.energy": "%s / %s RF",
   "tooltip.agritechevolved.capacitor.energy_percentage": "%s%% Full",
   "tooltip.agritechevolved.capacitor.transfer_rate": "Transfer Rate: %s RF/t",
-  "tooltip.agritechevolved.capacitor.connects_all_sides": "Connects to all sides",
-  "tooltip.agritechevolved.capacitor.except_bottom": "(except bottom)",
   "tooltip.agritechevolved.capacitor.description": "RF Storage & Distribution",
   "tooltip.agritechevolved.capacitor.max_transfer": "Max Transfer: %s RF/t",
   "tooltip.agritechevolved.capacitor.information": "Capacitor Information",
@@ -127,12 +128,20 @@
   "tooltip.agritechevolved.fuel.shift_info": "§6§oHold Shift for Fuel & Fertilizer info§r",
   "tooltip.agritechevolved.crude_fuel.shift_info": "§6§oHold Shift for Fuel info§r",
 
+  "config.jade.agritechevolved.planter_info": "Planter Info",
+  "config.jade.plugin_agritechevolved.planter_info": "Planter Info",
   "jade.agritechevolved.crop_ready": "%s - Ready to Harvest!",
   "jade.agritechevolved.crop_progress": "%s - Stage %d/%d (%d%%)",
   "jade.agritechevolved.soil_info": "Soil: %s (%s growth)",
   "jade.agritechevolved.modules_installed": "Modules: %s",
-  "jade.agritechevolved.fertilizer_info": "Fertilizer: %s",
+  "jade.agritechevolved.fertilizer_info": "Fertilizer: %s (Speed: %s, Yield: %s)",
   "jade.agritechevolved.cloche_installed": "Cloche: Installed (Speed: %s, Yield: %s)",
   "jade.agritechevolved.energy_info": "Energy: %s / %s RF",
-  "jade.agritechevolved.module_info": "Modules: Speed %s | Yield %s"
+  "jade.agritechevolved.module_info": "Modules: Speed %s | Yield %s",
+
+  "tooltip.agritechevolved.soil_type": "Soil Info",
+  "tooltip.agritechevolved.soil_growth_modifier": "Growth Speed: %s",
+  "tooltip.agritechevolved.fertilizer_type": "Fertilizer Info",
+  "tooltip.agritechevolved.fertilizer_speed": "Growth Speed: %s",
+  "tooltip.agritechevolved.fertilizer_yield": "Yield Bonus: %s"
 }

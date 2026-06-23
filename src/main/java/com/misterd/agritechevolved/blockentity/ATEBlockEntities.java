@@ -71,6 +71,7 @@ public class ATEBlockEntities {
 
                     return null;
                 });
+        CapacitorBlockEntity.registerCapabilities(event);
     }
 
     public static void register(IEventBus eventBus) {

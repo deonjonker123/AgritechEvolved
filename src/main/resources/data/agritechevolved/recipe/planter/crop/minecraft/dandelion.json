@@ -1,0 +1,19 @@
+{
+  "type": "agritechevolved:crop",
+  "drops": [
+    {
+      "chance": 1.0,
+      "item": "minecraft:dandelion",
+      "max": 1,
+      "min": 1
+    }
+  ],
+  "seed": {
+    "item": "minecraft:dandelion"
+  },
+  "soils": [
+    {
+      "tag": "agritechevolved:dirt_soils"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "type": "agritechevolved:crop",
+  "drops": [
+    {
+      "chance": 1.0,
+      "item": "minecraft:oxeye_daisy",
+      "max": 1,
+      "min": 1
+    }
+  ],
+  "seed": {
+    "item": "minecraft:oxeye_daisy"
+  },
+  "soils": [
+    {
+      "tag": "agritechevolved:dirt_soils"
+    }
+  ]
+}

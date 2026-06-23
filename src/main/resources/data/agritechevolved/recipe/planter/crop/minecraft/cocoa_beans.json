@@ -1,0 +1,19 @@
+{
+  "type": "agritechevolved:crop",
+  "drops": [
+    {
+      "chance": 1.0,
+      "item": "minecraft:cocoa_beans",
+      "max": 3,
+      "min": 1
+    }
+  ],
+  "seed": {
+    "item": "minecraft:cocoa_beans"
+  },
+  "soils": [
+    {
+      "tag": "agritechevolved:jungle_soils"
+    }
+  ]
+}

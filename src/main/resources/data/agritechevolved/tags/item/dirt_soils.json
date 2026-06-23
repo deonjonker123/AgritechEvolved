@@ -1,0 +1,14 @@
+{
+  "values": [
+    "minecraft:grass_block",
+    "minecraft:dirt",
+    "minecraft:coarse_dirt",
+    "minecraft:rooted_dirt",
+    "minecraft:mycelium",
+    "minecraft:podzol",
+    "minecraft:mud",
+    "minecraft:muddy_mangrove_roots",
+    "agritechevolved:mulch",
+    {"id":"farmersdelight:rich_soil", "required": false}
+  ]
+}

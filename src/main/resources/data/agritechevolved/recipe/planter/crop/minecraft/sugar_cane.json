@@ -1,0 +1,22 @@
+{
+  "type": "agritechevolved:crop",
+  "drops": [
+    {
+      "chance": 1.0,
+      "item": "minecraft:sugar_cane",
+      "max": 3,
+      "min": 1
+    }
+  ],
+  "seed": {
+    "item": "minecraft:sugar_cane"
+  },
+  "soils": [
+    {
+      "tag": "agritechevolved:dirt_soils"
+    },
+    {
+      "tag": "agritechevolved:sand_soils"
+    }
+  ]
+}

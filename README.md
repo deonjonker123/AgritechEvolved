@@ -1,126 +1,84 @@
+![ATE](https://raw.githubusercontent.com/deonjonker123/AgritechEvolved/refs/heads/26.1.2/ate_ban.png)
 
-# AgriTech: Evolved
+# Agritech: Evolved (ATE)
 
-AgriTech: Evolved is a comprehensive agricultural automation mod for Minecraft that enhances farming with advanced machines, modules, and extensive mod compatibility.
+Farming automation mod with planters, machines, modules, and power gen.
 
-## Core Features
+## Planters
 
-### **Automated Planters**
+**Basic Planter** — plant a seed or sapling, it grows by itself, drops go into whatever's underneath it. All 11 vanilla wood types.
 
--   **Basic Planter**: A simple wooden planter that automatically grows crops and saplings. Automatically outputs drops to a container under it. Available in all 11 vanilla wood types.
-- **Advanced Planter**: A high-tech planter with energy consumption, module slots, fertilizer support, and enhanced automation capabilities
+**Advanced Planter** — Planter that runs on RF, and has speed and yield upgrade slots.
 
-### **Cloche**
-A glass bell jar that attaches to any planter, boosting both growth speed and harvest yield. Stacks with fertilizer and modules for maximum efficiency. Configurable speed and yield multipliers.
+## Cloche
 
-- Right-click a planter with a cloche to attach it
-- Shift-right-click with an empty hand to detach and recover it
-- Breaking a cloched planter drops both items separately
+Glass dome that attaches to a planter. Boosts growth speed and yield, stacks with fertilizer and modules. Right-click to attach, shift-right-click empty-handed to take it back off. Break a cloched planter and you get both items back separately.
 
-### **Machines**
-- **Composter**: Converts organic materials into biomass fuel with configurable input ratios
-- **Biomass Burner**: Generates RF energy from crude biomass, biomass, and compacted biomass
-- **Energy Capacitors**: Three tiers of energy storage (Tier 1: 500k RF, Tier 2: 1M RF, Tier 3: 4M RF)
+## Machines
 
-### **Enhancement Modules**
-- **Speed Modules (MK1-MK3)**: Increase processing speed at the cost of higher power consumption
-- **Yield Modules (MK1-MK3)**: Boost harvest yields while reducing processing speed
+- **Composter** — turns organic items into biomass fuel and fertilizer. Anything that works in a vanilla composter works in this one too
+- **Biomass Burner** — burns crude/regular/compacted biomass for RF
+- **Energy Capacitors** — three tiers, 500k / 1M / 4M RF
 
-### **Specialized Blocks**
-- **Mulch**: Natural growth accelerator providing 50% speed boost
-- **Infused Farmland**: Premium soil offering 100% growth speed increase
+## Modules
 
-### **Fertilizer System**
+- **Speed (MK1-3)** — faster processing, costs more power
+- **Yield (MK1-3)** — more harvest, slower processing
 
-Fertilizer support with configurable speed and yield multipliers:
+## Other Blocks
 
--   Vanilla bone meal
--   Mystical Agriculture fertilizers
--   Immersive Engineering fertilizers
--   Forbidden & Arcanus arcane bone meal
+- **Mulch** — +50% growth speed
+- **Infused Farmland** — +100% growth speed
 
-Fertilizer can be automated via hopper or pipe into any of the four cardinal sides of the planter.
+## Fertilizer
 
-## Mod Compatibility
+Bone meal works. Also supports Mystical Agriculture, Immersive Engineering, and Forbidden & Arcanus fertilizers. Pipe or hopper it into any side of either planter.
 
-### **Supported Crop Mods**
+## Data-Driven
 
-- Mystical Agriculture & Mystical Agradditions
-- Farmer's Delight
-- Ars Nouveau
-- Silent Gear
-- Immersive Engineering
-- Occultism
-- Cobblemon
-- Pam's HarvestCraft 2 - Crops
-- Actually Additions
-- Croptopia
+Nothing's hardcoded. Add/remove/edit seeds, soils, saplings, fertilizers through:
 
-### **Supported Tree Mods**
+- **Datapacks** — regular JSON
+- **KubeJS** — for scripted/server-side control
 
-- Ars Nouveau & Ars Elemental
-- Forbidden & Arcanus
-- Integrated Dynamics
-- Silent Gear
-- Occultism
-- Cobblemon
-- Pam's HarvestCraft 2 - Trees
-- Croptopia
-- EvilCraft
+Means you can add support for unsupported mods, change growth modifiers, mess with fertilizer values, or override defaults you don't like.
 
-### **Supported Soil Mods**
+## Mod Support
 
--   Mystical Agriculture farmlands
--   Farmer's Delight soils
--   Just Dire Things goosoils
+**Crops:** Mystical Agriculture & Mystical Agradditions, Farmer's Delight, Ars Nouveau, Silent Gear, Immersive Engineering, Occultism, Cobblemon, Pam's HarvestCraft 2, Actually Additions, Croptopia
 
-## Advanced Configuration System
+**Trees:** Ars Nouveau & Ars Elemental, Forbidden & Arcanus, Integrated Dynamics, Silent Gear, Occultism, Cobblemon, Pam's HarvestCraft 2, Croptopia, EvilCraft
 
-1.  **Mod Compatibility Toggles**: Enable/disable specific mod integrations per-mod, so you only load what you need.
-2.  **Crop/Sapling/Soil Database**: Comprehensive JSON-based system defining what grows on what, with full TOML override support for custom rules.
-3.  **Balance Configuration**: Fine-tune module effectiveness, power consumption, and processing times
+**Soils:** Mystical Agriculture farmland, Farmer's Delight soils, Just Dire Things goosoils
 
-### **Live Config Reloading**
+## Balance Config
 
-No server/client restart required. Changes to crops, soils, fertilizers via the overrider toml, or compatibility settings can be applied instantly via in-game commands.
+Module strength, power draw, and processing times are all tunable.
 
-| Command                                | Effect                                      |
-|----------------------------------------|---------------------------------------------|
-| `/agritechevolved reload`              | Reloads all configs                         |
-| `/agritechevolved reload plantables`   | Reloads the crop/soil/sapling database only |
-| `/agritechevolved reload compostables` | Reloads the compostable database only       |
-| `/agritechevolved reload config`       | Reloads the main TOML config only           |
+## Interactive Placement
 
-Failed reloads report errors directly in chat rather than silently failing.
+- Right-click with seeds/saplings/soil to insert directly
+- Right-click with a hoe to till compatible blocks
+- Right-click vanilla farmland with mystical essence to convert it
 
-### **Interactive Placement**
+## Power
 
--   Right-click with seeds to insert directly into planters
--   Right-click with saplings for instant placement
--   Right-click with soil blocks for instant placement
--   Right-click with hoes to till compatible blocks
-- Right-click with mystical essence to convert vanilla farmland to the mystical farmland
+Runs on RF.
 
-### **Visual Feedback**
+- Advanced Planter: 64 RF/t base
+- Composter: 64 RF/t base
+- Modules scale power draw with their effect
 
--   Real-time rendering of planted crops and soil types
--   Progress bars for all processing operations
--   Audio feedback for successful interactions
+## JEI
 
-## Energy System
-Uses RF power with configurable consumption rates:
--    Advanced Planter: 64 RF/t base consumption
--    Composter: 64 RF/t base consumption
--    Module power scaling based on effectiveness
+Shows valid crop/soil recipes for the planters.
 
-## JEI Integration
+## Jade
 
--   Compatible crop/soil combinations of the planters
+Shows crop/sapling, growth stage and progress, soil type and its bonus, fertilizer slotted (if any), and cloche speed/yield status.
 
-## Jade Integration
+## Heads Up
 
--   Displays current crop or sapling name
--   Shows growth stage and progress percentage
--   Shows active soil type and its growth modifier
--   Shows active fertilizer when one is slotted
-- Shows cloche status with speed and yield modifiers
+Agritech: Evolved (ATE) is NOT related to Agritech (AT2). Not an addon, not a successor, doesn't build on it. Two separate mods, similar name, same general idea, zero shared code.
+
+Running both is fine but pointless — datapacks/KubeJS for one won't do anything for the other, different namespaces entirely.

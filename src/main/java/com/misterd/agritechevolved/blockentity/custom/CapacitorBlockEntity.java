@@ -36,7 +36,7 @@ import java.lang.reflect.Field;
 public class CapacitorBlockEntity extends BlockEntity implements MenuProvider {
 
     private EnergyStorage energyStorage;
-    private int tier         = 1;
+    private int tier = 1;
     private int transferRate = 512;
 
     public CapacitorBlockEntity(BlockPos pos, BlockState blockState) {
@@ -46,19 +46,19 @@ public class CapacitorBlockEntity extends BlockEntity implements MenuProvider {
 
     private void initializeCapacitor(BlockState state) {
         if (state.is(ATEBlocks.CAPACITOR_TIER_1.get())) {
-            tier         = 1;
+            tier = 1;
             transferRate = Config.getCapacitorT1TransferRate();
             energyStorage = makeTrackedStorage(Config.getCapacitorT1Buffer());
         } else if (state.is(ATEBlocks.CAPACITOR_TIER_2.get())) {
-            tier         = 2;
+            tier = 2;
             transferRate = Config.getCapacitorT2TransferRate();
             energyStorage = makeTrackedStorage(Config.getCapacitorT2Buffer());
         } else if (state.is(ATEBlocks.CAPACITOR_TIER_3.get())) {
-            tier         = 3;
+            tier = 3;
             transferRate = Config.getCapacitorT3TransferRate();
             energyStorage = makeTrackedStorage(Config.getCapacitorT3Buffer());
         } else {
-            tier         = 1;
+            tier = 1;
             transferRate = Config.getCapacitorT1TransferRate();
             energyStorage = new EnergyStorage(Config.getCapacitorT1Buffer());
         }
@@ -96,14 +96,12 @@ public class CapacitorBlockEntity extends BlockEntity implements MenuProvider {
 
         if (be.energyStorage.getEnergyStored() > 0) {
             for (Direction dir : Direction.values()) {
-                if (dir == Direction.DOWN) continue;
                 if (be.energyStorage.getEnergyStored() <= 0) break;
 
                 BlockPos neighborPos = pos.relative(dir);
                 if (level.getBlockEntity(neighborPos) == null) continue;
 
-                IEnergyStorage neighbor = level.getCapability(
-                        Capabilities.EnergyStorage.BLOCK, neighborPos, dir.getOpposite());
+                IEnergyStorage neighbor = level.getCapability(Capabilities.EnergyStorage.BLOCK, neighborPos, dir.getOpposite());
                 if (neighbor == null || !neighbor.canReceive()) continue;
 
                 int toTransfer = be.energyStorage.extractEnergy(be.transferRate, true);
@@ -124,7 +122,7 @@ public class CapacitorBlockEntity extends BlockEntity implements MenuProvider {
 
         boolean hasEnergy = be.getEnergyStored() > 0;
         BooleanProperty prop = null;
-        if      (state.is(ATEBlocks.CAPACITOR_TIER_1.get())) prop = CapacitorTier1Block.HAS_ENERGY;
+        if (state.is(ATEBlocks.CAPACITOR_TIER_1.get())) prop = CapacitorTier1Block.HAS_ENERGY;
         else if (state.is(ATEBlocks.CAPACITOR_TIER_2.get())) prop = CapacitorTier2Block.HAS_ENERGY;
         else if (state.is(ATEBlocks.CAPACITOR_TIER_3.get())) prop = CapacitorTier3Block.HAS_ENERGY;
 
@@ -133,7 +131,7 @@ public class CapacitorBlockEntity extends BlockEntity implements MenuProvider {
         }
     }
 
-    public int getEnergyStored()    { return energyStorage != null ? energyStorage.getEnergyStored()    : 0; }
+    public int getEnergyStored() { return energyStorage != null ? energyStorage.getEnergyStored()    : 0; }
     public int getMaxEnergyStored() { return energyStorage != null ? energyStorage.getMaxEnergyStored() : 0; }
     public boolean canExtractEnergy() { return true; }
     public boolean canReceiveEnergy() { return true; }
@@ -146,16 +144,15 @@ public class CapacitorBlockEntity extends BlockEntity implements MenuProvider {
         return energyStorage != null ? energyStorage.extractEnergy(maxExtract, simulate) : 0;
     }
 
-    public IEnergyStorage getEnergyStorage()                 { return energyStorage; }
+    public IEnergyStorage getEnergyStorage() { return energyStorage; }
     public IEnergyStorage getEnergyStorage(@Nullable Direction side) {
-        if (side == Direction.DOWN) return null;
         return new IEnergyStorage() {
-            @Override public int  receiveEnergy(int max, boolean sim) { return CapacitorBlockEntity.this.receiveEnergy(max, sim); }
-            @Override public int  extractEnergy(int max, boolean sim) { return CapacitorBlockEntity.this.extractEnergy(max, sim); }
-            @Override public int  getEnergyStored()                   { return CapacitorBlockEntity.this.getEnergyStored(); }
-            @Override public int  getMaxEnergyStored()                { return CapacitorBlockEntity.this.getMaxEnergyStored(); }
-            @Override public boolean canExtract()                     { return true; }
-            @Override public boolean canReceive()                     { return true; }
+            @Override public int receiveEnergy(int max, boolean sim) { return CapacitorBlockEntity.this.receiveEnergy(max, sim); }
+            @Override public int extractEnergy(int max, boolean sim) { return CapacitorBlockEntity.this.extractEnergy(max, sim); }
+            @Override public int getEnergyStored() { return CapacitorBlockEntity.this.getEnergyStored(); }
+            @Override public int getMaxEnergyStored() { return CapacitorBlockEntity.this.getMaxEnergyStored(); }
+            @Override public boolean canExtract() { return true; }
+            @Override public boolean canReceive() { return true; }
         };
     }
 
@@ -163,9 +160,9 @@ public class CapacitorBlockEntity extends BlockEntity implements MenuProvider {
         if (energyStorage == null) return;
         int clamped = Math.min(energy, energyStorage.getMaxEnergyStored());
         try {
-            Field f = EnergyStorage.class.getDeclaredField("energy");
-            f.setAccessible(true);
-            f.setInt(energyStorage, clamped);
+            Field field = EnergyStorage.class.getDeclaredField("energy");
+            field.setAccessible(true);
+            field.setInt(energyStorage, clamped);
         } catch (Exception e) {
             int current;
             while ((current = energyStorage.getEnergyStored()) < clamped
@@ -174,13 +171,13 @@ public class CapacitorBlockEntity extends BlockEntity implements MenuProvider {
         }
     }
 
-    public int    getTier()        { return tier; }
-    public int    getTransferRate() { return transferRate; }
+    public int getTier() { return tier; }
+    public int getTransferRate() { return transferRate; }
     public String getTierName() {
         return switch (tier) {
-            case 1  -> "Tier 1";
-            case 2  -> "Tier 2";
-            case 3  -> "Tier 3";
+            case 1 -> "Tier 1";
+            case 2 -> "Tier 2";
+            case 3 -> "Tier 3";
             default -> "Unknown";
         };
     }
@@ -198,7 +195,7 @@ public class CapacitorBlockEntity extends BlockEntity implements MenuProvider {
         super.loadAdditional(tag, registries);
         if (getBlockState() != null) initializeCapacitor(getBlockState());
         if (tag.contains("energy") && energyStorage != null) energyStorage.deserializeNBT(registries, tag.get("energy"));
-        if (tag.contains("tier"))         tier         = tag.getInt("tier");
+        if (tag.contains("tier")) tier = tag.getInt("tier");
         if (tag.contains("transferRate")) transferRate = tag.getInt("transferRate");
     }
 
@@ -222,7 +219,7 @@ public class CapacitorBlockEntity extends BlockEntity implements MenuProvider {
 
     public static void registerCapabilities(RegisterCapabilitiesEvent event) {
         event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, ATEBlockEntities.CAPACITOR_BE.get(),
-                (be, dir) -> be instanceof CapacitorBlockEntity c ? c.getEnergyStorage(dir) : null);
+                (be, dir) -> be instanceof CapacitorBlockEntity capacitorBlockEntity ? capacitorBlockEntity.getEnergyStorage(dir) : null);
     }
 
     @Override

@@ -1,0 +1,25 @@
+{
+  "type": "agritechevolved:crop",
+  "drops": [
+    {
+      "chance": 1.0,
+      "item": "minecraft:wheat",
+      "max": 1,
+      "min": 1
+    },
+    {
+      "chance": 0.5,
+      "item": "minecraft:wheat_seeds",
+      "max": 2,
+      "min": 1
+    }
+  ],
+  "seed": {
+    "item": "minecraft:wheat_seeds"
+  },
+  "soils": [
+    {
+      "tag": "agritechevolved:farmland_soils"
+    }
+  ]
+}
