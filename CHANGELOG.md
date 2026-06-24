@@ -42,3 +42,7 @@ All notable changes to this project will be documented here.
 ## [2.1.2.1+neoforge-mc26.1.2] - 2026-06-16
 ### Fixed
 - Fixed data components (NBT) being stripped from items when extracted through menus or scaled through yield modifiers
+
+## [2.1.2.2+neoforge-mc26.1.2] - 2026-06-24
+### Fixed
+- Made it so MA farmlands can't be downgraded in the planter
