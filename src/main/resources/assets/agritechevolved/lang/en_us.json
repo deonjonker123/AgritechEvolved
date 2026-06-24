@@ -53,6 +53,7 @@
 
   "message.agritechevolved.invalid_plant_soil_combination": "Seed/Sapling can't grow on this soil",
   "message.agritechevolved.same_farmland": "This farmland is already of this type!",
+  "message.agritechevolved.same_ma_farmland": "Cannot downgrade Mystical Farmland Tier",
 
   "tooltip.agritechevolved.sm_mk1": "§6§n§lHold Shift for more info§r§r§r",
   "tooltip.agritechevolved.sm_mk2": "§6§n§lHold Shift for more info§r§r§r",

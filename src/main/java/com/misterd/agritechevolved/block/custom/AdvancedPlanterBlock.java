@@ -9,6 +9,7 @@ import com.misterd.agritechevolved.item.ATEItems;
 import com.misterd.agritechevolved.item.custom.ClocheItem;
 import com.misterd.agritechevolved.util.ATETags;
 import com.mojang.serialization.MapCodec;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
@@ -45,6 +46,7 @@ import net.neoforged.neoforge.common.ItemAbilities;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class AdvancedPlanterBlock extends BaseEntityBlock {
@@ -64,16 +66,24 @@ public class AdvancedPlanterBlock extends BaseEntityBlock {
             Block.box(3, 2, 3, 13, 3, 13)
     );
 
-    private static final Map<String, String> ESSENCE_TO_FARMLAND;
+    private static final List<String> FARMLAND_TIERS = List.of(
+            "minecraft:farmland",
+            "mysticalagriculture:inferium_farmland",
+            "mysticalagriculture:prudentium_farmland",
+            "mysticalagriculture:tertium_farmland",
+            "mysticalagriculture:imperium_farmland",
+            "mysticalagriculture:supremium_farmland",
+            "mysticalagradditions:insanium_farmland"
+    );
 
-    static {
-        ESSENCE_TO_FARMLAND = new HashMap<>();
-        ESSENCE_TO_FARMLAND.put("mysticalagriculture:inferium_essence", "mysticalagriculture:inferium_farmland");
-        ESSENCE_TO_FARMLAND.put("mysticalagriculture:prudentium_essence", "mysticalagriculture:prudentium_farmland");
-        ESSENCE_TO_FARMLAND.put("mysticalagriculture:tertium_essence", "mysticalagriculture:tertium_farmland");
-        ESSENCE_TO_FARMLAND.put("mysticalagriculture:imperium_essence", "mysticalagriculture:imperium_farmland");
-        ESSENCE_TO_FARMLAND.put("mysticalagriculture:supremium_essence", "mysticalagriculture:supremium_farmland");
-    }
+    private static final Map<String, String> ESSENCE_TO_FARMLAND = Map.of(
+            "mysticalagriculture:inferium_essence", "mysticalagriculture:inferium_farmland",
+            "mysticalagriculture:prudentium_essence", "mysticalagriculture:prudentium_farmland",
+            "mysticalagriculture:tertium_essence", "mysticalagriculture:tertium_farmland",
+            "mysticalagriculture:imperium_essence", "mysticalagriculture:imperium_farmland",
+            "mysticalagriculture:supremium_essence", "mysticalagriculture:supremium_farmland",
+            "mysticalagradditions:insanium_essence", "mysticalagradditions:insanium_farmland"
+    );
 
     public AdvancedPlanterBlock(Properties properties) {
         super(properties);
@@ -238,8 +248,10 @@ public class AdvancedPlanterBlock extends BaseEntityBlock {
                 || (soilId.startsWith("mysticalagriculture:") && soilId.endsWith("_farmland"))
                 || (soilId.startsWith("mysticalagradditions:") && soilId.endsWith("_farmland"));
         if (!isFarmland) return false;
-        if (soilId.equals(targetFarmlandId)) {
-            if (!level.isClientSide()) player.displayClientMessage(Component.translatable("message.agritechevolved.same_farmland"), true);
+        int currentTier = FARMLAND_TIERS.indexOf(soilId);
+        int targetTier = FARMLAND_TIERS.indexOf(targetFarmlandId);
+        if (targetTier <= currentTier) {
+            if (!level.isClientSide()) player.displayClientMessage(Component.translatable("message.agritechevolved.same_ma_farmland").withStyle(ChatFormatting.GOLD), true);
             return true;
         }
         Block resultBlock = BuiltInRegistries.BLOCK.get(ResourceLocation.parse(targetFarmlandId));
