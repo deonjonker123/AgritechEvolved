@@ -45,6 +45,8 @@ public class ATEBlockTagProvider extends BlockTagsProvider {
                 .add(key(ATEBlocks.CAPACITOR_TIER_1.get()))
                 .add(key(ATEBlocks.CAPACITOR_TIER_2.get()))
                 .add(key(ATEBlocks.CAPACITOR_TIER_3.get()))
+                .add(key(ATEBlocks.SILO.get()))
+                .add(key(ATEBlocks.FERT_SPREADER.get()))
 
                 .add(key(ATEBlocks.COMPACTED_BIOMASS_BLOCK.get()));
 

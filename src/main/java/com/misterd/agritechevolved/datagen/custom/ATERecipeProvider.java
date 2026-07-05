@@ -239,6 +239,26 @@ public class ATERecipeProvider extends RecipeProvider {
                 .unlockedBy("has_furnace", has(Items.FURNACE))
                 .save(output);
 
+        shaped(RecipeCategory.MISC, ATEBlocks.SILO.get())
+                .pattern("III")
+                .pattern("IFI")
+                .pattern("IRI")
+                .define('I', Items.IRON_INGOT)
+                .define('F', Tags.Items.CHESTS)
+                .define('R', Items.OBSERVER)
+                .unlockedBy("has_observer", has(Items.OBSERVER))
+                .save(output);
+
+        shaped(RecipeCategory.MISC, ATEBlocks.FERT_SPREADER.get())
+                .pattern("III")
+                .pattern("IFI")
+                .pattern("IRI")
+                .define('I', Items.IRON_INGOT)
+                .define('F', Tags.Items.CHESTS)
+                .define('R', Items.DISPENSER)
+                .unlockedBy("has_dispenser", has(Items.DISPENSER))
+                .save(output);
+
         shaped(RecipeCategory.MISC, ATEBlocks.CAPACITOR_TIER_1.get())
                 .pattern("RRR")
                 .pattern("ICI")
@@ -329,6 +349,37 @@ public class ATERecipeProvider extends RecipeProvider {
                 .define('N', Items.NETHERITE_INGOT)
                 .define('Y', ATEItems.YM_MK2.get())
                 .unlockedBy("has_ym_mk2", has(ATEItems.YM_MK2.get()))
+                .save(output);
+
+        shaped(RecipeCategory.MISC, ATEItems.RM_MK1.get())
+                .pattern(" W ")
+                .pattern("SCS")
+                .pattern(" W ")
+                .define('W', Items.REDSTONE_TORCH)
+                .define('S', Items.REDSTONE)
+                .define('C', Items.COPPER_BLOCK.weathering().pick(WeatheringCopper.WeatherState.UNAFFECTED))
+                .unlockedBy("has_redstone", has(Items.REDSTONE))
+                .save(output);
+
+        shaped(RecipeCategory.MISC, ATEItems.RM_MK2.get())
+                .pattern(" G ")
+                .pattern("CYC")
+                .pattern(" G ")
+                .define('G', Items.REDSTONE_BLOCK)
+                .define('C', Items.IRON_BLOCK)
+                .define('Y', ATEItems.YM_MK1.get())
+                .unlockedBy("has_rm_mk1", has(ATEItems.RM_MK1.get()))
+                .save(output);
+
+        shaped(RecipeCategory.MISC, ATEItems.RM_MK3.get())
+                .pattern("ENE")
+                .pattern("GYG")
+                .pattern("ENE")
+                .define('E', Items.COMPARATOR)
+                .define('G', Items.REDSTONE_BLOCK)
+                .define('N', Items.NETHERITE_INGOT)
+                .define('Y', ATEItems.YM_MK2.get())
+                .unlockedBy("has_rm_mk2", has(ATEItems.RM_MK2.get()))
                 .save(output);
 
         shaped(RecipeCategory.MISC, ATEItems.COMPACTED_BIOMASS.get())

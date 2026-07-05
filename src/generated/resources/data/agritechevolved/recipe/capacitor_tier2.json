@@ -1,6 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
   "key": {
     "C": "agritechevolved:capacitor_tier1",
     "G": "minecraft:gold_ingot",

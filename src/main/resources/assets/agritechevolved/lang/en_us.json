@@ -17,6 +17,8 @@
   "block.agritechevolved.advanced_planter": "Advanced Planter",
 
   "block.agritechevolved.composter": "Composter",
+  "block.agritechevolved.silo": "Silo",
+  "block.agritechevolved.fertilizer_spreader": "Fertilizer Spreader",
 
   "block.agritechevolved.biomass_burner": "Biomass Burner",
 
@@ -35,6 +37,9 @@
   "item.agritechevolved.ym_mk1": "Yield Upgrade MK1",
   "item.agritechevolved.ym_mk2": "Yield Upgrade MK2",
   "item.agritechevolved.ym_mk3": "Yield Upgrade MK3",
+  "item.agritechevolved.rm_mk1": "Range Upgrade MK1",
+  "item.agritechevolved.rm_mk2": "Range Upgrade MK2",
+  "item.agritechevolved.rm_mk3": "Range Upgrade MK3",
 
   "item.agritechevolved.cloche_dome": "Cloche Dome",
 
@@ -51,6 +56,8 @@
   "gui.agritechevolved.biomass_burner": "Biomass Burner",
   "gui.agritechevolved.composter": "Composter",
   "gui.agritechevolved.capacitor": "Capacitor",
+  "gui.agritechevolved.silo": "Silo",
+  "gui.agritechevolved.fertilizer_spreader": "Fertilizer Spreader",
 
   "message.agritechevolved.invalid_seed_soil_combination": "Seed/Sapling can't grow on this soil",
   "message.agritechevolved.same_farmland": "This farmland is already of this type!",
@@ -120,6 +127,9 @@
   "tooltip.agritechevolved.module.power_increase": "§cand increases power consumption by %s%%§r",
   "tooltip.agritechevolved.module.yield_boost": "§aIncreases yield by %s%%§r",
   "tooltip.agritechevolved.module.speed_reduction": "§cand reduces processing speed by %s%%§r",
+  "tooltip.agritechevolved.module.rm_mk1":"§aIncreases Silo and Fertilizer Spreader range by 16 blocks§r",
+  "tooltip.agritechevolved.module.rm_mk2":"§aIncreases Silo and Fertilizer Spreader range by 32 blocks§r",
+  "tooltip.agritechevolved.module.rm_mk3":"§aIncreases Silo and Fertilizer Spreader range by 64 blocks§r",
 
   "tooltip.agritechevolved.fuel.burn_duration": "§bBurns for %s seconds§r",
   "tooltip.agritechevolved.fuel.rf_per_second": "§eGenerates %s RF/second§r",
@@ -142,6 +152,7 @@
   "tooltip.agritechevolved.slot.upgrade_1": "Upgrade Slot 1",
   "tooltip.agritechevolved.slot.upgrade_2": "Upgrade Slot 2",
   "tooltip.agritechevolved.slot.upgrade": "Speed Upgrade Slot",
+  "tooltip.agritechevolved.slot.range_module": "Range Upgrade Slot",
 
   "tooltip.agritechevolved.soil_type": "Soil Info",
   "tooltip.agritechevolved.soil_growth_modifier": "Growth Speed: %s",

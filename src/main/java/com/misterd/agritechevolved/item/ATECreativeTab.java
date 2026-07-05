@@ -36,6 +36,8 @@ public class ATECreativeTab {
                         output.accept(ATEBlocks.COMPOSTER);
 
                         output.accept(ATEBlocks.BIOMASS_BURNER);
+                        output.accept(ATEBlocks.SILO);
+                        output.accept(ATEBlocks.FERT_SPREADER);
                         output.accept(ATEBlocks.CAPACITOR_TIER_1);
                         output.accept(ATEBlocks.CAPACITOR_TIER_2);
                         output.accept(ATEBlocks.CAPACITOR_TIER_3);
@@ -53,6 +55,9 @@ public class ATECreativeTab {
                         output.accept(ATEItems.SM_MK1.get());
                         output.accept(ATEItems.SM_MK2.get());
                         output.accept(ATEItems.SM_MK3.get());
+                        output.accept(ATEItems.RM_MK1.get());
+                        output.accept(ATEItems.RM_MK2.get());
+                        output.accept(ATEItems.RM_MK3.get());
                         output.accept(ATEItems.CLOCHE.get());
                     }).build());
 

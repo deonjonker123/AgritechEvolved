@@ -114,6 +114,42 @@ public class ATEItems {
                 }
             });
 
+    public static final DeferredItem<Item> RM_MK1 = ITEMS.registerItem("rm_mk1",
+            props -> new Item(props) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> adder, TooltipFlag flag) {
+                    if (isShiftDown()) {
+                        adder.accept(Component.translatable("tooltip.agritechevolved.module.rm_mk1"));
+                    } else {
+                        adder.accept(Component.translatable("tooltip.agritechevolved.module.shift_info"));
+                    }
+                }
+            });
+
+    public static final DeferredItem<Item> RM_MK2 = ITEMS.registerItem("rm_mk2",
+            props -> new Item(props) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> adder, TooltipFlag flag) {
+                    if (isShiftDown()) {
+                        adder.accept(Component.translatable("tooltip.agritechevolved.module.rm_mk2"));
+                    } else {
+                        adder.accept(Component.translatable("tooltip.agritechevolved.module.shift_info"));
+                    }
+                }
+            });
+
+    public static final DeferredItem<Item> RM_MK3 = ITEMS.registerItem("rm_mk3",
+            props -> new Item(props) {
+                @Override
+                public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> adder, TooltipFlag flag) {
+                    if (isShiftDown()) {
+                        adder.accept(Component.translatable("tooltip.agritechevolved.module.rm_mk3"));
+                    } else {
+                        adder.accept(Component.translatable("tooltip.agritechevolved.module.shift_info"));
+                    }
+                }
+            });
+
     public static final DeferredItem<Item> CRUDE_BIOMASS = ITEMS.registerItem("crude_biomass",
             props -> new Item(props) {
                 @Override

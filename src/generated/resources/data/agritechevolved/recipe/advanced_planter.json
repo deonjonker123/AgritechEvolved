@@ -1,6 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
   "key": {
     "A": "#agritechevolved:basic_planter_items",
     "F": "minecraft:iron_ingot",

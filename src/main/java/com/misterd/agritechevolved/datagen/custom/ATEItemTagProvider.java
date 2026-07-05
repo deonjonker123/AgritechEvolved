@@ -34,7 +34,10 @@ public class ATEItemTagProvider extends ItemTagsProvider {
                 .add(key(ATEItems.SM_MK3.get()))
                 .add(key(ATEItems.YM_MK1.get()))
                 .add(key(ATEItems.YM_MK2.get()))
-                .add(key(ATEItems.YM_MK3.get()));
+                .add(key(ATEItems.YM_MK3.get()))
+                .add(key(ATEItems.RM_MK1.get()))
+                .add(key(ATEItems.RM_MK2.get()))
+                .add(key(ATEItems.RM_MK3.get()));
 
         tag(ATETags.Items.BASIC_PLANTER_ITEMS)
                 .add(key(ATEBlocks.ACACIA_PLANTER.asItem()))

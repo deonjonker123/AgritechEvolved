@@ -30,6 +30,9 @@ public class ATEModelProvider extends ModelProvider {
         itemModels.generateFlatItem(ATEItems.YM_MK1.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(ATEItems.YM_MK2.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(ATEItems.YM_MK3.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ATEItems.RM_MK1.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ATEItems.RM_MK2.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ATEItems.RM_MK3.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(ATEItems.CRUDE_BIOMASS.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(ATEItems.BIOMASS.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(ATEItems.COMPACTED_BIOMASS.get(), ModelTemplates.FLAT_ITEM);

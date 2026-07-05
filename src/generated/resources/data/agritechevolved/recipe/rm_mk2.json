@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "C": "minecraft:iron_block",
+    "G": "minecraft:redstone_block",
+    "Y": "agritechevolved:ym_mk1"
+  },
+  "pattern": [
+    " G ",
+    "CYC",
+    " G "
+  ],
+  "result": {
+    "id": "agritechevolved:rm_mk2"
+  }
+}

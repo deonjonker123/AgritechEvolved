@@ -36,7 +36,7 @@ public class ATEBlockEntities {
 
     public static final Supplier<BlockEntityType<AdvancedPlanterBlockEntity>> ADVANCED_PLANTER_BLOCK_BE
             = BLOCK_ENTITIES.register("advanced_planter_block_be", () ->  new BlockEntityType<>(
-                    AdvancedPlanterBlockEntity::new, ATEBlocks.ADVANCED_PLANTER.get()));
+            AdvancedPlanterBlockEntity::new, ATEBlocks.ADVANCED_PLANTER.get()));
 
     public static final Supplier<BlockEntityType<ComposterBlockEntity>> COMPOSTER_BE
             = BLOCK_ENTITIES.register("composter_be", () ->  new BlockEntityType<>(
@@ -53,6 +53,14 @@ public class ATEBlockEntities {
     public static final Supplier<BlockEntityType<BiomassBurnerBlockEntity>> BURNER_BE
             = BLOCK_ENTITIES.register("burner_be", () ->  new BlockEntityType<>(
             BiomassBurnerBlockEntity::new, ATEBlocks.BIOMASS_BURNER.get()));
+
+    public static final Supplier<BlockEntityType<SiloBlockEntity>> SILO_BE
+            = BLOCK_ENTITIES.register("silo_be", () -> new BlockEntityType<>(
+            SiloBlockEntity::new, ATEBlocks.SILO.get()));
+
+    public static final Supplier<BlockEntityType<FertilizerSpreaderBlockEntity>> FERTILIZER_SPREADER_BE
+            = BLOCK_ENTITIES.register("fertilizer_spreader_be", () -> new BlockEntityType<>(
+            FertilizerSpreaderBlockEntity::new, ATEBlocks.FERT_SPREADER.get()));
 
     private static void registerCapabilities(RegisterCapabilitiesEvent event) {
         event.registerBlockEntity(Capabilities.Item.BLOCK, PLANTER_BLOCK_BE.get(),
