@@ -52,3 +52,7 @@ All notable changes to this project will be documented here.
 - Added Silo and Fertilizer Spreader blocks. Silo pulls drops from all planters in range, Fertilizer Spreader pushes fertilizer to all planters in range
 - Added range upgrades for the Silo and Fertilizer Spreader blocks
 - Added config options for both blocks
+
+## [2.2.0.1+neoforge-mc26.1.2] - 2026-07-05
+### Fixed
+- Better performance for the silo and spreader
