@@ -13,6 +13,7 @@ public class ATETags {
         public static final TagKey<Item> DIRT_LIKE_BLOCK_ITEMS = createTag("dirt_like_block_items");
         public static final TagKey<Item> BASIC_PLANTER_ITEMS = createTag("basic_planter_items");
         public static final TagKey<Item> ATE_MODULES = createTag("agritechevolved_modules");
+        public static final TagKey<Item> ATE_RANGE_MODULES = createTag("agritechevolved_range_modules");
         public static final TagKey<Item> FARMLAND_SOILS = createTag("farmland_soils");
         public static final TagKey<Item> DIRT_SOILS = createTag("dirt_soils");
         public static final TagKey<Item> TREE_SOILS = createTag("tree_soils");

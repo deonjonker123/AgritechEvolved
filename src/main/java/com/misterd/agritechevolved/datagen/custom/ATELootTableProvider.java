@@ -36,6 +36,8 @@ public class ATELootTableProvider extends BlockLootSubProvider {
         dropSelf(ATEBlocks.CAPACITOR_TIER_1.get());
         dropSelf(ATEBlocks.CAPACITOR_TIER_2.get());
         dropSelf(ATEBlocks.CAPACITOR_TIER_3.get());
+        dropSelf(ATEBlocks.SILO.get());
+        dropSelf(ATEBlocks.FERT_SPREADER.get());
         dropSelf(ATEBlocks.COMPACTED_BIOMASS_BLOCK.get());
         add(ATEBlocks.INFUSED_FARMLAND.get(),block -> createInfusedFarmlandTable(block, ATEBlocks.MULCH.get().asItem()));
         dropSelf(ATEBlocks.MULCH.get());

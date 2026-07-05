@@ -14,9 +14,6 @@ public class Config {
     public static ModConfigSpec COMMON_CONFIG;
     public static ModConfigSpec SPEC;
 
-    // -------------------------------------------------------------------------
-    // Modules
-    // -------------------------------------------------------------------------
     public static ModConfigSpec.DoubleValue SPEED_MODULE_MK1_MULTIPLIER;
     public static ModConfigSpec.DoubleValue SPEED_MODULE_MK1_POWER_MULTIPLIER;
     public static ModConfigSpec.DoubleValue SPEED_MODULE_MK2_MULTIPLIER;
@@ -30,24 +27,18 @@ public class Config {
     public static ModConfigSpec.DoubleValue YIELD_MODULE_MK3_MULTIPLIER;
     public static ModConfigSpec.DoubleValue YIELD_MODULE_MK3_SPEED_PENALTY;
 
-    // -------------------------------------------------------------------------
-    // Machines — Planter
-    // -------------------------------------------------------------------------
     public static ModConfigSpec.IntValue PLANTER_BASE_POWER_CONSUMPTION;
     public static ModConfigSpec.IntValue PLANTER_BASE_PROCESSING_TIME;
     public static ModConfigSpec.IntValue PLANTER_ENERGY_BUFFER;
     public static ModConfigSpec.IntValue ADVANCED_PLANTER_BASE_PROCESSING_TIME;
 
-    // Cloche
     public static ModConfigSpec.DoubleValue CLOCHE_SPEED_MULTIPLIER;
     public static ModConfigSpec.DoubleValue CLOCHE_YIELD_MULTIPLIER;
 
-    // Machines — Composter
     public static ModConfigSpec.IntValue COMPOSTER_BASE_POWER_CONSUMPTION;
     public static ModConfigSpec.IntValue COMPOSTER_BASE_PROCESSING_TIME;
     public static ModConfigSpec.IntValue COMPOSTER_ENERGY_BUFFER;
 
-    // Machines — Burner
     public static ModConfigSpec.IntValue BURNER_ENERGY_BUFFER;
     public static ModConfigSpec.IntValue BURNER_BIOMASS_RF_VALUE;
     public static ModConfigSpec.IntValue BURNER_BIOMASS_BURN_DURATION;
@@ -58,7 +49,6 @@ public class Config {
     public static ModConfigSpec.IntValue BURNER_CRUDE_BIOMASS_RF_VALUE;
     public static ModConfigSpec.IntValue BURNER_CRUDE_BIOMASS_BURN_DURATION;
 
-    // Machines — Capacitors
     public static ModConfigSpec.IntValue CAPACITOR_T1_BUFFER;
     public static ModConfigSpec.IntValue CAPACITOR_T1_TRANSFER_RATE;
     public static ModConfigSpec.IntValue CAPACITOR_T2_BUFFER;
@@ -66,9 +56,16 @@ public class Config {
     public static ModConfigSpec.IntValue CAPACITOR_T3_BUFFER;
     public static ModConfigSpec.IntValue CAPACITOR_T3_TRANSFER_RATE;
 
-    // =========================================================================
-    // Registration
-    // =========================================================================
+    public static ModConfigSpec.IntValue SILO_BASE_RANGE;
+    public static ModConfigSpec.IntValue SILO_ENERGY_BUFFER;
+    public static ModConfigSpec.IntValue SILO_BASE_POWER_CONSUMPTION;
+    public static ModConfigSpec.IntValue SILO_PULL_INTERVAL;
+
+    public static ModConfigSpec.IntValue FERTILIZER_SPREADER_BASE_RANGE;
+    public static ModConfigSpec.IntValue FERTILIZER_SPREADER_ENERGY_BUFFER;
+    public static ModConfigSpec.IntValue FERTILIZER_SPREADER_BASE_POWER_CONSUMPTION;
+    public static ModConfigSpec.IntValue FERTILIZER_SPREADER_PUSH_INTERVAL;
+    public static ModConfigSpec.IntValue FERTILIZER_SPREADER_PUSH_AMOUNT;
 
     public static void register(ModContainer container) {
         moduleConfig();
@@ -77,10 +74,6 @@ public class Config {
         SPEC = COMMON_CONFIG;
         container.registerConfig(ModConfig.Type.COMMON, COMMON_CONFIG);
     }
-
-    // =========================================================================
-    // Config builders
-    // =========================================================================
 
     private static void moduleConfig() {
         COMMON_BUILDER.comment("Module Effectiveness Settings").push("modules");
@@ -112,6 +105,8 @@ public class Config {
         composterConfig();
         burnerConfig();
         capacitorConfig();
+        siloConfig();
+        fertilizerSpreaderConfig();
         COMMON_BUILDER.pop();
     }
 
@@ -165,9 +160,24 @@ public class Config {
         COMMON_BUILDER.pop();
     }
 
-    // =========================================================================
-    // Getters — Modules
-    // =========================================================================
+    private static void siloConfig() {
+        COMMON_BUILDER.comment("Silo Configuration").push("silo");
+        SILO_BASE_RANGE = COMMON_BUILDER.comment("Base range for Silo (blocks)").defineInRange("base_range", 16, 4, 64);
+        SILO_ENERGY_BUFFER = COMMON_BUILDER.comment("Energy buffer capacity for Silo (RF)").defineInRange("energy_buffer", 100000, 1000, 1000000);
+        SILO_BASE_POWER_CONSUMPTION = COMMON_BUILDER.comment("Base power consumption for Silo (RF/t)").defineInRange("base_power_consumption", 128, 1, 100000);
+        SILO_PULL_INTERVAL = COMMON_BUILDER.comment("How often the Silo pulls from planters in range (ticks)").defineInRange("pull_interval", 60, 2, 6000);
+        COMMON_BUILDER.pop();
+    }
+
+    private static void fertilizerSpreaderConfig() {
+        COMMON_BUILDER.comment("Fertilizer Spreader Configuration").push("fertilizer_spreader");
+        FERTILIZER_SPREADER_BASE_RANGE = COMMON_BUILDER.comment("Base range for Fertilizer Spreader (blocks)").defineInRange("base_range", 16, 4, 64);
+        FERTILIZER_SPREADER_ENERGY_BUFFER = COMMON_BUILDER.comment("Energy buffer capacity for Fertilizer Spreader (RF)").defineInRange("energy_buffer", 100000, 1000, 1000000);
+        FERTILIZER_SPREADER_BASE_POWER_CONSUMPTION = COMMON_BUILDER.comment("Base power consumption for Fertilizer Spreader (RF/t)").defineInRange("base_power_consumption", 128, 1, 100000);
+        FERTILIZER_SPREADER_PUSH_INTERVAL = COMMON_BUILDER.comment("How often the Fertilizer Spreader pushes to planters in range (ticks)").defineInRange("push_interval", 60, 2, 6000);
+        FERTILIZER_SPREADER_PUSH_AMOUNT = COMMON_BUILDER.comment("How many fertilizer items the Fertilizer Spreader pushes per planter per push").defineInRange("push_amount", 8, 1, 64);
+        COMMON_BUILDER.pop();
+    }
 
     public static double getSpeedModuleMk1Multiplier() { return SPEED_MODULE_MK1_MULTIPLIER.get(); }
     public static double getSpeedModuleMk1PowerMultiplier() { return SPEED_MODULE_MK1_POWER_MULTIPLIER.get(); }
@@ -182,33 +192,17 @@ public class Config {
     public static double getYieldModuleMk3Multiplier() { return YIELD_MODULE_MK3_MULTIPLIER.get(); }
     public static double getYieldModuleMk3SpeedPenalty() { return YIELD_MODULE_MK3_SPEED_PENALTY.get(); }
 
-    // =========================================================================
-    // Getters — Cloche
-    // =========================================================================
-
     public static double getClocheSpeedMultiplier() { return CLOCHE_SPEED_MULTIPLIER.get(); }
     public static double getClocheYieldMultiplier() { return CLOCHE_YIELD_MULTIPLIER.get(); }
-
-    // =========================================================================
-    // Getters — Planter
-    // =========================================================================
 
     public static int getPlanterBasePowerConsumption() { return PLANTER_BASE_POWER_CONSUMPTION.get(); }
     public static int getPlanterBaseProcessingTime() { return PLANTER_BASE_PROCESSING_TIME.get(); }
     public static int getAdvancedPlanterBaseProcessingTime() { return ADVANCED_PLANTER_BASE_PROCESSING_TIME.get(); }
     public static int getPlanterEnergyBuffer() { return PLANTER_ENERGY_BUFFER.get(); }
 
-    // =========================================================================
-    // Getters — Composter
-    // =========================================================================
-
     public static int getComposterBasePowerConsumption() { return COMPOSTER_BASE_POWER_CONSUMPTION.get(); }
     public static int getComposterBaseProcessingTime() { return COMPOSTER_BASE_PROCESSING_TIME.get(); }
     public static int getComposterEnergyBuffer() { return COMPOSTER_ENERGY_BUFFER.get(); }
-
-    // =========================================================================
-    // Getters — Burner
-    // =========================================================================
 
     public static int getBurnerEnergyBuffer() { return BURNER_ENERGY_BUFFER.get(); }
     public static int getBurnerBiomassRfValue() { return BURNER_BIOMASS_RF_VALUE.get(); }
@@ -220,10 +214,6 @@ public class Config {
     public static int getBurnerCrudeBiomassRfValue() { return BURNER_CRUDE_BIOMASS_RF_VALUE.get(); }
     public static int getBurnerCrudeBiomassBurnDuration() { return BURNER_CRUDE_BIOMASS_BURN_DURATION.get(); }
 
-    // =========================================================================
-    // Getters — Capacitors
-    // =========================================================================
-
     public static int getCapacitorT1Buffer() { return CAPACITOR_T1_BUFFER.get(); }
     public static int getCapacitorT1TransferRate() { return CAPACITOR_T1_TRANSFER_RATE.get(); }
     public static int getCapacitorT2Buffer() { return CAPACITOR_T2_BUFFER.get(); }
@@ -231,9 +221,16 @@ public class Config {
     public static int getCapacitorT3Buffer() { return CAPACITOR_T3_BUFFER.get(); }
     public static int getCapacitorT3TransferRate() { return CAPACITOR_T3_TRANSFER_RATE.get(); }
 
-    // =========================================================================
-    // Config lifecycle
-    // =========================================================================
+    public static int getSiloBaseRange() { return SILO_BASE_RANGE.get(); }
+    public static int getSiloEnergyBuffer() { return SILO_ENERGY_BUFFER.get(); }
+    public static int getSiloBasePowerConsumption() { return SILO_BASE_POWER_CONSUMPTION.get(); }
+    public static int getSiloPullInterval() { return SILO_PULL_INTERVAL.get(); }
+
+    public static int getFertilizerSpreaderBaseRange() { return FERTILIZER_SPREADER_BASE_RANGE.get(); }
+    public static int getFertilizerSpreaderEnergyBuffer() { return FERTILIZER_SPREADER_ENERGY_BUFFER.get(); }
+    public static int getFertilizerSpreaderBasePowerConsumption() { return FERTILIZER_SPREADER_BASE_POWER_CONSUMPTION.get(); }
+    public static int getFertilizerSpreaderPushInterval() { return FERTILIZER_SPREADER_PUSH_INTERVAL.get(); }
+    public static int getFertilizerSpreaderPushAmount() { return FERTILIZER_SPREADER_PUSH_AMOUNT.get(); }
 
     public static void loadConfig() {
         LOGGER.info("AgriTech: Evolved config reloaded");

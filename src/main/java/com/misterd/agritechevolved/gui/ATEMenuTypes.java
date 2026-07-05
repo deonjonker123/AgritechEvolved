@@ -18,6 +18,8 @@ public class ATEMenuTypes {
     public static final DeferredHolder<MenuType<?>, MenuType<ComposterMenu>> COMPOSTER_MENU = registerMenuType("composter_menu", ComposterMenu::new);
     public static final DeferredHolder<MenuType<?>, MenuType<CapacitorMenu>> CAPACITOR_MENU = registerMenuType("capacitor_menu", CapacitorMenu::new);
     public static final DeferredHolder<MenuType<?>, MenuType<BiomassBurnerMenu>> BURNER_MENU = registerMenuType("burner_menu", BiomassBurnerMenu::new);
+    public static final DeferredHolder<MenuType<?>, MenuType<SiloMenu>> SILO_MENU = registerMenuType("silo_menu", SiloMenu::new);
+    public static final DeferredHolder<MenuType<?>, MenuType<FertilizerSpreaderMenu>> FERTILIZER_SPREADER_MENU = registerMenuType("fertilizer_spreader_menu", FertilizerSpreaderMenu::new);
 
     private static <T extends AbstractContainerMenu> DeferredHolder<MenuType<?>, MenuType<T>> registerMenuType(String name, IContainerFactory<T> factory) {
         return MENUS.register(name, () -> IMenuTypeExtension.create(factory));

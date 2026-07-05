@@ -2,10 +2,7 @@ package com.misterd.agritechevolved;
 
 import com.misterd.agritechevolved.block.ATEBlocks;
 import com.misterd.agritechevolved.blockentity.ATEBlockEntities;
-import com.misterd.agritechevolved.blockentity.custom.AdvancedPlanterBlockEntity;
-import com.misterd.agritechevolved.blockentity.custom.BiomassBurnerBlockEntity;
-import com.misterd.agritechevolved.blockentity.custom.CapacitorBlockEntity;
-import com.misterd.agritechevolved.blockentity.custom.ComposterBlockEntity;
+import com.misterd.agritechevolved.blockentity.custom.*;
 import com.misterd.agritechevolved.client.ber.AdvancedPlanterBlockEntityRenderer;
 import com.misterd.agritechevolved.client.ber.PlanterBlockEntityRenderer;
 import com.misterd.agritechevolved.component.ATEDataComponents;
@@ -60,6 +57,8 @@ public class AgritechEvolved {
         modEventBus.addListener(ComposterBlockEntity::registerCapabilities);
         modEventBus.addListener(BiomassBurnerBlockEntity::registerCapabilities);
         modEventBus.addListener(CapacitorBlockEntity::registerCapabilities);
+        modEventBus.addListener(SiloBlockEntity::registerCapabilities);
+        modEventBus.addListener(FertilizerSpreaderBlockEntity::registerCapabilities);
 
         Config.register(modContainer);
         modEventBus.register(Config.class);
@@ -115,6 +114,8 @@ public class AgritechEvolved {
             event.register(ATEMenuTypes.COMPOSTER_MENU.get(), ComposterScreen::new);
             event.register(ATEMenuTypes.BURNER_MENU.get(), BiomassBurnerScreen::new);
             event.register(ATEMenuTypes.CAPACITOR_MENU.get(), CapacitorScreen::new);
+            event.register(ATEMenuTypes.FERTILIZER_SPREADER_MENU.get(), FertilizerSpreaderScreen::new);
+            event.register(ATEMenuTypes.SILO_MENU.get(), SiloScreen::new);
         }
 
         @SubscribeEvent

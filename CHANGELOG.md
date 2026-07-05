@@ -46,3 +46,9 @@ All notable changes to this project will be documented here.
 ## [2.1.2.2+neoforge-mc26.1.2] - 2026-06-24
 ### Fixed
 - Made it so MA farmlands can't be downgraded in the planter
+
+## [2.2.0+neoforge-mc26.1.2] - 2026-07-05
+### Added
+- Added Silo and Fertilizer Spreader blocks. Silo pulls drops from all planters in range, Fertilizer Spreader pushes fertilizer to all planters in range
+- Added range upgrades for the Silo and Fertilizer Spreader blocks
+- Added config options for both blocks

@@ -139,6 +139,16 @@ public class ATEBlocks {
                     .setId(ResourceKey.create(Registries.BLOCK, id))
                     .strength(1.0F, 3.0F).sound(SoundType.MOSS).noOcclusion()));
 
+    public static final DeferredBlock<Block> SILO = registerBlock("silo",
+            id -> new SiloBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, id))
+                    .strength(2.0F, 3.0F).sound(SoundType.STONE).noOcclusion().requiresCorrectToolForDrops()));
+
+    public static final DeferredBlock<Block> FERT_SPREADER = registerBlock("fertilizer_spreader",
+            id -> new FertilizerSpreaderBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, id))
+                    .strength(2.0F, 3.0F).sound(SoundType.STONE).noOcclusion().requiresCorrectToolForDrops()));
+
     private static <T extends Block> DeferredBlock<T> registerBlock(String name, Function<Identifier, T> factory) {
         DeferredBlock<T> toReturn = BLOCKS.register(name, factory);
         registerBlockItem(name, toReturn);

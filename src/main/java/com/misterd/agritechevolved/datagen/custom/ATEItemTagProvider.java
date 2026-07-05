@@ -31,6 +31,11 @@ public class ATEItemTagProvider extends ItemTagsProvider {
                 .add(ATEItems.YM_MK2.get())
                 .add(ATEItems.YM_MK3.get());
 
+        tag(ATETags.Items.ATE_RANGE_MODULES)
+                .add(ATEItems.RM_MK1.get())
+                .add(ATEItems.RM_MK2.get())
+                .add(ATEItems.RM_MK3.get());
+
         tag(ATETags.Items.BASIC_PLANTER_ITEMS)
                 .add(ATEBlocks.ACACIA_PLANTER.asItem())
                 .add(ATEBlocks.BAMBOO_PLANTER.asItem())

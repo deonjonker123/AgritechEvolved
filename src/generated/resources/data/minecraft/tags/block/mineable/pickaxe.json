@@ -6,6 +6,8 @@
     "agritechevolved:capacitor_tier1",
     "agritechevolved:capacitor_tier2",
     "agritechevolved:capacitor_tier3",
+    "agritechevolved:silo",
+    "agritechevolved:fertilizer_spreader",
     "agritechevolved:compacted_biomass_block"
   ]
 }

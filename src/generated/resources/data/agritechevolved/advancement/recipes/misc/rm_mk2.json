@@ -1,32 +1,32 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_the_recipe": {
-      "conditions": {
-        "recipe": "agritechevolved:ym_mk1"
-      },
-      "trigger": "minecraft:recipe_unlocked"
-    },
-    "has_wheat_seeds": {
+    "has_rm_mk1": {
       "conditions": {
         "items": [
           {
-            "items": "minecraft:wheat_seeds"
+            "items": "agritechevolved:rm_mk1"
           }
         ]
       },
       "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "agritechevolved:rm_mk2"
+      },
+      "trigger": "minecraft:recipe_unlocked"
     }
   },
   "requirements": [
     [
       "has_the_recipe",
-      "has_wheat_seeds"
+      "has_rm_mk1"
     ]
   ],
   "rewards": {
     "recipes": [
-      "agritechevolved:ym_mk1"
+      "agritechevolved:rm_mk2"
     ]
   }
 }
