@@ -52,8 +52,11 @@ public class SiloBlockEntity extends BlockEntity implements MenuProvider {
     private static final String RM_MK2 = "agritechevolved:rm_mk2";
     private static final String RM_MK3 = "agritechevolved:rm_mk3";
 
+    private static final int MIN_RESCAN_INTERVAL_TICKS = 20;
+
     private int energyStored = 0;
     private int tickCounter = 0;
+    private int scanAge = MIN_RESCAN_INTERVAL_TICKS;
     private List<BlockPos> cachedTargets = new ArrayList<>();
 
     public final ItemStacksResourceHandler inventory = new ItemStacksResourceHandler(TOTAL_SLOTS) {
@@ -78,6 +81,38 @@ public class SiloBlockEntity extends BlockEntity implements MenuProvider {
         }
     };
 
+    private final ResourceHandler<ItemResource> externalItemHandler = new ResourceHandler<>() {
+        @Override
+        public int size() { return inventory.size(); }
+
+        @Override
+        public ItemResource getResource(int index) { return inventory.getResource(index); }
+
+        @Override
+        public long getAmountAsLong(int index) { return inventory.getAmountAsLong(index); }
+
+        @Override
+        public long getCapacityAsLong(int index, ItemResource resource) {
+            return inventory.getCapacityAsLong(index, resource);
+        }
+
+        @Override
+        public boolean isValid(int index, ItemResource resource) { return false; }
+
+        @Override
+        public int insert(int index, ItemResource resource, int amount, TransactionContext tx) {
+            return 0;
+        }
+
+        @Override
+        public int extract(int index, ItemResource resource, int amount, TransactionContext tx) {
+            if (index >= STORAGE_SLOTS) return 0;
+            return inventory.extract(index, resource, amount, tx);
+        }
+    };
+
+    private final EnergyHandler energyHandler = new BEEnergyHandler(this);
+
     public SiloBlockEntity(BlockPos pos, BlockState blockState) {
         super(ATEBlockEntities.SILO_BE.get(), pos, blockState);
     }
@@ -95,7 +130,11 @@ public class SiloBlockEntity extends BlockEntity implements MenuProvider {
         boolean changed = false;
         if (hasPower) {
             be.energyStored -= required;
-            be.rescanTargets(level, pos);
+            be.scanAge += Config.getSiloPullInterval();
+            if (be.scanAge >= MIN_RESCAN_INTERVAL_TICKS) {
+                be.rescanTargets(level, pos);
+                be.scanAge = 0;
+            }
             for (BlockPos targetPos : be.cachedTargets) {
                 if (be.pullFromTarget(level, targetPos)) changed = true;
             }
@@ -197,39 +236,11 @@ public class SiloBlockEntity extends BlockEntity implements MenuProvider {
     }
 
     public ResourceHandler<ItemResource> getExternalItemHandler(@Nullable Direction side) {
-        return new ResourceHandler<>() {
-            @Override
-            public int size() { return inventory.size(); }
-
-            @Override
-            public ItemResource getResource(int index) { return inventory.getResource(index); }
-
-            @Override
-            public long getAmountAsLong(int index) { return inventory.getAmountAsLong(index); }
-
-            @Override
-            public long getCapacityAsLong(int index, ItemResource resource) {
-                return inventory.getCapacityAsLong(index, resource);
-            }
-
-            @Override
-            public boolean isValid(int index, ItemResource resource) { return false; }
-
-            @Override
-            public int insert(int index, ItemResource resource, int amount, TransactionContext tx) {
-                return 0;
-            }
-
-            @Override
-            public int extract(int index, ItemResource resource, int amount, TransactionContext tx) {
-                if (index >= STORAGE_SLOTS) return 0;
-                return inventory.extract(index, resource, amount, tx);
-            }
-        };
+        return externalItemHandler;
     }
 
     public EnergyHandler getEnergyHandler(@Nullable Direction side) {
-        return new BEEnergyHandler(this);
+        return energyHandler;
     }
 
     private static class BEEnergyHandler extends SnapshotJournal<Integer> implements EnergyHandler {

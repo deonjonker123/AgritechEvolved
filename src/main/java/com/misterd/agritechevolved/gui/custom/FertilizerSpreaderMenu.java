@@ -146,11 +146,12 @@ public class FertilizerSpreaderMenu extends AbstractContainerMenu {
     }
 
     private void insertSingle(ItemStack stack, int slot) {
+        int actual;
         try (Transaction tx = Transaction.openRoot()) {
-            blockEntity.inventory.insert(slot, ItemResource.of(stack), 1, tx);
-            tx.commit();
+            actual = blockEntity.inventory.insert(slot, ItemResource.of(stack), 1, tx);
+            if (actual > 0) tx.commit();
         }
-        stack.shrink(1);
+        if (actual > 0) stack.shrink(actual);
     }
 
     @Override
