@@ -63,3 +63,7 @@ All notable changes to this project will be documented here.
 ## [3.1.0.1+neoforge-mc26.2] - 2026-07-05
 ### Fixed
 - Better performance for the silo and spreader
+
+## [3.1.0.2+neoforge-mc26.2] - 2026-07-05
+### Fixed
+- Better performance for the silo and spreader
