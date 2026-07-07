@@ -56,3 +56,7 @@ All notable changes to this project will be documented here.
 ## [2.2.0.1+neoforge-mc26.1.2] - 2026-07-05
 ### Fixed
 - Better performance for the silo and spreader
+
+## [2.2.0.3+neoforge-mc26.1.2] - 2026-07-07
+### Added
+-  Silent's Gems, Biomes O' Plenty, Oh The Biomes We've Gone, and Regions Unexplored compatibility

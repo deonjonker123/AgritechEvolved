@@ -14,6 +14,10 @@
     {"id": "justdirethings:goosoil_tier2", "required": false},
     {"id": "justdirethings:goosoil_tier3", "required": false},
     {"id": "justdirethings:goosoil_tier4", "required": false},
-    {"id": "farmersdelight:rich_soil_farmland", "required": false}
+    {"id": "farmersdelight:rich_soil_farmland", "required": false},
+
+    {"id":"regions_unexplored:peat_farmland", "required": false},
+    {"id":"regions_unexplored:silt_farmland", "required": false},
+    {"id":"biomeswevegone:lush_farmland", "required": false}
   ]
 }
