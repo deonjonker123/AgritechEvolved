@@ -1,0 +1,25 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "silentgems"
+    }
+  ],
+  "type": "agritechevolved:crop",
+  "drops": [
+    {
+      "chance": 1.0,
+      "item": "silentgems:rose_quartz_glowrose",
+      "max": 1,
+      "min": 1
+    }
+  ],
+  "seed": {
+    "item": "silentgems:rose_quartz_glowrose"
+  },
+  "soils": [
+    {
+      "tag": "agritechevolved:tree_soils"
+    }
+  ]
+}

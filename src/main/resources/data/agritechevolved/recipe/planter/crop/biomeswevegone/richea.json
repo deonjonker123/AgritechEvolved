@@ -1,0 +1,25 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "biomeswevegone"
+    }
+  ],
+  "type": "agritechevolved:crop",
+  "drops": [
+    {
+      "chance": 1.0,
+      "item": "biomeswevegone:richea",
+      "max": 1,
+      "min": 1
+    }
+  ],
+  "seed": {
+    "item": "biomeswevegone:richea"
+  },
+  "soils": [
+    {
+      "tag": "agritechevolved:tree_soils"
+    }
+  ]
+}

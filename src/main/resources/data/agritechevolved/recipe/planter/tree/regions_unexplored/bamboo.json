@@ -1,0 +1,37 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "regions_unexplored"
+    }
+  ],
+  "type": "agritechevolved:tree",
+  "drops": [
+    {
+      "chance": 1.0,
+      "item": "regions_unexplored:bamboo_log",
+      "max": 6,
+      "min": 2
+    },
+    {
+      "chance": 0.5,
+      "item": "regions_unexplored:bamboo_sapling",
+      "max": 2,
+      "min": 1
+    },
+    {
+      "chance": 0.5,
+      "item": "minecraft:stick",
+      "max": 2,
+      "min": 1
+    }
+  ],
+  "sapling": {
+    "item": "regions_unexplored:bamboo_sapling"
+  },
+  "soils": [
+    {
+      "tag": "agritechevolved:tree_soils"
+    }
+  ]
+}
