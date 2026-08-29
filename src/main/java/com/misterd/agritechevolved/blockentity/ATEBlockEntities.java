@@ -31,7 +31,24 @@ public class ATEBlockEntities {
                     ATEBlocks.OAK_PLANTER.get(),
                     ATEBlocks.SPRUCE_PLANTER.get(),
                     ATEBlocks.WARPED_PLANTER.get(),
-                    ATEBlocks.PALE_OAK_PLANTER.get()
+                    ATEBlocks.PALE_OAK_PLANTER.get(),
+                    ATEBlocks.TERRACOTTA_PLANTER.get(),
+                    ATEBlocks.BLACK_TERRACOTTA_PLANTER.get(),
+                    ATEBlocks.BLUE_TERRACOTTA_PLANTER.get(),
+                    ATEBlocks.BROWN_TERRACOTTA_PLANTER.get(),
+                    ATEBlocks.CYAN_TERRACOTTA_PLANTER.get(),
+                    ATEBlocks.GRAY_TERRACOTTA_PLANTER.get(),
+                    ATEBlocks.GREEN_TERRACOTTA_PLANTER.get(),
+                    ATEBlocks.LIGHT_BLUE_TERRACOTTA_PLANTER.get(),
+                    ATEBlocks.LIGHT_GRAY_TERRACOTTA_PLANTER.get(),
+                    ATEBlocks.LIME_TERRACOTTA_PLANTER.get(),
+                    ATEBlocks.MAGENTA_TERRACOTTA_PLANTER.get(),
+                    ATEBlocks.ORANGE_TERRACOTTA_PLANTER.get(),
+                    ATEBlocks.PINK_TERRACOTTA_PLANTER.get(),
+                    ATEBlocks.PURPLE_TERRACOTTA_PLANTER.get(),
+                    ATEBlocks.RED_TERRACOTTA_PLANTER.get(),
+                    ATEBlocks.WHITE_TERRACOTTA_PLANTER.get(),
+                    ATEBlocks.YELLOW_TERRACOTTA_PLANTER.get()
             ));
 
     public static final Supplier<BlockEntityType<AdvancedPlanterBlockEntity>> ADVANCED_PLANTER_BLOCK_BE
