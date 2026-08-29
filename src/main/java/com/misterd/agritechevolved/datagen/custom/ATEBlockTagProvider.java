@@ -48,7 +48,25 @@ public class ATEBlockTagProvider extends BlockTagsProvider {
                 .add(key(ATEBlocks.SILO.get()))
                 .add(key(ATEBlocks.FERT_SPREADER.get()))
 
-                .add(key(ATEBlocks.COMPACTED_BIOMASS_BLOCK.get()));
+                .add(key(ATEBlocks.COMPACTED_BIOMASS_BLOCK.get()))
+
+                .add(key(ATEBlocks.TERRACOTTA_PLANTER.get()))
+                .add(key(ATEBlocks.BLACK_TERRACOTTA_PLANTER.get()))
+                .add(key(ATEBlocks.BLUE_TERRACOTTA_PLANTER.get()))
+                .add(key(ATEBlocks.BROWN_TERRACOTTA_PLANTER.get()))
+                .add(key(ATEBlocks.CYAN_TERRACOTTA_PLANTER.get()))
+                .add(key(ATEBlocks.GRAY_TERRACOTTA_PLANTER.get()))
+                .add(key(ATEBlocks.GREEN_TERRACOTTA_PLANTER.get()))
+                .add(key(ATEBlocks.LIGHT_BLUE_TERRACOTTA_PLANTER.get()))
+                .add(key(ATEBlocks.LIGHT_GRAY_TERRACOTTA_PLANTER.get()))
+                .add(key(ATEBlocks.LIME_TERRACOTTA_PLANTER.get()))
+                .add(key(ATEBlocks.MAGENTA_TERRACOTTA_PLANTER.get()))
+                .add(key(ATEBlocks.ORANGE_TERRACOTTA_PLANTER.get()))
+                .add(key(ATEBlocks.PINK_TERRACOTTA_PLANTER.get()))
+                .add(key(ATEBlocks.PURPLE_TERRACOTTA_PLANTER.get()))
+                .add(key(ATEBlocks.RED_TERRACOTTA_PLANTER.get()))
+                .add(key(ATEBlocks.WHITE_TERRACOTTA_PLANTER.get()))
+                .add(key(ATEBlocks.YELLOW_TERRACOTTA_PLANTER.get()));;
 
         tag(BlockTags.MINEABLE_WITH_SHOVEL)
                 .add(key(ATEBlocks.INFUSED_FARMLAND.get()))
@@ -66,6 +84,23 @@ public class ATEBlockTagProvider extends BlockTagsProvider {
                 .add(key(ATEBlocks.OAK_PLANTER.get()))
                 .add(key(ATEBlocks.SPRUCE_PLANTER.get()))
                 .add(key(ATEBlocks.WARPED_PLANTER.get()))
-                .add(key(ATEBlocks.PALE_OAK_PLANTER.get()));
+                .add(key(ATEBlocks.PALE_OAK_PLANTER.get()))
+                .add(key(ATEBlocks.TERRACOTTA_PLANTER.get()))
+                .add(key(ATEBlocks.BLACK_TERRACOTTA_PLANTER.get()))
+                .add(key(ATEBlocks.BLUE_TERRACOTTA_PLANTER.get()))
+                .add(key(ATEBlocks.BROWN_TERRACOTTA_PLANTER.get()))
+                .add(key(ATEBlocks.CYAN_TERRACOTTA_PLANTER.get()))
+                .add(key(ATEBlocks.GRAY_TERRACOTTA_PLANTER.get()))
+                .add(key(ATEBlocks.GREEN_TERRACOTTA_PLANTER.get()))
+                .add(key(ATEBlocks.LIGHT_BLUE_TERRACOTTA_PLANTER.get()))
+                .add(key(ATEBlocks.LIGHT_GRAY_TERRACOTTA_PLANTER.get()))
+                .add(key(ATEBlocks.LIME_TERRACOTTA_PLANTER.get()))
+                .add(key(ATEBlocks.MAGENTA_TERRACOTTA_PLANTER.get()))
+                .add(key(ATEBlocks.ORANGE_TERRACOTTA_PLANTER.get()))
+                .add(key(ATEBlocks.PINK_TERRACOTTA_PLANTER.get()))
+                .add(key(ATEBlocks.PURPLE_TERRACOTTA_PLANTER.get()))
+                .add(key(ATEBlocks.RED_TERRACOTTA_PLANTER.get()))
+                .add(key(ATEBlocks.WHITE_TERRACOTTA_PLANTER.get()))
+                .add(key(ATEBlocks.YELLOW_TERRACOTTA_PLANTER.get()));
     }
 }

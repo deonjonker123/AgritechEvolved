@@ -1,15 +1,12 @@
 {
   "type": "minecraft:crafting_shaped",
   "key": {
-    "D": "minecraft:jungle_slab",
     "H": "minecraft:hopper",
-    "L": "minecraft:jungle_log",
     "P": "minecraft:jungle_planks"
   },
   "pattern": [
-    "P P",
-    "PDP",
-    "LHL"
+    "PHP",
+    "PPP"
   ],
   "result": {
     "id": "agritechevolved:basic_jungle_planter"

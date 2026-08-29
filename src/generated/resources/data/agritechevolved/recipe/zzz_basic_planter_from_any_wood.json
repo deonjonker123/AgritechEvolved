@@ -1,15 +1,12 @@
 {
   "type": "minecraft:crafting_shaped",
   "key": {
-    "D": "#minecraft:wooden_slabs",
     "H": "minecraft:hopper",
-    "L": "#minecraft:logs",
     "P": "#minecraft:planks"
   },
   "pattern": [
-    "P P",
-    "PDP",
-    "LHL"
+    "PHP",
+    "PPP"
   ],
   "result": {
     "id": "agritechevolved:basic_planter"
