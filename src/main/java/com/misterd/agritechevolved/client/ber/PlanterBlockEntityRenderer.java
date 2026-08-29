@@ -84,7 +84,7 @@ public class PlanterBlockEntityRenderer implements BlockEntityRenderer<BlockEnti
 
     private void renderWater(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
         TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(WATER_STILL);
-        float y = 0.41F, xMin = 0.175F, xMax = 0.825F, zMin = 0.175F, zMax = 0.825F;
+        float y = 0.55F, xMin = 0.175F, xMax = 0.825F, zMin = 0.175F, zMax = 0.825F;
         float u0 = sprite.getU0(), u1 = sprite.getU1();
         float v0 = sprite.getV0(), v1 = sprite.getV1();
         poseStack.pushPose();

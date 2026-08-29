@@ -11,7 +11,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.level.ItemLike;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.conditions.IConditionBuilder;
 
@@ -25,134 +24,98 @@ public class ATERecipeProvider extends RecipeProvider implements IConditionBuild
     @Override
     protected void buildRecipes(RecipeOutput recipeOutput) {
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ATEBlocks.ACACIA_PLANTER.get())
-                .pattern("P P")
-                .pattern("PDP")
-                .pattern("LHL")
+                .pattern("PHP")
+                .pattern("PPP")
                 .define('P', Items.ACACIA_PLANKS)
-                .define('L', Items.ACACIA_LOG)
                 .define('H', Items.HOPPER)
-                .define('D', Items.ACACIA_SLAB)
                 .unlockedBy("has_acaia_log", has(Items.ACACIA_LOG))
                 .save(recipeOutput);
 
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ATEBlocks.BAMBOO_PLANTER.get())
-                .pattern("P P")
-                .pattern("PDP")
-                .pattern("LHL")
+                .pattern("PHP")
+                .pattern("PPP")
                 .define('P', Items.BAMBOO_PLANKS)
-                .define('L', Items.BAMBOO_BLOCK)
                 .define('H', Items.HOPPER)
-                .define('D', Items.BAMBOO_SLAB)
                 .unlockedBy("has_bamboo_block", has(Items.BAMBOO_BLOCK))
                 .save(recipeOutput);
 
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ATEBlocks.BIRCH_PLANTER.get())
-                .pattern("P P")
-                .pattern("PDP")
-                .pattern("LHL")
+                .pattern("PHP")
+                .pattern("PPP")
                 .define('P', Items.BIRCH_PLANKS)
-                .define('L', Items.BIRCH_LOG)
                 .define('H', Items.HOPPER)
-                .define('D', Items.BIRCH_SLAB)
                 .unlockedBy("has_birch_log", has(Items.BIRCH_LOG))
                 .save(recipeOutput);
 
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ATEBlocks.CHERRY_PLANTER.get())
-                .pattern("P P")
-                .pattern("PDP")
-                .pattern("LHL")
+                .pattern("PHP")
+                .pattern("PPP")
                 .define('P', Items.CHERRY_PLANKS)
-                .define('L', Items.CHERRY_LOG)
                 .define('H', Items.HOPPER)
-                .define('D', Items.CHERRY_SLAB)
                 .unlockedBy("has_cherry_log", has(Items.CHERRY_LOG))
                 .save(recipeOutput);
 
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ATEBlocks.CRIMSON_PLANTER.get())
-                .pattern("P P")
-                .pattern("PDP")
-                .pattern("LHL")
+                .pattern("PHP")
+                .pattern("PPP")
                 .define('P', Items.CRIMSON_PLANKS)
-                .define('L', Items.CRIMSON_STEM)
                 .define('H', Items.HOPPER)
-                .define('D', Items.CRIMSON_SLAB)
                 .unlockedBy("has_crimson_stem", has(Items.CRIMSON_STEM))
                 .save(recipeOutput);
 
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ATEBlocks.DARK_OAK_PLANTER.get())
-                .pattern("P P")
-                .pattern("PDP")
-                .pattern("LHL")
+                .pattern("PHP")
+                .pattern("PPP")
                 .define('P', Items.DARK_OAK_PLANKS)
-                .define('L', Items.DARK_OAK_LOG)
                 .define('H', Items.HOPPER)
-                .define('D', Items.DARK_OAK_SLAB)
                 .unlockedBy("has_dark_oak_log", has(Items.DARK_OAK_LOG))
                 .save(recipeOutput);
 
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ATEBlocks.JUNGLE_PLANTER.get())
-                .pattern("P P")
-                .pattern("PDP")
-                .pattern("LHL")
+                .pattern("PHP")
+                .pattern("PPP")
                 .define('P', Items.JUNGLE_PLANKS)
-                .define('L', Items.JUNGLE_LOG)
                 .define('H', Items.HOPPER)
-                .define('D', Items.JUNGLE_SLAB)
                 .unlockedBy("has_jungle_log", has(Items.JUNGLE_LOG))
                 .save(recipeOutput);
 
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ATEBlocks.MANGROVE_PLANTER.get())
-                .pattern("P P")
-                .pattern("PDP")
-                .pattern("LHL")
+                .pattern("PHP")
+                .pattern("PPP")
                 .define('P', Items.MANGROVE_PLANKS)
-                .define('L', Items.MANGROVE_LOG)
                 .define('H', Items.HOPPER)
-                .define('D', Items.MANGROVE_SLAB)
                 .unlockedBy("has_mangrove_log", has(Items.MANGROVE_LOG))
                 .save(recipeOutput);
 
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ATEBlocks.OAK_PLANTER.get())
-                .pattern("P P")
-                .pattern("PDP")
-                .pattern("LHL")
+                .pattern("PHP")
+                .pattern("PPP")
                 .define('P', Items.OAK_PLANKS)
-                .define('L', Items.OAK_LOG)
                 .define('H', Items.HOPPER)
-                .define('D', Items.OAK_SLAB)
                 .unlockedBy("has_oak_log", has(Items.OAK_LOG))
                 .save(recipeOutput);
 
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ATEBlocks.OAK_PLANTER.get())
-                .pattern("P P")
-                .pattern("PDP")
-                .pattern("LHL")
+                .pattern("PHP")
+                .pattern("PPP")
                 .define('P', ItemTags.PLANKS)
-                .define('L', ItemTags.LOGS)
                 .define('H', Items.HOPPER)
-                .define('D', ItemTags.WOODEN_SLABS)
                 .unlockedBy("has_oak_log", has(Items.OAK_LOG))
                 .save(recipeOutput, "agritechevolved:basic_planter_from_any_wood");
 
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ATEBlocks.SPRUCE_PLANTER.get())
-                .pattern("P P")
-                .pattern("PDP")
-                .pattern("LHL")
+                .pattern("PHP")
+                .pattern("PPP")
                 .define('P', Items.SPRUCE_PLANKS)
-                .define('L', Items.SPRUCE_LOG)
                 .define('H', Items.HOPPER)
-                .define('D', Items.SPRUCE_SLAB)
                 .unlockedBy("has_spruce_log", has(Items.SPRUCE_LOG))
                 .save(recipeOutput);
 
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ATEBlocks.WARPED_PLANTER.get())
-                .pattern("P P")
-                .pattern("PDP")
-                .pattern("LHL")
+                .pattern("PHP")
+                .pattern("PPP")
                 .define('P', Items.WARPED_PLANKS)
-                .define('L', Items.WARPED_STEM)
                 .define('H', Items.HOPPER)
-                .define('D', Items.WARPED_SLAB)
                 .unlockedBy("has_warped_stem", has(Items.WARPED_STEM))
                 .save(recipeOutput);
 
@@ -331,6 +294,238 @@ public class ATERecipeProvider extends RecipeProvider implements IConditionBuild
                 .define('D', ATETags.Items.DIRT_LIKE_BLOCK_ITEMS)
                 .unlockedBy("has_leaves", has(ItemTags.LEAVES))
                 .save(recipeOutput);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ATEBlocks.TERRACOTTA_PLANTER.get())
+                .pattern("PHP")
+                .pattern("PPP")
+                .define('P', Items.TERRACOTTA)
+                .define('H', Items.HOPPER)
+                .unlockedBy("has_hopper", has(Items.HOPPER))
+                .save(recipeOutput);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ATEBlocks.BLACK_TERRACOTTA_PLANTER.get())
+                .pattern("PHP")
+                .pattern("PPP")
+                .define('P', Items.BLACK_TERRACOTTA)
+                .define('H', Items.HOPPER)
+                .unlockedBy("has_hopper", has(Items.HOPPER))
+                .save(recipeOutput);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ATEBlocks.BLUE_TERRACOTTA_PLANTER.get())
+                .pattern("PHP")
+                .pattern("PPP")
+                .define('P', Items.BLUE_TERRACOTTA)
+                .define('H', Items.HOPPER)
+                .unlockedBy("has_hopper", has(Items.HOPPER))
+                .save(recipeOutput);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ATEBlocks.BROWN_TERRACOTTA_PLANTER.get())
+                .pattern("PHP")
+                .pattern("PPP")
+                .define('P', Items.BROWN_TERRACOTTA)
+                .define('H', Items.HOPPER)
+                .unlockedBy("has_hopper", has(Items.HOPPER))
+                .save(recipeOutput);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ATEBlocks.CYAN_TERRACOTTA_PLANTER.get())
+                .pattern("PHP")
+                .pattern("PPP")
+                .define('P', Items.CYAN_TERRACOTTA)
+                .define('H', Items.HOPPER)
+                .unlockedBy("has_hopper", has(Items.HOPPER))
+                .save(recipeOutput);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ATEBlocks.GRAY_TERRACOTTA_PLANTER.get())
+                .pattern("PHP")
+                .pattern("PPP")
+                .define('P', Items.GRAY_TERRACOTTA)
+                .define('H', Items.HOPPER)
+                .unlockedBy("has_hopper", has(Items.HOPPER))
+                .save(recipeOutput);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ATEBlocks.GREEN_TERRACOTTA_PLANTER.get())
+                .pattern("PHP")
+                .pattern("PPP")
+                .define('P', Items.GREEN_TERRACOTTA)
+                .define('H', Items.HOPPER)
+                .unlockedBy("has_hopper", has(Items.HOPPER))
+                .save(recipeOutput);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ATEBlocks.LIGHT_BLUE_TERRACOTTA_PLANTER.get())
+                .pattern("PHP")
+                .pattern("PPP")
+                .define('P', Items.LIGHT_BLUE_TERRACOTTA)
+                .define('H', Items.HOPPER)
+                .unlockedBy("has_hopper", has(Items.HOPPER))
+                .save(recipeOutput);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ATEBlocks.LIGHT_GRAY_TERRACOTTA_PLANTER.get())
+                .pattern("PHP")
+                .pattern("PPP")
+                .define('P', Items.LIGHT_GRAY_TERRACOTTA)
+                .define('H', Items.HOPPER)
+                .unlockedBy("has_hopper", has(Items.HOPPER))
+                .save(recipeOutput);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ATEBlocks.LIME_TERRACOTTA_PLANTER.get())
+                .pattern("PHP")
+                .pattern("PPP")
+                .define('P', Items.LIME_TERRACOTTA)
+                .define('H', Items.HOPPER)
+                .unlockedBy("has_hopper", has(Items.HOPPER))
+                .save(recipeOutput);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ATEBlocks.MAGENTA_TERRACOTTA_PLANTER.get())
+                .pattern("PHP")
+                .pattern("PPP")
+                .define('P', Items.MAGENTA_TERRACOTTA)
+                .define('H', Items.HOPPER)
+                .unlockedBy("has_hopper", has(Items.HOPPER))
+                .save(recipeOutput);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ATEBlocks.ORANGE_TERRACOTTA_PLANTER.get())
+                .pattern("PHP")
+                .pattern("PPP")
+                .define('P', Items.ORANGE_TERRACOTTA)
+                .define('H', Items.HOPPER)
+                .unlockedBy("has_hopper", has(Items.HOPPER))
+                .save(recipeOutput);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ATEBlocks.PINK_TERRACOTTA_PLANTER.get())
+                .pattern("PHP")
+                .pattern("PPP")
+                .define('P', Items.PINK_TERRACOTTA)
+                .define('H', Items.HOPPER)
+                .unlockedBy("has_hopper", has(Items.HOPPER))
+                .save(recipeOutput);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ATEBlocks.PURPLE_TERRACOTTA_PLANTER.get())
+                .pattern("PHP")
+                .pattern("PPP")
+                .define('P', Items.PURPLE_TERRACOTTA)
+                .define('H', Items.HOPPER)
+                .unlockedBy("has_hopper", has(Items.HOPPER))
+                .save(recipeOutput);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ATEBlocks.RED_TERRACOTTA_PLANTER.get())
+                .pattern("PHP")
+                .pattern("PPP")
+                .define('P', Items.RED_TERRACOTTA)
+                .define('H', Items.HOPPER)
+                .unlockedBy("has_hopper", has(Items.HOPPER))
+                .save(recipeOutput);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ATEBlocks.WHITE_TERRACOTTA_PLANTER.get())
+                .pattern("PHP")
+                .pattern("PPP")
+                .define('P', Items.WHITE_TERRACOTTA)
+                .define('H', Items.HOPPER)
+                .unlockedBy("has_hopper", has(Items.HOPPER))
+                .save(recipeOutput);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ATEBlocks.YELLOW_TERRACOTTA_PLANTER.get())
+                .pattern("PHP")
+                .pattern("PPP")
+                .define('P', Items.YELLOW_TERRACOTTA)
+                .define('H', Items.HOPPER)
+                .unlockedBy("has_hopper", has(Items.HOPPER))
+                .save(recipeOutput);
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ATEBlocks.BLACK_TERRACOTTA_PLANTER.get())
+                .requires(ATEBlocks.TERRACOTTA_PLANTER.get())
+                .requires(Items.BLACK_DYE)
+                .unlockedBy("has_terracotta_planter", has(ATEBlocks.TERRACOTTA_PLANTER.get()))
+                .save(recipeOutput, "agritechevolved:black_terracotta_planter_from_dye");
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ATEBlocks.BLUE_TERRACOTTA_PLANTER.get())
+                .requires(ATEBlocks.TERRACOTTA_PLANTER.get())
+                .requires(Items.BLUE_DYE)
+                .unlockedBy("has_terracotta_planter", has(ATEBlocks.TERRACOTTA_PLANTER.get()))
+                .save(recipeOutput, "agritechevolved:blue_terracotta_planter_from_dye");
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ATEBlocks.BROWN_TERRACOTTA_PLANTER.get())
+                .requires(ATEBlocks.TERRACOTTA_PLANTER.get())
+                .requires(Items.BROWN_DYE)
+                .unlockedBy("has_terracotta_planter", has(ATEBlocks.TERRACOTTA_PLANTER.get()))
+                .save(recipeOutput, "agritechevolved:brown_terracotta_planter_from_dye");
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ATEBlocks.CYAN_TERRACOTTA_PLANTER.get())
+                .requires(ATEBlocks.TERRACOTTA_PLANTER.get())
+                .requires(Items.CYAN_DYE)
+                .unlockedBy("has_terracotta_planter", has(ATEBlocks.TERRACOTTA_PLANTER.get()))
+                .save(recipeOutput, "agritechevolved:cyan_terracotta_planter_from_dye");
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ATEBlocks.GRAY_TERRACOTTA_PLANTER.get())
+                .requires(ATEBlocks.TERRACOTTA_PLANTER.get())
+                .requires(Items.GRAY_DYE)
+                .unlockedBy("has_terracotta_planter", has(ATEBlocks.TERRACOTTA_PLANTER.get()))
+                .save(recipeOutput, "agritechevolved:gray_terracotta_planter_from_dye");
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ATEBlocks.GREEN_TERRACOTTA_PLANTER.get())
+                .requires(ATEBlocks.TERRACOTTA_PLANTER.get())
+                .requires(Items.GREEN_DYE)
+                .unlockedBy("has_terracotta_planter", has(ATEBlocks.TERRACOTTA_PLANTER.get()))
+                .save(recipeOutput, "agritechevolved:green_terracotta_planter_from_dye");
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ATEBlocks.LIGHT_BLUE_TERRACOTTA_PLANTER.get())
+                .requires(ATEBlocks.TERRACOTTA_PLANTER.get())
+                .requires(Items.LIGHT_BLUE_DYE)
+                .unlockedBy("has_terracotta_planter", has(ATEBlocks.TERRACOTTA_PLANTER.get()))
+                .save(recipeOutput, "agritechevolved:light_blue_terracotta_planter_from_dye");
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ATEBlocks.LIGHT_GRAY_TERRACOTTA_PLANTER.get())
+                .requires(ATEBlocks.TERRACOTTA_PLANTER.get())
+                .requires(Items.LIGHT_GRAY_DYE)
+                .unlockedBy("has_terracotta_planter", has(ATEBlocks.TERRACOTTA_PLANTER.get()))
+                .save(recipeOutput, "agritechevolved:light_gray_terracotta_planter_from_dye");
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ATEBlocks.LIME_TERRACOTTA_PLANTER.get())
+                .requires(ATEBlocks.TERRACOTTA_PLANTER.get())
+                .requires(Items.LIME_DYE)
+                .unlockedBy("has_terracotta_planter", has(ATEBlocks.TERRACOTTA_PLANTER.get()))
+                .save(recipeOutput, "agritechevolved:lime_terracotta_planter_from_dye");
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ATEBlocks.MAGENTA_TERRACOTTA_PLANTER.get())
+                .requires(ATEBlocks.TERRACOTTA_PLANTER.get())
+                .requires(Items.MAGENTA_DYE)
+                .unlockedBy("has_terracotta_planter", has(ATEBlocks.TERRACOTTA_PLANTER.get()))
+                .save(recipeOutput, "agritechevolved:magenta_terracotta_planter_from_dye");
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ATEBlocks.ORANGE_TERRACOTTA_PLANTER.get())
+                .requires(ATEBlocks.TERRACOTTA_PLANTER.get())
+                .requires(Items.ORANGE_DYE)
+                .unlockedBy("has_terracotta_planter", has(ATEBlocks.TERRACOTTA_PLANTER.get()))
+                .save(recipeOutput, "agritechevolved:orange_terracotta_planter_from_dye");
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ATEBlocks.PINK_TERRACOTTA_PLANTER.get())
+                .requires(ATEBlocks.TERRACOTTA_PLANTER.get())
+                .requires(Items.PINK_DYE)
+                .unlockedBy("has_terracotta_planter", has(ATEBlocks.TERRACOTTA_PLANTER.get()))
+                .save(recipeOutput, "agritechevolved:pink_terracotta_planter_from_dye");
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ATEBlocks.PURPLE_TERRACOTTA_PLANTER.get())
+                .requires(ATEBlocks.TERRACOTTA_PLANTER.get())
+                .requires(Items.PURPLE_DYE)
+                .unlockedBy("has_terracotta_planter", has(ATEBlocks.TERRACOTTA_PLANTER.get()))
+                .save(recipeOutput, "agritechevolved:purple_terracotta_planter_from_dye");
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ATEBlocks.RED_TERRACOTTA_PLANTER.get())
+                .requires(ATEBlocks.TERRACOTTA_PLANTER.get())
+                .requires(Items.RED_DYE)
+                .unlockedBy("has_terracotta_planter", has(ATEBlocks.TERRACOTTA_PLANTER.get()))
+                .save(recipeOutput, "agritechevolved:red_terracotta_planter_from_dye");
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ATEBlocks.WHITE_TERRACOTTA_PLANTER.get())
+                .requires(ATEBlocks.TERRACOTTA_PLANTER.get())
+                .requires(Items.WHITE_DYE)
+                .unlockedBy("has_terracotta_planter", has(ATEBlocks.TERRACOTTA_PLANTER.get()))
+                .save(recipeOutput, "agritechevolved:white_terracotta_planter_from_dye");
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ATEBlocks.YELLOW_TERRACOTTA_PLANTER.get())
+                .requires(ATEBlocks.TERRACOTTA_PLANTER.get())
+                .requires(Items.YELLOW_DYE)
+                .unlockedBy("has_terracotta_planter", has(ATEBlocks.TERRACOTTA_PLANTER.get()))
+                .save(recipeOutput, "agritechevolved:yellow_terracotta_planter_from_dye");
 
         buildDurabilityRecipes(recipeOutput);
     }

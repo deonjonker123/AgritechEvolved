@@ -43,6 +43,23 @@ public class ATELootTableProvider extends BlockLootSubProvider {
         dropSelf(ATEBlocks.CAPACITOR_TIER_2.get());
         dropSelf(ATEBlocks.CAPACITOR_TIER_3.get());
         dropSelf(ATEBlocks.COMPACTED_BIOMASS_BLOCK.get());
+        dropSelf(ATEBlocks.TERRACOTTA_PLANTER.get());
+        dropSelf(ATEBlocks.BLACK_TERRACOTTA_PLANTER.get());
+        dropSelf(ATEBlocks.BLUE_TERRACOTTA_PLANTER.get());
+        dropSelf(ATEBlocks.BROWN_TERRACOTTA_PLANTER.get());
+        dropSelf(ATEBlocks.CYAN_TERRACOTTA_PLANTER.get());
+        dropSelf(ATEBlocks.GRAY_TERRACOTTA_PLANTER.get());
+        dropSelf(ATEBlocks.GREEN_TERRACOTTA_PLANTER.get());
+        dropSelf(ATEBlocks.LIGHT_BLUE_TERRACOTTA_PLANTER.get());
+        dropSelf(ATEBlocks.LIGHT_GRAY_TERRACOTTA_PLANTER.get());
+        dropSelf(ATEBlocks.LIME_TERRACOTTA_PLANTER.get());
+        dropSelf(ATEBlocks.MAGENTA_TERRACOTTA_PLANTER.get());
+        dropSelf(ATEBlocks.ORANGE_TERRACOTTA_PLANTER.get());
+        dropSelf(ATEBlocks.PINK_TERRACOTTA_PLANTER.get());
+        dropSelf(ATEBlocks.PURPLE_TERRACOTTA_PLANTER.get());
+        dropSelf(ATEBlocks.RED_TERRACOTTA_PLANTER.get());
+        dropSelf(ATEBlocks.WHITE_TERRACOTTA_PLANTER.get());
+        dropSelf(ATEBlocks.YELLOW_TERRACOTTA_PLANTER.get());
         add(ATEBlocks.INFUSED_FARMLAND.get(), createInfusedFarmlandTable());
         dropSelf(ATEBlocks.MULCH.get());
     }

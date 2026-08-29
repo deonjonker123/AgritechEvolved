@@ -32,6 +32,24 @@ public class ATECreativeTab {
 
                         output.accept(ATEBlocks.ADVANCED_PLANTER);
 
+                        output.accept(ATEBlocks.TERRACOTTA_PLANTER);
+                        output.accept(ATEBlocks.BLACK_TERRACOTTA_PLANTER);
+                        output.accept(ATEBlocks.BLUE_TERRACOTTA_PLANTER);
+                        output.accept(ATEBlocks.BROWN_TERRACOTTA_PLANTER);
+                        output.accept(ATEBlocks.CYAN_TERRACOTTA_PLANTER);
+                        output.accept(ATEBlocks.GRAY_TERRACOTTA_PLANTER);
+                        output.accept(ATEBlocks.GREEN_TERRACOTTA_PLANTER);
+                        output.accept(ATEBlocks.LIGHT_BLUE_TERRACOTTA_PLANTER);
+                        output.accept(ATEBlocks.LIGHT_GRAY_TERRACOTTA_PLANTER);
+                        output.accept(ATEBlocks.LIME_TERRACOTTA_PLANTER);
+                        output.accept(ATEBlocks.MAGENTA_TERRACOTTA_PLANTER);
+                        output.accept(ATEBlocks.ORANGE_TERRACOTTA_PLANTER);
+                        output.accept(ATEBlocks.PINK_TERRACOTTA_PLANTER);
+                        output.accept(ATEBlocks.PURPLE_TERRACOTTA_PLANTER);
+                        output.accept(ATEBlocks.RED_TERRACOTTA_PLANTER);
+                        output.accept(ATEBlocks.WHITE_TERRACOTTA_PLANTER);
+                        output.accept(ATEBlocks.YELLOW_TERRACOTTA_PLANTER);
+
                         output.accept(ATEBlocks.COMPOSTER);
 
                         output.accept(ATEBlocks.BIOMASS_BURNER);

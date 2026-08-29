@@ -1,0 +1,19 @@
+{
+  "type": "agritechevolved:crop",
+  "drops": [
+    {
+      "chance": 1.0,
+      "item": "minecraft:brain_coral",
+      "max": 2,
+      "min": 1
+    }
+  ],
+  "seed": {
+    "item": "minecraft:brain_coral"
+  },
+  "soils": [
+    {
+      "tag": "agritechevolved:water_soils"
+    }
+  ]
+}

@@ -215,6 +215,125 @@ public class ATEBlocks {
                 }
             });
 
+    public static final DeferredBlock<Block> TERRACOTTA_PLANTER = registerBlock("terracotta_planter",
+            () -> new PlanterBlock(BlockBehaviour.Properties.of()
+                    .strength(2.0F, 3.0F)
+                    .sound(SoundType.STONE)
+                    .noOcclusion()
+                    .requiresCorrectToolForDrops()));
+
+    public static final DeferredBlock<Block> BLACK_TERRACOTTA_PLANTER = registerBlock("black_terracotta_planter",
+            () -> new PlanterBlock(BlockBehaviour.Properties.of()
+                    .strength(2.0F, 3.0F)
+                    .sound(SoundType.STONE)
+                    .noOcclusion()
+                    .requiresCorrectToolForDrops()));
+
+    public static final DeferredBlock<Block> BLUE_TERRACOTTA_PLANTER = registerBlock("blue_terracotta_planter",
+            () -> new PlanterBlock(BlockBehaviour.Properties.of()
+                    .strength(2.0F, 3.0F)
+                    .sound(SoundType.STONE)
+                    .noOcclusion()
+                    .requiresCorrectToolForDrops()));
+
+    public static final DeferredBlock<Block> BROWN_TERRACOTTA_PLANTER = registerBlock("brown_terracotta_planter",
+            () -> new PlanterBlock(BlockBehaviour.Properties.of()
+                    .strength(2.0F, 3.0F)
+                    .sound(SoundType.STONE)
+                    .noOcclusion()
+                    .requiresCorrectToolForDrops()));
+
+    public static final DeferredBlock<Block> CYAN_TERRACOTTA_PLANTER = registerBlock("cyan_terracotta_planter",
+            () -> new PlanterBlock(BlockBehaviour.Properties.of()
+                    .strength(2.0F, 3.0F)
+                    .sound(SoundType.STONE)
+                    .noOcclusion()
+                    .requiresCorrectToolForDrops()));
+
+    public static final DeferredBlock<Block> GRAY_TERRACOTTA_PLANTER = registerBlock("gray_terracotta_planter",
+            () -> new PlanterBlock(BlockBehaviour.Properties.of()
+                    .strength(2.0F, 3.0F)
+                    .sound(SoundType.STONE)
+                    .noOcclusion()
+                    .requiresCorrectToolForDrops()));
+
+    public static final DeferredBlock<Block> GREEN_TERRACOTTA_PLANTER = registerBlock("green_terracotta_planter",
+            () -> new PlanterBlock(BlockBehaviour.Properties.of()
+                    .strength(2.0F, 3.0F)
+                    .sound(SoundType.STONE)
+                    .noOcclusion()
+                    .requiresCorrectToolForDrops()));
+
+    public static final DeferredBlock<Block> LIGHT_BLUE_TERRACOTTA_PLANTER = registerBlock("light_blue_terracotta_planter",
+            () -> new PlanterBlock(BlockBehaviour.Properties.of()
+                    .strength(2.0F, 3.0F)
+                    .sound(SoundType.STONE)
+                    .noOcclusion()
+                    .requiresCorrectToolForDrops()));
+
+    public static final DeferredBlock<Block> LIGHT_GRAY_TERRACOTTA_PLANTER = registerBlock("light_gray_terracotta_planter",
+            () -> new PlanterBlock(BlockBehaviour.Properties.of()
+                    .strength(2.0F, 3.0F)
+                    .sound(SoundType.STONE)
+                    .noOcclusion()
+                    .requiresCorrectToolForDrops()));
+
+    public static final DeferredBlock<Block> LIME_TERRACOTTA_PLANTER = registerBlock("lime_terracotta_planter",
+            () -> new PlanterBlock(BlockBehaviour.Properties.of()
+                    .strength(2.0F, 3.0F)
+                    .sound(SoundType.STONE)
+                    .noOcclusion()
+                    .requiresCorrectToolForDrops()));
+
+    public static final DeferredBlock<Block> MAGENTA_TERRACOTTA_PLANTER = registerBlock("magenta_terracotta_planter",
+            () -> new PlanterBlock(BlockBehaviour.Properties.of()
+                    .strength(2.0F, 3.0F)
+                    .sound(SoundType.STONE)
+                    .noOcclusion()
+                    .requiresCorrectToolForDrops()));
+
+    public static final DeferredBlock<Block> ORANGE_TERRACOTTA_PLANTER = registerBlock("orange_terracotta_planter",
+            () -> new PlanterBlock(BlockBehaviour.Properties.of()
+                    .strength(2.0F, 3.0F)
+                    .sound(SoundType.STONE)
+                    .noOcclusion()
+                    .requiresCorrectToolForDrops()));
+
+    public static final DeferredBlock<Block> PINK_TERRACOTTA_PLANTER = registerBlock("pink_terracotta_planter",
+            () -> new PlanterBlock(BlockBehaviour.Properties.of()
+                    .strength(2.0F, 3.0F)
+                    .sound(SoundType.STONE)
+                    .noOcclusion()
+                    .requiresCorrectToolForDrops()));
+
+    public static final DeferredBlock<Block> PURPLE_TERRACOTTA_PLANTER = registerBlock("purple_terracotta_planter",
+            () -> new PlanterBlock(BlockBehaviour.Properties.of()
+                    .strength(2.0F, 3.0F)
+                    .sound(SoundType.STONE)
+                    .noOcclusion()
+                    .requiresCorrectToolForDrops()));
+
+    public static final DeferredBlock<Block> RED_TERRACOTTA_PLANTER = registerBlock("red_terracotta_planter",
+            () -> new PlanterBlock(BlockBehaviour.Properties.of()
+                    .strength(2.0F, 3.0F)
+                    .sound(SoundType.STONE)
+                    .noOcclusion()
+                    .requiresCorrectToolForDrops()));
+
+    public static final DeferredBlock<Block> WHITE_TERRACOTTA_PLANTER = registerBlock("white_terracotta_planter",
+            () -> new PlanterBlock(BlockBehaviour.Properties.of()
+                    .strength(2.0F, 3.0F)
+                    .sound(SoundType.STONE)
+                    .noOcclusion()
+                    .requiresCorrectToolForDrops()));
+
+    public static final DeferredBlock<Block> YELLOW_TERRACOTTA_PLANTER = registerBlock("yellow_terracotta_planter",
+            () -> new PlanterBlock(BlockBehaviour.Properties.of()
+                    .strength(2.0F, 3.0F)
+                    .sound(SoundType.STONE)
+                    .noOcclusion()
+                    .requiresCorrectToolForDrops()));
+
     private static <T extends Block> DeferredBlock<T> registerBlock(String name, Supplier<T> block) {
         DeferredBlock<T> toReturn = BLOCKS.register(name, block);
         registerBlockItem(name, toReturn);
