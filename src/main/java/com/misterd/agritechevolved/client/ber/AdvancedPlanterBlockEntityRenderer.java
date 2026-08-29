@@ -12,6 +12,7 @@ import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
 import net.minecraft.client.renderer.item.ItemModelResolver;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
 
 public class AdvancedPlanterBlockEntityRenderer
         implements BlockEntityRenderer<AdvancedPlanterBlockEntity, AdvancedPlanterBlockEntityRenderer.RenderState> {
@@ -32,7 +33,7 @@ public class AdvancedPlanterBlockEntityRenderer
     }
 
     @Override
-    public void extractRenderState(AdvancedPlanterBlockEntity be, RenderState state, float partialTick, Vec3 cameraPos, ModelFeatureRenderer.@org.jspecify.annotations.Nullable CrumblingOverlay crumblingOverlay) {
+    public void extractRenderState(AdvancedPlanterBlockEntity be, RenderState state, float partialTick, Vec3 cameraPos, ModelFeatureRenderer.@Nullable CrumblingOverlay crumblingOverlay) {
         BlockEntityRenderer.super.extractRenderState(be, state, partialTick, cameraPos, crumblingOverlay);
 
         state.cloched = be.getBlockState().getValue(AdvancedPlanterBlock.CLOCHED);
