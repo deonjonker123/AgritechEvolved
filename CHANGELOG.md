@@ -69,3 +69,7 @@ All notable changes to this project will be documented here.
 ### Changed
 
 - Updated basic planters' recipes to be less annoying 
+
+## [2.2.0.4+neoforge-mc26.1.2] - 2026-09-10
+### Fixed
+- Issue #7: fixed the range upgrades recipes to use the correct item

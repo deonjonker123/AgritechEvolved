@@ -327,7 +327,7 @@ public class ATERecipeProvider extends RecipeProvider {
                 .pattern(" G ")
                 .define('G', Items.REDSTONE_BLOCK)
                 .define('C', Items.IRON_BLOCK)
-                .define('Y', ATEItems.YM_MK1.get())
+                .define('Y', ATEItems.RM_MK1.get())
                 .unlockedBy("has_rm_mk1", has(ATEItems.RM_MK1.get()))
                 .save(output);
 
@@ -338,7 +338,7 @@ public class ATERecipeProvider extends RecipeProvider {
                 .define('E', Items.COMPARATOR)
                 .define('G', Items.REDSTONE_BLOCK)
                 .define('N', Items.NETHERITE_INGOT)
-                .define('Y', ATEItems.YM_MK2.get())
+                .define('Y', ATEItems.RM_MK2.get())
                 .unlockedBy("has_rm_mk2", has(ATEItems.RM_MK2.get()))
                 .save(output);
 
