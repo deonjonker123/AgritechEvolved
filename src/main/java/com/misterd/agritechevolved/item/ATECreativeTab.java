@@ -32,15 +32,6 @@ public class ATECreativeTab {
 
                         output.accept(ATEBlocks.ADVANCED_PLANTER);
 
-                        output.accept(ATEBlocks.DEEPSLATE_BRICKS_PLANTER);
-                        output.accept(ATEBlocks.DEEPSLATE_TILES_PLANTER);
-                        output.accept(ATEBlocks.POLISHED_DEEPLSATE_PLANTER);
-                        output.accept(ATEBlocks.TUFF_BRICKS_PLANTER);
-                        output.accept(ATEBlocks.POLISHED_TUFF_PLANTER);
-                        output.accept(ATEBlocks.STONE_BRICKS_PLANTER);
-                        output.accept(ATEBlocks.STONE_PLANTER);
-                        output.accept(ATEBlocks.END_STONE_PLANTER);
-
                         output.accept(ATEBlocks.TERRACOTTA_PLANTER);
                         output.accept(ATEBlocks.BLACK_TERRACOTTA_PLANTER);
                         output.accept(ATEBlocks.BLUE_TERRACOTTA_PLANTER);

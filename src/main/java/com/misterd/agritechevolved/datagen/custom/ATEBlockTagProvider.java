@@ -59,15 +59,7 @@ public class ATEBlockTagProvider extends BlockTagsProvider {
                 .add(ATEBlocks.PURPLE_TERRACOTTA_PLANTER.get())
                 .add(ATEBlocks.RED_TERRACOTTA_PLANTER.get())
                 .add(ATEBlocks.WHITE_TERRACOTTA_PLANTER.get())
-                .add(ATEBlocks.YELLOW_TERRACOTTA_PLANTER.get())
-                .add(ATEBlocks.DEEPSLATE_TILES_PLANTER.get())
-                .add(ATEBlocks.DEEPSLATE_BRICKS_PLANTER.get())
-                .add(ATEBlocks.END_STONE_PLANTER.get())
-                .add(ATEBlocks.POLISHED_DEEPLSATE_PLANTER.get())
-                .add(ATEBlocks.POLISHED_TUFF_PLANTER.get())
-                .add(ATEBlocks.STONE_PLANTER.get())
-                .add(ATEBlocks.STONE_BRICKS_PLANTER.get())
-                .add(ATEBlocks.TUFF_BRICKS_PLANTER.get());
+                .add(ATEBlocks.YELLOW_TERRACOTTA_PLANTER.get());
 
         tag(BlockTags.MINEABLE_WITH_SHOVEL)
                 .add(ATEBlocks.INFUSED_FARMLAND.get())
@@ -102,15 +94,7 @@ public class ATEBlockTagProvider extends BlockTagsProvider {
                 .add(ATEBlocks.PURPLE_TERRACOTTA_PLANTER.get())
                 .add(ATEBlocks.RED_TERRACOTTA_PLANTER.get())
                 .add(ATEBlocks.WHITE_TERRACOTTA_PLANTER.get())
-                .add(ATEBlocks.YELLOW_TERRACOTTA_PLANTER.get())
-                .add(ATEBlocks.DEEPSLATE_TILES_PLANTER.get())
-                .add(ATEBlocks.DEEPSLATE_BRICKS_PLANTER.get())
-                .add(ATEBlocks.END_STONE_PLANTER.get())
-                .add(ATEBlocks.POLISHED_DEEPLSATE_PLANTER.get())
-                .add(ATEBlocks.POLISHED_TUFF_PLANTER.get())
-                .add(ATEBlocks.STONE_PLANTER.get())
-                .add(ATEBlocks.STONE_BRICKS_PLANTER.get())
-                .add(ATEBlocks.TUFF_BRICKS_PLANTER.get());
+                .add(ATEBlocks.YELLOW_TERRACOTTA_PLANTER.get());
 
         tag(ATETags.Blocks.DIRT_LIKE_BLOCKS)
                 .add(Blocks.DIRT)

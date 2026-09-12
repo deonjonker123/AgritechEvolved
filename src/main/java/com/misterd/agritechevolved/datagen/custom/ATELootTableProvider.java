@@ -60,14 +60,6 @@ public class ATELootTableProvider extends BlockLootSubProvider {
         dropSelf(ATEBlocks.RED_TERRACOTTA_PLANTER.get());
         dropSelf(ATEBlocks.WHITE_TERRACOTTA_PLANTER.get());
         dropSelf(ATEBlocks.YELLOW_TERRACOTTA_PLANTER.get());
-        dropSelf(ATEBlocks.DEEPSLATE_BRICKS_PLANTER.get());
-        dropSelf(ATEBlocks.DEEPSLATE_TILES_PLANTER.get());
-        dropSelf(ATEBlocks.END_STONE_PLANTER.get());
-        dropSelf(ATEBlocks.POLISHED_DEEPLSATE_PLANTER.get());
-        dropSelf(ATEBlocks.POLISHED_TUFF_PLANTER.get());
-        dropSelf(ATEBlocks.STONE_PLANTER.get());
-        dropSelf(ATEBlocks.STONE_BRICKS_PLANTER.get());
-        dropSelf(ATEBlocks.TUFF_BRICKS_PLANTER.get());
         add(ATEBlocks.INFUSED_FARMLAND.get(), createInfusedFarmlandTable());
         dropSelf(ATEBlocks.MULCH.get());
     }

@@ -48,15 +48,7 @@ public class ATEBlockEntities {
                     ATEBlocks.PURPLE_TERRACOTTA_PLANTER.get(),
                     ATEBlocks.RED_TERRACOTTA_PLANTER.get(),
                     ATEBlocks.WHITE_TERRACOTTA_PLANTER.get(),
-                    ATEBlocks.YELLOW_TERRACOTTA_PLANTER.get(),
-                    ATEBlocks.DEEPSLATE_BRICKS_PLANTER.get(),
-                    ATEBlocks.DEEPSLATE_TILES_PLANTER.get(),
-                    ATEBlocks.END_STONE_PLANTER.get(),
-                    ATEBlocks.POLISHED_TUFF_PLANTER.get(),
-                    ATEBlocks.POLISHED_DEEPLSATE_PLANTER.get(),
-                    ATEBlocks.STONE_PLANTER.get(),
-                    ATEBlocks.STONE_BRICKS_PLANTER.get(),
-                    ATEBlocks.TUFF_BRICKS_PLANTER.get()
+                    ATEBlocks.YELLOW_TERRACOTTA_PLANTER.get()
             ).build(null));
 
     public static final Supplier<BlockEntityType<AdvancedPlanterBlockEntity>> ADVANCED_PLANTER_BLOCK_BE
