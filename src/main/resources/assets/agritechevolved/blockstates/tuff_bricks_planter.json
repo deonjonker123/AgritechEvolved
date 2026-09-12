@@ -1,0 +1,6 @@
+{
+	"variants": {
+		"cloched=false": { "model": "agritechevolved:block/tuff_bricks_planter" },
+		"cloched=true":  { "model": "agritechevolved:block/tuff_bricks_planter" }
+	}
+}

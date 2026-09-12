@@ -95,14 +95,6 @@ public class ATERecipeProvider extends RecipeProvider implements IConditionBuild
                 .unlockedBy("has_oak_log", has(Items.OAK_LOG))
                 .save(recipeOutput);
 
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ATEBlocks.OAK_PLANTER.get())
-                .pattern("PHP")
-                .pattern("PPP")
-                .define('P', ItemTags.PLANKS)
-                .define('H', Items.HOPPER)
-                .unlockedBy("has_oak_log", has(Items.OAK_LOG))
-                .save(recipeOutput, "agritechevolved:basic_planter_from_any_wood");
-
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ATEBlocks.SPRUCE_PLANTER.get())
                 .pattern("PHP")
                 .pattern("PPP")
@@ -526,6 +518,70 @@ public class ATERecipeProvider extends RecipeProvider implements IConditionBuild
                 .requires(Items.YELLOW_DYE)
                 .unlockedBy("has_terracotta_planter", has(ATEBlocks.TERRACOTTA_PLANTER.get()))
                 .save(recipeOutput, "agritechevolved:yellow_terracotta_planter_from_dye");
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ATEBlocks.DEEPSLATE_BRICKS_PLANTER.get())
+                .pattern("PHP")
+                .pattern("PPP")
+                .define('P', Items.DEEPSLATE_BRICKS)
+                .define('H', Items.HOPPER)
+                .unlockedBy("has_hopper", has(Items.HOPPER))
+                .save(recipeOutput);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ATEBlocks.DEEPSLATE_TILES_PLANTER.get())
+                .pattern("PHP")
+                .pattern("PPP")
+                .define('P', Items.DEEPSLATE_TILES)
+                .define('H', Items.HOPPER)
+                .unlockedBy("has_hopper", has(Items.HOPPER))
+                .save(recipeOutput);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ATEBlocks.END_STONE_PLANTER.get())
+                .pattern("PHP")
+                .pattern("PPP")
+                .define('P', Items.END_STONE_BRICKS)
+                .define('H', Items.HOPPER)
+                .unlockedBy("has_hopper", has(Items.HOPPER))
+                .save(recipeOutput);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ATEBlocks.POLISHED_DEEPLSATE_PLANTER.get())
+                .pattern("PHP")
+                .pattern("PPP")
+                .define('P', Items.POLISHED_DEEPSLATE)
+                .define('H', Items.HOPPER)
+                .unlockedBy("has_hopper", has(Items.HOPPER))
+                .save(recipeOutput);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ATEBlocks.POLISHED_TUFF_PLANTER.get())
+                .pattern("PHP")
+                .pattern("PPP")
+                .define('P', Items.POLISHED_TUFF)
+                .define('H', Items.HOPPER)
+                .unlockedBy("has_hopper", has(Items.HOPPER))
+                .save(recipeOutput);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ATEBlocks.STONE_BRICKS_PLANTER.get())
+                .pattern("PHP")
+                .pattern("PPP")
+                .define('P', Items.STONE_BRICKS)
+                .define('H', Items.HOPPER)
+                .unlockedBy("has_hopper", has(Items.HOPPER))
+                .save(recipeOutput);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ATEBlocks.STONE_PLANTER.get())
+                .pattern("PHP")
+                .pattern("PPP")
+                .define('P', Items.STONE)
+                .define('H', Items.HOPPER)
+                .unlockedBy("has_hopper", has(Items.HOPPER))
+                .save(recipeOutput);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ATEBlocks.TUFF_BRICKS_PLANTER.get())
+                .pattern("PHP")
+                .pattern("PPP")
+                .define('P', Items.TUFF_BRICKS)
+                .define('H', Items.HOPPER)
+                .unlockedBy("has_hopper", has(Items.HOPPER))
+                .save(recipeOutput);
 
         buildDurabilityRecipes(recipeOutput);
     }

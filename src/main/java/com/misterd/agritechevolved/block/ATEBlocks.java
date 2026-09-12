@@ -334,6 +334,62 @@ public class ATEBlocks {
                     .noOcclusion()
                     .requiresCorrectToolForDrops()));
 
+    public static final DeferredBlock<Block> DEEPSLATE_BRICKS_PLANTER = registerBlock("deepslate_bricks_planter",
+            () -> new PlanterBlock(BlockBehaviour.Properties.of()
+                    .strength(2.0F, 3.0F)
+                    .sound(SoundType.STONE)
+                    .noOcclusion()
+                    .requiresCorrectToolForDrops()));
+
+    public static final DeferredBlock<Block> DEEPSLATE_TILES_PLANTER = registerBlock("deepslate_tiles_planter",
+            () -> new PlanterBlock(BlockBehaviour.Properties.of()
+                    .strength(2.0F, 3.0F)
+                    .sound(SoundType.STONE)
+                    .noOcclusion()
+                    .requiresCorrectToolForDrops()));
+
+    public static final DeferredBlock<Block> END_STONE_PLANTER = registerBlock("end_stone_planter",
+            () -> new PlanterBlock(BlockBehaviour.Properties.of()
+                    .strength(2.0F, 3.0F)
+                    .sound(SoundType.STONE)
+                    .noOcclusion()
+                    .requiresCorrectToolForDrops()));
+
+    public static final DeferredBlock<Block> POLISHED_DEEPLSATE_PLANTER = registerBlock("polished_deepslate_planter",
+            () -> new PlanterBlock(BlockBehaviour.Properties.of()
+                    .strength(2.0F, 3.0F)
+                    .sound(SoundType.STONE)
+                    .noOcclusion()
+                    .requiresCorrectToolForDrops()));
+
+    public static final DeferredBlock<Block> POLISHED_TUFF_PLANTER = registerBlock("polished_tuff_planter",
+            () -> new PlanterBlock(BlockBehaviour.Properties.of()
+                    .strength(2.0F, 3.0F)
+                    .sound(SoundType.STONE)
+                    .noOcclusion()
+                    .requiresCorrectToolForDrops()));
+
+    public static final DeferredBlock<Block> STONE_BRICKS_PLANTER = registerBlock("stone_bricks_planter",
+            () -> new PlanterBlock(BlockBehaviour.Properties.of()
+                    .strength(2.0F, 3.0F)
+                    .sound(SoundType.STONE)
+                    .noOcclusion()
+                    .requiresCorrectToolForDrops()));
+
+    public static final DeferredBlock<Block> STONE_PLANTER = registerBlock("stone_planter",
+            () -> new PlanterBlock(BlockBehaviour.Properties.of()
+                    .strength(2.0F, 3.0F)
+                    .sound(SoundType.STONE)
+                    .noOcclusion()
+                    .requiresCorrectToolForDrops()));
+
+    public static final DeferredBlock<Block> TUFF_BRICKS_PLANTER = registerBlock("tuff_bricks_planter",
+            () -> new PlanterBlock(BlockBehaviour.Properties.of()
+                    .strength(2.0F, 3.0F)
+                    .sound(SoundType.STONE)
+                    .noOcclusion()
+                    .requiresCorrectToolForDrops()));
+
     private static <T extends Block> DeferredBlock<T> registerBlock(String name, Supplier<T> block) {
         DeferredBlock<T> toReturn = BLOCKS.register(name, block);
         registerBlockItem(name, toReturn);

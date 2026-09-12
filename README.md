@@ -6,7 +6,7 @@ Farming automation mod with planters, machines, modules, and power gen.
 
 ## Planters
 
-**Basic Planter** — plant a seed or sapling, it grows by itself, drops go into whatever's underneath it. All 11 vanilla wood types.
+**Basic Planter** — plant a seed or sapling, it grows by itself, drops go into whatever's underneath it. All 11 vanilla wood types, all terracotta variants and a few stone variants
 
 **Advanced Planter** — Planter that runs on RF, and has speed and yield upgrade slots.
 

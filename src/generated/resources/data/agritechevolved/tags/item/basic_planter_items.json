@@ -27,6 +27,14 @@
     "agritechevolved:purple_terracotta_planter",
     "agritechevolved:red_terracotta_planter",
     "agritechevolved:white_terracotta_planter",
-    "agritechevolved:yellow_terracotta_planter"
+    "agritechevolved:yellow_terracotta_planter",
+    "agritechevolved:deepslate_tiles_planter",
+    "agritechevolved:deepslate_bricks_planter",
+    "agritechevolved:end_stone_planter",
+    "agritechevolved:polished_deepslate_planter",
+    "agritechevolved:polished_tuff_planter",
+    "agritechevolved:stone_planter",
+    "agritechevolved:stone_bricks_planter",
+    "agritechevolved:tuff_bricks_planter"
   ]
 }

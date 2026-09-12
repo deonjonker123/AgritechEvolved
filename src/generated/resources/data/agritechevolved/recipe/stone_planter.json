@@ -6,7 +6,7 @@
       "item": "minecraft:hopper"
     },
     "P": {
-      "tag": "minecraft:planks"
+      "item": "minecraft:stone"
     }
   },
   "pattern": [
@@ -15,6 +15,6 @@
   ],
   "result": {
     "count": 1,
-    "id": "agritechevolved:basic_planter"
+    "id": "agritechevolved:stone_planter"
   }
 }
