@@ -1,10 +1,7 @@
 package com.misterd.agritechevolved.datagen;
 
 import com.misterd.agritechevolved.AgritechEvolved;
-import com.misterd.agritechevolved.datagen.custom.ATEBlockTagProvider;
-import com.misterd.agritechevolved.datagen.custom.ATEItemTagProvider;
-import com.misterd.agritechevolved.datagen.custom.ATELootTableProvider;
-import com.misterd.agritechevolved.datagen.custom.ATEModelProvider;
+import com.misterd.agritechevolved.datagen.custom.*;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.core.registries.Registries;
@@ -29,7 +26,8 @@ public class DataGenerators {
                 .add(Registries.LOOT_TABLE, new LootTableProvider(
                         Set.of(),
                         List.of(new LootTableProvider.SubProviderEntry(ATELootTableProvider::new, LootContextParamSets.BLOCK))
-                ));
+                ))
+                .add(ATERecipeProvider.create());
     }
 
     @SubscribeEvent

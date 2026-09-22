@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "C": "minecraft:copper_block",
+    "I": "minecraft:iron_ingot",
+    "R": "minecraft:redstone"
+  },
+  "pattern": [
+    "RRR",
+    "ICI",
+    "RRR"
+  ],
+  "result": {
+    "id": "agritechevolved:capacitor_tier1"
+  }
+}

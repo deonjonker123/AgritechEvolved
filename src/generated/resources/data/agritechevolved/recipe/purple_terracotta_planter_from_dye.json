@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "agritechevolved:terracotta_planter",
+    "minecraft:purple_dye"
+  ],
+  "result": {
+    "id": "agritechevolved:purple_terracotta_planter"
+  }
+}

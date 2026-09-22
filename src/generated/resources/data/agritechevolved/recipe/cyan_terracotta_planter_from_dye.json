@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "agritechevolved:terracotta_planter",
+    "minecraft:cyan_dye"
+  ],
+  "result": {
+    "id": "agritechevolved:cyan_terracotta_planter"
+  }
+}
