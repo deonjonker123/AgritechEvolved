@@ -3,9 +3,7 @@ package com.misterd.agritechevolved.item;
 import com.misterd.agritechevolved.Config;
 import com.misterd.agritechevolved.item.custom.ClocheItem;
 import com.mojang.blaze3d.platform.InputConstants;
-import com.mojang.blaze3d.platform.Window;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -15,7 +13,6 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import org.lwjgl.glfw.GLFW;
 
 import java.text.NumberFormat;
 import java.util.Locale;
@@ -233,8 +230,8 @@ public class ATEItems {
             props -> new ClocheItem(props));
 
     private static boolean isShiftDown() {
-        Window window = Minecraft.getInstance().getWindow();
-        return InputConstants.isKeyDown(window, GLFW.GLFW_KEY_LEFT_SHIFT) || InputConstants.isKeyDown(window, GLFW.GLFW_KEY_RIGHT_SHIFT);
+        return InputConstants.isKeyDown(InputConstants.KEY_LSHIFT)
+                || InputConstants.isKeyDown(InputConstants.KEY_RSHIFT);
     }
 
     public static void register(IEventBus eventBus) {

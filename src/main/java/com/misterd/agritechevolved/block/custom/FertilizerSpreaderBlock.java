@@ -2,7 +2,6 @@ package com.misterd.agritechevolved.block.custom;
 
 import com.misterd.agritechevolved.blockentity.ATEBlockEntities;
 import com.misterd.agritechevolved.blockentity.custom.FertilizerSpreaderBlockEntity;
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -46,7 +45,6 @@ public class FertilizerSpreaderBlock extends BaseEntityBlock {
             Block.box(0, 10, 2, 2, 16, 14),
             Block.box(14, 10, 2, 16, 16, 14)
     );
-    public static final MapCodec<FertilizerSpreaderBlock> CODEC = simpleCodec(FertilizerSpreaderBlock::new);
     public static final BooleanProperty POWERED = BooleanProperty.create("powered");
 
     public FertilizerSpreaderBlock(Properties properties) {
@@ -62,11 +60,6 @@ public class FertilizerSpreaderBlock extends BaseEntityBlock {
     @Override
     protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         return SHAPE;
-    }
-
-    @Override
-    protected MapCodec<? extends BaseEntityBlock> codec() {
-        return CODEC;
     }
 
     @Override

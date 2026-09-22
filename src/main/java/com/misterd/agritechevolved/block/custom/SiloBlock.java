@@ -2,7 +2,6 @@ package com.misterd.agritechevolved.block.custom;
 
 import com.misterd.agritechevolved.blockentity.ATEBlockEntities;
 import com.misterd.agritechevolved.blockentity.custom.SiloBlockEntity;
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -33,7 +32,6 @@ import javax.annotation.Nullable;
 public class SiloBlock extends BaseEntityBlock {
 
     public static final VoxelShape SHAPE = Block.box(0, 0, 0, 16, 16, 16);
-    public static final MapCodec<SiloBlock> CODEC = simpleCodec(SiloBlock::new);
     public static final BooleanProperty POWERED = BooleanProperty.create("powered");
 
     public SiloBlock(Properties properties) {
@@ -49,11 +47,6 @@ public class SiloBlock extends BaseEntityBlock {
     @Override
     protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         return SHAPE;
-    }
-
-    @Override
-    protected MapCodec<? extends BaseEntityBlock> codec() {
-        return CODEC;
     }
 
     @Override

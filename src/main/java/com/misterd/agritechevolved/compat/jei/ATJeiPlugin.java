@@ -17,6 +17,7 @@ import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import mezz.jei.api.runtime.IJeiRuntime;
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.RegistryOps;
@@ -24,9 +25,10 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.Compostable;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.level.block.ComposterBlock;
 import net.minecraft.world.level.storage.LevelResource;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ResolvableInt;
 import net.neoforged.fml.ModList;
 
 import java.nio.file.FileSystem;
@@ -104,7 +106,6 @@ public class ATJeiPlugin implements IModPlugin {
         List<PlanterRecipe> recipes = new ArrayList<>();
         DynamicOps<JsonElement> ops = RegistryOps.create(JsonOps.INSTANCE, mc.getConnection().registryAccess());
 
-        // Walk mod JAR / dev resources
         Path modFilePath = ModList.get().getModFileById("agritechevolved").getFile().getFilePath();
         try {
             if (Files.isDirectory(modFilePath)) {
@@ -130,7 +131,6 @@ public class ATJeiPlugin implements IModPlugin {
             LogUtils.getLogger().error("[ATE JEI] Failed to walk mod recipes: {}", e.getMessage());
         }
 
-        // Walk world datapacks (singleplayer only)
         var server = mc.getSingleplayerServer();
         if (server != null) {
             try {
@@ -162,7 +162,6 @@ public class ATJeiPlugin implements IModPlugin {
                 LogUtils.getLogger().error("[ATE JEI] Failed to access datapack dir: {}", e.getMessage());
             }
 
-            // Pick up KubeJS and other runtime-injected recipes from server RecipeManager
             try {
                 server.getRecipeManager().getRecipes().forEach(holder -> {
                     try {
@@ -214,20 +213,74 @@ public class ATJeiPlugin implements IModPlugin {
         }
     }
 
+    private float getCompostChance(ItemStack stack) {
+        Compostable compostable = stack.get(DataComponents.COMPOSTABLE);
+        if (compostable == null) {
+            return 0.0f;
+        }
+
+        ResolvableInt layers = compostable.layers();
+
+        if (layers instanceof ResolvableInt.Constant constant) {
+            return constant.value() > 0 ? 1.0f : 0.0f;
+        }
+
+        var encoded = ResolvableInt.CODEC.encodeStart(JsonOps.INSTANCE, layers);
+
+        if (encoded.result().isEmpty()) {
+            return 0.0f;
+        }
+
+        JsonElement json = encoded.result().get();
+
+        if (!json.isJsonPrimitive()) {
+            return 0.0f;
+        }
+
+        if (!json.getAsJsonPrimitive().isString()) {
+            return 0.0f;
+        }
+
+        return switch (json.getAsString()) {
+            case "minecraft:compostable/low" -> 0.30f;
+            case "minecraft:compostable/low_medium" -> 0.50f;
+            case "minecraft:compostable/medium" -> 0.65f;
+            case "minecraft:compostable/medium_high" -> 0.85f;
+            case "minecraft:compostable/always_add_one" -> 1.00f;
+            default -> 0.0f;
+        };
+    }
+
     private List<CompostRecipe> generateCompostRecipes() {
         List<CompostRecipe> recipes = new ArrayList<>();
+
         for (var item : BuiltInRegistries.ITEM) {
             ItemStack stack = new ItemStack(item);
-            float chance = ComposterBlock.getValue(stack);
-            if (chance <= 0f) continue;
+
+            float chance = getCompostChance(stack);
+
+            if (chance <= 0.0f) {
+                continue;
+            }
+
             String itemId = BuiltInRegistries.ITEM.getKey(item).toString();
+
             try {
                 recipes.add(CompostRecipe.create(itemId, chance));
             } catch (Exception e) {
-                LogUtils.getLogger().error("[ATE JEI] Failed compost recipe for {}: {}", itemId, e.getMessage());
+                LogUtils.getLogger().error(
+                        "[ATE JEI] Failed compost recipe for {}",
+                        itemId,
+                        e
+                );
             }
         }
-        LogUtils.getLogger().info("[ATE JEI] Generated {} compost recipes", recipes.size());
+
+        LogUtils.getLogger().info(
+                "[ATE JEI] Generated {} compost recipes",
+                recipes.size()
+        );
+
         return recipes;
     }
 

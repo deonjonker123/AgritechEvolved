@@ -2,7 +2,6 @@ package com.misterd.agritechevolved.block.custom;
 
 import com.misterd.agritechevolved.blockentity.ATEBlockEntities;
 import com.misterd.agritechevolved.blockentity.custom.BiomassBurnerBlockEntity;
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -39,7 +38,6 @@ public class BiomassBurnerBlock extends BaseEntityBlock {
     public static final EnumProperty<Direction> FACING = HorizontalDirectionalBlock.FACING;
     public static final BooleanProperty BURNING = BooleanProperty.create("burning");
     public static final VoxelShape SHAPE = Block.box(0, 0, 0, 16, 16, 16);
-    public static final MapCodec<BiomassBurnerBlock> CODEC = simpleCodec(BiomassBurnerBlock::new);
 
     public BiomassBurnerBlock(Properties properties) {
         super(properties);
@@ -51,11 +49,6 @@ public class BiomassBurnerBlock extends BaseEntityBlock {
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(FACING, BURNING);
-    }
-
-    @Override
-    protected MapCodec<? extends BaseEntityBlock> codec() {
-        return CODEC;
     }
 
     @Override

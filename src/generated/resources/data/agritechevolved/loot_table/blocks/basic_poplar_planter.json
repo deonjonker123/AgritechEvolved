@@ -8,11 +8,11 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "agritechevolved:green_terracotta_planter"
+          "name": "agritechevolved:basic_poplar_planter"
         }
       ],
       "rolls": 1
     }
   ],
-  "random_sequence": "agritechevolved:blocks/green_terracotta_planter"
+  "random_sequence": "agritechevolved:blocks/basic_poplar_planter"
 }

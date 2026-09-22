@@ -4,6 +4,7 @@ import com.misterd.agritechevolved.block.ATEBlocks;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.loot.BlockLootSubProvider;
+import net.minecraft.data.loot.LootTableSubProvider;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -13,8 +14,8 @@ import net.minecraft.world.level.storage.loot.entries.LootItem;
 import java.util.Set;
 
 public class ATELootTableProvider extends BlockLootSubProvider {
-    public ATELootTableProvider(HolderLookup.Provider registries) {
-        super(Set.of(), FeatureFlags.REGISTRY.allFlags(), registries);
+    public ATELootTableProvider(LootTableSubProvider.Context output) {
+        super(Set.of(), FeatureFlags.REGISTRY.allFlags(), output);
     }
 
     protected void generate() {
@@ -30,6 +31,7 @@ public class ATELootTableProvider extends BlockLootSubProvider {
         dropSelf(ATEBlocks.SPRUCE_PLANTER.get());
         dropSelf(ATEBlocks.WARPED_PLANTER.get());
         dropSelf(ATEBlocks.PALE_OAK_PLANTER.get());
+        dropSelf(ATEBlocks.POPLAR_PLANTER.get());
         dropSelf(ATEBlocks.ADVANCED_PLANTER.get());
         dropSelf(ATEBlocks.COMPOSTER.get());
         dropSelf(ATEBlocks.BIOMASS_BURNER.get());

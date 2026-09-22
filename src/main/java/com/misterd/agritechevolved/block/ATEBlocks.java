@@ -2,13 +2,11 @@ package com.misterd.agritechevolved.block;
 
 import com.misterd.agritechevolved.AgritechEvolved;
 import com.misterd.agritechevolved.Config;
+import com.misterd.agritechevolved.block.custom.*;
 import com.misterd.agritechevolved.component.ATEDataComponents;
 import com.misterd.agritechevolved.item.ATEItems;
-import com.misterd.agritechevolved.block.custom.*;
 import com.mojang.blaze3d.platform.InputConstants;
-import com.mojang.blaze3d.platform.Window;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -24,7 +22,6 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import org.lwjgl.glfw.GLFW;
 
 import java.text.NumberFormat;
 import java.util.Locale;
@@ -90,6 +87,11 @@ public class ATEBlocks {
                     .strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
 
     public static final DeferredBlock<Block> PALE_OAK_PLANTER = registerBlock("basic_pale_oak_planter",
+            id -> new PlanterBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, id))
+                    .strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
+
+    public static final DeferredBlock<Block> POPLAR_PLANTER = registerBlock("basic_poplar_planter",
             id -> new PlanterBlock(BlockBehaviour.Properties.of()
                     .setId(ResourceKey.create(Registries.BLOCK, id))
                     .strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
@@ -341,8 +343,8 @@ public class ATEBlocks {
     }
 
     private static boolean isShiftDown() {
-        Window window = Minecraft.getInstance().getWindow();
-        return InputConstants.isKeyDown(window, GLFW.GLFW_KEY_LEFT_SHIFT) || InputConstants.isKeyDown(window, GLFW.GLFW_KEY_RIGHT_SHIFT);
+        return InputConstants.isKeyDown(InputConstants.KEY_LSHIFT)
+                || InputConstants.isKeyDown(InputConstants.KEY_RSHIFT);
     }
 
     public static void register(IEventBus eventBus) {

@@ -32,6 +32,7 @@ public class ATEBlockEntities {
                     ATEBlocks.SPRUCE_PLANTER.get(),
                     ATEBlocks.WARPED_PLANTER.get(),
                     ATEBlocks.PALE_OAK_PLANTER.get(),
+                    ATEBlocks.POPLAR_PLANTER.get(),
                     ATEBlocks.TERRACOTTA_PLANTER.get(),
                     ATEBlocks.BLACK_TERRACOTTA_PLANTER.get(),
                     ATEBlocks.BLUE_TERRACOTTA_PLANTER.get(),

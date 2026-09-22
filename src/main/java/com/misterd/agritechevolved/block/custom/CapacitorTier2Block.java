@@ -3,7 +3,6 @@ package com.misterd.agritechevolved.block.custom;
 import com.misterd.agritechevolved.blockentity.ATEBlockEntities;
 import com.misterd.agritechevolved.blockentity.custom.CapacitorBlockEntity;
 import com.misterd.agritechevolved.component.ATEDataComponents;
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -38,7 +37,6 @@ import java.util.List;
 
 public class CapacitorTier2Block extends BaseEntityBlock {
 
-    public static final MapCodec<CapacitorTier2Block> CODEC = simpleCodec(CapacitorTier2Block::new);
     public static final BooleanProperty HAS_ENERGY = BooleanProperty.create("has_energy");
     public static final EnumProperty<Direction> FACING = HorizontalDirectionalBlock.FACING;
 
@@ -52,11 +50,6 @@ public class CapacitorTier2Block extends BaseEntityBlock {
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(HAS_ENERGY, FACING);
-    }
-
-    @Override
-    protected MapCodec<? extends BaseEntityBlock> codec() {
-        return CODEC;
     }
 
     @Override

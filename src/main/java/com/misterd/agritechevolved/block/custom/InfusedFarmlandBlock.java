@@ -106,8 +106,8 @@ public class InfusedFarmlandBlock extends Block {
             int age = crop.getValue(SweetBerryBushBlock.AGE);
             if (age < 3) next = crop.setValue(SweetBerryBushBlock.AGE, age + 1);
         } else if (b instanceof BonemealableBlock bonemealable) {
-            if (bonemealable.isValidBonemealTarget(level, cropPos, crop)) {
-                bonemealable.performBonemeal(level, random, cropPos, crop);
+            if (bonemealable.isValidBonemealTarget(level, cropPos, crop, BonemealSource.MOB)) {
+                bonemealable.performBonemeal(level, random, cropPos, crop, BonemealSource.MOB);
             }
         }
 

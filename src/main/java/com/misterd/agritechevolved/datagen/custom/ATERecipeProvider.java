@@ -2,24 +2,20 @@ package com.misterd.agritechevolved.datagen.custom;
 
 import com.misterd.agritechevolved.block.ATEBlocks;
 import com.misterd.agritechevolved.item.ATEItems;
-import com.misterd.agritechevolved.recipe.CropRecipe;
-import com.misterd.agritechevolved.recipe.DropEntry;
 import com.misterd.agritechevolved.recipe.DurabilityShapelessRecipe;
-import com.misterd.agritechevolved.recipe.TreeRecipe;
 import com.misterd.agritechevolved.util.ATETags;
-import net.minecraft.core.HolderLookup;
+import net.minecraft.advancements.Advancement;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.MultiRegistryBootstrap;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.RecipeCategory;
-import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.Items;
@@ -29,29 +25,32 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.block.WeatheringCopper;
 import net.neoforged.neoforge.common.Tags;
 
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
+import java.util.Set;
 
 public class ATERecipeProvider extends RecipeProvider {
 
-    public ATERecipeProvider(HolderLookup.Provider provider, RecipeOutput recipeOutput) {
-        super(provider, recipeOutput);
+    private final BootstrapContext<Recipe<?>> recipeContext;
+
+    public ATERecipeProvider(BootstrapContext<Recipe<?>> recipeOutput, BootstrapContext<Advancement> advancementOutput) {
+        super(recipeOutput, advancementOutput);
+        this.recipeContext = recipeOutput;
     }
 
-    public static class Runner extends RecipeProvider.Runner {
-        public Runner(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> provider) {
-            super(packOutput, provider);
-        }
+    public static MultiRegistryBootstrap create() {
+        return new MultiRegistryBootstrap() {
+            @Override
+            public Set<ResourceKey<? extends Registry<?>>> requestedRegistries() {
+                return Set.of(Registries.RECIPE, Registries.ADVANCEMENT);
+            }
 
-        @Override
-        protected RecipeProvider createRecipeProvider(HolderLookup.Provider provider, RecipeOutput recipeOutput) {
-            return new ATERecipeProvider(provider, recipeOutput);
-        }
-
-        @Override
-        public String getName() {
-            return "Agritech: Evolved Recipes";
-        }
+            @Override
+            public void run(MultiRegistryBootstrap.BootstrapGetter registries) {
+                new ATERecipeProvider(
+                        registries.get(Registries.RECIPE),
+                        registries.get(Registries.ADVANCEMENT)
+                ).buildRecipes();
+            }
+        };
     }
 
     @Override
@@ -158,6 +157,14 @@ public class ATERecipeProvider extends RecipeProvider {
                 .define('P', Items.PALE_OAK_PLANKS)
                 .define('H', Items.HOPPER)
                 .unlockedBy("has_pale_oak_log", has(Items.PALE_OAK_LOG))
+                .save(output);
+
+        shaped(RecipeCategory.MISC, ATEBlocks.POPLAR_PLANTER.get())
+                .pattern("PHP")
+                .pattern("PPP")
+                .define('P', Items.POPLAR_PLANKS)
+                .define('H', Items.HOPPER)
+                .unlockedBy("has_poplar_log", has(Items.POPLAR_LOG))
                 .save(output);
 
         shaped(RecipeCategory.MISC, ATEItems.CLOCHE.get(), 4)
@@ -627,8 +634,8 @@ public class ATERecipeProvider extends RecipeProvider {
     }
 
     private void saveTillingRecipe(String name, Item input, Item result) {
-        HolderSet<Item> hoeTag = registries
-                .lookupOrThrow(Registries.ITEM)
+        HolderSet<Item> hoeTag = recipeContext
+                .lookup(Registries.ITEM)
                 .getOrThrow(ItemTags.HOES);
 
         NonNullList<Ingredient> ingredients = NonNullList.create();

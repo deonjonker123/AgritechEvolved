@@ -1,5 +1,6 @@
 package com.misterd.agritechevolved.block.custom;
 
+import com.misterd.agritechevolved.block.ATEBlocks;
 import com.misterd.agritechevolved.blockentity.ATEBlockEntities;
 import com.misterd.agritechevolved.blockentity.custom.AdvancedPlanterBlockEntity;
 import com.misterd.agritechevolved.datamap.ATEDataMaps;
@@ -8,9 +9,12 @@ import com.misterd.agritechevolved.item.ATEItems;
 import com.misterd.agritechevolved.item.custom.ClocheItem;
 import com.misterd.agritechevolved.util.ATETags;
 import com.misterd.agritechevolved.util.RegistryHelper;
-import com.mojang.serialization.MapCodec;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
+import net.minecraft.core.component.BlockTransformer;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -23,11 +27,10 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.HoeItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
@@ -41,7 +44,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.neoforged.neoforge.common.ItemAbilities;
 import net.neoforged.neoforge.transfer.item.ItemResource;
 import net.neoforged.neoforge.transfer.transaction.Transaction;
 
@@ -51,7 +53,6 @@ import java.util.Map;
 
 public class AdvancedPlanterBlock extends BaseEntityBlock {
 
-    public static final MapCodec<AdvancedPlanterBlock> CODEC = simpleCodec(AdvancedPlanterBlock::new);
     public static final BooleanProperty POWERED = BooleanProperty.create("powered");
     public static final BooleanProperty CLOCHED = BooleanProperty.create("cloched");
     public static final VoxelShape SHAPE = Shapes.or(
@@ -103,11 +104,6 @@ public class AdvancedPlanterBlock extends BaseEntityBlock {
     }
 
     @Override
-    protected MapCodec<? extends BaseEntityBlock> codec() {
-        return CODEC;
-    }
-
-    @Override
     protected RenderShape getRenderShape(BlockState state) {
         return RenderShape.MODEL;
     }
@@ -150,7 +146,7 @@ public class AdvancedPlanterBlock extends BaseEntityBlock {
         if (isFertilizer(heldItem)) {
             return handleFertilizer(state, level, pos, player, planter, heldItem);
         }
-        if (heldItem.getItem() instanceof HoeItem) {
+        if (heldItem.has(DataComponents.BLOCK_TRANSFORMER)) {
             return handleHoeTill(level, pos, player, planter, heldItem, hand, hitResult);
         }
         if (heldItem.is(ATETags.Items.ATE_MODULES)) {
@@ -263,25 +259,100 @@ public class AdvancedPlanterBlock extends BaseEntityBlock {
 
     private InteractionResult handleHoeTill(Level level, BlockPos pos, Player player, AdvancedPlanterBlockEntity planter, ItemStack heldItem, InteractionHand hand, BlockHitResult hitResult) {
         ItemStack soilStack = planter.getStack(1);
+
         if (!soilStack.isEmpty() && soilStack.getItem() instanceof BlockItem soilBlockItem) {
-            BlockState soilState = soilBlockItem.getBlock().defaultBlockState();
-            BlockState result = soilState.getToolModifiedState(new UseOnContext(level, player, hand, heldItem, hitResult), ItemAbilities.HOE_TILL, false);
+            Block soilBlock = soilBlockItem.getBlock();
+
+            if (soilBlock == ATEBlocks.MULCH.get()) {
+                try (Transaction tx = Transaction.openRoot()) {
+                    planter.inventory.extract(1, ItemResource.of(soilStack), 1, tx);
+                    planter.inventory.insert(1, ItemResource.of(new ItemStack(ATEBlocks.INFUSED_FARMLAND.get())),1,tx);
+                    tx.commit();
+                }
+
+                level.playSound(null, pos, SoundEvents.CROP_PLANTED, SoundSource.BLOCKS, 1.0F, 1.0F);
+
+                if (!player.getAbilities().instabuild) {
+                    EquipmentSlot slot = hand == InteractionHand.MAIN_HAND
+                            ? EquipmentSlot.MAINHAND
+                            : EquipmentSlot.OFFHAND;
+
+                    heldItem.hurtAndBreak(1, player, slot);
+                }
+
+                return level.isClientSide()
+                        ? InteractionResult.SUCCESS
+                        : InteractionResult.SUCCESS_SERVER;
+            }
+
+            BlockState soilState = soilBlock.defaultBlockState();
+
+            BlockState result = computeTilledState(level, pos, heldItem, soilState, hitResult.getDirection());
+
             if (result != null) {
                 try (Transaction tx = Transaction.openRoot()) {
                     planter.inventory.extract(1, ItemResource.of(soilStack), 1, tx);
                     planter.inventory.insert(1, ItemResource.of(new ItemStack(result.getBlock())), 1, tx);
                     tx.commit();
                 }
-                level.playSound(player, pos, SoundEvents.HOE_TILL, SoundSource.BLOCKS, 1.0F, 1.0F);
+
+                level.playSound(null, pos, SoundEvents.CROP_PLANTED, SoundSource.BLOCKS, 1.0F, 1.0F);
+
                 if (!player.getAbilities().instabuild) {
                     EquipmentSlot slot = hand == InteractionHand.MAIN_HAND
-                            ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND;
+                            ? EquipmentSlot.MAINHAND
+                            : EquipmentSlot.OFFHAND;
+
                     heldItem.hurtAndBreak(1, player, slot);
                 }
-                return level.isClientSide() ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
+
+                return level.isClientSide()
+                        ? InteractionResult.SUCCESS
+                        : InteractionResult.SUCCESS_SERVER;
             }
         }
+
         return InteractionResult.PASS;
+    }
+
+    private static @Nullable BlockState computeTilledState(Level level, BlockPos pos, ItemStack hoe, BlockState soilState, Direction clickedFace) {
+        Holder<BlockTransformer> transformer = hoe.get(DataComponents.BLOCK_TRANSFORMER);
+
+        if (transformer == null) {
+            return null;
+        }
+
+        LevelAccessor soilLevel = createSoilLevelAccessor(level, pos, soilState);
+
+        for (BlockTransformer.BlockTransformData transform : transformer.value().transforms()) {
+
+            if (transform.disallowedFaces().contains(clickedFace)) {
+                continue;
+            }
+
+            BlockState result = transform.blockStateProvider().value().getOptionalState(soilLevel, level.getRandom(), pos);
+
+            if (result != null) {
+                return result;
+            }
+        }
+
+        return null;
+    }
+
+    private static LevelAccessor createSoilLevelAccessor(Level level, BlockPos soilPos, BlockState soilState) {
+        return (LevelAccessor) java.lang.reflect.Proxy.newProxyInstance(LevelAccessor.class.getClassLoader(),new Class<?>[]{LevelAccessor.class},
+                (proxy, method, args) -> {if (method.getName().equals("getBlockState")
+                        && args != null
+                        && args.length == 1
+                        && args[0] instanceof BlockPos requestedPos
+                        && requestedPos.equals(soilPos)) {
+                    return soilState;
+                }
+
+                    return method.invoke(level, args);
+                }
+        );
     }
 
     private InteractionResult handleModuleInsert(Level level, BlockPos pos, BlockState state, Player player, AdvancedPlanterBlockEntity planter, ItemStack heldItem) {

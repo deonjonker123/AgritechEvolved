@@ -1,19 +1,23 @@
 package com.misterd.agritechevolved.blockentity.custom;
 
+import com.google.gson.JsonElement;
 import com.misterd.agritechevolved.Config;
 import com.misterd.agritechevolved.block.custom.ComposterBlock;
 import com.misterd.agritechevolved.blockentity.ATEBlockEntities;
 import com.misterd.agritechevolved.gui.custom.ComposterMenu;
 import com.misterd.agritechevolved.item.ATEItems;
 import com.misterd.agritechevolved.util.RegistryHelper;
+import com.mojang.serialization.JsonOps;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Containers;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleContainer;
@@ -21,11 +25,18 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.Compostable;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ResolvableInt;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.transfer.ResourceHandler;
@@ -37,6 +48,7 @@ import net.neoforged.neoforge.transfer.transaction.Transaction;
 import net.neoforged.neoforge.transfer.transaction.TransactionContext;
 
 import javax.annotation.Nullable;
+import java.util.Optional;
 
 public class ComposterBlockEntity extends BlockEntity implements MenuProvider {
 
@@ -179,12 +191,46 @@ public class ComposterBlockEntity extends BlockEntity implements MenuProvider {
     }
 
     private float getCompostChance(ItemStack stack) {
-        return net.minecraft.world.level.block.ComposterBlock.getValue(stack);
+        Compostable compostable = stack.get(DataComponents.COMPOSTABLE);
+        if (compostable == null) {
+            return 0.0f;
+        }
+
+        ResolvableInt layers = compostable.layers();
+
+        if (layers instanceof ResolvableInt.Constant constant) {
+            return constant.value() > 0 ? 1.0f : 0.0f;
+        }
+
+        var encoded = ResolvableInt.CODEC.encodeStart(JsonOps.INSTANCE, layers);
+
+        if (encoded.result().isEmpty()) {
+            return 0.0f;
+        }
+
+        JsonElement json = encoded.result().get();
+
+        if (!json.isJsonPrimitive()) {
+            return 0.0f;
+        }
+
+        if (!json.getAsJsonPrimitive().isString()) {
+            return 0.0f;
+        }
+
+        return switch (json.getAsString()) {
+            case "minecraft:compostable/low" -> 0.30f;
+            case "minecraft:compostable/low_medium" -> 0.50f;
+            case "minecraft:compostable/medium" -> 0.65f;
+            case "minecraft:compostable/medium_high" -> 0.85f;
+            case "minecraft:compostable/always_add_one" -> 1.00f;
+            default -> 0.0f;
+        };
     }
 
     public boolean isCompostableItem(ItemStack stack) {
         if (stack.isEmpty()) return false;
-        return getCompostChance(stack) > 0f;
+        return stack.has(DataComponents.COMPOSTABLE);
     }
 
     private boolean isSpeedModule(ItemStack stack) {
