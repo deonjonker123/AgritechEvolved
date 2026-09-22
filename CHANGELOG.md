@@ -73,3 +73,7 @@ All notable changes to this project will be documented here.
 ## [2.2.0.4+neoforge-mc26.1.2] - 2026-09-10
 ### Fixed
 - Issue #7: fixed the range upgrades recipes to use the correct item
+
+## [2.2.0.5+neoforge-mc26.1.2] - 2026-09-22
+### New
+- Fresh textures
