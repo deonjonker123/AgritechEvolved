@@ -2,15 +2,11 @@ package com.misterd.agritechevolved.datagen.custom;
 
 import com.misterd.agritechevolved.block.ATEBlocks;
 import com.misterd.agritechevolved.item.ATEItems;
-import com.misterd.agritechevolved.recipe.CropRecipe;
-import com.misterd.agritechevolved.recipe.DropEntry;
 import com.misterd.agritechevolved.recipe.DurabilityShapelessRecipe;
-import com.misterd.agritechevolved.recipe.TreeRecipe;
 import com.misterd.agritechevolved.util.ATETags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.RecipeCategory;
@@ -19,7 +15,6 @@ import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.Items;
@@ -29,7 +24,6 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.block.WeatheringCopper;
 import net.neoforged.neoforge.common.Tags;
 
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public class ATERecipeProvider extends RecipeProvider {
