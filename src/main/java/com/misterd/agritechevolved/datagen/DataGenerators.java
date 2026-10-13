@@ -13,6 +13,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
+import net.neoforged.neoforge.data.event.GatherDataRegistryEntriesEvent;
 
 import java.util.List;
 import java.util.Set;
@@ -21,9 +22,9 @@ import java.util.concurrent.CompletableFuture;
 @EventBusSubscriber(modid = AgritechEvolved.MODID)
 public class DataGenerators {
 
-    private static RegistrySetBuilder reloadableRegistries() {
-        return new RegistrySetBuilder()
-                .add(Registries.LOOT_TABLE, new LootTableProvider(
+    @SubscribeEvent
+    public static void gatherRegistryEntries(GatherDataRegistryEntriesEvent event) {
+        event.add(Registries.LOOT_TABLE, new LootTableProvider(
                         Set.of(),
                         List.of(new LootTableProvider.SubProviderEntry(ATELootTableProvider::new, LootContextParamSets.BLOCK))
                 ))
@@ -35,8 +36,6 @@ public class DataGenerators {
         DataGenerator generator = event.getGenerator();
         PackOutput packOutput = generator.getPackOutput();
         CompletableFuture<HolderLookup.Provider> worldLookup = event.getWorldLookupProvider();
-
-        event.createReloadableRegistryObjects(reloadableRegistries());
 
         BlockTagsProvider blockTagsProvider = new ATEBlockTagProvider(packOutput, worldLookup);
         generator.addProvider(true, blockTagsProvider);
@@ -50,8 +49,6 @@ public class DataGenerators {
         DataGenerator generator = event.getGenerator();
         PackOutput packOutput = generator.getPackOutput();
         CompletableFuture<HolderLookup.Provider> worldLookup = event.getWorldLookupProvider();
-
-        event.createReloadableRegistryObjects(reloadableRegistries());
 
         BlockTagsProvider blockTagsProvider = new ATEBlockTagProvider(packOutput, worldLookup);
         generator.addProvider(true, blockTagsProvider);
