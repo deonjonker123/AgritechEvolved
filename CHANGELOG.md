@@ -84,3 +84,7 @@ All notable changes to this project will be documented here.
 ## [3.1.0.5+neoforge-mc26.2] - 2026-09-22
 ### Fixed
 - Fresh textures
+
+## [3.1.0.6+neoforge-mc26.2] - 2026-10-13
+### Fixed
+- Fixed planters stalling when output is full (Issue #10)
