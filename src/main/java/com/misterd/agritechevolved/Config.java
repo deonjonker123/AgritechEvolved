@@ -72,7 +72,7 @@ public class Config {
         machineConfig();
         COMMON_CONFIG = COMMON_BUILDER.build();
         SPEC = COMMON_CONFIG;
-        container.registerConfig(ModConfig.Type.COMMON, COMMON_CONFIG);
+        container.registerConfig(ModConfig.Type.LOCAL, COMMON_CONFIG);
     }
 
     private static void moduleConfig() {
