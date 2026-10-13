@@ -282,9 +282,18 @@ public class PlanterBlockEntity extends BlockEntity implements MenuProvider {
             }
         }
 
-        if (be.readyToHarvest && be.hasOutputSpace()) {
-            be.harvestPlant(state);
-            tryOutputItemsBelow(level, pos, be);
+        if (be.readyToHarvest) {
+            boolean hasSpace = be.hasOutputSpace();
+
+            if (!hasSpace && level.getGameTime() % 10 == 0) {
+                tryOutputItemsBelow(level, pos, be);
+                hasSpace = be.hasOutputSpace();
+            }
+
+            if (hasSpace) {
+                be.harvestPlant(state);
+                tryOutputItemsBelow(level, pos, be);
+            }
         }
     }
 
