@@ -210,8 +210,10 @@ public class BasicPlanterMenu extends AbstractContainerMenu {
                 ItemStack existing = be.getStack(index);
                 if (!existing.isEmpty())
                     be.inventory.extract(index, ItemResource.of(existing), existing.getCount(), tx);
-                if (!stack.isEmpty())
-                    be.inventory.insert(index, ItemResource.of(stack), stack.getCount(), tx);
+                if (!stack.isEmpty()) {
+                    long cap = be.inventory.getCapacityAsLong(index, ItemResource.of(stack));
+                    be.inventory.insert(index, ItemResource.of(stack), (int) Math.min(stack.getCount(), cap), tx);
+                }
                 tx.commit();
             }
             setChanged();
@@ -220,6 +222,11 @@ public class BasicPlanterMenu extends AbstractContainerMenu {
         @Override
         public boolean mayPlace(ItemStack stack) {
             return be.inventory.isValid(index, ItemResource.of(stack));
+        }
+
+        @Override
+        public int getMaxStackSize() {
+            return (index == 0 || index == 1) ? 1 : 64;
         }
 
         @Override
