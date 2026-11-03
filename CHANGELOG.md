@@ -82,6 +82,6 @@ All notable changes to this project will be documented here.
 ### Fixed
 - Fixed planters stalling when output is full (Issue #10)
 
-## [2.2.0.7+neoforge-mc26.1.2] - 2026-10-13
+## [2.2.0.7+neoforge-mc26.1.2] - 2026-11-03
 ### Fixed
 - Planter's soil slot will now always only take one soil item (Fixes issue #12)
