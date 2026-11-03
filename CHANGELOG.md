@@ -87,7 +87,11 @@ All notable changes to this project will be documented here.
 ## [4.0.0.1+neoforge-mc26.3] - 2026-09-22
 ### Hotfix
 - Recipes working again
-- 
+
 ## [4.0.0.2+neoforge-mc26.3] - 2026-10-13
 ### Fixed
 - Fixed planters stalling when output is full (Issue #10)
+
+## [4.0.0.3+neoforge-mc26.3] - 2026-11-03
+### Fixed
+- Planter's soil slot will now always only take one soil item (Fixes issue #12)
