@@ -371,6 +371,7 @@ public class AdvancedPlanterBlock extends BaseEntityBlock {
                 return InteractionResult.SUCCESS;
             }
         }
+        openGui(player, planter, pos);
         return InteractionResult.SUCCESS;
     }
 

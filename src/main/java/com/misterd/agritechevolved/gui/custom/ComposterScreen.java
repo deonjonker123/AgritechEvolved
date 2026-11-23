@@ -1,8 +1,6 @@
 package com.misterd.agritechevolved.gui.custom;
 
-import com.misterd.agritechevolved.compat.jei.ATJeiPlugin;
-import com.misterd.agritechevolved.compat.jei.CompostRecipeCategory;
-import mezz.jei.api.runtime.IJeiRuntime;
+import com.misterd.agritechevolved.compat.jei.JeiCompat;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -117,13 +115,9 @@ public class ComposterScreen extends AbstractContainerScreen<ComposterMenu> {
 
     @Override
     public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
-        if (event.button() == 0
-                && isOver(PROGRESS_BAR_X, PROGRESS_BAR_Y, PROGRESS_BAR_W, PROGRESS_BAR_H,
-                (int) event.x(), (int) event.y())) {
-            IJeiRuntime runtime = ATJeiPlugin.getJeiRuntime();
-            if (runtime != null && minecraft != null && minecraft.player != null) {
-                runtime.getRecipesGui().showTypes(List.of(CompostRecipeCategory.COMPOST_RECIPE_TYPE));
-            }
+        if (event.button() == 0 && JeiCompat.isLoaded()
+                && isOver(PROGRESS_BAR_X, PROGRESS_BAR_Y, PROGRESS_BAR_W, PROGRESS_BAR_H, (int) event.x(), (int) event.y())) {
+            JeiCompat.showCompostRecipes();
             return true;
         }
         return super.mouseClicked(event, doubleClick);

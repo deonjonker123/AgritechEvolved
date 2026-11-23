@@ -59,11 +59,12 @@ public class FertilizerSpreaderMenu extends AbstractContainerMenu {
 
     private void addDataSlots() {
         addDataSlot(new DataSlot() {
-            @Override
-            public int get() { return blockEntity.getEnergyStored(); }
-
-            @Override
-            public void set(int value) { lastEnergyStored = value; }
+            @Override public int get() { return blockEntity.getEnergyStored() & 0xFFFF; }
+            @Override public void set(int value) { lastEnergyStored = (lastEnergyStored & 0xFFFF0000) | (value & 0xFFFF); }
+        });
+        addDataSlot(new DataSlot() {
+            @Override public int get() { return (blockEntity.getEnergyStored() >> 16) & 0xFFFF; }
+            @Override public void set(int value) { lastEnergyStored = (lastEnergyStored & 0xFFFF) | ((value & 0xFFFF) << 16); }
         });
     }
 

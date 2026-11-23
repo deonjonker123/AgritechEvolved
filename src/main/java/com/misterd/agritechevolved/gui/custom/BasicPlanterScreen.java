@@ -1,8 +1,6 @@
 package com.misterd.agritechevolved.gui.custom;
 
-import com.misterd.agritechevolved.compat.jei.ATJeiPlugin;
-import com.misterd.agritechevolved.compat.jei.PlanterRecipeCategory;
-import mezz.jei.api.runtime.IJeiRuntime;
+import com.misterd.agritechevolved.compat.jei.JeiCompat;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -85,14 +83,11 @@ public class BasicPlanterScreen extends AbstractContainerScreen<BasicPlanterMenu
 
     @Override
     public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
-        if (event.button() == 0) {
+        if (event.button() == 0 && JeiCompat.isLoaded()) {
             double mx = event.x(), my = event.y();
             if (mx >= this.leftPos + 40 && mx <= this.leftPos + 46
                     && my >= this.topPos + 18 && my <= this.topPos + 71) {
-                IJeiRuntime runtime = ATJeiPlugin.getJeiRuntime();
-                if (runtime != null && minecraft != null && minecraft.player != null) {
-                    runtime.getRecipesGui().showTypes(List.of(PlanterRecipeCategory.PLANTER_RECIPE_TYPE));
-                }
+                JeiCompat.showPlanterRecipes();
                 return true;
             }
         }
