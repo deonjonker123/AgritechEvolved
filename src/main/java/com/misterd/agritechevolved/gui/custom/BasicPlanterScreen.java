@@ -1,5 +1,6 @@
 package com.misterd.agritechevolved.gui.custom;
 
+import com.misterd.agritechevolved.compat.jei.JeiCompat;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
@@ -73,5 +74,18 @@ public class BasicPlanterScreen extends AbstractContainerScreen<BasicPlanterMenu
         if (this.hoveredSlot != null && this.hoveredSlot == this.menu.slots.get(menuSlot) && !this.hoveredSlot.hasItem()) {
             guiGraphics.renderTooltip(this.font, Component.translatable(key), mouseX, mouseY);
         }
+    }
+
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        if (button == 0 && JeiCompat.isLoaded()) {
+            int guiX = (this.width - this.imageWidth) / 2;
+            int guiY = (this.height - this.imageHeight) / 2;
+            if (mouseX >= guiX + 40 && mouseX <= guiX + 46 && mouseY >= guiY + 18 && mouseY <= guiY + 71) {
+                JeiCompat.showPlanterRecipes();
+                return true;
+            }
+        }
+        return super.mouseClicked(mouseX, mouseY, button);
     }
 }

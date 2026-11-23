@@ -1,5 +1,6 @@
 package com.misterd.agritechevolved.gui.custom;
 
+import com.misterd.agritechevolved.compat.jei.JeiCompat;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
@@ -116,5 +117,18 @@ public class AdvancedPlanterScreen extends AbstractContainerScreen<AdvancedPlant
 
     private static boolean isHoveringWidget(int mouseX, int mouseY, int wx, int wy, int ww, int wh) {
         return mouseX >= wx && mouseX <= wx + ww && mouseY >= wy && mouseY <= wy + wh;
+    }
+
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        if (button == 0 && JeiCompat.isLoaded()) {
+            int x = (width - imageWidth) / 2;
+            int y = (height - imageHeight) / 2;
+            if (isHoveringWidget((int) mouseX, (int) mouseY, x + GROWTH_BAR_X, y + GROWTH_BAR_Y, GROWTH_BAR_W, GROWTH_BAR_H + 1)) {
+                JeiCompat.showPlanterRecipes();
+                return true;
+            }
+        }
+        return super.mouseClicked(mouseX, mouseY, button);
     }
 }

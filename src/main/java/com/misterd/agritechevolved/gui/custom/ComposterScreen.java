@@ -1,5 +1,6 @@
 package com.misterd.agritechevolved.gui.custom;
 
+import com.misterd.agritechevolved.compat.jei.JeiCompat;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
@@ -117,5 +118,14 @@ public class ComposterScreen extends AbstractContainerScreen<ComposterMenu> {
         int x = (width - imageWidth) / 2;
         int y = (height - imageHeight) / 2;
         return mouseX >= x + wx && mouseX <= x + wx + ww && mouseY >= y + wy && mouseY <= y + wy + wh;
+    }
+
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        if (button == 0 && JeiCompat.isLoaded() && isHovering(PROGRESS_BAR_X, PROGRESS_BAR_Y, PROGRESS_BAR_W, PROGRESS_BAR_H, (int) mouseX, (int) mouseY)) {
+            JeiCompat.showCompostRecipes();
+            return true;
+        }
+        return super.mouseClicked(mouseX, mouseY, button);
     }
 }
