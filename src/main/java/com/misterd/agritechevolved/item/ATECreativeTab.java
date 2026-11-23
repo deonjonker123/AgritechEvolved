@@ -1,0 +1,34 @@
+package com.misterd.agritechevolved.item;
+
+import com.misterd.agritechevolved.AgritechEvolved;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.RegistryObject;
+
+public class ATECreativeTab {
+    public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TAB = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, AgritechEvolved.MODID);
+
+    public static final RegistryObject<CreativeModeTab> AGRITECH_EVOLVED = CREATIVE_MODE_TAB.register("agritechevolved_creativetab",
+            () -> CreativeModeTab.builder().icon(() -> new ItemStack(ATEItems.BIOMASS.get()))
+                    .title(Component.translatable("creativetab.agritechevolved"))
+                    .displayItems((itemDisplayParameters, output) -> {
+                        output.accept(ATEItems.CRUDE_BIOMASS.get());
+                        output.accept(ATEItems.BIOMASS.get());
+                        output.accept(ATEItems.COMPACTED_BIOMASS.get());
+                        output.accept(ATEItems.YM_MK1.get());
+                        output.accept(ATEItems.YM_MK2.get());
+                        output.accept(ATEItems.YM_MK3.get());
+                        output.accept(ATEItems.SM_MK1.get());
+                        output.accept(ATEItems.SM_MK2.get());
+                        output.accept(ATEItems.SM_MK3.get());
+                        output.accept(ATEItems.CLOCHE.get());
+                    }).build());
+
+    public static void register(IEventBus eventBus) {
+        CREATIVE_MODE_TAB.register(eventBus);
+    }
+}
