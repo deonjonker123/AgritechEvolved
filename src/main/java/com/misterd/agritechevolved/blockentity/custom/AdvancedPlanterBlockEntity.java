@@ -543,13 +543,12 @@ public class AdvancedPlanterBlockEntity extends BlockEntity implements MenuProvi
         ItemStack plantStack = inventory.getStackInSlot(SLOT_PLANT);
         ItemStack soilStack = inventory.getStackInSlot(SLOT_SOIL);
         if (plantStack.isEmpty() || soilStack.isEmpty()) return;
-        float soilMod = getSoilGrowthModifier(soilStack);
-        float clocheMod = getClocheGrowthModifier();
-        int adjustedTime = Math.max(1, Math.round(Config.getPlanterBaseProcessingTime() / (soilMod * clocheMod)));
-        int boost = Math.max(1, Math.round(adjustedTime * 0.25F * speedMultiplier));
-        growthTicks = Math.min(adjustedTime, growthTicks + boost);
-        growthProgress = (int) ((float) growthTicks / adjustedTime * 100.0F);
-        if (growthTicks >= adjustedTime) { readyToHarvest = true; growthProgress = 100; }
+        float totalMod = getSoilGrowthModifier(soilStack) * getModuleSpeedModifier() * getClocheGrowthModifier() * speedMultiplier;
+        int growthTime = Math.max(1, Math.round(Config.getAdvancedPlanterBaseProcessingTime() / totalMod));
+        int boost = Math.max(1, Math.round(growthTime * 0.1F * speedMultiplier));
+        growthTicks = Math.min(growthTicks + boost, growthTime);
+        growthProgress = (int) (growthTicks / (float) growthTime * 100);
+        if (growthTicks >= growthTime) { readyToHarvest = true; growthProgress = 100; }
         lastGrowthStage = getGrowthStage();
         setChanged();
     }
