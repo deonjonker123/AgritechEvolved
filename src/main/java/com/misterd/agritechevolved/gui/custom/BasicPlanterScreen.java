@@ -1,9 +1,7 @@
 package com.misterd.agritechevolved.gui.custom;
 
-import com.misterd.agritechevolved.compat.jei.ATJeiPlugin;
-import com.misterd.agritechevolved.compat.jei.PlanterRecipeCategory;
+import com.misterd.agritechevolved.compat.jei.JeiCompat;
 import com.mojang.blaze3d.systems.RenderSystem;
-import mezz.jei.api.runtime.IJeiRuntime;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -19,14 +17,9 @@ public class BasicPlanterScreen extends AbstractContainerScreen<BasicPlanterMenu
 
     public BasicPlanterScreen(BasicPlanterMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
-        this.imageHeight = 171;
+        this.imageWidth = 176;
+        this.imageHeight = 172;
         this.inventoryLabelY = this.imageHeight - 94;
-    }
-
-    @Override
-    protected void init() {
-        super.init();
-        this.titleLabelX = (this.imageWidth - this.font.width(this.title)) / 2;
     }
 
     @Override
@@ -40,9 +33,9 @@ public class BasicPlanterScreen extends AbstractContainerScreen<BasicPlanterMenu
 
         float growthProgress = this.menu.blockEntity.getGrowthProgress();
         if (growthProgress > 0.0F) {
-            int progressBarHeight = (int) (52.0F * growthProgress);
-            int progressBarY = y + 18 + 52 - progressBarHeight;
-            guiGraphics.blit(GUI_TEXTURE, x + 40, progressBarY, 176, 52 - progressBarHeight, 6, progressBarHeight);
+            int barHeight = (int) (54.0F * growthProgress);
+            int barY = y + 17 + 54 - barHeight;
+            guiGraphics.blit(GUI_TEXTURE, x + 40, barY, 176, 54 - barHeight, 6, barHeight);
         }
     }
 
@@ -64,21 +57,26 @@ public class BasicPlanterScreen extends AbstractContainerScreen<BasicPlanterMenu
                     Component.literal(String.format("%.1f%%", progress * 100.0F)).withStyle(ChatFormatting.GREEN),
                     Component.translatable("tooltip.agritechevolved.view_recipes").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC)
             ), x, y);
+            return;
+        }
+        renderEmptySlotTooltip(guiGraphics, x, y, 36, "tooltip.agritechevolved.slot.plant");
+        renderEmptySlotTooltip(guiGraphics, x, y, 37, "tooltip.agritechevolved.slot.soil");
+        renderEmptySlotTooltip(guiGraphics, x, y, 38, "tooltip.agritechevolved.slot.fertilizer");
+    }
+
+    private void renderEmptySlotTooltip(GuiGraphics guiGraphics, int mouseX, int mouseY, int menuSlot, String key) {
+        if (this.hoveredSlot != null && this.hoveredSlot == this.menu.slots.get(menuSlot) && !this.hoveredSlot.hasItem()) {
+            guiGraphics.renderTooltip(this.font, Component.translatable(key), mouseX, mouseY);
         }
     }
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if (button == 0) {
+        if (button == 0 && JeiCompat.isLoaded()) {
             int guiX = (this.width - this.imageWidth) / 2;
             int guiY = (this.height - this.imageHeight) / 2;
             if (mouseX >= guiX + 40 && mouseX <= guiX + 46 && mouseY >= guiY + 18 && mouseY <= guiY + 71) {
-                if (this.minecraft != null && this.minecraft.player != null) {
-                    IJeiRuntime runtime = ATJeiPlugin.getJeiRuntime();
-                    if (runtime != null) {
-                        runtime.getRecipesGui().showTypes(List.of(PlanterRecipeCategory.PLANTER_RECIPE_TYPE));
-                    }
-                }
+                JeiCompat.showPlanterRecipes();
                 return true;
             }
         }

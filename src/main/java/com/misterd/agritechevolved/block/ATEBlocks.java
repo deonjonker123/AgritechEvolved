@@ -334,6 +334,20 @@ public class ATEBlocks {
                     .noOcclusion()
                     .requiresCorrectToolForDrops()));
 
+    public static final DeferredBlock<Block> SILO = registerBlock("silo",
+            () -> new SiloBlock(BlockBehaviour.Properties.of()
+                    .strength(2.0F, 3.0F)
+                    .sound(SoundType.STONE)
+                    .noOcclusion()
+                    .requiresCorrectToolForDrops()));
+
+    public static final DeferredBlock<Block> FERT_SPREADER = registerBlock("fertilizer_spreader",
+            () -> new FertilizerSpreaderBlock(BlockBehaviour.Properties.of()
+                    .strength(2.0F, 3.0F)
+                    .sound(SoundType.STONE)
+                    .noOcclusion()
+                    .requiresCorrectToolForDrops()));
+
     private static <T extends Block> DeferredBlock<T> registerBlock(String name, Supplier<T> block) {
         DeferredBlock<T> toReturn = BLOCKS.register(name, block);
         registerBlockItem(name, toReturn);

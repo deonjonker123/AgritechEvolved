@@ -56,6 +56,17 @@ public class Config {
     public static ModConfigSpec.IntValue CAPACITOR_T3_BUFFER;
     public static ModConfigSpec.IntValue CAPACITOR_T3_TRANSFER_RATE;
 
+    public static ModConfigSpec.IntValue SILO_BASE_RANGE;
+    public static ModConfigSpec.IntValue SILO_ENERGY_BUFFER;
+    public static ModConfigSpec.IntValue SILO_BASE_POWER_CONSUMPTION;
+    public static ModConfigSpec.IntValue SILO_PULL_INTERVAL;
+
+    public static ModConfigSpec.IntValue FERTILIZER_SPREADER_BASE_RANGE;
+    public static ModConfigSpec.IntValue FERTILIZER_SPREADER_ENERGY_BUFFER;
+    public static ModConfigSpec.IntValue FERTILIZER_SPREADER_BASE_POWER_CONSUMPTION;
+    public static ModConfigSpec.IntValue FERTILIZER_SPREADER_PUSH_INTERVAL;
+    public static ModConfigSpec.IntValue FERTILIZER_SPREADER_PUSH_AMOUNT;
+
     public static void register(ModContainer container) {
         moduleConfig();
         machineConfig();
@@ -94,6 +105,27 @@ public class Config {
         composterConfig();
         burnerConfig();
         capacitorConfig();
+        siloConfig();
+        fertilizerSpreaderConfig();
+        COMMON_BUILDER.pop();
+    }
+
+    private static void siloConfig() {
+        COMMON_BUILDER.comment("Silo Configuration").push("silo");
+        SILO_BASE_RANGE = COMMON_BUILDER.comment("Base range for Silo (blocks)").defineInRange("base_range", 16, 4, 64);
+        SILO_ENERGY_BUFFER = COMMON_BUILDER.comment("Energy buffer capacity for Silo (RF)").defineInRange("energy_buffer", 100000, 1000, 1000000);
+        SILO_BASE_POWER_CONSUMPTION = COMMON_BUILDER.comment("Base power consumption for Silo (RF/t)").defineInRange("base_power_consumption", 128, 1, 100000);
+        SILO_PULL_INTERVAL = COMMON_BUILDER.comment("How often the Silo pulls from planters in range (ticks)").defineInRange("pull_interval", 60, 2, 6000);
+        COMMON_BUILDER.pop();
+    }
+
+    private static void fertilizerSpreaderConfig() {
+        COMMON_BUILDER.comment("Fertilizer Spreader Configuration").push("fertilizer_spreader");
+        FERTILIZER_SPREADER_BASE_RANGE = COMMON_BUILDER.comment("Base range for Fertilizer Spreader (blocks)").defineInRange("base_range", 16, 4, 64);
+        FERTILIZER_SPREADER_ENERGY_BUFFER = COMMON_BUILDER.comment("Energy buffer capacity for Fertilizer Spreader (RF)").defineInRange("energy_buffer", 100000, 1000, 1000000);
+        FERTILIZER_SPREADER_BASE_POWER_CONSUMPTION = COMMON_BUILDER.comment("Base power consumption for Fertilizer Spreader (RF/t)").defineInRange("base_power_consumption", 128, 1, 100000);
+        FERTILIZER_SPREADER_PUSH_INTERVAL = COMMON_BUILDER.comment("How often the Fertilizer Spreader pushes to planters in range (ticks)").defineInRange("push_interval", 60, 2, 6000);
+        FERTILIZER_SPREADER_PUSH_AMOUNT = COMMON_BUILDER.comment("How many fertilizer items the Fertilizer Spreader pushes per planter per push").defineInRange("push_amount", 8, 1, 64);
         COMMON_BUILDER.pop();
     }
 
@@ -188,6 +220,17 @@ public class Config {
     public static int getCapacitorT2TransferRate() { return CAPACITOR_T2_TRANSFER_RATE.get(); }
     public static int getCapacitorT3Buffer() { return CAPACITOR_T3_BUFFER.get(); }
     public static int getCapacitorT3TransferRate() { return CAPACITOR_T3_TRANSFER_RATE.get(); }
+
+    public static int getSiloBaseRange() { return SILO_BASE_RANGE.get(); }
+    public static int getSiloEnergyBuffer() { return SILO_ENERGY_BUFFER.get(); }
+    public static int getSiloBasePowerConsumption() { return SILO_BASE_POWER_CONSUMPTION.get(); }
+    public static int getSiloPullInterval() { return SILO_PULL_INTERVAL.get(); }
+
+    public static int getFertilizerSpreaderBaseRange() { return FERTILIZER_SPREADER_BASE_RANGE.get(); }
+    public static int getFertilizerSpreaderEnergyBuffer() { return FERTILIZER_SPREADER_ENERGY_BUFFER.get(); }
+    public static int getFertilizerSpreaderBasePowerConsumption() { return FERTILIZER_SPREADER_BASE_POWER_CONSUMPTION.get(); }
+    public static int getFertilizerSpreaderPushInterval() { return FERTILIZER_SPREADER_PUSH_INTERVAL.get(); }
+    public static int getFertilizerSpreaderPushAmount() { return FERTILIZER_SPREADER_PUSH_AMOUNT.get(); }
 
     public static void loadConfig() {
         LOGGER.info("AgriTech: Evolved config reloaded");

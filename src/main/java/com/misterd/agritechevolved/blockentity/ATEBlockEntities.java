@@ -71,6 +71,14 @@ public class ATEBlockEntities {
             = BLOCK_ENTITIES.register("burner_be", () ->  BlockEntityType.Builder.of(
             BiomassBurnerBlockEntity::new, ATEBlocks.BIOMASS_BURNER.get()).build(null));
 
+    public static final Supplier<BlockEntityType<SiloBlockEntity>> SILO_BE
+            = BLOCK_ENTITIES.register("silo_be", () -> BlockEntityType.Builder.of(
+            SiloBlockEntity::new, ATEBlocks.SILO.get()).build(null));
+
+    public static final Supplier<BlockEntityType<FertilizerSpreaderBlockEntity>> FERTILIZER_SPREADER_BE
+            = BLOCK_ENTITIES.register("fertilizer_spreader_be", () -> BlockEntityType.Builder.of(
+            FertilizerSpreaderBlockEntity::new, ATEBlocks.FERT_SPREADER.get()).build(null));
+
     private static void registerCapabilities(RegisterCapabilitiesEvent event) {
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, PLANTER_BLOCK_BE.get(),
                 (blockEntity, direction) -> {
@@ -88,7 +96,6 @@ public class ATEBlockEntities {
 
                     return null;
                 });
-        CapacitorBlockEntity.registerCapabilities(event);
     }
 
     public static void register(IEventBus eventBus) {

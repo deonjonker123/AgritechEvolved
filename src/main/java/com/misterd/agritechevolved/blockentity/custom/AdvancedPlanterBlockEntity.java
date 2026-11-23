@@ -264,7 +264,7 @@ public class AdvancedPlanterBlockEntity extends BlockEntity implements MenuProvi
     public IItemHandler getItemHandler(@Nullable Direction side) {
         if (side == Direction.DOWN) return outputHandler;
         return new IItemHandler() {
-            @Override public int getSlots() { return 12; }
+            @Override public int getSlots() { return 1 + (SLOT_OUTPUT_MAX - SLOT_OUTPUT_MIN + 1); }
             @Override public ItemStack getStackInSlot(int slot) {
                 return slot == 0 ? inventory.getStackInSlot(SLOT_FERTILIZER) : inventory.getStackInSlot(slot + SLOT_FERTILIZER);
             }
@@ -438,6 +438,8 @@ public class AdvancedPlanterBlockEntity extends BlockEntity implements MenuProvi
 
     public float getGrowthProgress() { return growthProgress / 100.0F; }
 
+    public boolean isReadyToHarvest() { return readyToHarvest; }
+
     public int getGrowthStage() {
         return isTree() ? (growthProgress > 50 ? 1 : 0) : Math.min(8, (int)(growthProgress / 12.5F));
     }
@@ -526,16 +528,15 @@ public class AdvancedPlanterBlockEntity extends BlockEntity implements MenuProvi
 
     public void applyManualFertilizer(float speedMultiplier) {
         if (readyToHarvest) return;
-        ItemStack plantStack = inventory.getStackInSlot(0);
-        ItemStack soilStack = inventory.getStackInSlot(1);
+        ItemStack plantStack = inventory.getStackInSlot(SLOT_PLANT);
+        ItemStack soilStack = inventory.getStackInSlot(SLOT_SOIL);
         if (plantStack.isEmpty() || soilStack.isEmpty()) return;
-        float soilMod = getSoilGrowthModifier(soilStack);
-        float clocheMod = getClocheGrowthModifier();
-        int adjustedTime = Math.max(1, Math.round(Config.getPlanterBaseProcessingTime() / (soilMod * clocheMod)));
-        int boost = Math.max(1, Math.round(adjustedTime * 0.25F * speedMultiplier));
-        growthTicks = Math.min(adjustedTime, growthTicks + boost);
-        growthProgress = (int) ((float) growthTicks / adjustedTime * 100.0F);
-        if (growthTicks >= adjustedTime) { readyToHarvest = true; growthProgress = 100; }
+        float totalMod = getSoilGrowthModifier(soilStack) * getModuleSpeedModifier() * getClocheGrowthModifier() * speedMultiplier;
+        int growthTime = Math.max(1, Math.round(Config.getAdvancedPlanterBaseProcessingTime() / totalMod));
+        int boost = Math.max(1, Math.round(growthTime * 0.1F * speedMultiplier));
+        growthTicks = Math.min(growthTicks + boost, growthTime);
+        growthProgress = (int) (growthTicks / (float) growthTime * 100);
+        if (growthTicks >= growthTime) { readyToHarvest = true; growthProgress = 100; }
         lastGrowthStage = getGrowthStage();
         setChanged();
     }

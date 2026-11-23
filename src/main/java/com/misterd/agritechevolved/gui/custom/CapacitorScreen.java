@@ -23,14 +23,13 @@ public class CapacitorScreen extends AbstractContainerScreen<CapacitorMenu> {
 
     public CapacitorScreen(CapacitorMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
-        this.imageHeight = 153;
+        this.imageHeight = 154;
         this.inventoryLabelY = imageHeight - 94;
     }
 
     @Override
     protected void init() {
         super.init();
-        titleLabelX = (imageWidth - font.width(title)) / 2;
     }
 
     @Override
@@ -52,7 +51,7 @@ public class CapacitorScreen extends AbstractContainerScreen<CapacitorMenu> {
         if (maxEnergy > 0) {
             int fillWidth = (int) (BAR_W * (double) energy / maxEnergy);
             if (fillWidth > 0) {
-                guiGraphics.blit(GUI_TEXTURE, x + BAR_X, y + BAR_Y, 0, 153, fillWidth, BAR_H);
+                guiGraphics.blit(GUI_TEXTURE, x + BAR_X, y + BAR_Y, 0, 154, fillWidth, BAR_H);
             }
         }
     }

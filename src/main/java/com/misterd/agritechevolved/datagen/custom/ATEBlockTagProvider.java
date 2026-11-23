@@ -43,6 +43,9 @@ public class ATEBlockTagProvider extends BlockTagsProvider {
 
                 .add(ATEBlocks.COMPACTED_BIOMASS_BLOCK.get())
 
+                .add(ATEBlocks.SILO.get())
+                .add(ATEBlocks.FERT_SPREADER.get())
+
                 .add(ATEBlocks.TERRACOTTA_PLANTER.get())
                 .add(ATEBlocks.BLACK_TERRACOTTA_PLANTER.get())
                 .add(ATEBlocks.BLUE_TERRACOTTA_PLANTER.get())

@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "F": {
+      "tag": "c:chests"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "R": {
+      "item": "minecraft:observer"
+    }
+  },
+  "pattern": [
+    "III",
+    "IFI",
+    "IRI"
+  ],
+  "result": {
+    "count": 1,
+    "id": "agritechevolved:silo"
+  }
+}

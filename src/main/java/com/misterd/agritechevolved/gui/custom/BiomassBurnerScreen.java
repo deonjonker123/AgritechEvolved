@@ -16,17 +16,17 @@ import java.util.Locale;
 public class BiomassBurnerScreen extends AbstractContainerScreen<BiomassBurnerMenu> {
 
     private static final ResourceLocation GUI_TEXTURE = ResourceLocation.fromNamespaceAndPath("agritechevolved", "textures/gui/burner_gui.png");
-    private static final int PROGRESS_BAR_X = 62;
-    private static final int PROGRESS_BAR_Y = 59;
-    private static final int PROGRESS_BAR_W = 52;
-    private static final int PROGRESS_BAR_H = 6;
-    private static final int PROGRESS_BAR_TEX_X = 0;
-    private static final int PROGRESS_BAR_TEX_Y = 166;
-    private static final int ENERGY_BAR_X = 158;
-    private static final int ENERGY_BAR_Y = 15;
-    private static final int ENERGY_BAR_W = 10;
-    private static final int ENERGY_BAR_H = 52;
-    private static final int ENERGY_BAR_TEX_X = 176;
+    private static final int PROGRESS_BAR_X = 103;
+    private static final int PROGRESS_BAR_Y = 28;
+    private static final int PROGRESS_BAR_W = 6;
+    private static final int PROGRESS_BAR_H = 24;
+    private static final int PROGRESS_BAR_TEX_X = 176;
+    private static final int PROGRESS_BAR_TEX_Y = 0;
+    private static final int ENERGY_BAR_X = 163;
+    private static final int ENERGY_BAR_Y = 14;
+    private static final int ENERGY_BAR_W = 6;
+    private static final int ENERGY_BAR_H = 54;
+    private static final int ENERGY_BAR_TEX_X = 182;
     private static final int FUEL_SLOT_X = 79;
     private static final int FUEL_SLOT_Y = 31;
     private static final int FUEL_SLOT_W = 18;
@@ -35,20 +35,13 @@ public class BiomassBurnerScreen extends AbstractContainerScreen<BiomassBurnerMe
     public BiomassBurnerScreen(BiomassBurnerMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
         this.imageWidth = 176;
-        this.imageHeight = 166;
-        this.inventoryLabelY = imageHeight - 96;
+        this.imageHeight = 165;
+        this.inventoryLabelY = imageHeight - 94;
     }
 
     @Override
     protected void init() {
         super.init();
-        titleLabelX = (imageWidth - font.width(title)) / 2;
-    }
-
-    @Override
-    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        super.render(guiGraphics, mouseX, mouseY, partialTick);
-        renderTooltip(guiGraphics, mouseX, mouseY);
     }
 
     @Override
@@ -62,9 +55,9 @@ public class BiomassBurnerScreen extends AbstractContainerScreen<BiomassBurnerMe
         int progress = menu.getProgress();
         int maxProgress = menu.getMaxProgress();
         if (maxProgress > 0) {
-            int filled = (int) (PROGRESS_BAR_W * (double) progress / maxProgress);
+            int filled = (int) (PROGRESS_BAR_H * (double) progress / maxProgress);
             if (filled > 0) {
-                guiGraphics.blit(GUI_TEXTURE, x + PROGRESS_BAR_X, y + PROGRESS_BAR_Y, PROGRESS_BAR_TEX_X, PROGRESS_BAR_TEX_Y, filled, PROGRESS_BAR_H);
+                guiGraphics.blit(GUI_TEXTURE, x + PROGRESS_BAR_X, y + PROGRESS_BAR_Y + PROGRESS_BAR_H - filled, PROGRESS_BAR_TEX_X, PROGRESS_BAR_TEX_Y + PROGRESS_BAR_H - filled, PROGRESS_BAR_W, filled);
             }
         }
         int energy = menu.getEnergyStored();
@@ -75,6 +68,12 @@ public class BiomassBurnerScreen extends AbstractContainerScreen<BiomassBurnerMe
                 guiGraphics.blit(GUI_TEXTURE, x + ENERGY_BAR_X, y + ENERGY_BAR_Y + ENERGY_BAR_H - filled, ENERGY_BAR_TEX_X, ENERGY_BAR_H - filled, ENERGY_BAR_W, filled);
             }
         }
+    }
+
+    @Override
+    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+        super.render(guiGraphics, mouseX, mouseY, partialTick);
+        renderTooltip(guiGraphics, mouseX, mouseY);
     }
 
     @Override

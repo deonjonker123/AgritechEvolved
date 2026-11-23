@@ -1,9 +1,7 @@
 package com.misterd.agritechevolved.gui.custom;
 
-import com.misterd.agritechevolved.compat.jei.ATJeiPlugin;
-import com.misterd.agritechevolved.compat.jei.PlanterRecipeCategory;
+import com.misterd.agritechevolved.compat.jei.JeiCompat;
 import com.mojang.blaze3d.systems.RenderSystem;
-import mezz.jei.api.runtime.IJeiRuntime;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -19,29 +17,22 @@ import java.util.Locale;
 public class AdvancedPlanterScreen extends AbstractContainerScreen<AdvancedPlanterMenu> {
 
     private static final ResourceLocation GUI_TEXTURE = ResourceLocation.fromNamespaceAndPath("agritechevolved", "textures/gui/advanced_planter_gui.png");
-    private static final int GROWTH_BAR_X = 40;
-    private static final int GROWTH_BAR_Y = 19;
+    private static final int GROWTH_BAR_X = 31;
+    private static final int GROWTH_BAR_Y = 18;
     private static final int GROWTH_BAR_W = 6;
-    private static final int GROWTH_BAR_H = 52;
-    private static final int GROWTH_BAR_TEX_X = 222;
-    private static final int ENERGY_BAR_X = 194;
-    private static final int ENERGY_BAR_Y = 19;
-    private static final int ENERGY_BAR_W = 10;
-    private static final int ENERGY_BAR_H = 52;
-    private static final int ENERGY_BAR_TEX_X = 212;
+    private static final int GROWTH_BAR_H = 54;
+    private static final int GROWTH_BAR_TEX_X = 176;
+    private static final int ENERGY_BAR_X = 163;
+    private static final int ENERGY_BAR_Y = 18;
+    private static final int ENERGY_BAR_W = 6;
+    private static final int ENERGY_BAR_H = 54;
+    private static final int ENERGY_BAR_TEX_X = 182;
 
     public AdvancedPlanterScreen(AdvancedPlanterMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
-        this.imageWidth = 212;
-        this.imageHeight = 170;
-        this.inventoryLabelX = 26;
-        this.inventoryLabelY = imageHeight - 92;
-    }
-
-    @Override
-    protected void init() {
-        super.init();
-        titleLabelX = (imageWidth - font.width(title)) / 2;
+        this.imageWidth = 176;
+        this.imageHeight = 172;
+        this.inventoryLabelY = imageHeight - 94;
     }
 
     @Override
@@ -65,7 +56,7 @@ public class AdvancedPlanterScreen extends AbstractContainerScreen<AdvancedPlant
     private void renderGrowthBar(GuiGraphics guiGraphics, int x, int y) {
         float progress = menu.getGrowthProgress();
         if (progress <= 0.0F) return;
-        int filledH = (int)(GROWTH_BAR_H * progress);
+        int filledH = (int) (GROWTH_BAR_H * progress);
         int barY = y + GROWTH_BAR_Y + GROWTH_BAR_H - filledH;
         guiGraphics.blit(GUI_TEXTURE, x + GROWTH_BAR_X, barY, GROWTH_BAR_TEX_X, GROWTH_BAR_H - filledH, GROWTH_BAR_W, filledH);
     }
@@ -74,7 +65,7 @@ public class AdvancedPlanterScreen extends AbstractContainerScreen<AdvancedPlant
         int energy = menu.getEnergyStored();
         int maxEnergy = menu.getMaxEnergyStored();
         if (maxEnergy <= 0) return;
-        int filledH = (int)(ENERGY_BAR_H * ((float) energy / maxEnergy));
+        int filledH = (int) (ENERGY_BAR_H * ((float) energy / maxEnergy));
         int barY = y + ENERGY_BAR_Y + ENERGY_BAR_H - filledH;
         guiGraphics.blit(GUI_TEXTURE, x + ENERGY_BAR_X, barY, ENERGY_BAR_TEX_X, ENERGY_BAR_H - filledH, ENERGY_BAR_W, filledH);
     }
@@ -91,6 +82,7 @@ public class AdvancedPlanterScreen extends AbstractContainerScreen<AdvancedPlant
                     Component.literal(String.format("%.1f%%", progress * 100.0F)).withStyle(ChatFormatting.GREEN),
                     Component.translatable("tooltip.agritechevolved.view_recipes").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC)
             ), mouseX, mouseY);
+            return;
         }
         if (isHoveringWidget(mouseX, mouseY, x + ENERGY_BAR_X, y + ENERGY_BAR_Y, ENERGY_BAR_W, ENERGY_BAR_H + 1)) {
             int energy = menu.getEnergyStored();
@@ -100,19 +92,28 @@ public class AdvancedPlanterScreen extends AbstractContainerScreen<AdvancedPlant
                     Component.translatable("tooltip.agritechevolved.stored_energy"),
                     Component.literal(fmt.format(energy) + " / " + fmt.format(maxEnergy) + " RF").withStyle(ChatFormatting.YELLOW)
             ), mouseX, mouseY);
+            return;
+        }
+        renderEmptySlotTooltip(guiGraphics, mouseX, mouseY, 36, "tooltip.agritechevolved.slot.plant");
+        renderEmptySlotTooltip(guiGraphics, mouseX, mouseY, 37, "tooltip.agritechevolved.slot.soil");
+        renderEmptySlotTooltip(guiGraphics, mouseX, mouseY, 38, "tooltip.agritechevolved.slot.upgrade_1");
+        renderEmptySlotTooltip(guiGraphics, mouseX, mouseY, 39, "tooltip.agritechevolved.slot.upgrade_2");
+        renderEmptySlotTooltip(guiGraphics, mouseX, mouseY, 40, "tooltip.agritechevolved.slot.fertilizer");
+    }
+
+    private void renderEmptySlotTooltip(GuiGraphics guiGraphics, int mouseX, int mouseY, int menuSlot, String key) {
+        if (hoveredSlot != null && hoveredSlot == menu.slots.get(menuSlot) && !hoveredSlot.hasItem()) {
+            guiGraphics.renderTooltip(font, Component.translatable(key), mouseX, mouseY);
         }
     }
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if (button == 0) {
+        if (button == 0 && JeiCompat.isLoaded()) {
             int x = (width - imageWidth) / 2;
             int y = (height - imageHeight) / 2;
             if (isHoveringWidget((int) mouseX, (int) mouseY, x + GROWTH_BAR_X, y + GROWTH_BAR_Y, GROWTH_BAR_W, GROWTH_BAR_H + 1)) {
-                IJeiRuntime runtime = ATJeiPlugin.getJeiRuntime();
-                if (runtime != null && minecraft != null && minecraft.player != null) {
-                    runtime.getRecipesGui().showTypes(List.of(PlanterRecipeCategory.PLANTER_RECIPE_TYPE));
-                }
+                JeiCompat.showPlanterRecipes();
                 return true;
             }
         }

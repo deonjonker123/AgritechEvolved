@@ -62,6 +62,8 @@ public class ATELootTableProvider extends BlockLootSubProvider {
         dropSelf(ATEBlocks.YELLOW_TERRACOTTA_PLANTER.get());
         add(ATEBlocks.INFUSED_FARMLAND.get(), createInfusedFarmlandTable());
         dropSelf(ATEBlocks.MULCH.get());
+        dropSelf(ATEBlocks.SILO.get());
+        dropSelf(ATEBlocks.FERT_SPREADER.get());
     }
 
     private LootTable.Builder createInfusedFarmlandTable() {
