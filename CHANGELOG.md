@@ -92,3 +92,7 @@ All notable changes to this project will be documented here.
 ## [3.1.0.7+neoforge-mc26.2] - 2026-11-03
 ### Fixed
 - Planter's soil slot will now always only take one soil item (Fixes issue #12)
+
+## [3.1.0.8+neoforge-mc26.2] - 2026-11-24
+### Fixed
+- Planter's soil slot will now always only take one soil item (Fixes issue #12)

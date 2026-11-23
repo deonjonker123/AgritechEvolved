@@ -53,37 +53,20 @@ public class BiomassBurnerMenu extends AbstractContainerMenu {
 
     private void addDataSlots() {
         addDataSlot(new DataSlot() {
-            @Override
-            public int get() {
-                return blockEntity.getEnergyStored();
-            }
-
-            @Override
-            public void set(int value) {
-                lastEnergy = value;
-            }
+            @Override public int get() { return blockEntity.getEnergyStored() & 0xFFFF; }
+            @Override public void set(int value) { lastEnergy = (lastEnergy & 0xFFFF0000) | (value & 0xFFFF); }
         });
         addDataSlot(new DataSlot() {
-            @Override
-            public int get() {
-                return blockEntity.getProgress();
-            }
-
-            @Override
-            public void set(int value) {
-                lastProgress = value;
-            }
+            @Override public int get() { return (blockEntity.getEnergyStored() >> 16) & 0xFFFF; }
+            @Override public void set(int value) { lastEnergy = (lastEnergy & 0xFFFF) | ((value & 0xFFFF) << 16); }
         });
         addDataSlot(new DataSlot() {
-            @Override
-            public int get() {
-                return blockEntity.getMaxProgress();
-            }
-
-            @Override
-            public void set(int value) {
-                lastMaxProgress = value;
-            }
+            @Override public int get() { return blockEntity.getProgress(); }
+            @Override public void set(int value) { lastProgress = value; }
+        });
+        addDataSlot(new DataSlot() {
+            @Override public int get() { return blockEntity.getMaxProgress(); }
+            @Override public void set(int value) { lastMaxProgress = value; }
         });
     }
 
