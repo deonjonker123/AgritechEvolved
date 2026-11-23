@@ -13,6 +13,10 @@ base.archivesName = mod_id
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
+def mixinSrgToOfficial = layout.buildDirectory.file(
+        'mappings/srg-to-official.srg'
+)
+
 sourceSets.main.resources {
     srcDir 'src/generated/resources'
     exclude '.cache'
@@ -24,6 +28,9 @@ minecraft {
     runs {
         configureEach {
             workingDir.convention layout.projectDirectory.dir('run')
+
+            systemProperty 'mixin.env.remapRefMap', 'true'
+            systemProperty 'mixin.env.refMapRemappingFile', mixinSrgToOfficial.get().asFile.absolutePath
         }
 
         register('client') {
@@ -53,6 +60,10 @@ repositories {
     maven {
         name = "Jared's maven"
         url = 'https://maven.blamejared.com/'
+        content {
+            includeGroup 'mezz.jei'
+            includeGroup 'net.mezzdev.config'
+        }
     }
     maven {
         name = 'Modrinth'
@@ -70,7 +81,7 @@ dependencies {
     runtimeOnly renamer.dependency("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
     compileOnly renamer.dependency("net.mezzdev.config:mezz_config-${minecraft_version}-config-api:${mezz_config_version}")
     runtimeOnly renamer.dependency("net.mezzdev.config:mezz_config-${minecraft_version}-forge:${mezz_config_version}")
-    compileOnly renamer.dependency("maven.modrinth:jade:${jade_version}")
+    implementation renamer.dependency("maven.modrinth:jade:${project.jade_version}")
 }
 
 tasks.named('processResources', ProcessResources) {
@@ -104,6 +115,130 @@ tasks.named('jar', Jar) {
 
 renamer.mappings.from minecraft.dependency.toSrgFile
 
+def officialToSrgMappings = minecraft.dependency.toSrgFile
+
+tasks.register('generateMixinSrgToOfficial') {
+    inputs.file(officialToSrgMappings)
+    outputs.file(mixinSrgToOfficial)
+
+    doLast {
+        def classMappings = [:]
+        def memberMappings = []
+
+        def currentOfficialClass = null
+        def currentSrgClass = null
+
+        def inputFile = officialToSrgMappings.get()
+
+        new java.util.zip.GZIPInputStream(
+                inputFile.newInputStream()
+        ).withReader('UTF-8') { reader ->
+
+            reader.eachLine { rawLine ->
+                if (!rawLine.trim() || rawLine.startsWith('tsrg2')) {
+                    return
+                }
+
+                def parts = rawLine.trim().split(/\s+/)
+
+                if (!rawLine.startsWith(' ') &&
+                        !rawLine.startsWith('\t')) {
+
+                    if (parts.length == 2 &&
+                            !parts[0].endsWith('/') &&
+                            !parts[1].endsWith('/')) {
+
+                        currentOfficialClass = parts[0]
+                        currentSrgClass = parts[1]
+
+                        classMappings[currentOfficialClass] =
+                                currentSrgClass
+                    }
+
+                    return
+                }
+
+                if (parts.length != 3 ||
+                        currentOfficialClass == null) {
+                    return
+                }
+
+                def officialName = parts[0]
+                def descriptor = parts[1]
+                def srgName = parts[2]
+
+                if (descriptor.startsWith('(')) {
+                    def srgDescriptor = descriptor.replaceAll(
+                            /L([^;]+);/
+                    ) { match, className ->
+                        "L${classMappings.get(className) ?: className};"
+                    }
+
+                    memberMappings << [
+                            type: 'MD',
+                            srgOwner: currentSrgClass,
+                            srgName: srgName,
+                            srgDescriptor: srgDescriptor,
+                            officialOwner: currentOfficialClass,
+                            officialName: officialName,
+                            officialDescriptor: descriptor
+                    ]
+                }
+                else {
+                    memberMappings << [
+                            type: 'FD',
+                            srgOwner: currentSrgClass,
+                            srgName: srgName,
+                            officialOwner: currentOfficialClass,
+                            officialName: officialName
+                    ]
+                }
+            }
+        }
+
+        def outputFile = mixinSrgToOfficial.get().asFile
+        outputFile.parentFile.mkdirs()
+
+        outputFile.withWriter('UTF-8') { writer ->
+
+            classMappings.each { officialName, srgName ->
+                writer.println("CL: ${srgName} ${officialName}")
+            }
+
+            memberMappings.each { mapping ->
+                if (mapping.type == 'MD') {
+                    writer.println(
+                            "MD: ${mapping.srgOwner}/${mapping.srgName} " +
+                                    "${mapping.srgDescriptor} " +
+                                    "${mapping.officialOwner}/${mapping.officialName} " +
+                                    "${mapping.officialDescriptor}"
+                    )
+                } else {
+                    writer.println(
+                            "FD: ${mapping.srgOwner}/${mapping.srgName} " +
+                                    "${mapping.officialOwner}/${mapping.officialName}"
+                    )
+                }
+            }
+        }
+
+        println "Generated Mixin mappings: ${outputFile.absolutePath}"
+        println "Class mappings: ${classMappings.size()}"
+        println "Member mappings: ${memberMappings.size()}"
+    }
+}
+
+tasks.matching {
+    it.name in [
+            'runClient',
+            'runServer',
+            'runGameTestServer',
+            'runData'
+    ]
+}.configureEach {
+    dependsOn tasks.named('generateMixinSrgToOfficial')
+}
+
 renamer.classes(tasks.named('jar', Jar)) {
     archiveClassifier = ''
 }
@@ -115,7 +250,6 @@ publishing {
 
     publications.register('mavenJava', MavenPublication) {
         from components.java
-        artifact renameJar
     }
 }
 
