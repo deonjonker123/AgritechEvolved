@@ -127,7 +127,7 @@ public class BasicPlanterMenu extends AbstractContainerMenu {
 
     private void addPlayerHotbar(Inventory playerInventory) {
         for (int i = 0; i < 9; i++) {
-            addSlot(new Slot(playerInventory, i, 8 + i * 18, 147));
+            addSlot(new Slot(playerInventory, i, 8 + i * 18, 146));
         }
     }
 

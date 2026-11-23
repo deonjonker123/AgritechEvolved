@@ -81,6 +81,8 @@ public class AgritechEvolved {
                 MenuScreens.register(ATEMenuTypes.COMPOSTER_MENU.get(), ComposterScreen::new);
                 MenuScreens.register(ATEMenuTypes.BURNER_MENU.get(), BiomassBurnerScreen::new);
                 MenuScreens.register(ATEMenuTypes.CAPACITOR_MENU.get(), CapacitorScreen::new);
+                MenuScreens.register(ATEMenuTypes.SILO_MENU.get(), SiloScreen::new);
+                MenuScreens.register(ATEMenuTypes.FERTILIZER_SPREADER_MENU.get(), FertilizerSpreaderScreen::new);
             });
         }
 

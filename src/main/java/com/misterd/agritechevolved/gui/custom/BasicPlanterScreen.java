@@ -17,14 +17,14 @@ public class BasicPlanterScreen extends AbstractContainerScreen<BasicPlanterMenu
 
     public BasicPlanterScreen(BasicPlanterMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
-        this.imageHeight = 171;
+        this.imageWidth = 176;
+        this.imageHeight = 172;
         this.inventoryLabelY = this.imageHeight - 94;
     }
 
     @Override
     protected void init() {
         super.init();
-        this.titleLabelX = (this.imageWidth - this.font.width(this.title)) / 2;
     }
 
     @Override
@@ -38,9 +38,9 @@ public class BasicPlanterScreen extends AbstractContainerScreen<BasicPlanterMenu
 
         float growthProgress = this.menu.blockEntity.getGrowthProgress();
         if (growthProgress > 0.0F) {
-            int progressBarHeight = (int) (52.0F * growthProgress);
-            int progressBarY = y + 18 + 52 - progressBarHeight;
-            guiGraphics.blit(GUI_TEXTURE, x + 40, progressBarY, 176, 52 - progressBarHeight, 6, progressBarHeight);
+            int barHeight = (int) (54.0F * growthProgress);
+            int barY = y + 17 + 54 - barHeight;
+            guiGraphics.blit(GUI_TEXTURE, x + 40, barY, 176, 54 - barHeight, 6, barHeight);
         }
     }
 

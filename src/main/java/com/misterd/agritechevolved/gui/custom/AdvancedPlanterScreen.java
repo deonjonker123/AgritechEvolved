@@ -17,29 +17,27 @@ import java.util.Locale;
 public class AdvancedPlanterScreen extends AbstractContainerScreen<AdvancedPlanterMenu> {
 
     private static final ResourceLocation GUI_TEXTURE = ResourceLocation.fromNamespaceAndPath("agritechevolved", "textures/gui/advanced_planter_gui.png");
-    private static final int GROWTH_BAR_X = 40;
-    private static final int GROWTH_BAR_Y = 19;
+    private static final int GROWTH_BAR_X = 31;
+    private static final int GROWTH_BAR_Y = 18;
     private static final int GROWTH_BAR_W = 6;
-    private static final int GROWTH_BAR_H = 52;
-    private static final int GROWTH_BAR_TEX_X = 222;
-    private static final int ENERGY_BAR_X = 194;
-    private static final int ENERGY_BAR_Y = 19;
-    private static final int ENERGY_BAR_W = 10;
-    private static final int ENERGY_BAR_H = 52;
-    private static final int ENERGY_BAR_TEX_X = 212;
+    private static final int GROWTH_BAR_H = 54;
+    private static final int GROWTH_BAR_TEX_X = 176;
+    private static final int ENERGY_BAR_X = 163;
+    private static final int ENERGY_BAR_Y = 18;
+    private static final int ENERGY_BAR_W = 6;
+    private static final int ENERGY_BAR_H = 54;
+    private static final int ENERGY_BAR_TEX_X = 182;
 
     public AdvancedPlanterScreen(AdvancedPlanterMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
-        this.imageWidth = 212;
-        this.imageHeight = 170;
-        this.inventoryLabelX = 26;
-        this.inventoryLabelY = imageHeight - 92;
+        this.imageWidth = 176;
+        this.imageHeight = 172;
+        this.inventoryLabelY = imageHeight - 94;
     }
 
     @Override
     protected void init() {
         super.init();
-        titleLabelX = (imageWidth - font.width(title)) / 2;
     }
 
     @Override

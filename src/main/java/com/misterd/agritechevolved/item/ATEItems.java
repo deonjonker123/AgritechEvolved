@@ -131,6 +131,48 @@ public class ATEItems {
                 }
             });
 
+    public static final RegistryObject<Item> RM_MK1 = ITEMS.register("rm_mk1",
+            () -> new Item(new Item.Properties())
+            {
+                @Override
+                public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    if (Screen.hasShiftDown()) {
+                        tooltipComponents.add(Component.translatable("tooltip.agritechevolved.module.rm_mk1"));
+                    } else {
+                        tooltipComponents.add(Component.translatable("tooltip.agritechevolved.module.shift_info"));
+                    }
+                    super.appendHoverText(stack, level, tooltipComponents, tooltipFlag);
+                }
+            });
+
+    public static final RegistryObject<Item> RM_MK2 = ITEMS.register("rm_mk2",
+            () -> new Item(new Item.Properties())
+            {
+                @Override
+                public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    if (Screen.hasShiftDown()) {
+                        tooltipComponents.add(Component.translatable("tooltip.agritechevolved.module.rm_mk2"));
+                    } else {
+                        tooltipComponents.add(Component.translatable("tooltip.agritechevolved.module.shift_info"));
+                    }
+                    super.appendHoverText(stack, level, tooltipComponents, tooltipFlag);
+                }
+            });
+
+    public static final RegistryObject<Item> RM_MK3 = ITEMS.register("rm_mk3",
+            () -> new Item(new Item.Properties())
+            {
+                @Override
+                public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+                    if (Screen.hasShiftDown()) {
+                        tooltipComponents.add(Component.translatable("tooltip.agritechevolved.module.rm_mk3"));
+                    } else {
+                        tooltipComponents.add(Component.translatable("tooltip.agritechevolved.module.shift_info"));
+                    }
+                    super.appendHoverText(stack, level, tooltipComponents, tooltipFlag);
+                }
+            });
+
     public static final RegistryObject<Item> CRUDE_BIOMASS = ITEMS.register("crude_biomass",
             () -> new Item(new Item.Properties())
             {

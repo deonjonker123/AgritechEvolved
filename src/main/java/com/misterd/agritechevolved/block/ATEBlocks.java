@@ -186,6 +186,20 @@ public class ATEBlocks {
                 }
             });
 
+    public static final RegistryObject<Block> SILO = registerBlock("silo",
+            () -> new SiloBlock(BlockBehaviour.Properties.of()
+                    .strength(2.0F, 3.0F)
+                    .sound(SoundType.STONE)
+                    .noOcclusion()
+                    .requiresCorrectToolForDrops()));
+
+    public static final RegistryObject<Block> FERT_SPREADER = registerBlock("fertilizer_spreader",
+            () -> new FertilizerSpreaderBlock(BlockBehaviour.Properties.of()
+                    .strength(2.0F, 3.0F)
+                    .sound(SoundType.STONE)
+                    .noOcclusion()
+                    .requiresCorrectToolForDrops()));
+
     public static final RegistryObject<Block> COMPACTED_BIOMASS_BLOCK = registerBlock("compacted_biomass_block",
             () -> new Block(BlockBehaviour.Properties.of()
                     .strength(1.0F, 3.0F)

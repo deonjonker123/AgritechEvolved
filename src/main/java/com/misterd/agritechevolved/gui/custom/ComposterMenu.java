@@ -71,7 +71,7 @@ public class ComposterMenu extends AbstractContainerMenu {
 
     private void addPlayerHotbar(Inventory inv) {
         for (int i = 0; i < HOTBAR_SLOTS; i++)
-            addSlot(new Slot(inv, i, 8 + i * 18, 147));
+            addSlot(new Slot(inv, i, 8 + i * 18, 146));
     }
 
     private void addDataSlots() {

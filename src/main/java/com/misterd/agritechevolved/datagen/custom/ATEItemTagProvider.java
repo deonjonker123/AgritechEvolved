@@ -32,6 +32,11 @@ public class ATEItemTagProvider extends ItemTagsProvider {
                 .add(ATEItems.YM_MK2.get())
                 .add(ATEItems.YM_MK3.get());
 
+        tag(ATETags.Items.ATE_RANGE_MODULES)
+                .add(ATEItems.RM_MK1.get())
+                .add(ATEItems.RM_MK2.get())
+                .add(ATEItems.RM_MK3.get());
+
         copy(ATETags.Blocks.DIRT_LIKE_BLOCKS, ATETags.Items.DIRT_LIKE_BLOCK_ITEMS);
 
         copy(ATETags.Blocks.BASIC_PLANTERS, ATETags.Items.BASIC_PLANTER_ITEMS);

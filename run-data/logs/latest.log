@@ -1,35 +1,30 @@
-[23Nov2026 23:25:44.935] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher running: args [--launchTarget, forgedatauserdev, --assetIndex, 5, --assetsDir, C:\Users\deonj\AppData\Roaming\.minecraft\assets, --gameDir, ., --fml.forgeVersion, 47.4.29, --fml.mcVersion, 1.20.1, --fml.forgeGroup, net.minecraftforge, --fml.mcpVersion, 20230612.114412, --mod, agritechevolved, --all, --output, E:\MODS\_Forge\ATEForge\src\generated\resources, --existing, E:\MODS\_Forge\ATEForge\src\main\resources]
-[23Nov2026 23:25:44.938] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher 10.0.9+10.0.9+main.dcd20f30 starting: java version 17.0.21 by Eclipse Adoptium; OS Windows 10 arch amd64 version 10.0
-[23Nov2026 23:25:45.026] [main/WARN] [net.minecraftforge.fml.loading.FMLConfig/CORE]: Configuration file E:\MODS\_Forge\ATEForge\run-data\config\fml.toml is not correct. Correcting
-[23Nov2026 23:25:45.027] [main/INFO] [net.minecraftforge.fml.loading.FMLConfig/CORE]: Incorrect key [earlyWindowSkipGLVersions] was corrected from null to []
-[23Nov2026 23:25:45.027] [main/INFO] [net.minecraftforge.fml.loading.FMLConfig/CORE]: Incorrect key [earlyWindowLogHelpMessage] was corrected from null to true
-[23Nov2026 23:25:45.028] [main/INFO] [net.minecraftforge.fml.loading.FMLConfig/CORE]: Incorrect key [earlyWindowSquir] was corrected from null to false
-[23Nov2026 23:25:45.028] [main/INFO] [net.minecraftforge.fml.loading.FMLConfig/CORE]: Incorrect key [earlyWindowShowCPU] was corrected from null to false
-[23Nov2026 23:25:45.041] [main/INFO] [net.minecraftforge.fml.loading.ImmediateWindowHandler/]: ImmediateWindowProvider not loading because launch target is forgedatauserdev
-[23Nov2026 23:25:45.075] [main/INFO] [mixin/]: SpongePowered MIXIN Subsystem Version=0.8.5 Source=union:/C:/Users/deonj/.gradle/caches/modules-2/files-2.1/org.spongepowered/mixin/0.8.5/9d1c0c3a304ae6697ecd477218fa61b850bf57fc/mixin-0.8.5.jar%23178!/ Service=ModLauncher Env=CLIENT
-[23Nov2026 23:25:45.328] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\deonj\.gradle\caches\modules-2\files-2.1\net.minecraftforge\javafmllanguage\1.20.1-47.4.29\fec026d9bcb93a85ef7a7cf841ba9221fabb8380\javafmllanguage-1.20.1-47.4.29.jar is missing mods.toml file
-[23Nov2026 23:25:45.330] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\deonj\.gradle\caches\modules-2\files-2.1\net.minecraftforge\lowcodelanguage\1.20.1-47.4.29\7b1a33a5c123c5b422d31a7e16abf4c2b86e82cc\lowcodelanguage-1.20.1-47.4.29.jar is missing mods.toml file
-[23Nov2026 23:25:45.333] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\deonj\.gradle\caches\modules-2\files-2.1\net.minecraftforge\mclanguage\1.20.1-47.4.29\15e23258cfa355df6c6dabc96ad733e0b91ce238\mclanguage-1.20.1-47.4.29.jar is missing mods.toml file
-[23Nov2026 23:25:45.335] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\deonj\.gradle\caches\modules-2\files-2.1\net.minecraftforge\fmlcore\1.20.1-47.4.29\56543aa86bffd18ada2cd3b03f96f707f549970c\fmlcore-1.20.1-47.4.29.jar is missing mods.toml file
-[23Nov2026 23:25:45.421] [main/INFO] [net.minecraftforge.fml.loading.moddiscovery.JarInJarDependencyLocator/]: No dependencies to load found. Skipping!
-[23Nov2026 23:25:46.977] [main/INFO] [cpw.mods.modlauncher.LaunchServiceHandler/MODLAUNCHER]: Launching target 'forgedatauserdev' with arguments [--gameDir, ., --assetsDir, C:\Users\deonj\AppData\Roaming\.minecraft\assets, --assetIndex, 5, --mod, agritechevolved, --all, --output, E:\MODS\_Forge\ATEForge\src\generated\resources, --existing, E:\MODS\_Forge\ATEForge\src\main\resources]
-[23Nov2026 23:25:47.243] [main/INFO] [mixin/]: Remapping refMap jade.refmap.json using E:\MODS\_Forge\ATEForge\build\mappings\srg-to-official.srg
-[23Nov2026 23:25:47.569] [main/INFO] [net.minecraftforge.data.loading.DatagenModLoader/]: Initializing Data Gatherer for mods [agritechevolved]
-[23Nov2026 23:25:51.433] [modloading-worker-0/INFO] [net.minecraftforge.common.ForgeMod/FORGEMOD]: Forge mod loading, version 47.4.29, for MC 1.20.1 with MCP 20230612.114412
-[23Nov2026 23:25:51.434] [modloading-worker-0/INFO] [net.minecraftforge.common.MinecraftForge/FORGE]: MinecraftForge v47.4.29 Initialized
-[23Nov2026 23:25:51.899] [modloading-worker-0/INFO] [mezz.jei.library.load.PluginCaller/]: Sending ConfigManager...
-[23Nov2026 23:25:51.904] [modloading-worker-0/INFO] [mezz.jei.library.load.PluginCaller/]: Sending ConfigManager took 2.625 milliseconds
-[23Nov2026 23:25:52.101] [main/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/E:/MODS/_Forge/ATEForge/.gradle/mavenizer/repo/net/minecraftforge/forge/1.20.1-47.4.29/forge-1.20.1-47.4.29.jar%23191!/assets/.mcassetsroot' uses unexpected schema
-[23Nov2026 23:25:52.101] [main/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/E:/MODS/_Forge/ATEForge/.gradle/mavenizer/repo/net/minecraftforge/forge/1.20.1-47.4.29/forge-1.20.1-47.4.29.jar%23191!/data/.mcassetsroot' uses unexpected schema
-[23Nov2026 23:25:52.223] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Loot Tables
-[23Nov2026 23:25:52.278] [main/INFO] [net.minecraft.data.DataGenerator/]: Loot Tables finished after 53 ms
-[23Nov2026 23:25:52.278] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Recipes
-[23Nov2026 23:25:52.330] [main/INFO] [net.minecraft.data.DataGenerator/]: Recipes finished after 51 ms
-[23Nov2026 23:25:52.330] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Tags for minecraft:block mod id agritechevolved
-[23Nov2026 23:25:52.406] [main/INFO] [net.minecraft.data.DataGenerator/]: Tags for minecraft:block mod id agritechevolved finished after 75 ms
-[23Nov2026 23:25:52.406] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Item Models: agritechevolved
-[23Nov2026 23:25:52.414] [main/INFO] [net.minecraft.data.DataGenerator/]: Item Models: agritechevolved finished after 7 ms
-[23Nov2026 23:25:52.415] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Tags for minecraft:item mod id agritechevolved
-[23Nov2026 23:25:52.417] [main/INFO] [net.minecraft.data.DataGenerator/]: Tags for minecraft:item mod id agritechevolved finished after 1 ms
-[23Nov2026 23:25:52.417] [main/INFO] [net.minecraft.data.DataGenerator/]: All providers took: 193 ms
-[23Nov2026 23:25:52.426] [main/INFO] [net.minecraft.data.HashCache/]: Caching: total files: 185, old count: 0, new count: 186, removed stale: 0, written: 185
+[24Nov2026 00:46:39.333] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher running: args [--launchTarget, forgedatauserdev, --assetIndex, 5, --assetsDir, C:\Users\deonj\AppData\Roaming\.minecraft\assets, --gameDir, ., --fml.forgeVersion, 47.4.29, --fml.mcVersion, 1.20.1, --fml.forgeGroup, net.minecraftforge, --fml.mcpVersion, 20230612.114412, --mod, agritechevolved, --all, --output, E:\MODS\_Forge\ATEForge\src\generated\resources, --existing, E:\MODS\_Forge\ATEForge\src\main\resources]
+[24Nov2026 00:46:39.363] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher 10.0.9+10.0.9+main.dcd20f30 starting: java version 17.0.21 by Eclipse Adoptium; OS Windows 10 arch amd64 version 10.0
+[24Nov2026 00:46:39.456] [main/INFO] [net.minecraftforge.fml.loading.ImmediateWindowHandler/]: ImmediateWindowProvider not loading because launch target is forgedatauserdev
+[24Nov2026 00:46:39.495] [main/INFO] [mixin/]: SpongePowered MIXIN Subsystem Version=0.8.5 Source=union:/C:/Users/deonj/.gradle/caches/modules-2/files-2.1/org.spongepowered/mixin/0.8.5/9d1c0c3a304ae6697ecd477218fa61b850bf57fc/mixin-0.8.5.jar%23178!/ Service=ModLauncher Env=CLIENT
+[24Nov2026 00:46:39.720] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\deonj\.gradle\caches\modules-2\files-2.1\net.minecraftforge\javafmllanguage\1.20.1-47.4.29\fec026d9bcb93a85ef7a7cf841ba9221fabb8380\javafmllanguage-1.20.1-47.4.29.jar is missing mods.toml file
+[24Nov2026 00:46:39.723] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\deonj\.gradle\caches\modules-2\files-2.1\net.minecraftforge\lowcodelanguage\1.20.1-47.4.29\7b1a33a5c123c5b422d31a7e16abf4c2b86e82cc\lowcodelanguage-1.20.1-47.4.29.jar is missing mods.toml file
+[24Nov2026 00:46:39.726] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\deonj\.gradle\caches\modules-2\files-2.1\net.minecraftforge\mclanguage\1.20.1-47.4.29\15e23258cfa355df6c6dabc96ad733e0b91ce238\mclanguage-1.20.1-47.4.29.jar is missing mods.toml file
+[24Nov2026 00:46:39.729] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\deonj\.gradle\caches\modules-2\files-2.1\net.minecraftforge\fmlcore\1.20.1-47.4.29\56543aa86bffd18ada2cd3b03f96f707f549970c\fmlcore-1.20.1-47.4.29.jar is missing mods.toml file
+[24Nov2026 00:46:39.819] [main/INFO] [net.minecraftforge.fml.loading.moddiscovery.JarInJarDependencyLocator/]: No dependencies to load found. Skipping!
+[24Nov2026 00:46:41.306] [main/INFO] [cpw.mods.modlauncher.LaunchServiceHandler/MODLAUNCHER]: Launching target 'forgedatauserdev' with arguments [--gameDir, ., --assetsDir, C:\Users\deonj\AppData\Roaming\.minecraft\assets, --assetIndex, 5, --mod, agritechevolved, --all, --output, E:\MODS\_Forge\ATEForge\src\generated\resources, --existing, E:\MODS\_Forge\ATEForge\src\main\resources]
+[24Nov2026 00:46:41.647] [main/INFO] [mixin/]: Remapping refMap jade.refmap.json using E:\MODS\_Forge\ATEForge\build\mappings\srg-to-official.srg
+[24Nov2026 00:46:41.952] [main/INFO] [net.minecraftforge.data.loading.DatagenModLoader/]: Initializing Data Gatherer for mods [agritechevolved]
+[24Nov2026 00:46:45.502] [modloading-worker-0/INFO] [net.minecraftforge.common.ForgeMod/FORGEMOD]: Forge mod loading, version 47.4.29, for MC 1.20.1 with MCP 20230612.114412
+[24Nov2026 00:46:45.503] [modloading-worker-0/INFO] [net.minecraftforge.common.MinecraftForge/FORGE]: MinecraftForge v47.4.29 Initialized
+[24Nov2026 00:46:45.807] [modloading-worker-0/INFO] [mezz.jei.library.load.PluginCaller/]: Sending ConfigManager...
+[24Nov2026 00:46:45.811] [modloading-worker-0/INFO] [mezz.jei.library.load.PluginCaller/]: Sending ConfigManager took 2.624 milliseconds
+[24Nov2026 00:46:46.026] [main/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/E:/MODS/_Forge/ATEForge/.gradle/mavenizer/repo/net/minecraftforge/forge/1.20.1-47.4.29/forge-1.20.1-47.4.29.jar%23191!/assets/.mcassetsroot' uses unexpected schema
+[24Nov2026 00:46:46.027] [main/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/E:/MODS/_Forge/ATEForge/.gradle/mavenizer/repo/net/minecraftforge/forge/1.20.1-47.4.29/forge-1.20.1-47.4.29.jar%23191!/data/.mcassetsroot' uses unexpected schema
+[24Nov2026 00:46:46.142] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Loot Tables
+[24Nov2026 00:46:46.188] [main/INFO] [net.minecraft.data.DataGenerator/]: Loot Tables finished after 45 ms
+[24Nov2026 00:46:46.189] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Recipes
+[24Nov2026 00:46:46.221] [main/INFO] [net.minecraft.data.DataGenerator/]: Recipes finished after 31 ms
+[24Nov2026 00:46:46.221] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Tags for minecraft:block mod id agritechevolved
+[24Nov2026 00:46:46.286] [main/INFO] [net.minecraft.data.DataGenerator/]: Tags for minecraft:block mod id agritechevolved finished after 64 ms
+[24Nov2026 00:46:46.286] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Item Models: agritechevolved
+[24Nov2026 00:46:46.290] [main/INFO] [net.minecraft.data.DataGenerator/]: Item Models: agritechevolved finished after 4 ms
+[24Nov2026 00:46:46.291] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Tags for minecraft:item mod id agritechevolved
+[24Nov2026 00:46:46.293] [main/INFO] [net.minecraft.data.DataGenerator/]: Tags for minecraft:item mod id agritechevolved finished after 2 ms
+[24Nov2026 00:46:46.293] [main/INFO] [net.minecraft.data.DataGenerator/]: All providers took: 151 ms
+[24Nov2026 00:46:46.301] [main/INFO] [net.minecraft.data.HashCache/]: Caching: total files: 201, old count: 185, new count: 202, removed stale: 0, written: 17

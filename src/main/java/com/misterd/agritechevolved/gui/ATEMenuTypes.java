@@ -19,6 +19,8 @@ public class ATEMenuTypes {
     public static final RegistryObject<MenuType<CapacitorMenu>> CAPACITOR_MENU = registerMenuType("capacitor_menu", CapacitorMenu::new);
     public static final RegistryObject<MenuType<BiomassBurnerMenu>> BURNER_MENU = registerMenuType("burner_menu", BiomassBurnerMenu::new);
     public static final RegistryObject<MenuType<AdvancedPlanterMenu>> ADVANCED_PLANTER_BLOCK_MENU = registerMenuType("advanced_planter_block_menu", AdvancedPlanterMenu::new);
+    public static final RegistryObject<MenuType<SiloMenu>> SILO_MENU = registerMenuType("silo_menu", SiloMenu::new);
+    public static final RegistryObject<MenuType<FertilizerSpreaderMenu>> FERTILIZER_SPREADER_MENU = registerMenuType("fertilizer_spreader_menu", FertilizerSpreaderMenu::new);
 
     private static <T extends AbstractContainerMenu> RegistryObject<MenuType<T>> registerMenuType(String name, IContainerFactory<T> factory) {
         return MENUS.register(name, () -> IForgeMenuType.create(factory));

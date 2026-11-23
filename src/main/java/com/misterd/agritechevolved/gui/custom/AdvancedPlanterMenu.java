@@ -46,13 +46,13 @@ public class AdvancedPlanterMenu extends AbstractContainerMenu {
     private void addBlockEntitySlots() {
         addSlot(new InputSlot(blockEntity, SLOT_PLANT, 8, 19, true));
         addSlot(new InputSlot(blockEntity, SLOT_SOIL, 8, 55, true));
-        addSlot(new InputSlot(blockEntity, SLOT_MODULE_1, 152, 19, true));
-        addSlot(new InputSlot(blockEntity, SLOT_MODULE_2, 170, 19, true));
-        addSlot(new InputSlot(blockEntity, SLOT_FERTILIZER, 161, 55, false));
+        addSlot(new InputSlot(blockEntity, SLOT_MODULE_1, 134, 19, true));
+        addSlot(new InputSlot(blockEntity, SLOT_MODULE_2, 134, 37, true));
+        addSlot(new InputSlot(blockEntity, SLOT_FERTILIZER, 134, 55, false));
         int outputIndex = SLOT_OUTPUT_MIN;
         for (int row = 0; row < 3; row++) {
             for (int col = 0; col < 4; col++) {
-                addSlot(new OutputSlot(blockEntity, outputIndex++, 62 + col * 18, 19 + row * 18));
+                addSlot(new OutputSlot(blockEntity, outputIndex++, 44 + col * 18, 19 + row * 18));
             }
         }
     }
@@ -60,14 +60,14 @@ public class AdvancedPlanterMenu extends AbstractContainerMenu {
     private void addPlayerInventory(Inventory inv) {
         for (int row = 0; row < PLAYER_INV_ROWS; row++) {
             for (int col = 0; col < PLAYER_INV_COLS; col++) {
-                addSlot(new Slot(inv, col + row * PLAYER_INV_COLS + HOTBAR_SLOTS, 26 + col * 18, 88 + row * 18));
+                addSlot(new Slot(inv, col + row * PLAYER_INV_COLS + HOTBAR_SLOTS, 8 + col * 18, 88 + row * 18));
             }
         }
     }
 
     private void addPlayerHotbar(Inventory inv) {
         for (int i = 0; i < HOTBAR_SLOTS; i++) {
-            addSlot(new Slot(inv, i, 26 + i * 18, 146));
+            addSlot(new Slot(inv, i, 8 + i * 18, 146));
         }
     }
 

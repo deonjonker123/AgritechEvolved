@@ -66,6 +66,14 @@ public class ATEBlockEntities {
             BLOCK_ENTITIES.register("burner_be", () -> BlockEntityType.Builder.of(
                     BiomassBurnerBlockEntity::new, ATEBlocks.BIOMASS_BURNER.get()).build(null));
 
+    public static final RegistryObject<BlockEntityType<SiloBlockEntity>> SILO_BE =
+            BLOCK_ENTITIES.register("silo_be", () -> BlockEntityType.Builder.of(
+                    SiloBlockEntity::new, ATEBlocks.SILO.get()).build(null));
+
+    public static final RegistryObject<BlockEntityType<FertilizerSpreaderBlockEntity>> FERTILIZER_SPREADER_BE =
+            BLOCK_ENTITIES.register("fertilizer_spreader_be", () -> BlockEntityType.Builder.of(
+                    FertilizerSpreaderBlockEntity::new, ATEBlocks.FERT_SPREADER.get()).build(null));
+
     public static void register(IEventBus eventBus) {
         BLOCK_ENTITIES.register(eventBus);
     }
