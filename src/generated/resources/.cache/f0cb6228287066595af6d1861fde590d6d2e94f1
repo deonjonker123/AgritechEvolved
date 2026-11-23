@@ -1,0 +1,5 @@
+// 1.20.1	2026-11-23T23:25:52.4175533	Tags for minecraft:item mod id agritechevolved
+497e2c6bd858d4118004c6e8f788a8d8a8fddb3a data/agritechevolved/tags/items/agritechevolved_modules.json
+31c704888aae82cda7aab01fd522410b364cd7e3 data/agritechevolved/tags/items/basic_planter_items.json
+dec58a067b5af7774c9ff5678b3092b7746624b4 data/agritechevolved/tags/items/biomass.json
+b6332f1eacc99885e63827dd5a42de85f5ca8c3e data/agritechevolved/tags/items/dirt_like_block_items.json

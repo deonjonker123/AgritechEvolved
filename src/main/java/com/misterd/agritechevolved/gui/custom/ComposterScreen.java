@@ -89,6 +89,7 @@ public class ComposterScreen extends AbstractContainerScreen<ComposterMenu> {
                     Component.literal(String.format("Organic Items: %d/%d", organicItems, requiredItems)).withStyle(ChatFormatting.GRAY),
                     Component.translatable("tooltip.agritechevolved.view_recipes").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC)
             ), mouseX, mouseY);
+            return;
         }
         if (isHovering(ENERGY_BAR_X, ENERGY_BAR_Y, ENERGY_BAR_W, ENERGY_BAR_H, mouseX, mouseY)) {
             int energy = menu.getEnergyStored();
@@ -101,6 +102,14 @@ public class ComposterScreen extends AbstractContainerScreen<ComposterMenu> {
                     Component.literal(energyText).withStyle(ChatFormatting.GREEN),
                     Component.literal(String.format("%.1f%%", pct)).withStyle(ChatFormatting.GRAY)
             ), mouseX, mouseY);
+            return;
+        }
+        renderEmptySlotTooltip(guiGraphics, mouseX, mouseY, 51, "tooltip.agritechevolved.slot.upgrade");
+    }
+
+    private void renderEmptySlotTooltip(GuiGraphics guiGraphics, int mouseX, int mouseY, int menuSlot, String key) {
+        if (hoveredSlot != null && hoveredSlot == menu.slots.get(menuSlot) && !hoveredSlot.hasItem()) {
+            guiGraphics.renderTooltip(font, Component.translatable(key), mouseX, mouseY);
         }
     }
 

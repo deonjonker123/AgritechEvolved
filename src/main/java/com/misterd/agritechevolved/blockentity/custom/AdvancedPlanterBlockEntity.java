@@ -528,6 +528,8 @@ public class AdvancedPlanterBlockEntity extends BlockEntity implements MenuProvi
         return drops;
     }
 
+    public boolean isReadyToHarvest() { return readyToHarvest; }
+
     private List<ItemStack> applyYieldModifier(List<ItemStack> drops, float modifier) {
         if (modifier == 1.0F) return drops;
         List<ItemStack> result = new ArrayList<>();

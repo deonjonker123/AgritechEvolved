@@ -62,6 +62,16 @@ public class BasicPlanterScreen extends AbstractContainerScreen<BasicPlanterMenu
                     Component.literal(String.format("%.1f%%", progress * 100.0F)).withStyle(ChatFormatting.GREEN),
                     Component.translatable("tooltip.agritechevolved.view_recipes").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC)
             ), x, y);
+            return;
+        }
+        renderEmptySlotTooltip(guiGraphics, x, y, 36, "tooltip.agritechevolved.slot.plant");
+        renderEmptySlotTooltip(guiGraphics, x, y, 37, "tooltip.agritechevolved.slot.soil");
+        renderEmptySlotTooltip(guiGraphics, x, y, 38, "tooltip.agritechevolved.slot.fertilizer");
+    }
+
+    private void renderEmptySlotTooltip(GuiGraphics guiGraphics, int mouseX, int mouseY, int menuSlot, String key) {
+        if (this.hoveredSlot != null && this.hoveredSlot == this.menu.slots.get(menuSlot) && !this.hoveredSlot.hasItem()) {
+            guiGraphics.renderTooltip(this.font, Component.translatable(key), mouseX, mouseY);
         }
     }
 }

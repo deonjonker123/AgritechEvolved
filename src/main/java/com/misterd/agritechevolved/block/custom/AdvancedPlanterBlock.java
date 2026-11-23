@@ -150,15 +150,18 @@ public class AdvancedPlanterBlock extends BaseEntityBlock {
         if (planter.isValidSoilForAnyRecipe(heldItem)) return tryPlaceSoil(heldItem, level, pos, state, player, planter);
         if (heldItem.getItem() instanceof HoeItem) return tryTillSoil(heldItem, level, pos, player, hand, hitResult, planter);
         if (AdvancedPlanterBlockEntity.isFertilizer(heldItem)) return tryPlaceFertilizer(heldItem, level, pos, state, player, planter);
-        if (AdvancedPlanterBlockEntity.isModule(heldItem)) return tryPlaceModule(heldItem, level, pos, state, planter);
+        if (AdvancedPlanterBlockEntity.isModule(heldItem)) return tryPlaceModule(heldItem, level, pos, state, player, planter);
         if (tryUpgradeFarmland(heldItem, level, pos, player, planter)) return InteractionResult.sidedSuccess(level.isClientSide());
         if (!level.isClientSide()) openMenu(pos, player, planter);
         return InteractionResult.SUCCESS;
     }
 
     private InteractionResult tryPlaceSeedOrSapling(ItemStack heldItem, Level level, BlockPos pos, BlockState state, Player player, AdvancedPlanterBlockEntity planter) {
+        if (!planter.inventory.getStackInSlot(AdvancedPlanterBlockEntity.SLOT_PLANT).isEmpty()) {
+            if (!level.isClientSide()) openMenu(pos, player, planter);
+            return InteractionResult.SUCCESS;
+        }
         if (level.isClientSide()) return InteractionResult.SUCCESS;
-        if (!planter.inventory.getStackInSlot(AdvancedPlanterBlockEntity.SLOT_PLANT).isEmpty()) return InteractionResult.SUCCESS;
         ItemStack soilStack = planter.inventory.getStackInSlot(AdvancedPlanterBlockEntity.SLOT_SOIL);
         if (!soilStack.isEmpty() && !planter.isValidPlantSoilCombination(heldItem, soilStack)) {
             player.displayClientMessage(Component.translatable("message.agritechevolved.invalid_plant_soil_combination"), true);
@@ -170,8 +173,11 @@ public class AdvancedPlanterBlock extends BaseEntityBlock {
     }
 
     private InteractionResult tryPlaceSoil(ItemStack heldItem, Level level, BlockPos pos, BlockState state, Player player, AdvancedPlanterBlockEntity planter) {
+        if (!planter.inventory.getStackInSlot(AdvancedPlanterBlockEntity.SLOT_SOIL).isEmpty()) {
+            if (!level.isClientSide()) openMenu(pos, player, planter);
+            return InteractionResult.SUCCESS;
+        }
         if (level.isClientSide()) return InteractionResult.SUCCESS;
-        if (!planter.inventory.getStackInSlot(AdvancedPlanterBlockEntity.SLOT_SOIL).isEmpty()) return InteractionResult.SUCCESS;
         ItemStack plantStack = planter.inventory.getStackInSlot(AdvancedPlanterBlockEntity.SLOT_PLANT);
         if (!plantStack.isEmpty() && !planter.isValidPlantSoilCombination(plantStack, heldItem)) {
             player.displayClientMessage(Component.translatable("message.agritechevolved.invalid_plant_soil_combination"), true);
@@ -179,6 +185,42 @@ public class AdvancedPlanterBlock extends BaseEntityBlock {
         }
         placeInSlot(planter, AdvancedPlanterBlockEntity.SLOT_SOIL, heldItem, level, pos, state);
         level.playSound(null, pos, SoundEvents.GRAVEL_PLACE, SoundSource.BLOCKS, 1.0F, 0.8F);
+        return InteractionResult.SUCCESS;
+    }
+
+    private InteractionResult tryPlaceFertilizer(ItemStack heldItem, Level level, BlockPos pos, BlockState state, Player player, AdvancedPlanterBlockEntity planter) {
+        if (planter.inventory.getStackInSlot(AdvancedPlanterBlockEntity.SLOT_PLANT).isEmpty()
+                || planter.inventory.getStackInSlot(AdvancedPlanterBlockEntity.SLOT_SOIL).isEmpty()
+                || planter.isReadyToHarvest()) {
+            if (!level.isClientSide()) openMenu(pos, player, planter);
+            return InteractionResult.SUCCESS;
+        }
+        if (!level.isClientSide()) {
+            FertilizerData data = ATEDataMaps.getFertilizer(heldItem.getItem());
+            if (data != null) {
+                planter.applyManualFertilizer(data.speedMultiplier());
+                if (!player.getAbilities().instabuild) heldItem.shrink(1);
+                level.playSound(null, pos, SoundEvents.BONE_MEAL_USE, SoundSource.BLOCKS, 1.0F, 1.0F);
+                if (level instanceof ServerLevel serverLevel) {
+                    serverLevel.sendParticles(ParticleTypes.HAPPY_VILLAGER, pos.getX() + 0.5, pos.getY() + 0.8, pos.getZ() + 0.5, 6, 0.3, 0.2, 0.3, 0.0);
+                }
+                level.sendBlockUpdated(pos, state, state, 3);
+            }
+        }
+        return InteractionResult.SUCCESS;
+    }
+
+    private InteractionResult tryPlaceModule(ItemStack heldItem, Level level, BlockPos pos, BlockState state, Player player, AdvancedPlanterBlockEntity planter) {
+        for (int slot = AdvancedPlanterBlockEntity.SLOT_MODULE_1; slot <= AdvancedPlanterBlockEntity.SLOT_MODULE_2; slot++) {
+            if (planter.inventory.getStackInSlot(slot).isEmpty()) {
+                if (!level.isClientSide()) {
+                    placeInSlot(planter, slot, heldItem, level, pos, state);
+                    level.playSound(null, pos, SoundEvents.ITEM_PICKUP, SoundSource.BLOCKS, 1.0F, 1.2F);
+                }
+                return InteractionResult.SUCCESS;
+            }
+        }
+        if (!level.isClientSide()) openMenu(pos, player, planter);
         return InteractionResult.SUCCESS;
     }
 
@@ -192,33 +234,6 @@ public class AdvancedPlanterBlock extends BaseEntityBlock {
         level.playSound(player, pos, SoundEvents.HOE_TILL, SoundSource.BLOCKS, 1.0F, 1.0F);
         if (!player.getAbilities().instabuild) heldItem.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(hand));
         return InteractionResult.sidedSuccess(level.isClientSide());
-    }
-
-    private InteractionResult tryPlaceFertilizer(ItemStack heldItem, Level level, BlockPos pos, BlockState state, Player player, AdvancedPlanterBlockEntity planter) {
-        if (level.isClientSide()) return InteractionResult.SUCCESS;
-        FertilizerData data = ATEDataMaps.getFertilizer(heldItem.getItem());
-        if (data != null && !planter.inventory.getStackInSlot(AdvancedPlanterBlockEntity.SLOT_PLANT).isEmpty() && !planter.inventory.getStackInSlot(AdvancedPlanterBlockEntity.SLOT_SOIL).isEmpty()) {
-            planter.applyManualFertilizer(data.speedMultiplier());
-            if (!player.getAbilities().instabuild) heldItem.shrink(1);
-            level.playSound(null, pos, SoundEvents.BONE_MEAL_USE, SoundSource.BLOCKS, 1.0F, 1.0F);
-            if (level instanceof ServerLevel serverLevel) {
-                serverLevel.sendParticles(ParticleTypes.HAPPY_VILLAGER, pos.getX() + 0.5, pos.getY() + 0.8, pos.getZ() + 0.5, 6, 0.3, 0.2, 0.3, 0.0);
-            }
-            level.sendBlockUpdated(pos, state, state, 3);
-        }
-        return InteractionResult.SUCCESS;
-    }
-
-    private InteractionResult tryPlaceModule(ItemStack heldItem, Level level, BlockPos pos, BlockState state, AdvancedPlanterBlockEntity planter) {
-        if (level.isClientSide()) return InteractionResult.SUCCESS;
-        for (int slot = AdvancedPlanterBlockEntity.SLOT_MODULE_1; slot <= AdvancedPlanterBlockEntity.SLOT_MODULE_2; slot++) {
-            if (planter.inventory.getStackInSlot(slot).isEmpty()) {
-                placeInSlot(planter, slot, heldItem, level, pos, state);
-                level.playSound(null, pos, SoundEvents.ITEM_PICKUP, SoundSource.BLOCKS, 1.0F, 1.2F);
-                return InteractionResult.SUCCESS;
-            }
-        }
-        return InteractionResult.SUCCESS;
     }
 
     private boolean tryUpgradeFarmland(ItemStack heldItem, Level level, BlockPos pos, Player player, AdvancedPlanterBlockEntity planter) {

@@ -89,6 +89,7 @@ public class AdvancedPlanterScreen extends AbstractContainerScreen<AdvancedPlant
                     Component.literal(String.format("%.1f%%", progress * 100.0F)).withStyle(ChatFormatting.GREEN),
                     Component.translatable("tooltip.agritechevolved.view_recipes").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC)
             ), mouseX, mouseY);
+            return;
         }
         if (isHoveringWidget(mouseX, mouseY, x + ENERGY_BAR_X, y + ENERGY_BAR_Y, ENERGY_BAR_W, ENERGY_BAR_H + 1)) {
             int energy = menu.getEnergyStored();
@@ -98,6 +99,18 @@ public class AdvancedPlanterScreen extends AbstractContainerScreen<AdvancedPlant
                     Component.translatable("tooltip.agritechevolved.stored_energy"),
                     Component.literal(fmt.format(energy) + " / " + fmt.format(maxEnergy) + " RF").withStyle(ChatFormatting.YELLOW)
             ), mouseX, mouseY);
+            return;
+        }
+        renderEmptySlotTooltip(guiGraphics, mouseX, mouseY, 36, "tooltip.agritechevolved.slot.plant");
+        renderEmptySlotTooltip(guiGraphics, mouseX, mouseY, 37, "tooltip.agritechevolved.slot.soil");
+        renderEmptySlotTooltip(guiGraphics, mouseX, mouseY, 38, "tooltip.agritechevolved.slot.upgrade_1");
+        renderEmptySlotTooltip(guiGraphics, mouseX, mouseY, 39, "tooltip.agritechevolved.slot.upgrade_2");
+        renderEmptySlotTooltip(guiGraphics, mouseX, mouseY, 40, "tooltip.agritechevolved.slot.fertilizer");
+    }
+
+    private void renderEmptySlotTooltip(GuiGraphics guiGraphics, int mouseX, int mouseY, int menuSlot, String key) {
+        if (hoveredSlot != null && hoveredSlot == menu.slots.get(menuSlot) && !hoveredSlot.hasItem()) {
+            guiGraphics.renderTooltip(font, Component.translatable(key), mouseX, mouseY);
         }
     }
 

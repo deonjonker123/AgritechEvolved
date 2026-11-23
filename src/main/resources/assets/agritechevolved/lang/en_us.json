@@ -34,6 +34,8 @@
   "block.agritechevolved.advanced_planter": "Advanced Planter",
 
   "block.agritechevolved.composter": "Composter",
+  "block.agritechevolved.silo": "Silo",
+  "block.agritechevolved.fertilizer_spreader": "Fertilizer Spreader",
 
   "block.agritechevolved.biomass_burner": "Biomass Burner",
 
@@ -46,16 +48,19 @@
   "block.agritechevolved.infused_farmland": "Infused Farmland",
   "block.agritechevolved.mulch": "Mulch",
 
-  "item.agritechevolved.sm_mk1": "Speed Module MK1",
-  "item.agritechevolved.sm_mk2": "Speed Module MK2",
-  "item.agritechevolved.sm_mk3": "Speed Module MK3",
-  "item.agritechevolved.ym_mk1": "Yield Module MK1",
-  "item.agritechevolved.ym_mk2": "Yield Module MK2",
-  "item.agritechevolved.ym_mk3": "Yield Module MK3",
+  "item.agritechevolved.sm_mk1": "Speed Upgrade MK1",
+  "item.agritechevolved.sm_mk2": "Speed Upgrade MK2",
+  "item.agritechevolved.sm_mk3": "Speed Upgrade MK3",
+  "item.agritechevolved.ym_mk1": "Yield Upgrade MK1",
+  "item.agritechevolved.ym_mk2": "Yield Upgrade MK2",
+  "item.agritechevolved.ym_mk3": "Yield Upgrade MK3",
+  "item.agritechevolved.rm_mk1": "Range Upgrade MK1",
+  "item.agritechevolved.rm_mk2": "Range Upgrade MK2",
+  "item.agritechevolved.rm_mk3": "Range Upgrade MK3",
 
   "item.agritechevolved.cloche_dome": "Cloche Dome",
 
-  "item.agritechevolved.cloche.tooltip.line1": "Place on a planter to boost growth and yield.",
+  "item.agritechevolved.cloche.tooltip.line1": "Place on a planter to increases growth and yield.",
   "item.agritechevolved.cloche.tooltip.line2": "Stacks with fertilizer for maximum efficiency.",
   "item.agritechevolved.cloche.tooltip.line3": "Shift-right-click with empty hand to remove.",
 
@@ -68,8 +73,10 @@
   "gui.agritechevolved.biomass_burner": "Biomass Burner",
   "gui.agritechevolved.composter": "Composter",
   "gui.agritechevolved.capacitor": "Capacitor",
+  "gui.agritechevolved.silo": "Silo",
+  "gui.agritechevolved.fertilizer_spreader": "Fertilizer Spreader",
 
-  "message.agritechevolved.invalid_plant_soil_combination": "Seed/Sapling can't grow on this soil",
+  "message.agritechevolved.invalid_seed_soil_combination": "Seed/Sapling can't grow on this soil",
   "message.agritechevolved.same_farmland": "This farmland is already of this type!",
   "message.agritechevolved.same_ma_farmland": "Cannot downgrade Mystical Farmland Tier",
 
@@ -91,6 +98,8 @@
   "jei.agritechevolved.planter.tooltip": "Basic & Advanced Planters",
   "jei.agritechevolved.composting.tooltip": "Composting",
 
+  "jei.agritechevolved.farmland_tilling.title": "Making Farmlands",
+
   "tooltip.agritechevolved.stored_energy": "Energy Stored",
   "tooltip.agritechevolved.growth_progress": "Growth Progress",
   "tooltip.agritechevolved.view_recipes": "Click to view recipes",
@@ -104,7 +113,7 @@
   "tooltip.agritechevolved.burner.progress_percentage": "%s%% Complete",
   "tooltip.agritechevolved.burner.time_remaining": "%s seconds remaining",
   "tooltip.agritechevolved.burner.no_fuel": "No Fuel",
-  "tooltip.agritechevolved.burner.insert_fuel": "Insert biomass or compacted biomass",
+  "tooltip.agritechevolved.burner.insert_fuel": "Insert biomass",
   "tooltip.agritechevolved.burner.fuel_slot": "Fuel Slot",
   "tooltip.agritechevolved.burner.accepts": "Accepts:",
   "tooltip.agritechevolved.burner.accepts_crude_biomass": "• Crude Biomass",
@@ -131,21 +140,42 @@
   "tooltip.agritechevolved.crude_biomass.inefficient": "Very inefficient",
 
   "tooltip.agritechevolved.module.shift_info": "§6§oHold Shift for info§r",
-  "tooltip.agritechevolved.module.speed_boost": "§aBoosts Advanced Planter and Machine processing speed by %s%%§r",
-  "tooltip.agritechevolved.module.power_increase": "§cbut increases power consumption by %s%%§r",
-  "tooltip.agritechevolved.module.yield_boost": "§aBoosts Advanced Planter yield by %s%%§r",
-  "tooltip.agritechevolved.module.speed_reduction": "§cbut reduces processing speed by %s%%§r",
-
-  "tooltip.agritechevolved.fertilizer.effects": "Fertilizer Effects:",
-  "tooltip.agritechevolved.fertilizer.speed_boost": "§aBoosts planter speed by %s%%§r",
-  "tooltip.agritechevolved.fertilizer.yield_boost": "§aBoosts planter yield by %s%%§r",
+  "tooltip.agritechevolved.module.speed_boost": "§aIncreases processing speed by %s%%§r",
+  "tooltip.agritechevolved.module.power_increase": "§cand increases power consumption by %s%%§r",
+  "tooltip.agritechevolved.module.yield_boost": "§aIncreases yield by %s%%§r",
+  "tooltip.agritechevolved.module.speed_reduction": "§cand reduces processing speed by %s%%§r",
+  "tooltip.agritechevolved.module.rm_mk1":"§aIncreases Silo and Fertilizer Spreader range by 16 blocks§r",
+  "tooltip.agritechevolved.module.rm_mk2":"§aIncreases Silo and Fertilizer Spreader range by 32 blocks§r",
+  "tooltip.agritechevolved.module.rm_mk3":"§aIncreases Silo and Fertilizer Spreader range by 64 blocks§r",
 
   "tooltip.agritechevolved.fuel.burn_duration": "§bBurns for %s seconds§r",
   "tooltip.agritechevolved.fuel.rf_per_second": "§eGenerates %s RF/second§r",
   "tooltip.agritechevolved.fuel.duration_bonus": "§a+%s%% RF from longer burn§r",
   "tooltip.agritechevolved.fuel.duration_penalty": "§c-%s%% RF from shorter burn§r",
-  "tooltip.agritechevolved.fuel.shift_info": "§6§oHold Shift for Fuel & Fertilizer info§r",
-  "tooltip.agritechevolved.crude_fuel.shift_info": "§6§oHold Shift for Fuel info§r",
+  "tooltip.agritechevolved.fuel.shift_info": "§6§oHold Shift more info§r",
+  "tooltip.agritechevolved.crude_fuel.shift_info": "§6§oHold Shift for more info§r",
+
+  "tooltip.agritechevolved.infused_farmland.growth_boost": "Increases growth speed by 100%",
+  "tooltip.agritechevolved.infused_farmland.hoe_craft": "Crafted by combining Mulch and a Hoe in a Crafting Table",
+  "tooltip.agritechevolved.infused_farmland.hoe_craft2": "or by Tilling Mulch in a Planter",
+  "tooltip.agritechevolved.mulch.growth_boost": "Increases crop growth speed by 50%",
+  "tooltip.agritechevolved.mulch.hoe_craft": "Combine with a hoe in a Crafting Table for Infused Farmland",
+  "tooltip.agritechevolved.planter.till": "Right-click with a Hoe to till soil placed inside",
+  "tooltip.agritechevolved.planter.fertilize": "Right-click with Bone Meal or fertilizer to boost crop growth",
+
+  "tooltip.agritechevolved.slot.plant": "Plant Slot",
+  "tooltip.agritechevolved.slot.soil": "Soil Slot",
+  "tooltip.agritechevolved.slot.fertilizer": "Fertilizer Slot",
+  "tooltip.agritechevolved.slot.upgrade_1": "Upgrade Slot 1",
+  "tooltip.agritechevolved.slot.upgrade_2": "Upgrade Slot 2",
+  "tooltip.agritechevolved.slot.upgrade": "Speed Upgrade Slot",
+  "tooltip.agritechevolved.slot.range_module": "Range Upgrade Slot",
+
+  "tooltip.agritechevolved.soil_type": "Soil Info",
+  "tooltip.agritechevolved.soil_growth_modifier": "Growth Speed: %s",
+  "tooltip.agritechevolved.fertilizer_type": "Fertilizer Info",
+  "tooltip.agritechevolved.fertilizer_speed": "Growth Speed: %s",
+  "tooltip.agritechevolved.fertilizer_yield": "Yield Bonus: %s",
 
   "config.jade.agritechevolved.planter_info": "Planter Info",
   "config.jade.plugin_agritechevolved.planter_info": "Planter Info",
@@ -156,11 +186,5 @@
   "jade.agritechevolved.fertilizer_info": "Fertilizer: %s (Speed: %s, Yield: %s)",
   "jade.agritechevolved.cloche_installed": "Cloche: Installed (Speed: %s, Yield: %s)",
   "jade.agritechevolved.energy_info": "Energy: %s / %s RF",
-  "jade.agritechevolved.module_info": "Modules: Speed %s | Yield %s",
-
-  "tooltip.agritechevolved.soil_type": "Soil Info",
-  "tooltip.agritechevolved.soil_growth_modifier": "Growth Speed: %s",
-  "tooltip.agritechevolved.fertilizer_type": "Fertilizer Info",
-  "tooltip.agritechevolved.fertilizer_speed": "Growth Speed: %s",
-  "tooltip.agritechevolved.fertilizer_yield": "Yield Bonus: %s"
+  "jade.agritechevolved.module_info": "Modules: Speed %s | Yield %s"
 }
