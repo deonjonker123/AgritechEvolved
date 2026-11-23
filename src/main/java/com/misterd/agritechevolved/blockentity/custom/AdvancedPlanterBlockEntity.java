@@ -415,8 +415,17 @@ public class AdvancedPlanterBlockEntity extends BlockEntity implements MenuProvi
                 if (be.growthTicks % 20 == 0) { level.sendBlockUpdated(pos, state, state, 3); be.setChanged(); }
             }
         }
-        if (be.readyToHarvest && be.hasOutputSpace()) be.harvestPlant();
-        tryOutputItemsBelow(level, pos, be);
+        if (be.readyToHarvest) {
+            boolean hasSpace = be.hasOutputSpace();
+            if (!hasSpace && level.getGameTime() % 10 == 0) {
+                tryOutputItemsBelow(level, pos, be);
+                hasSpace = be.hasOutputSpace();
+            }
+            if (hasSpace) {
+                be.harvestPlant();
+                tryOutputItemsBelow(level, pos, be);
+            }
+        }
     }
 
     private void resetGrowth() {
