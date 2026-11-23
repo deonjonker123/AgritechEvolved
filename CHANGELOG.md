@@ -85,3 +85,10 @@ All notable changes to this project will be documented here.
 ## [2.2.0.7+neoforge-mc26.1.2] - 2026-11-03
 ### Fixed
 - Planter's soil slot will now always only take one soil item (Fixes issue #12)
+
+## [2.2.0.8+neoforge-mc26.1.2] - 2026-11-24
+### Fixed
+- Energy bars and tooltips in the Composter, Advanced Planter, Biomass Burner, Silo and Fertilizer Spreader GUIs no longer wrap around above 32,767 RF
+- Items can no longer be placed by hand into the Basic Planter's output slots
+- Right-clicking the Advanced Planter with an upgrade module when both module slots are full now opens the GUI
+- Clicking a progress bar to view recipes no longer crashes the game when JEI isn't installed
