@@ -1,0 +1,19 @@
+{
+  "type": "agritechevolved:crop",
+  "drops": [
+    {
+      "chance": 1.0,
+      "item": "minecraft:pitcher_plant",
+      "max": 1,
+      "min": 1
+    }
+  ],
+  "seed": {
+    "item": "minecraft:pitcher_pod"
+  },
+  "soils": [
+    {
+      "tag": "agritechevolved:farmland_soils"
+    }
+  ]
+}

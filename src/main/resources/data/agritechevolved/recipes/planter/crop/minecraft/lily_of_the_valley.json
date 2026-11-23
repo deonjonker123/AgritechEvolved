@@ -1,0 +1,19 @@
+{
+  "type": "agritechevolved:crop",
+  "drops": [
+    {
+      "chance": 1.0,
+      "item": "minecraft:lily_of_the_valley",
+      "max": 1,
+      "min": 1
+    }
+  ],
+  "seed": {
+    "item": "minecraft:lily_of_the_valley"
+  },
+  "soils": [
+    {
+      "tag": "agritechevolved:dirt_soils"
+    }
+  ]
+}

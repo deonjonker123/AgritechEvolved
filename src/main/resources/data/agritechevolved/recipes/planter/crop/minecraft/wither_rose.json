@@ -1,0 +1,19 @@
+{
+  "type": "agritechevolved:crop",
+  "drops": [
+    {
+      "chance": 1.0,
+      "item": "minecraft:wither_rose",
+      "max": 1,
+      "min": 1
+    }
+  ],
+  "seed": {
+    "item": "minecraft:wither_rose"
+  },
+  "soils": [
+    {
+      "tag": "agritechevolved:dirt_soils"
+    }
+  ]
+}

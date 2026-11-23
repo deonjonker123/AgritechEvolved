@@ -1,0 +1,19 @@
+{
+  "type": "agritechevolved:crop",
+  "drops": [
+    {
+      "chance": 1.0,
+      "item": "minecraft:spore_blossom",
+      "max": 1,
+      "min": 1
+    }
+  ],
+  "seed": {
+    "item": "minecraft:spore_blossom"
+  },
+  "soils": [
+    {
+      "tag": "agritechevolved:moss_soils"
+    }
+  ]
+}

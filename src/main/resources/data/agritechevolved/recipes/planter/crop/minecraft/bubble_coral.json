@@ -1,0 +1,19 @@
+{
+  "type": "agritechevolved:crop",
+  "drops": [
+    {
+      "chance": 1.0,
+      "item": "minecraft:bubble_coral",
+      "max": 2,
+      "min": 1
+    }
+  ],
+  "seed": {
+    "item": "minecraft:bubble_coral"
+  },
+  "soils": [
+    {
+      "tag": "agritechevolved:water_soils"
+    }
+  ]
+}

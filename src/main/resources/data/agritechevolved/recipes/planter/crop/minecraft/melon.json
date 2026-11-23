@@ -1,0 +1,19 @@
+{
+  "type": "agritechevolved:crop",
+  "drops": [
+    {
+      "chance": 1.0,
+      "item": "minecraft:melon_slice",
+      "max": 7,
+      "min": 3
+    }
+  ],
+  "seed": {
+    "item": "minecraft:melon_seeds"
+  },
+  "soils": [
+    {
+      "tag": "agritechevolved:farmland_soils"
+    }
+  ]
+}

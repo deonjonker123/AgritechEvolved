@@ -1,0 +1,19 @@
+{
+  "type": "agritechevolved:crop",
+  "drops": [
+    {
+      "chance": 1.0,
+      "item": "minecraft:seagrass",
+      "max": 2,
+      "min": 1
+    }
+  ],
+  "seed": {
+    "item": "minecraft:seagrass"
+  },
+  "soils": [
+    {
+      "tag": "agritechevolved:water_soils"
+    }
+  ]
+}
