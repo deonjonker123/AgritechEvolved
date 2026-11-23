@@ -3,13 +3,13 @@
   "drops": [
     {
       "chance": 1.0,
-      "item": "minecraft:short_grass",
+      "item": "minecraft:grass",
       "max": 1,
       "min": 1
     }
   ],
   "seed": {
-    "item": "minecraft:short_grass"
+    "item": "minecraft:grass"
   },
   "soils": [
     {
