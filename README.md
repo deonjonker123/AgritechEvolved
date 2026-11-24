@@ -45,11 +45,11 @@ Means you can add support for unsupported mods, change growth modifiers, mess wi
 
 ## Mod Support
 
-**Crops:** Mystical Agriculture & Mystical Agradditions, Farmer's Delight, Ars Nouveau, Silent Gear, Immersive Engineering, Occultism, Cobblemon, Pam's HarvestCraft 2, Actually Additions, Croptopia, The Aether II
+**Crops:** Mystical Agriculture & Mystical Agradditions, Farmer's Delight, Ars Nouveau, Silent Gear, Immersive Engineering, Occultism, Cobblemon, Pam's HarvestCraft 2, Croptopia
 
-**Trees:** Ars Nouveau & Ars Elemental, Forbidden & Arcanus, Integrated Dynamics, Silent Gear, Occultism, Cobblemon, Pam's HarvestCraft 2, Croptopia, EvilCraft, The Aether II
+**Trees:** Ars Nouveau & Ars Elemental, Forbidden & Arcanus, Integrated Dynamics, Silent Gear, Occultism, Cobblemon, Pam's HarvestCraft 2, Croptopia, EvilCraft
 
-**Soils:** Mystical Agriculture farmland, Farmer's Delight soils, Just Dire Things goosoils, The Aether II
+**Soils:** Mystical Agriculture farmland, Farmer's Delight soils
 
 ## Balance Config
 
