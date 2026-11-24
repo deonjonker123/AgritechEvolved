@@ -113,16 +113,6 @@ public class ComposterScreen extends AbstractContainerScreen<ComposterMenu> {
         super.extractTooltip(graphics, mouseX, mouseY);
     }
 
-    @Override
-    public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
-        if (event.button() == 0 && JeiCompat.isLoaded()
-                && isOver(PROGRESS_BAR_X, PROGRESS_BAR_Y, PROGRESS_BAR_W, PROGRESS_BAR_H, (int) event.x(), (int) event.y())) {
-            JeiCompat.showCompostRecipes();
-            return true;
-        }
-        return super.mouseClicked(event, doubleClick);
-    }
-
     private boolean isOver(int wx, int wy, int ww, int wh, int mx, int my) {
         return mx >= this.leftPos + wx && mx <= this.leftPos + wx + ww
                 && my >= this.topPos + wy && my <= this.topPos + wy + wh;

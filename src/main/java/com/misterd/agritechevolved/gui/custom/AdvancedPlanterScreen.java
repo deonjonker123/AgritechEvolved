@@ -129,16 +129,6 @@ public class AdvancedPlanterScreen extends AbstractContainerScreen<AdvancedPlant
         super.extractTooltip(graphics, mouseX, mouseY);
     }
 
-    @Override
-    public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
-        if (event.button() == 0 && JeiCompat.isLoaded()
-                && isOver(GROWTH_BAR_X, GROWTH_BAR_Y, GROWTH_BAR_W, GROWTH_BAR_H + 1, (int) event.x(), (int) event.y())) {
-            JeiCompat.showPlanterRecipes();
-            return true;
-        }
-        return super.mouseClicked(event, doubleClick);
-    }
-
     private boolean isOver(int wx, int wy, int ww, int wh, int mx, int my) {
         return mx >= this.leftPos + wx && mx <= this.leftPos + wx + ww
                 && my >= this.topPos + wy && my <= this.topPos + wy + wh;

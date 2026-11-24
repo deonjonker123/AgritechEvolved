@@ -80,17 +80,4 @@ public class BasicPlanterScreen extends AbstractContainerScreen<BasicPlanterMenu
         }
         super.extractTooltip(graphics, mouseX, mouseY);
     }
-
-    @Override
-    public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
-        if (event.button() == 0 && JeiCompat.isLoaded()) {
-            double mx = event.x(), my = event.y();
-            if (mx >= this.leftPos + 40 && mx <= this.leftPos + 46
-                    && my >= this.topPos + 18 && my <= this.topPos + 71) {
-                JeiCompat.showPlanterRecipes();
-                return true;
-            }
-        }
-        return super.mouseClicked(event, doubleClick);
-    }
 }

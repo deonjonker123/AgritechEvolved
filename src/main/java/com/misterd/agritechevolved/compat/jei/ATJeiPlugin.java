@@ -3,6 +3,9 @@ package com.misterd.agritechevolved.compat.jei;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.misterd.agritechevolved.block.ATEBlocks;
+import com.misterd.agritechevolved.gui.custom.AdvancedPlanterScreen;
+import com.misterd.agritechevolved.gui.custom.BasicPlanterScreen;
+import com.misterd.agritechevolved.gui.custom.ComposterScreen;
 import com.misterd.agritechevolved.recipe.ATERecipeTypes;
 import com.misterd.agritechevolved.recipe.CropRecipe;
 import com.misterd.agritechevolved.recipe.TreeRecipe;
@@ -11,12 +14,19 @@ import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.JsonOps;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
+import mezz.jei.api.gui.handlers.IGuiClickableArea;
+import mezz.jei.api.gui.handlers.IGuiContainerHandler;
 import mezz.jei.api.helpers.IGuiHelper;
+import mezz.jei.api.recipe.IFocusFactory;
+import mezz.jei.api.recipe.types.IRecipeType;
+import mezz.jei.api.registration.IGuiHandlerRegistration;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import mezz.jei.api.runtime.IJeiRuntime;
+import mezz.jei.api.runtime.IRecipesGui;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
@@ -36,6 +46,7 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -315,5 +326,47 @@ public class ATJeiPlugin implements IModPlugin {
         } catch (Exception e) {
             LogUtils.getLogger().error("[ATE JEI] Failed modded tilling {} -> {}: {}", inputId, resultId, e.getMessage());
         }
+    }
+
+    @Override
+    public void registerGuiHandlers(IGuiHandlerRegistration registration) {
+        registration.addGuiContainerHandler(BasicPlanterScreen.class, new IGuiContainerHandler<>() {
+            @Override
+            public Collection<IGuiClickableArea> getGuiClickableAreas(BasicPlanterScreen screen, double mouseX, double mouseY) {
+                return List.of(recipeArea(40, 18, 7, 54, PlanterRecipeCategory.PLANTER_RECIPE_TYPE));
+            }
+        });
+        registration.addGuiContainerHandler(AdvancedPlanterScreen.class, new IGuiContainerHandler<>() {
+            @Override
+            public Collection<IGuiClickableArea> getGuiClickableAreas(AdvancedPlanterScreen screen, double mouseX, double mouseY) {
+                return List.of(recipeArea(31, 18, 7, 55, PlanterRecipeCategory.PLANTER_RECIPE_TYPE));
+            }
+        });
+        registration.addGuiContainerHandler(ComposterScreen.class, new IGuiContainerHandler<>() {
+            @Override
+            public Collection<IGuiClickableArea> getGuiClickableAreas(ComposterScreen screen, double mouseX, double mouseY) {
+                return List.of(recipeArea(85, 18, 7, 55, CompostRecipeCategory.COMPOST_RECIPE_TYPE));
+            }
+        });
+    }
+
+    private static IGuiClickableArea recipeArea(int x, int y, int width, int height, IRecipeType<?> recipeType) {
+        Rect2i area = new Rect2i(x, y, width, height);
+        return new IGuiClickableArea() {
+            @Override
+            public Rect2i getArea() {
+                return area;
+            }
+
+            @Override
+            public boolean isTooltipEnabled() {
+                return false;
+            }
+
+            @Override
+            public void onClick(IFocusFactory focusFactory, IRecipesGui recipesGui) {
+                recipesGui.showTypes(List.of(recipeType));
+            }
+        };
     }
 }
